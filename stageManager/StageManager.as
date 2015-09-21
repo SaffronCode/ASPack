@@ -36,7 +36,7 @@ package stageManager
 							
 		private static var debugW:Number,debugH:Number;
 		
-		private static var deltaStageWidth:Number,deltaStageHeight:Number,
+		private static var deltaStageWidth:Number=0,deltaStageHeight:Number=0,
 							stageScaleWidth:Number,stageScaleHeight:Number;
 		
 		private static var lastStageFW:Number,lastStageFH:Number;
