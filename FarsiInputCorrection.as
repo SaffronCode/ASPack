@@ -251,11 +251,21 @@ package
 				manageInputPose();
 				oldTextField.addEventListener(Event.CHANGE,changeTheDisplayedText);	
 			}
+			else
+			{
+				oldTextField.addEventListener(Event.CHANGE,changeTheStageText);
+			}
 			
 			
 			oldTextField.addEventListener(Event.ENTER_FRAME,manageInputPose);
 			oldTextField.addEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 			oldTextField.addEventListener(REMOVE_OLD_TEXT,unLoad);
+		}
+		
+		protected function changeTheStageText(event:Event):void
+		{
+			// TODO Auto-generated method stub
+			myStageText.text = oldTextField.text ;
 		}
 		
 		/**This will replace each new line charachter to both \n and \r to make sure that the enter will apprear for that*/
