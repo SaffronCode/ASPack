@@ -142,7 +142,7 @@ package
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
 		 * freeScrollOnTarget will make the targetArea rectangle to listen to the size of the scrollble object<br>
 		 * <br>
-		 * You can only lock t_d or r_l scroll when you didn't enter targetAreaRectangle.*/
+		 * You can only lock t_d or r_l scroll when you didn't enter targetAreaRectangle.(Why???)*/
 		public function ScrollMT(target:DisplayObject,maskArea:Rectangle,targetArea:Rectangle=null,FreeScrollOnTarget_TD:Boolean=false,FreeScrollOnTarget_LR:Boolean=false,activeEffect:Boolean=true,
 				RevertY:Boolean=false/*,RevertX:Boolean=false*/)
 		{
@@ -454,6 +454,9 @@ package
 			}
 			if(canScroll())
 			{
+				//Lock the parent scoller imediatly
+				targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
+				
 				isScrolling = true ;
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
 				//Added on version 1.2 ↓
