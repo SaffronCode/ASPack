@@ -21,6 +21,8 @@
 
 package
 {
+	import com.mteamapp.StringFunctions;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
@@ -186,7 +188,7 @@ package
 		
 		
 		/**Return textwidth*/
-		public static function onTextArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,align:Boolean = true,convertSerevHTML:Boolean=false,linksColor:int=-1):Number
+		public static function onTextArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,align:Boolean = true,convertSerevHTML:Boolean=false,linksColor:int=-1,generateLinksForURLs:Boolean=false):Number
 		{
 			text+=' \n ';
 			if(captureResolution<=0)
@@ -198,6 +200,12 @@ package
 			{
 				var fontSize:Number = Number(textField.defaultTextFormat.size) ;
 				text = Unicode.htmlCorrect(text,linksColor,!replaceWithBitmap,fontSize);
+			}
+			
+			if(generateLinksForURLs)
+			{
+				text = StringFunctions.generateLinks(text,linksColor);//Unicode.htmlCorrect(text,linksColor,!replaceWithBitmap,fontSize);
+				//trace("Text changed to : "+text)
 			}
 			
 			//textField.multiline = true;
