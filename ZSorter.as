@@ -14,12 +14,21 @@ package  {
 	public class ZSorter {
 
 		
-		public static function sort(target:MovieClip){
+		/**sortBy : 0=Y, 1=Scale*/
+		public static function sort(target:MovieClip,sortBy:uint=0){
 			var chi
 			var sorter:Array = new Array()
 			for(var i=target.numChildren-1 ; i>=0 ; i--){
-				chi = target.getChildAt(i)
-				sorter[i] = (chi.y)
+				chi = target.getChildAt(i);
+				switch(sortBy)
+				{
+					case(0):
+						sorter[i] = (chi.y)
+						break;
+					case(1):
+						sorter[i] = (chi.scaleX)
+						break;
+				}
 			}
 			for(i=0;i<sorter.length;i++){
 				for(var j=i;j<sorter.length;j++){
