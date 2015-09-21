@@ -68,10 +68,16 @@
 		}
 		
 		/**When the image is ready, you can get its image from imageBytes*/
-		public static function getCameraImage(onImageReady:Function,imageW:Number=NaN,imageH:Number=NaN):void
+		public static function getCameraImage(onImageReady:Function,imageW:Number=NaN,imageH:Number=NaN,loadThisFileIfNotSupporting:String=null):void
 		{
 			imageBytes = null;
 			imageBitmapData = null ;
+			
+			if(!CameraUI.isSupported)
+			{
+				loadFile(onImageReady,new File(loadThisFileIfNotSupporting),imageW,imageH);
+				return ;
+			}
 			
 			tempW = imageW;
 			tempH = imageH ;
@@ -154,7 +160,7 @@
 		
 	/////////////////////////////////////////////////////////////////
 		/**Load image from file then it will call your function*/
-		public static function loadImageFromGallery(onImageLoaded:Function,rect:Rectangle=null,imageW:Number=NaN,imageH:Number=NaN):void
+		public static function loadImageFromGallery(onImageLoaded:Function,rect:Rectangle=null,imageW:Number=NaN,imageH:Number=NaN,loadThisFileIfNotSupporting:String=null):void
 		{
 			imageBitmapData = null;
 			imageBytes = null ;
@@ -164,6 +170,7 @@
 			
 			if(!CameraRoll.supportsBrowseForImage)
 			{
+				loadFile(onImageLoaded,new File(loadThisFileIfNotSupporting),imageW,imageH);
 				return ;
 			}
 			onDone = onImageLoaded ;
