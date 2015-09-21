@@ -10,7 +10,7 @@ package
 				return '' ;
 			}
 			var AM_PM:String = "AM";
-			if(date.hours>12)
+			if(date.hours>=12)
 			{
 				AM_PM = "PM";
 			}
@@ -46,6 +46,11 @@ package
 			
 			dateSplitter = (splitter[0] as String).split('/');
 			timeSplitter = (splitter[1] as String).split(':');
+			
+			if(timeSplitter[0]=='12')
+			{
+				timeSplitter[0] = '0' ;
+			}
 			
 			createdDate = new Date(Number(dateSplitter[2]),Number(dateSplitter[0])-1,Number(dateSplitter[1]),Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
 			if(splitter[2] == "PM")
