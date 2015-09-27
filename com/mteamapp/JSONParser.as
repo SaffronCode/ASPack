@@ -35,6 +35,7 @@ package com.mteamapp
 		/**You can make a copy from simple objecs*/
 		public static function makeCopy(fromObject:*):*
 		{
+			trace("Clone created by JSONParser");
 			var itemType:Class = getDefinitionByName(getQualifiedClassName(fromObject)) as Class;
 			var cloneObject:Object = new itemType();
 			JSONParser.parse(JSONParser.stringify(fromObject),cloneObject) ;
@@ -84,6 +85,7 @@ package com.mteamapp
 		private var parsed:Object;
 
 		
+		/**This function can only use by RestGullJSON parser*/
 		private static function parsParams(fromObject:Object,toObject:*):void
 		{
 			var arr:Array ;
