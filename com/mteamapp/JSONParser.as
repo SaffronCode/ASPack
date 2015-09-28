@@ -94,7 +94,7 @@ package com.mteamapp
 			for(var i in fromObject)
 			{
 				var currentParam:Object = fromObject[i] ;
-				if(toObject.hasOwnProperty(i))
+				if(toObject.hasOwnProperty(i) && !(toObject[i] is Function))
 				{
 					if(toObject[i] is Vector.<*>)
 					{
@@ -154,8 +154,16 @@ package com.mteamapp
 					)
 					{
 						//trace("Put toObject : "+currentParam);
-						//trace("befor update : "+avmplus.getQualifiedClassName(toObject[i]))
-						toObject[i] = currentParam ;
+						//trace("Put toObject i is : "+i);
+						//trace("befor update : "+getQualifiedClassName(toObject[i]));
+						try
+						{
+							toObject[i] = currentParam ;
+						}
+						catch(e)
+						{
+							trace("The parameter is readonly : "+getQualifiedClassName(toObject[i]));
+						}
 						//trace("after update : "+avmplus.getQualifiedClassName(toObject[i])+' > '+toObject[i])
 					}
 					else
