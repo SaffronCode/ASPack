@@ -360,7 +360,7 @@ package
 		
 	///////////////////////////////////////////////////////
 		/**Returns true if user can click the center of this object*/
-		public static function isAccesibleByMouse(targ:DisplayObject):Boolean
+		public static function isAccesibleByMouse(targ:DisplayObject,ignoreAllTextsOnTheStage:Boolean=true):Boolean
 		{
 			/**Parent list for current target*/
 			var targParents:Vector.<DisplayObjectContainer>;
@@ -431,7 +431,15 @@ package
 							{
 								item = itemParent;
 								itemParent = item.parent ;
-								canClick = canClick && itemParent.mouseChildren ;
+								if(itemParent!=null)
+								{
+									canClick = canClick && itemParent.mouseChildren ;
+								}
+								else
+								{
+									//trace("itemParent is null now!!");
+									return true ;
+								}
 							}
 							if(item.hasOwnProperty("mouseEnabled"))
 							{
@@ -449,7 +457,7 @@ package
 								break;
 							}
 							
-							if(targ is TextField && item is TextField && item.parent == targ.stage)
+							if((ignoreAllTextsOnTheStage || targ is TextField) && item is TextField && item.parent == targ.stage)
 							{
 								//trace("It should be the stage text");
 								break;
@@ -460,6 +468,9 @@ package
 								//trace("It is the stage themplete");
 								break;
 							}
+							
+							//trace("item.parent == targ.stage : "+(item.parent == targ.stage)+" > "+item.parent);
+							//trace("targ is TextField : "+(targ is TextField)+' > '+targ);
 							
 							//trace("targLastChild : "+targLastChild+' > '+(targLastChild == targ));
 							//trace("itemParent : "+itemParent);
