@@ -75,16 +75,18 @@ package
 		/**Works only for native texts and make it editable or not*/
 		private var editableNativeText:Boolean;
 		
+		/**Add change listener to the stage text*/
+		private var listenToChangesAllTheTime:Boolean = false ;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField*/
-		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true):FarsiInputCorrection
+		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true):FarsiInputCorrection
 		{
 			if(softKeyFormat == null)
 			{
 				softKeyFormat = SoftKeyboardType.DEFAULT ;
 			}
-			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative);
+			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo);
 		}
 		
 		/**reset all added effects on this text field*/
@@ -94,8 +96,9 @@ package
 		}
 
 		
-		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true)
+		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true,controllStageTextsToo:Boolean=false)
 		{
+			listenToChangesAllTheTime = controllStageTextsToo ;
 			clearInputText = clearAfterClicked ;
 			correctNums = correctNumbers ;
 			oldTextField = textField ;
@@ -240,6 +243,10 @@ package
 			{
 				myStageText.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE,saveChanges);
 			}
+			if(listenToChangesAllTheTime)
+			{
+				myStageText.addEventListener(Event.CHANGE,onlyChangeTheCoreText);
+			}
 			myStageText.addEventListener(FocusEvent.FOCUS_OUT,saveChanges);
 			if(!onlyNativeText)
 			{
@@ -348,6 +355,32 @@ package
 				newTextField.text = '';
 			}
 			editing = true ;
+		}
+		
+		/***/
+		private function onlyChangeTheCoreText(e:*):void
+		{
+			if(correctNums)
+			{
+				oldTextField.text = UnicodeStatic.numberCorrection(myStageText.text);
+			}
+			else
+			{
+				oldTextField.text = myStageText.text;
+			}
+			
+			oldTextField.removeEventListener(Event.CHANGE,changeTheDisplayedText);	
+			oldTextField.removeEventListener(Event.CHANGE,changeTheStageText);
+			
+			oldTextField.dispatchEvent(new Event(Event.CHANGE));
+			if(!onlyNativeText)
+			{
+				oldTextField.addEventListener(Event.CHANGE,changeTheDisplayedText);	
+			}
+			else
+			{
+				oldTextField.addEventListener(Event.CHANGE,changeTheStageText);
+			}
 		}
 		
 		/**finish typing*/
