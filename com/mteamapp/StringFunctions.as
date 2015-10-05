@@ -192,6 +192,10 @@ package com.mteamapp
 		/**This function will shorten the senteces by the len vlaue*/
 		public static function short(str:String,len:uint=10,removeEntersWith:String=''):String
 		{
+			if(str==null)
+			{
+				return '' ;
+			}
 			if(removeEntersWith!='')
 			{
 				str = str.split('\r').join('\n').split('\n\n').join('\n').split('\n').join(removeEntersWith);
