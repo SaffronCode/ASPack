@@ -44,6 +44,10 @@ package
 	{
 		public static const LOCK_SCROLL_TILL_MOUSE_UP:String = "LOCK_SCROLL_TILL_MOUSE_UP";
 		
+		public static const UN_LOCK_SCROLL:String = "UN_LOCK_SCROLL";
+		
+		public static const THEMP_LOCK:String = "THEMP_LOCK" ;
+		
 		private static const KILL_OLD_SCROLLER:String = "KILL_OLD_SCROLLER" ;
 		
 		private const 	cursolCollor:Number = 0x000000,
@@ -156,6 +160,7 @@ package
 			acceptSetEfectOnMe = activeEffect ;
 			
 			targ.addEventListener(LOCK_SCROLL_TILL_MOUSE_UP,lockTheScrollThillMouseUp);
+			targ.addEventListener(THEMP_LOCK,lockTheScrollThempurarily);
 			
 			freeScrollOnTarget_TD = FreeScrollOnTarget_TD ;
 			freeScrollOnTarget_LR = FreeScrollOnTarget_LR ;
@@ -248,6 +253,14 @@ package
 		{
 			targStage.addEventListener(MouseEvent.MOUSE_UP,unLock);
 			lock();
+		}
+		
+		/**lock the scroller till the next mouse up event from the stage or UN_LOCK_SCROLL dispatches*/
+		private function lockTheScrollThempurarily(e:Event)
+		{
+			targStage.addEventListener(MouseEvent.MOUSE_UP,unLock);
+			targStage.addEventListener(UN_LOCK_SCROLL,unLock);
+			thempLock();
 		}
 		
 		
@@ -377,9 +390,16 @@ package
 		
 	/////////////////////////////controller function s ↓
 		
+		/**This lock will not clear current activities*/
+		public function thempLock():void
+		{
+			scrollLock = true ;
+		}
+		
 		/**lock the scroller and stop floating*/
 		public function lock(unlockOnFirstClick:Boolean=false):void
 		{
+			trace("**locked");
 			UnlockOnFirstClick = unlockOnFirstClick ;
 			MouseUnLock();
 			scrollLock = true ;
@@ -398,6 +418,9 @@ package
 		/**unlock the scroller*/
 		public function unLock(e:*=null)
 		{
+			trace("**unlocked");
+			targStage.removeEventListener(MouseEvent.MOUSE_UP,unLock);
+			targStage.removeEventListener(UN_LOCK_SCROLL,unLock);
 			scrollLock = false ;
 		}
 		
