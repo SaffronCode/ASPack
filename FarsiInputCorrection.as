@@ -360,6 +360,10 @@ package
 		/***/
 		private function onlyChangeTheCoreText(e:*):void
 		{
+			if(!myStageText.visible)
+			{
+				return;
+			}
 			if(correctNums)
 			{
 				oldTextField.text = UnicodeStatic.numberCorrection(myStageText.text);
@@ -401,8 +405,8 @@ package
 				}
 				if(!onlyNativeText)
 				{
-					myStageText.text = '' ;
 					myStageText.visible = false;
+					myStageText.text = '' ;
 				}
 				//trace('invisible the text '+oldTextField.textColor.toString(16));
 				
