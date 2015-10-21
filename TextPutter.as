@@ -46,6 +46,13 @@ package
 	{
 		public var target:MovieClip ;
 		public var txt:TextField ;
+		
+		/**Last info variables*/
+		public static var 	lastInfo_numLines:uint,
+							lastInfo_textWidth:Number,
+							lastInfo_textHeidth:Number;
+		
+		
 		public function TextPutter(targ:MovieClip)
 		{
 			super();
@@ -129,6 +136,10 @@ package
 			}
 			
 			
+			lastInfo_numLines = textField.numLines ;
+			lastInfo_textWidth = textField.textWidth;
+			lastInfo_textHeidth = textField.textHeight;
+			
 			//capture the textfield
 			if(replaceWithBitmap)
 			{
@@ -173,6 +184,10 @@ package
 			
 			textField.height = textField.textHeight+20 ;
 			
+			lastInfo_numLines = textField.numLines ;
+			lastInfo_textWidth = textField.textWidth;
+			lastInfo_textHeidth = textField.textHeight;
+			
 			if(captureBitmap)
 			{
 				var bitmapData:BitmapData = new BitmapData((textField.x+textField.width)*captureResolution
@@ -216,6 +231,10 @@ package
 			{
 				textField.parent.removeChild(removeThis);
 			}*/
+			
+			lastInfo_numLines = textField.numLines ;
+			lastInfo_textWidth = textField.textWidth;
+			lastInfo_textHeidth = textField.textHeight;
 			
 			//Replaced with this function
 			CaptueBitmap.deleteCapturedBigText(textField);
@@ -302,6 +321,10 @@ package
 				textField.text = textField.text.substring(0,textField.text.lastIndexOf('\n'));
 			}
 			
+			
+			lastInfo_numLines = textField.numLines ;
+			lastInfo_textWidth = textField.textWidth;
+			lastInfo_textHeidth = textField.textHeight;
 			
 			
 			//capture the textfield
