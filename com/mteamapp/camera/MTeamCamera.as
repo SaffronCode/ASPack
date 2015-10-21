@@ -19,7 +19,7 @@ package com.mteamapp.camera
 							
 		private var vid:Video;
 		
-		private var currentCamera:String;
+		private static var currentCamera:String='0';
 		
 		public static var firstCamID:String = '0',
 					secondCamID:String = '1';
@@ -47,7 +47,7 @@ package com.mteamapp.camera
 		
 		private var rotation0:Number ;
 		
-		private function setUpShared():void
+		private static function setUpShared():void
 		{
 			if(shared==null)
 			{
@@ -55,10 +55,10 @@ package com.mteamapp.camera
 			}
 		}
 		
-		private function get customRotation():Number
+		private static function get customRotation():Number
 		{
 			setUpShared();
-			var rotat:Number = shared.data.r ;
+			var rotat:Number = shared.data['r'+currentCamera] ;
 			
 			if(isNaN(rotat))
 			{
@@ -70,7 +70,7 @@ package com.mteamapp.camera
 			}
 		}
 		
-		private function setCustonRotation(value:Number):void
+		private static function setCustonRotation(value:Number):void
 		{
 			setUpShared();
 			//trace("value : "+value);
@@ -86,17 +86,13 @@ package com.mteamapp.camera
 				newVal-=360;
 			}
 			//trace("newVal 3 : "+newVal);
-			shared.data.r = newVal ;
+			shared.data['r'+currentCamera] = newVal ;
 		}
 		
 		public function MTeamCamera(target:MovieClip,selctedCameraID:String='')
 		{
 			DevicePrefrence.isItPC
-			if(selctedCameraID=='')
-			{
-				currentCamera = firstCamID ;
-			}
-			else
+			if(selctedCameraID!='')
 			{
 				currentCamera = selctedCameraID ;
 			}
@@ -359,6 +355,18 @@ package com.mteamapp.camera
 			//trace("customRotation-90 : "+(customRotation-90));
 			setCustonRotation(customRotation-90) ;
 			updateCustomRotationInterface();
+		}
+		
+		/**Rotate the default camera to left*/
+		public static function rotateLeft():void
+		{
+			setCustonRotation(customRotation-90) ;
+		}
+		
+		/**Rotate the default camera to right*/
+		public static function rotateRight():void
+		{
+			setCustonRotation(customRotation+90) ;
 		}
 		
 		public function rotateRight():void
