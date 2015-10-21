@@ -51,5 +51,38 @@ package
 			}
 			return '' ;
 		}
+		
+		/**Delete all files in this folder*/
+		public static function deleteAllFiles(folder:File):void
+		{
+			// TODO Auto Generated method stub
+			if(!folder.exists)
+			{
+				trace("The folder : "+folder.url+" dosn't exist");
+				return ;
+			}
+			var files:Array = folder.getDirectoryListing();
+			var file:File ; 
+			for(var i = 0 ; i<files.length ; i++)
+			{
+				file = files[i] as File;
+				if(file.isDirectory)
+				{
+					deleteAllFiles(file);
+				}
+				else
+				{
+					try
+					{
+						file.deleteFile();
+					}
+					catch(e){};
+				}
+			}
+			try
+			{
+				folder.deleteFile();
+			}catch(e){};
+		}
 	}
 }
