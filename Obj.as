@@ -163,10 +163,12 @@ package
 		
 //////////////////////////////////////////////////////////////
 		
-		/**this function will return arrray of founded object on displayObject*/
+		/**this function will return arrray of founded object on displayObject<br>
+		 * This function will returns at least one element that could be the null!*/
 		public static function getAllChilds(name:String,onThe:DisplayObjectContainer):Array
 		{
 			var founded:Array = [] ;
+			var i:int ;
 
 			if(onThe == null)
 			{
@@ -179,7 +181,7 @@ package
 			
 			if(onThe is DisplayObjectContainer)
 			{
-				for(var i = 0 ; i < onThe.numChildren ; i++)
+				for( i = 0 ; i < onThe.numChildren ; i++)
 				{
 					if(onThe.getChildAt(i) is DisplayObjectContainer)
 					{
@@ -187,6 +189,21 @@ package
 					}
 				}
 			
+			}
+			
+			//Below lines will contorll the founded items to have at least one element on the returned value.
+			for(i = 0 ; i<founded.length ; i++)
+			{
+				if(founded[i] == null)
+				{
+					founded.splice(i,1);
+					i--;
+				}
+			}
+			
+			if(founded.length==0)
+			{
+				founded.push(null);
 			}
 			
 			return founded ;
