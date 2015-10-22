@@ -205,7 +205,8 @@ package
 		/**Return textwidth*/
 		public static function onTextArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,align:Boolean = true,convertSerevHTML:Boolean=false,linksColor:int=-1,generateLinksForURLs:Boolean=false):Number
 		{
-			text+=' \n ';
+			//I dont need the extra line any more. please controll the scroller size your self
+			//text+=' \n ';
 			if(captureResolution<=0)
 			{
 				captureResolution = defaultResolution ;
