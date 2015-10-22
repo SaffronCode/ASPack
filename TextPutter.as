@@ -232,10 +232,6 @@ package
 				textField.parent.removeChild(removeThis);
 			}*/
 			
-			lastInfo_numLines = textField.numLines ;
-			lastInfo_textWidth = textField.textWidth;
-			lastInfo_textHeidth = textField.textHeight;
-			
 			//Replaced with this function
 			CaptueBitmap.deleteCapturedBigText(textField);
 			
@@ -249,6 +245,10 @@ package
 			{
 				textField.text = text ;
 			}
+			
+			lastInfo_numLines = textField.numLines ;
+			lastInfo_textWidth = textField.textWidth;
+			lastInfo_textHeidth = textField.textHeight;
 			
 			var textWidth:Number = textField.textWidth ;
 			
