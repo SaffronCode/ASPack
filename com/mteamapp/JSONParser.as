@@ -91,6 +91,9 @@ package com.mteamapp
 			var arr:Array ;
 			var j:int,l:uint ;
 			
+			//trace("From : "+JSON.stringify(fromObject));
+			//trace("To : "+JSON.stringify(toObject));
+			
 			for(var i in fromObject)
 			{
 				var currentParam:Object = fromObject[i] ;
@@ -146,6 +149,17 @@ package com.mteamapp
 							trace("The parameter "+i+" cannot pars on Array");
 						}
 					}
+					else if(toObject[i] is Date && toObject[i]!=null)
+					{
+						try
+						{
+							(toObject[i] as Date).time = (currentParam as Date).time ;
+						}
+						catch(e)
+						{
+							trace("Date value is wrong : "+currentParam);
+						}
+					}
 					else if(toObject[i] is String 
 						|| toObject[i] is Number 
 						|| toObject[i] is Date 
@@ -169,7 +183,15 @@ package com.mteamapp
 					else
 					{
 						//trace("Current parameter is complex parameter");
-						parsParams(currentParam,toObject[i]);
+						if(currentParam!=null)
+						{
+							parsParams(currentParam,toObject[i]);
+						}
+						else
+						{
+							trace("But the value is null");
+							toObject[i] = null ;
+						}
 					}
 					//__AS3__.vec::Vector.<*>
 					/*var className:String = getQualifiedClassName(toObject[i]);
@@ -191,6 +213,8 @@ package com.mteamapp
 			if(String(v).indexOf("\/Date(")!=-1)
 			{
 				var V:String = String(v) ;
+				trace("Get date :"+V);
+				trace("It is : "+ new Date(Number(V.substring(6,V.length-2))));
 				return new Date(Number(V.substring(6,V.length-2))) ;
 			}
 			return v ;
