@@ -79,7 +79,8 @@ package
 		private var listenToChangesAllTheTime:Boolean = false ;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
-		 * remember to ember fonts that used on the textField*/
+		 * remember to ember fonts that used on the textField<br>
+		 * CLOSE event dispatches when the keyboard leaved the text area*/
 		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true):FarsiInputCorrection
 		{
 			if(softKeyFormat == null)
@@ -411,6 +412,7 @@ package
 				//trace('invisible the text '+oldTextField.textColor.toString(16));
 				
 				oldTextField.dispatchEvent(new Event(Event.CHANGE));
+				oldTextField.dispatchEvent(new Event(Event.CLOSE));
 			}
 		}
 									   
