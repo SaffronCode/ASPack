@@ -1,5 +1,9 @@
 package
 {
+	import com.mteamapp.StringFunctions;
+	
+	import flash.utils.getTimer;
+
 	public class ServerDate
 	{
 		/**11/6/2014 1:10:14 AM*/
@@ -27,6 +31,71 @@ package
 			var createdDate:String = (date.month+1)+'/'+date.date+'/'+date.fullYear+' '+houre+':'+date.minutes+':'+date.seconds+' '+AM_PM;
 			
 			return createdDate ;
+		}
+		
+		
+		/**2015-10-27T10:46:56.9335483+03:30*/
+		public static function dateToServerDate2(date:Date):String
+		{
+			var zone:String = TimeToString.timeInString(Math.abs(date.timezoneOffset));
+			if(date.timezoneOffset<0)
+			{
+				zone = '+'+zone ;
+			}
+			else
+			{
+				zone = '-'+zone ;
+			}
+			var stringedDate:String = date.fullYear+'-'+(date.month+1)+'-'+date.date+'T' +
+				TimeToString.numToString(date.hours)+':'+TimeToString.numToString(date.minutes)+':'+TimeToString.numToString(date.seconds)+zone;
+			return stringedDate ;
+		}
+		
+		/**2015-10-27T10:46:56.9335483+03:30*/
+		public static function serverDateToDate2(date:String):Date
+		{
+			var myDate:Date = new Date();
+			
+			try
+			{
+				/**2015-10-27 , 10:46:56.9335483+03:30*/
+				var splitedDateT:Array = date.split('T');
+				/**2015 , 10 , 27*/
+				var splitedDatePart:Array = splitedDateT[0].split('-');
+				/**10 , 46 , 56.9335483+03 <strong>,</strong> 30*/
+				var splitedTimePart:Array = splitedDateT[1].split(':');
+				/**56.9335483 , 03:30*/
+				var splitedZoneAndSecond:Array ;
+				/**+ or -*/
+				var zoneMinutes:int ;
+				
+				var second:String ;
+				if(splitedTimePart[2].indexOf('+')!=-1)
+				{
+					splitedZoneAndSecond = splitedTimePart[2].split('+');
+					zoneMinutes = -1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
+				}
+				else
+				{
+					splitedZoneAndSecond = splitedTimePart[2].split('-');
+					zoneMinutes = 1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
+				}
+				
+				myDate.fullYearUTC = uint(splitedDatePart[0]);
+				myDate.monthUTC = uint(splitedDatePart[1])-1;
+				myDate.dateUTC = uint(splitedDatePart[2]);
+				myDate.hoursUTC = uint(splitedTimePart[0]);
+				myDate.minutesUTC = uint(splitedTimePart[1]);
+				myDate.secondsUTC = uint(splitedZoneAndSecond[0]);
+				myDate.minutes+=zoneMinutes;
+			}
+			catch(e)
+			{
+				trace("Date format is not parsable : "+date);
+				return null ;
+			}
+			
+			return myDate ;
 		}
 		
 		/**11/6/2014 1:10:14 AM*/

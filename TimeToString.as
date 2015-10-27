@@ -47,5 +47,18 @@ package
 			}
 			return num;
 		}
+		
+		/**1:10 > 70*/
+		public static function stringToNumBased60(str:String):uint
+		{
+			var parts:Array = str.split(':');
+			var num:uint = 0 ;
+			for(var i = 0 ; i<parts.length ; i++)
+			{
+				num *= 60 ;
+				num += uint(parts[i]) ;
+			}
+			return num ;
+		}
 	}
 }

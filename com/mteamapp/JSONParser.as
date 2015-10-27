@@ -23,7 +23,7 @@ package com.mteamapp
 		public static function parse(text:String,catcherObject:*):*
 		{
 			var fromObject:Object = {};
-			fromObject.data = JSON.parse(text,reviver) ;
+			fromObject.data = JSON.parse(text,reciver) ;
 			
 			var toObject:Object = {} ;
 			toObject.data = catcherObject ;
@@ -59,7 +59,9 @@ package com.mteamapp
 							{
 								//debug value;
 									//return "2014/01/01";
-								return mydateIndex+new Date(v).time+mydateEnd;
+									//return mydateIndex+new Date(v).time+mydateEnd;
+								//Required format is :    2015-10-27T10:46:56.9335483+03:30
+								return ServerDate.dateToServerDate2(new Date(v));;
 							}
 						}
 					}
@@ -208,15 +210,28 @@ package com.mteamapp
 			//trace("ToOjbect isDone :"+avmplus.getQualifiedClassName(toObject));
 		}
 		
-		private static function reviver(k,v):*
+		private static function reciver(k,v):*
 		{
-			if(String(v).indexOf("\/Date(")!=-1)
+			if(v is String)
 			{
-				var V:String = String(v) ;
-				trace("Get date :"+V);
-				trace("It is : "+ new Date(Number(V.substring(6,V.length-2))));
-				return new Date(Number(V.substring(6,V.length-2))) ;
+				if(String(v).indexOf("\/Date(")!=-1)
+				{
+					var V:String = String(v) ;
+					trace("Get date :"+V);
+					trace("It is : "+ new Date(Number(V.substring(6,V.length-2))));
+					return new Date(Number(V.substring(6,V.length-2))) ;
+				}
+				//Other date format is : 2015-10-27T10:46:56.9335483+03:30
+				if(String(v).indexOf('-')!=-1 && String(v).indexOf('T')!=-1 && String(v).indexOf(':')!=-1)
+				{
+					var tryTheDate:Date = ServerDate.serverDateToDate2(v);
+					if(tryTheDate!=null)
+					{
+						return tryTheDate;
+					}
+				}
 			}
+
 			return v ;
 		}
 	}
