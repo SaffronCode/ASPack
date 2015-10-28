@@ -80,10 +80,11 @@ package com.mteamapp.recorder
 			dispatcher.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR));
 		}
 		
-		protected static function mp3EncodeProgress(event:Event):void
+		protected static function mp3EncodeProgress(event:ProgressEvent):void
 		{
 			// TODO Auto-generated method stub
-			trace("On recording progress");
+			trace("On recording progress : "+event.bytesLoaded,event.bytesTotal);
+			dispatcher.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS,false,false,event.bytesLoaded,event.bytesTotal));
 		}
 		
 		protected static function mp3EncodeComplete(event:Event):void
