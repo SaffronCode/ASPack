@@ -521,5 +521,11 @@ package
 				item.parent.addChild(item);
 			}
 		}
+		
+		public static function stopAll(target:MovieClip):void
+		{
+			// TODO Auto Generated method stub
+			target.stopAllMovieClips();
+		}
 	}
 }
