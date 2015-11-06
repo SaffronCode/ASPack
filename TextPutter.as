@@ -211,7 +211,6 @@ package
 			{
 				captureResolution = defaultResolution ;
 			}
-			
 			if(convertSerevHTML)
 			{
 				var fontSize:Number = Number(textField.defaultTextFormat.size) ;
@@ -240,7 +239,9 @@ package
 			
 			if(arabic)
 			{
+				var cashedColor:uint = textField.textColor ;
 				UnicodeStatic.htmlText(textField,text,useCash,true,align);
+				textField.textColor = cashedColor;
 			}
 			else
 			{
