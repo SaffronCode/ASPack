@@ -8,9 +8,9 @@ package videoShow
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
 
-	[Event(name="videoFileIsLoaded", type="videoShow")]
-	[Event(name="videoNotFound", type="videoShow")]
-	[Event(name="videoStatusChanged", type="videoShow")]
+	[Event(name="VIDEO_LOADED", type="videoShow.VideoEvents")]
+	[Event(name="VIDEO_NOT_FOUND", type="videoShow.VideoEvents")]
+	[Event(name="VIDEO_STATUS_CHANGED", type="videoShow.VideoEvents")]
 	
 	public class VideoClass extends Sprite
 	{
@@ -119,7 +119,7 @@ package videoShow
 				netStream.pause();
 				played = false;
 			}
-			this.dispatchEvent(new videoEvents(videoEvents.VIDEO_STATUS_CHANGED,played));
+			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_STATUS_CHANGED,played));
 		}
 		
 		/**seek this video from selected position*/
@@ -149,7 +149,7 @@ package videoShow
 				netStream.resume();
 				played = true ;
 			}
-			this.dispatchEvent(new videoEvents(videoEvents.VIDEO_STATUS_CHANGED,played));
+			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_STATUS_CHANGED,played));
 		}
 		
 		/**get the video seek precent*/
@@ -175,8 +175,8 @@ package videoShow
 			{
 				pause();
 			}
-			this.dispatchEvent(new videoEvents(videoEvents.VIDEO_LOADED));
-			this.dispatchEvent(new videoEvents(videoEvents.VIDEO_STATUS_CHANGED,played));
+			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_LOADED));
+			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_STATUS_CHANGED,played));
 		}
 	}
 }
