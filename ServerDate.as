@@ -67,7 +67,7 @@ package
 				/**56.9335483 , 03:30*/
 				var splitedZoneAndSecond:Array ;
 				/**+ or -*/
-				var zoneMinutes:int ;
+				var zoneMinutes:int = 0 ;
 				
 				var second:String ;
 				if(splitedTimePart[2].indexOf('+')!=-1)
@@ -75,7 +75,7 @@ package
 					splitedZoneAndSecond = splitedTimePart[2].split('+');
 					zoneMinutes = -1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
 				}
-				else
+				else if(splitedTimePart[2].indexOf('-')!=-1)
 				{
 					splitedZoneAndSecond = splitedTimePart[2].split('-');
 					zoneMinutes = 1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;

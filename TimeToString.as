@@ -60,5 +60,21 @@ package
 			}
 			return num ;
 		}
+		
+		/**Return string in format YYYY/MM/DD HH:MM:SS*/
+		public static function dateToString(date:Date,showClock:Boolean=false,showSeconds:Boolean=false):String
+		{
+			// TODO Auto Generated method stub
+			var str:String = date.fullYear+'/'+(date.month+1)+'/'+date.date;
+			if(showClock)
+			{
+				str+=' '+numToString(date.hours)+':'+numToString(date.minutes);//
+				if(showSeconds)
+				{
+					str+=':'+numToString(date.seconds);
+				}
+			}
+			return str ;
+		}
 	}
 }
