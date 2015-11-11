@@ -153,6 +153,22 @@ package com.mteamapp
 			
 			return str ;
 		}
+		
+		/***Clear in line "s in the json values:<br>
+		 * {"data":"my name is "ali"."}<br>
+		 * {"data":"my name is \"ali\"."}*/
+		public static function clearDoubleQuartmarksOnJSON(str:String):String
+		{
+			//var str:String = '[{"IdNews":"585","DateNews":"1394\\/8\\/20 ","SubjectNews":"fdjsakl fjk\\"adsl jfkldsa ","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News585.jpg"},{"IdNews":"584","DateNews":"1394\\/8\\/20 ","SubjectNews":"fsjdkl klfsad jklfsjadk ljfklds","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News584.jpg"},{"IdNews":"583","DateNews":"1394\\/8\\/19 ","SubjectNews":"fdjks jkfjd skfkjdkslfj jkfd f","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News583.jpg"},{"IdNews":"582","DateNews":"1394\\/8\\/19 ","SubjectNews":"fdjfk kfjd lfdk lfkdsjkfkdfkls jkf","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News582.jpg"},{"IdNews":"581","DateNews":"1394\\/8\\/18 ","SubjectNews":"مjkf jkfdjsk jkfldjkfld kfdjkfdjk","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News581.jpg"},{"IdNews":"580","DateNews":"1394\\/8\\/18 ","SubjectNews":"fksjdf kfjds klfjkdlfkdsj f sf sfd","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News580.jpg"},{"IdNews":"579","DateNews":"1394\\/8\\/18 ","SubjectNews":"fdskl jfsdkj kfdsjk jkflfdks","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News579.jpg"},{"IdNews":"578","DateNews":"1394\\/8\\/18 ","SubjectNews":"fdsa fad" sfdsa"fdfsaf","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News578.jpg"},{"IdNews":"577","DateNews":"1394\\/8\\/17 ","SubjectNews":"jisfad jkfsdjakj lfasjfdjfsdj kfsdjkl jkf","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News577.jpg"},{"IdNews":"576","DateNews":"1394\\/8\\/17 ","SubjectNews":"fdf afd fsadfdsaf afs df asfsda fsda ","ImageNews":"http:\\/\\/www.melkban24.ir\\/Files\\/News576.jpg"}]';
+			var regexp:RegExp = /(":"((?!"\},\{)(?!",")(?!"\}\])(?!"\})(.))*[^\\])"((?!\},\{)(?!,")(?!\}\])(?!\}))/gi
+			var lastStr:String ;
+			do
+			{
+				lastStr = str ;
+				str = str.replace(regexp,'$1\\"')
+			}while(str!=lastStr)
+			return str ;
+		}
 	
 		
 		
