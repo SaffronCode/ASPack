@@ -51,7 +51,8 @@ package
 			return stringedDate ;
 		}
 		
-		/**2015-10-27T10:46:56.9335483+03:30*/
+		/**2015-10-27T10:46:56.9335483+03:30<br>
+		 * 2018-04-15T17:00:00*/
 		public static function serverDateToDate2(date:String):Date
 		{
 			var myDate:Date = new Date();
@@ -73,13 +74,25 @@ package
 				if(splitedTimePart[2].indexOf('+')!=-1)
 				{
 					splitedZoneAndSecond = splitedTimePart[2].split('+');
-					zoneMinutes = -1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
+					if(splitedZoneAndSecond.length>1)
+					{
+						zoneMinutes = -1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
+					}
 				}
 				else if(splitedTimePart[2].indexOf('-')!=-1)
 				{
 					splitedZoneAndSecond = splitedTimePart[2].split('-');
-					zoneMinutes = 1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
+					if(splitedZoneAndSecond.length>0)
+					{
+						zoneMinutes = 1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
+					}
 				}
+				else
+				{
+					splitedZoneAndSecond = [splitedTimePart[2]]
+				}
+				
+				trace("splitedZoneAndSecond : "+splitedZoneAndSecond);
 				
 				myDate.fullYearUTC = uint(splitedDatePart[0]);
 				myDate.monthUTC = uint(splitedDatePart[1])-1;
