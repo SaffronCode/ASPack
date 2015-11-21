@@ -207,6 +207,10 @@ package
 		{
 			//I dont need the extra line any more. please controll the scroller size your self
 			//text+=' \n ';
+			if(text==null)
+			{
+				text = '' ;
+			}
 			if(captureResolution<=0)
 			{
 				captureResolution = defaultResolution ;
