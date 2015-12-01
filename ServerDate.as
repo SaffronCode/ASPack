@@ -37,6 +37,10 @@ package
 		/**2015-10-27T10:46:56.9335483+03:30*/
 		public static function dateToServerDate2(date:Date):String
 		{
+			if(date==null)
+			{
+				return '' ;
+			}
 			var zone:String = TimeToString.timeInString(Math.abs(date.timezoneOffset));
 			if(date.timezoneOffset<0)
 			{
@@ -145,6 +149,10 @@ package
 		public static function copyDate(date:Date):Date
 		{
 			// TODO Auto Generated method stub
+			if(date==null)
+			{
+				return null;
+			}
 			var clonedDate:Date = new Date(date.fullYear,date.month,date.date,date.hours,date.minutes,date.seconds,date.milliseconds);
 			return clonedDate;
 		}
