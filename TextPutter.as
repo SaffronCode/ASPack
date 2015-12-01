@@ -26,6 +26,7 @@ package
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.MovieClip;
+	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.text.TextField;
 
@@ -151,7 +152,15 @@ package
 				bitmap.scaleX = bitmap.scaleY = 1/captureResolution;
 				bitmap.name = mustRemove;
 				textField.parent.addChild(bitmap);
+				
+				bitmap.addEventListener(Event.REMOVED_FROM_STAGE,disposeThisBitmap);
 			}
+		}
+		
+		protected static function disposeThisBitmap(event:Event):void
+		{
+			// TODO Auto-generated method stub
+			(event.target as Bitmap).bitmapData.dispose();
 		}
 		
 		/**put texts on the big textField areas*/
@@ -198,6 +207,8 @@ package
 				bitmap.scaleX = bitmap.scaleY = 1/captureResolution;
 				bitmap.name = mustRemove;
 				textField.parent.addChild(bitmap);
+				
+				bitmap.addEventListener(Event.REMOVED_FROM_STAGE,disposeThisBitmap);
 			}
 		}
 		
@@ -344,6 +355,7 @@ package
 				bitmap.scaleX = bitmap.scaleY = 1/captureResolution;
 				bitmap.name = mustRemove;
 				textField.parent.addChild(bitmap);
+				bitmap.addEventListener(Event.REMOVED_FROM_STAGE,disposeThisBitmap);
 			}
 		}
 	}
