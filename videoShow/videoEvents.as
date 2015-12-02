@@ -5,8 +5,8 @@ package videoShow
 	public class VideoEvents extends Event
 	{
 		public static const VIDEO_LOADED:String = "VIDEO_LOADED";
-		public static const VIDEO_NOT_FOUND:String = "VIDEO_LOADED";
-		public static const VIDEO_STATUS_CHANGED:String = "VIDEO_LOADED";
+		public static const VIDEO_NOT_FOUND:String = "VIDEO_NOT_FOUND";
+		public static const VIDEO_STATUS_CHANGED:String = "VIDEO_STATUS_CHANGED";
 		
 		public var statusPlay:Boolean ;
 		public function VideoEvents(type:String,playStatus:Boolean=false)

@@ -1,8 +1,11 @@
 package videoShow
 {
 	import flash.display.Sprite;
+	import flash.events.AsyncErrorEvent;
+	import flash.events.DRMErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
 	import flash.media.Video;
 	import flash.net.NetConnection;
@@ -46,6 +49,9 @@ package videoShow
 
 			netStream = new NetStream(netConnetction);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS,listenToNetStatus);
+			netStream.addEventListener(IOErrorEvent.IO_ERROR,noFileExists);
+			netStream.addEventListener(AsyncErrorEvent.ASYNC_ERROR,noFileExists);
+			netStream.addEventListener(DRMErrorEvent.DRM_ERROR,noFileExists);
 			netStream.client = videoClient ;
 			
 			video = new Video();
@@ -53,6 +59,13 @@ package videoShow
 			this.addChild(video);
 			
 			this.addEventListener(Event.REMOVED_FROM_STAGE,unLoad);
+		}
+		
+		protected function noFileExists(event:*):void
+		{
+			// TODO Auto-generated method stub
+			trace("File dose not exists");
+			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_NOT_FOUND));
 		}
 		
 		/**tells that if the video is loaded or not*/
