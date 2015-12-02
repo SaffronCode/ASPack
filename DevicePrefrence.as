@@ -18,6 +18,8 @@
 
 package
 {
+	import dataManager.GlobalStorage;
+	
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -37,6 +39,8 @@ package
 							tabletMinimomHeight:Number = 4;
 		
 		private static var bigScreen:int = -1 ;
+		
+		private static const ranked_sharedObject_id:String = "ranked_id" ;
 		
 		
 		
@@ -210,6 +214,7 @@ package
 			if(DevicePrefrence.isAndroid())
 			{
 				navigateToURL(new URLRequest("market://details?id="+appID));
+				GlobalStorage.save(ranked_sharedObject_id,true);
 			}
 			else
 			{
@@ -262,6 +267,18 @@ package
 		{
 			onDone();
 			navigateToURL(new URLRequest("http://itunes.apple.com/app/id"+appCodeID));
+			
+			GlobalStorage.save(ranked_sharedObject_id,true);
+		}
+		
+		/**Returns true if user is ranked to this application befor*/
+		public static function isRankedBefor():Boolean
+		{
+			if(GlobalStorage.load(ranked_sharedObject_id)!=null)
+			{
+				return true ;
+			}
+			return false ;
 		}
 		
 		
