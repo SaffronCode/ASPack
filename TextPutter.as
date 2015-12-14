@@ -126,6 +126,19 @@ package
 			//manage ing text field size
 			if( textField.textWidth > textField.width-5 )
 			{
+				if(splitTheExtraText)
+				{
+					var acceptableText:uint = uint((textField.width/textField.textWidth)*text.length) ;
+					if(arabic)
+					{
+						textField.text = UnicodeStatic.convert(StringFunctions.short(text,acceptableText),useCash,arabicNumber);
+					}
+					else
+					{
+						textField.text = StringFunctions.short(text,acceptableText);
+					}
+				}
+				
 				var maxW:Number = textField.width ;
 				var maxH:Number = textField.height ;
 				
