@@ -527,5 +527,27 @@ package
 			// TODO Auto Generated method stub
 			target.stopAllMovieClips();
 		}
+		
+		public static function displayObjectInfo(target:DisplayObject):String
+		{
+			// TODO Auto Generated method stub
+			var info:String = "" ;
+			var locationString:String ='';
+			info += "\tName: "+target.name+'\n' ;
+			info += "\tType: "+getQualifiedClassName(target)+'\n' ;
+			if(target.stage)
+			{
+				info += "\tArea on : "+target.getBounds(target.stage)+'\n' ;
+			}
+			while(target!=null)
+			{
+				locationString=target.name+'.'+locationString;
+				target = target.parent ;
+			}
+			info += "\tLocation: "+locationString;
+			
+			
+			return info;
+		}
 	}
 }
