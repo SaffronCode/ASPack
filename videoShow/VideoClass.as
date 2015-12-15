@@ -174,6 +174,12 @@ package videoShow
 			}
 			return 0 ;
 		}
+		
+		/**This is the loaded percent for the current video*/
+		public function get loadedStreamPercent():Number
+		{
+			return netStream.bytesLoaded/netStream.bytesTotal ;
+		}
 				
 			
 		
