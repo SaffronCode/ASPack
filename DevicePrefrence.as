@@ -40,7 +40,7 @@ package
 		
 		private static var bigScreen:int = -1 ;
 		
-		private static const ranked_sharedObject_id:String = "ranked_id" ;
+		private static const ranked_sharedObject_id:String = "ranked_id_2" ;
 		
 		
 		
@@ -192,13 +192,13 @@ package
 		/**Open the ranking page for any os*/
 		public static function rankThisApp(onCanseled:Function=null,onRedirected:Function=null):void
 		{
-			if(onRedirected == null)
+			if(onRedirected == null) 
 			{
 				onDone = new Function();
 			}
 			else
 			{
-				onDone = onRedirected ;
+				onDone = onRedirected ; 
 			}
 			if(onCanseled == null)
 			{
@@ -211,12 +211,7 @@ package
 			
 			
 			
-			if(DevicePrefrence.isAndroid())
-			{
-				navigateToURL(new URLRequest("market://details?id="+appID));
-				GlobalStorage.save(ranked_sharedObject_id,true);
-			}
-			else
+			if(DevicePrefrence.isIOS())
 			{
 				if(idCode.data.id == undefined)
 				{
@@ -226,6 +221,12 @@ package
 				{
 					openItuneStoreFor(idCode.data.id);
 				}
+			}
+			else
+			{
+				navigateToURL(new URLRequest("market://details?id=air."+appID));
+				GlobalStorage.save(ranked_sharedObject_id,true);
+				trace("The rank url is : "+"market://details?id=air."+appID);
 			}
 			//https://itunes.apple.com/lookup?bundleId=com.mteamapps.NabatNorooz
 		}
