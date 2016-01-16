@@ -339,17 +339,17 @@ package
 				textField.text = text ;
 			}
 			
-			
 			//textField.multiline = true ;
 			//textField.wordWrap = true ;
 			
 			
 			textField.height = firstHeight ;
 			
-			while(textField.maxScrollV>1)
+			//The below line was creates bug
+			/*while(textField.maxScrollV>1)
 			{
 				textField.text = textField.text.substring(0,textField.text.lastIndexOf('\n'));
-			}
+			}*/
 			
 			
 			lastInfo_numLines = textField.numLines ;
