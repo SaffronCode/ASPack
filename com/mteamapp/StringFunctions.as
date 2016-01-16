@@ -306,6 +306,10 @@ package com.mteamapp
 		public static function removeHTML(ReferText:String):String
 		{
 			// TODO Auto Generated method stub
+			if(ReferText==null)
+			{
+				return '' ;
+			}
 			var htmlDeleter:RegExp = /<\/?[^>]*>/gi;
 			return ReferText.replace(htmlDeleter,'');
 		}
