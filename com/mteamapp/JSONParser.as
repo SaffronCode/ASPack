@@ -87,7 +87,8 @@ package com.mteamapp
 		private var parsed:Object;
 
 		
-		/**This function can only use by RestGullJSON parser*/
+		/**This function can only use by RestGullJSON parser.<br>
+		 * Warning!! Vector.<int> will not catch by this class. you should change it with Array object.*/
 		private static function parsParams(fromObject:Object,toObject:*):void
 		{
 			var arr:Array ;
