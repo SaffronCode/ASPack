@@ -62,7 +62,7 @@ package
 		/**speed reduocers <br>
 		 * mu : is for the target is in the scroll rectangle range<br>
 		 * mu2 : is for hard speed down*/
-		private var mu:Number = 0.85,
+		private var mu:Number = 0.94,
 					mu2:Number = 0.4;
 		
 		/**this number is the minimom scrolling speed that start to protect mouse events to the scrollable object*/
@@ -478,7 +478,7 @@ package
 			if(canScroll())
 			{
 				//Lock the parent scoller imediatly
-				targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
+				//targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
 				
 				isScrolling = true ;
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
@@ -595,6 +595,12 @@ package
 			
 			if(isScrolling)
 			{
+				if(!Obj.isAccesibleByMouse(targParent,false,new Point(targStage.mouseX,targStage.mouseY)))
+				{
+					stopScroll();
+					unLock();
+					return;
+				}
 				var absScale:Number = absoluteScale();
 				//trace('absScale : '+absScale);
 				if(unLockLeftRight)

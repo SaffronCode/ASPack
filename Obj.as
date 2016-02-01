@@ -377,7 +377,7 @@ package
 		
 	///////////////////////////////////////////////////////
 		/**Returns true if user can click the center of this object*/
-		public static function isAccesibleByMouse(targ:DisplayObject,ignoreAllTextsOnTheStage:Boolean=true):Boolean
+		public static function isAccesibleByMouse(targ:DisplayObject,ignoreAllTextsOnTheStage:Boolean=true,conrollPosition:Point=null):Boolean
 		{
 			/**Parent list for current target*/
 			var targParents:Vector.<DisplayObjectContainer>;
@@ -410,10 +410,19 @@ package
 			//return true ;
 			
 			
-			var targArea:Rectangle = targ.getBounds(targ.stage);
-			var targCenterPoing:Point = new Point(targArea.x+targArea.width/2,targArea.y+targArea.height/2);
+			var targArea:Rectangle;
+			targArea = targ.getBounds(targ.stage);
+			var targCenterPoint:Point;
+			if(conrollPosition==null)
+			{
+				targCenterPoint = new Point(targArea.x+targArea.width/2,targArea.y+targArea.height/2);
+			}
+			else
+			{
+				targCenterPoint = conrollPosition ;
+			}
 			
-			itemsOnItsArea = targ.stage.getObjectsUnderPoint(targCenterPoing);
+			itemsOnItsArea = targ.stage.getObjectsUnderPoint(targCenterPoint);
 			for(i = 0 ; i<itemsOnItsArea.length ; i++)
 			{
 				var item:* = itemsOnItsArea[i] ;
