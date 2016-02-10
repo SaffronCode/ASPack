@@ -207,7 +207,7 @@ package videoPlayer
 				GPUavail = false ;
 				if(vid!=null)
 				{
-					this.removeChild(vid);
+					Obj.remove(vid);
 					vid = null ;
 				}
 				vid = new Video();
