@@ -387,7 +387,7 @@ package
 			
 			if(targ.stage == null)
 			{
-				trace("The item is not on stage");
+				//trace("The item is not on stage");
 				return false ;
 			}
 			
@@ -421,11 +421,12 @@ package
 			{
 				targCenterPoint = conrollPosition ;
 			}
-			
 			itemsOnItsArea = targ.stage.getObjectsUnderPoint(targCenterPoint);
+			//trace("** total items under poit : "+itemsOnItsArea.length+' < '+targCenterPoint);
 			for(i = 0 ; i<itemsOnItsArea.length ; i++)
 			{
 				var item:* = itemsOnItsArea[i] ;
+				//trace("Start with this targ : "+Obj.displayObjectInfo(item));
 				if(targ is DisplayObjectContainer && (targ as DisplayObjectContainer).contains(item))
 				{
 					//trace("The targ is container of "+item);
@@ -435,9 +436,11 @@ package
 				{
 					for(j = 0 ; j<targParents.length ; j++)
 					{
-						if(targParents[j].contains(item))
+						if(targParents[j].contains(item) && (targParents[j]!=item))
 						{
 							//trace(targParents[j]+" contains the "+item);
+							//trace("targParents[j] is "+displayObjectInfo(targParents[j]));
+							//trace("item is "+displayObjectInfo(item));
 							var targLastChild:DisplayObject ;
 							if(j == 0)
 							{
@@ -450,13 +453,16 @@ package
 							//trace("targLastChild is : "+targLastChild);
 							var canClick:Boolean = true ;
 							var itemParent:DisplayObjectContainer = item.parent ;
+							//trace("itemParent : "+itemParent);
 							
 							canClick = canClick && itemParent.mouseChildren ;
 							
 							while(itemParent!=targParents[j])
 							{
 								item = itemParent;
+								//trace("1. itemParent : "+itemParent);
 								itemParent = item.parent ;
+								//trace("2. itemParent : "+itemParent);
 								if(itemParent!=null)
 								{
 									canClick = canClick && itemParent.mouseChildren ;
@@ -512,6 +518,7 @@ package
 								//trace("Hitted!!  itemIndex:"+itemIndex+' targInsex:'+targInsex+' >>> '+item);
 								return false ;
 							}
+							//trace("Nothing founded");
 							break;
 						}
 					}
