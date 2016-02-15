@@ -1,5 +1,6 @@
 package
 {
+	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
@@ -28,8 +29,10 @@ package
 		
 		/**Save thesebytes to selected location<br>
 		 * This function will return the exeption string to*/
-		public static function seveFile(fileTarget:File,bytes:ByteArray):String
+		public static function seveFile(fileTarget:File,bytes:ByteArray,openAsync:Boolean=false):String
 		{
+			//The async file saver had problem. it cannot save all binary datas by one request.
+			openAsync = false ;
 			try
 			{
 				if(fileTarget.exists)
@@ -38,7 +41,15 @@ package
 				}
 				trace("File length : "+bytes.length+' save to :'+fileTarget.name);
 				var fileStream:FileStream = new FileStream();
-				fileStream.open(fileTarget,FileMode.WRITE);
+				if(openAsync)
+				{
+					fileStream.addEventListener(IOErrorEvent.IO_ERROR,cannotSaveThisFile);
+					fileStream.openAsync(fileTarget,FileMode.WRITE);
+				}
+				else
+				{
+					fileStream.open(fileTarget,FileMode.WRITE);
+				}
 				bytes.position = 0 ;
 				fileStream.writeBytes(bytes,0,bytes.bytesAvailable);
 				fileStream.close();
@@ -50,6 +61,11 @@ package
 				return e.message ;
 			}
 			return '' ;
+		}
+		
+		private static function cannotSaveThisFile(e:IOErrorEvent):void
+		{
+			trace("Cant save the file : "+e);
 		}
 		
 		/**Delete all files in this folder*/
