@@ -41,6 +41,10 @@ package com.mteamapp.recorder
 		
 		private static var MP3Bytes:ByteArray ;
 		
+		private static var saveWaveFormat:Boolean = false ;
+		
+		private static var _onSaveProccess:Boolean = false ;
+		
 		public static function get MP3File():ByteArray
 		{
 			return MP3Bytes ;
@@ -65,11 +69,23 @@ package com.mteamapp.recorder
 			
 			dispatcher.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS));
 			length = recorder.length ;
-			mp3Encoder = new ShineMP3Encoder(recorder.output);
-			mp3Encoder.addEventListener(Event.COMPLETE, mp3EncodeComplete);
-			mp3Encoder.addEventListener(ProgressEvent.PROGRESS, mp3EncodeProgress);
-			mp3Encoder.addEventListener(ErrorEvent.ERROR, mp3EncodeError);
-			mp3Encoder.start();
+			if(!saveWaveFormat)
+			{
+				mp3Encoder = new ShineMP3Encoder(recorder.output);
+				mp3Encoder.addEventListener(Event.COMPLETE, mp3EncodeComplete);
+				mp3Encoder.addEventListener(ProgressEvent.PROGRESS, mp3EncodeProgress);
+				mp3Encoder.addEventListener(ErrorEvent.ERROR, mp3EncodeError);
+				mp3Encoder.start();
+			}
+			else
+			{
+				MP3Bytes = new ByteArray();
+				MP3Bytes.writeBytes(recorder.output);
+				trace("Wave is ready");
+				_isRecording = false ;
+				_onSaveProccess = false ;
+				dispatcher.dispatchEvent(new Event(Event.COMPLETE));
+			}
 		}
 		
 		protected static function mp3EncodeError(event:Event):void
@@ -94,6 +110,7 @@ package com.mteamapp.recorder
 			MP3Bytes.writeBytes(mp3Encoder.mp3Data);
 			trace("MP3 is ready");
 			_isRecording = false ;
+			_onSaveProccess = false ;
 			dispatcher.dispatchEvent(new Event(Event.COMPLETE));
 		}
 		
@@ -108,8 +125,9 @@ package com.mteamapp.recorder
 		}
 
 		/**Recrod duration is based on milisecond.*/
-		public static function startRecording(duration:Number=10*60*1000):void
+		public static function startRecording(duration:Number=10*60*1000,SaveWaveFormat:Boolean = false):void
 		{
+			saveWaveFormat = SaveWaveFormat ;
 			setUp();
 			
 			if(_isRecording)
@@ -117,6 +135,7 @@ package com.mteamapp.recorder
 				trace("The SoundRecorder is already recording");
 				cansel() ;
 			}
+			_onSaveProccess = false ;
 			clearTimeout(timeOutId);
 			MP3Bytes = new ByteArray();
 			_isRecording = true;
@@ -151,6 +170,7 @@ package com.mteamapp.recorder
 		/**Stop the recording progress*/
 		public static function stopRecording():void
 		{
+			_onSaveProccess = true ;
 			clearTimeout(timeOutId);
 			if(!_isRecording)
 			{
@@ -159,6 +179,12 @@ package com.mteamapp.recorder
 			}
 			trace("Stop the recording!");
 			recorder.stop();
+		}
+		
+		/**Returns true if it is on the saving proccess*/
+		public static function isOnSavingProccess():Boolean
+		{
+			return _onSaveProccess ;
 		}
 	}
 }
