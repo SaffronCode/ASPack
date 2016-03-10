@@ -25,6 +25,7 @@ package
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.geom.Matrix;
@@ -72,6 +73,8 @@ package
 		
 		/**default resolution for captured images*/
 		public static var defaultResolution:Number = 2 ;
+
+		public static var lastInfo_realTextHeight:Number;
 		
 		
 		/**Split extra text is not working .*/
@@ -226,11 +229,27 @@ package
 		}
 		
 		
-		/**Return textwidth*/
-		public static function onTextArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,align:Boolean = true,convertSerevHTML:Boolean=false,linksColor:int=-1,generateLinksForURLs:Boolean=false):Number
+		/**Return textwidth.<br>
+		 * pass the vertical height to the verticalAlign to make it align on the vertical direction*/
+		public static function onTextArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,align:Boolean = true,convertSerevHTML:Boolean=false,linksColor:int=-1,generateLinksForURLs:Boolean=false,VerticalAlign_verticalHeight:Number=0):Number
 		{
 			//I dont need the extra line any more. please controll the scroller size your self
 			//text+=' \n ';
+			
+			var lineHeight:Number = 0 ;
+			lastInfo_realTextHeight = 0 ; 
+			
+			if(VerticalAlign_verticalHeight>0)
+			{
+				textField.text = '-';
+				var firstLineHieght:Number = textField.textHeight ;
+				trace(" ♠ : textField.textHeight1 : "+firstLineHieght);
+				textField.text = '-\n-';
+				trace(" ♠ : textField.textHeight2 : "+textField.textHeight);
+				lineHeight = textField.textHeight - firstLineHieght ;
+				trace(" ♦ : lineHeight : "+lineHeight);
+			}
+			
 			if(text==null)
 			{
 				text = '' ;
@@ -250,6 +269,7 @@ package
 				text = StringFunctions.generateLinks(text,linksColor);//Unicode.htmlCorrect(text,linksColor,!replaceWithBitmap,fontSize);
 				//trace("Text changed to : "+text)
 			}
+			
 			
 			//textField.multiline = true;
 			//textField.wordWrap = true;
@@ -276,6 +296,8 @@ package
 				textField.text = text ;
 			}
 			
+			lastInfo_realTextHeight = lineHeight*textField.numLines;
+			
 			lastInfo_numLines = textField.numLines ;
 			lastInfo_textWidth = textField.textWidth;
 			lastInfo_textHeidth = textField.textHeight;
@@ -292,7 +314,7 @@ package
 			
 			
 			//capture the textfield
-			if(replaceWithBitmap)
+			if(replaceWithBitmap || VerticalAlign_verticalHeight!=0)
 			{
 				/*var bitmapData:BitmapData = new BitmapData((textField.x+textField.width)*captureResolution
 					,(textField.y+textField.height)*captureResolution,true,0);
@@ -304,7 +326,19 @@ package
 				textField.parent.addChild(bitmap);*/
 				
 				//Added on version 1.5
-				CaptueBitmap.captureBigTextFields(textField,captureResolution);
+				var capturedObject:Bitmap = CaptueBitmap.captureBigTextFields(textField,captureResolution);
+				if(VerticalAlign_verticalHeight!=0)
+				{
+					trace("♦ : lastInfo_textHeidth : "+lastInfo_textHeidth);
+					trace("♦ : VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
+					trace("♦ : (VerticalAlign_verticalHeight-lastInfo_textHeidth)/2 : "+(VerticalAlign_verticalHeight-lastInfo_textHeidth)/2);
+					trace(" ♥ : capturedObject.y : "+capturedObject.y);
+					trace(" ♦ : text : "+text);
+					trace(" ♦ what is capturedObject ? :"+capturedObject);
+					trace(" ♦ : lastInfo_realTextHeight : "+lastInfo_realTextHeight);
+					trace(" ♦ : lineHeight : "+lineHeight);
+					capturedObject.y = (VerticalAlign_verticalHeight-lastInfo_realTextHeight)/2;
+				}
 			}
 			
 			return textWidth ;

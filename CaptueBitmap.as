@@ -73,8 +73,9 @@ package
 		}
 		
 		/**this function will capture image and put it in the parent of the text field . it may splitted to many many images. but 
-		 * deleteCapturedBigText() can remove the images of selected text field*/
-		public static function captureBigTextFields(CapturableArea:DisplayObject,resolution:Number=1):void
+		 * deleteCapturedBigText() can remove the images of selected text field<br>
+		 * Returns the last captured bitmap*/
+		public static function captureBigTextFields(CapturableArea:DisplayObject,resolution:Number=1):Bitmap
 		{
 			var textFieldContainer:DisplayObjectContainer = CapturableArea.parent;
 			var cashedMask:DisplayObject = textFieldContainer.mask ;
@@ -126,6 +127,8 @@ package
 			
 			textFieldContainer.mask = cashedMask ;
 			CapturableArea.visible = false;
+			
+			return bitMap ;
 		}
 		
 		/**remove all old captured images and restor text fild visible to true*/
