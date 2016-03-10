@@ -146,6 +146,33 @@ package
 			return createdDate ;
 		}
 		
+		/**2015-08-30 or 2015/08/30*/
+		public static function serverDateToDate3(date:String):Date
+		{
+			if(date == '' || date==null)
+			{
+				return new Date();
+			}
+			
+			
+			var dateSplitter:Array ;
+			var createdDate:Date;
+
+			
+			if( date.indexOf('/')!=-1)
+			{
+				dateSplitter = date.split('/');
+			}
+			else if(date.indexOf('-')!=-1)
+			{
+				dateSplitter = date.split('-');
+			}
+			
+			
+			createdDate = new Date(Number(dateSplitter[0]),Number(dateSplitter[1])-1,Number(dateSplitter[2]),0,0,0);
+
+			return createdDate ;
+		}
 		public static function copyDate(date:Date):Date
 		{
 			// TODO Auto Generated method stub
