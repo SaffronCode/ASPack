@@ -10,6 +10,7 @@ package
 {
 	import flash.display.BitmapData;
 	import flash.display.JPEGEncoderOptions;
+	import flash.display.PNGEncoderOptions;
 	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -94,6 +95,13 @@ package
 		{
 			var jpeg:JPEGEncoderOptions = new JPEGEncoderOptions(quality);
 			return bitmapData.encode(bitmapData.rect,jpeg) ;
+		}
+		
+		
+		public static function createPNG(bitmapData:BitmapData):ByteArray
+		{
+			var png:PNGEncoderOptions = new PNGEncoderOptions(true);
+			return bitmapData.encode(bitmapData.rect,png);
 		}
 		
 		/**This function will rotate current bitmap to 90 degrees*/
