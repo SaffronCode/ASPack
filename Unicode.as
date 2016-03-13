@@ -94,8 +94,8 @@ package
 			MESlistChr['ۀ'] = "ﮤ ﮥ ﮥ ﻫ";
 			MESlistChr['؟'] = "؟";		//manande و , be hichi nemichasbe
 			MESlistChr['ـ'] = "ــــــ";	//manande ـ be hame michasbe
-			//MESlistChr['«'] = "»";
-			//MESlistChr['»'] = "«";
+			MESlistChr['«'] = "»";
+			MESlistChr['»'] = "«";
 			MESlistChr['['] = "]";
 			MESlistChr[']'] = "[";
 			MESlistChr['('] = ")";
