@@ -297,6 +297,8 @@ package
 			}
 			
 			lastInfo_realTextHeight = lineHeight*textField.numLines;
+			//trace("♠ calculated height is : "+lastInfo_realTextHeight+" vs real text height : "+textField.textHeight);
+			lastInfo_realTextHeight = textField.textHeight ;
 			
 			lastInfo_numLines = textField.numLines ;
 			lastInfo_textWidth = textField.textWidth;
