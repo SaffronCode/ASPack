@@ -57,6 +57,15 @@ package
 		private var revertY:Boolean = false ,
 					revertX:Boolean = false ;
 		
+		private var stepSizes:Number = 0,
+					stepMinSpeed:Number = 5,
+					stepV:Number=0,
+					stepVMu:Number=0.7,
+					stepVF:Number=10,
+					stepVF2:Number=10,
+					stepVMu2:Number=0.9,
+					stepBack:Boolean = false ;
+		
 		
 	//animate controllers ↓
 		/**speed reduocers <br>
@@ -148,9 +157,10 @@ package
 		 * <br>
 		 * You can only lock t_d or r_l scroll when you didn't enter targetAreaRectangle.(Why???)*/
 		public function ScrollMT(target:DisplayObject,maskArea:Rectangle,targetArea:Rectangle=null,FreeScrollOnTarget_TD:Boolean=false,FreeScrollOnTarget_LR:Boolean=false,activeEffect:Boolean=true,
-				RevertY:Boolean=false/*,RevertX:Boolean=false*/)
+				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0)
 		{
 			revertY = RevertY ;
+			stepSizes = stepSize ;
 			
 			//remember target
 			targ = target ;
@@ -595,6 +605,7 @@ package
 			
 			if(isScrolling)
 			{
+				stepBack = false ;
 				if(!Obj.isAccesibleByMouse(targParent,false,new Point(targStage.mouseX,targStage.mouseY)))
 				{
 					stopScroll();
@@ -770,6 +781,25 @@ package
 				{
 					Vx*=slowDownMu ;
 					Vx+=(X1-X0)/slowDownSpeed;
+				}
+				
+				if(stepSizes!=0)
+				{
+					if(!isScrolling && (stepBack || Math.abs(Vx)<stepMinSpeed))
+					{
+						stepBack = true ;
+						//trace(" targetRect.x : "+targetRect.x);
+						//trace(" stepSizes : "+stepSizes);
+						//trace(" Math.round(targetRect.x/stepSizes) : "+Math.round(targetRect.x/stepSizes));
+						var bestPlace:Number = Math.min(0,Math.round(Math.max(maskRect.width-targetRect.width,targetRect.x)/stepSizes)*stepSizes) ;
+						//trace("NOW : "+bestPlace);
+						stepV += (bestPlace-targetRect.x)/stepVF; 
+						stepV*=stepVMu ;
+						
+						Vx+=stepV/stepVF2;
+						Vx*=stepVMu2;
+						//trace("Vx : "+Vx);
+					}
 				}
 			}
 		}
