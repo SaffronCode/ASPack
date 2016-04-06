@@ -783,7 +783,7 @@ package
 					Vx+=(X1-X0)/slowDownSpeed;
 				}
 				
-				if(stepSizes!=0)
+				if(stepSizes!=0 && targetRect.width>maskRect.width)
 				{
 					if(!isScrolling && (stepBack || Math.abs(Vx)<stepMinSpeed))
 					{
