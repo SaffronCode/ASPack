@@ -243,11 +243,11 @@ package
 			{
 				textField.text = '-';
 				var firstLineHieght:Number = textField.textHeight ;
-				trace(" ♠ : textField.textHeight1 : "+firstLineHieght);
+				//trace(" ♠ : textField.textHeight1 : "+firstLineHieght);
 				textField.text = '-\n-';
-				trace(" ♠ : textField.textHeight2 : "+textField.textHeight);
+			//	trace(" ♠ : textField.textHeight2 : "+textField.textHeight);
 				lineHeight = textField.textHeight - firstLineHieght ;
-				trace(" ♦ : lineHeight : "+lineHeight);
+				//trace(" ♦ : lineHeight : "+lineHeight);
 			}
 			
 			if(text==null)
