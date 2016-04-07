@@ -331,14 +331,14 @@ package
 				var capturedObject:Bitmap = CaptueBitmap.captureBigTextFields(textField,captureResolution);
 				if(VerticalAlign_verticalHeight!=0)
 				{
-					trace("♦ : lastInfo_textHeidth : "+lastInfo_textHeidth);
+					/*trace("♦ : lastInfo_textHeidth : "+lastInfo_textHeidth);
 					trace("♦ : VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
 					trace("♦ : (VerticalAlign_verticalHeight-lastInfo_textHeidth)/2 : "+(VerticalAlign_verticalHeight-lastInfo_textHeidth)/2);
 					trace(" ♥ : capturedObject.y : "+capturedObject.y);
 					trace(" ♦ : text : "+text);
 					trace(" ♦ what is capturedObject ? :"+capturedObject);
 					trace(" ♦ : lastInfo_realTextHeight : "+lastInfo_realTextHeight);
-					trace(" ♦ : lineHeight : "+lineHeight);
+					trace(" ♦ : lineHeight : "+lineHeight);*/
 					capturedObject.y = (VerticalAlign_verticalHeight-lastInfo_realTextHeight)/2;
 				}
 			}
