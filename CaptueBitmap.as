@@ -110,7 +110,7 @@ package
 				//trace("Math.min("+textHeight+"-"+currentY+","+maxHeight+") : "+Math.min(textHeight-currentY,maxHeight))
 				
 				bitData = new BitmapData(textWidth*resolution,currentImageHeight*resolution,true,0);//0x33ff0000
-				trace("captured image height : "+bitData.height);
+			//	trace("captured image height : "+bitData.height);
 				bitData.draw(textFieldContainer,new Matrix(resolution,0,0,resolution,X0*resolution*-1,currentY*resolution*-1-Y0*resolution));
 				bitMap = new Bitmap(bitData);
 				bitMap.smoothing = true ;
