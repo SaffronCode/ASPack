@@ -3,7 +3,7 @@ package
 	import com.mteamapp.StringFunctions;
 	
 	import flash.utils.getTimer;
-
+	
 	public class ServerDate
 	{
 		/**11/6/2014 1:10:14 AM*/
@@ -146,6 +146,9 @@ package
 			return createdDate ;
 		}
 		
+		
+		
+		
 		/**2015-08-30 or 2015/08/30*/
 		public static function serverDateToDate3(date:String):Date
 		{
@@ -157,7 +160,7 @@ package
 			
 			var dateSplitter:Array ;
 			var createdDate:Date;
-
+			
 			
 			if( date.indexOf('/')!=-1)
 			{
@@ -170,9 +173,46 @@ package
 			
 			
 			createdDate = new Date(Number(dateSplitter[0]),Number(dateSplitter[1])-1,Number(dateSplitter[2]),0,0,0);
-
+			
 			return createdDate ;
 		}
+		
+		/**2015/11/06 23:00:00 or   2015-11-06 23:00:00*/
+		public static function serverDateToDate4(date:String):Date
+		{
+			if(date == '' || date==null)
+			{
+				return new Date();
+			}
+			
+			var splitter:Array;
+			var dateSplitter:Array ;
+			var timeSplitter:Array;
+			var createdDate:Date;
+			
+			splitter = date.split(' ');
+			
+			if(date.indexOf('/')!=-1)
+			{			
+				dateSplitter = (splitter[0] as String).split('/');
+			}
+			else if(date.indexOf('-')!=-1)
+			{			
+				dateSplitter = (splitter[0] as String).split('-');
+			}
+			timeSplitter = (splitter[1] as String).split(':');
+			
+			if(timeSplitter[0]=='12')
+			{
+				timeSplitter[0] = '0' ;
+			}
+			
+			createdDate = new Date(Number(dateSplitter[0]),Number(dateSplitter[1])-1,Number(dateSplitter[2]),Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
+			
+			return createdDate ;
+		}
+		
+		
 		public static function copyDate(date:Date):Date
 		{
 			// TODO Auto Generated method stub
