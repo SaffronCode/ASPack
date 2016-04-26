@@ -309,6 +309,7 @@ package
 				hideTextField();
 				manageInputPose();
 				myStageText.assignFocus();
+				myStageText.selectRange(myStageText.text.length,myStageText.text.length);
 			}
 		}
 		
