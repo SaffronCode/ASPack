@@ -53,6 +53,9 @@ package
 		private const 	cursolCollor:Number = 0x000000,
 						cursolAlpha:Number = 0.1;
 		
+		/**This is the range that the IsRange function will return true if the scroller was out side of*/
+		private const acceptableDelta:Number = 1 ;
+		
 		/**This will make 0,0 position stay on button or top*/
 		private var revertY:Boolean = false ,
 					revertX:Boolean = false ;
@@ -409,7 +412,7 @@ package
 		/**lock the scroller and stop floating*/
 		public function lock(unlockOnFirstClick:Boolean=false):void
 		{
-			trace("**locked");
+			//trace("**locked");
 			UnlockOnFirstClick = unlockOnFirstClick ;
 			MouseUnLock();
 			scrollLock = true ;
@@ -725,6 +728,38 @@ package
 			
 		}
 		
+		
+		/**This will returns true if the scroller is in the correct ragne and there is no need to wait till scroller back to the page*/
+		public function isInRange():Boolean
+		{
+			if(
+				(
+					targetRect.width<maskRect.width 
+					|| 
+					(
+						targetRect.left<=maskRect.left+acceptableDelta
+						&& 
+						targetRect.right>=maskRect.right-acceptableDelta
+					)
+				)
+				&&
+				(
+					targetRect.height<maskRect.height
+					||
+					(
+						targetRect.top<=maskRect.top+acceptableDelta
+						&&
+						targetRect.bottom>=maskRect.bottom-acceptableDelta
+					)
+				)
+			)
+			{
+				//trace("It is in range");
+				return true ;
+			}
+			//trace("It is not in the range");
+			return false ;
+		}
 		
 		
 		/**this function will slow down the floating speeds if targRectangle was got out from the mask rectangle*/
