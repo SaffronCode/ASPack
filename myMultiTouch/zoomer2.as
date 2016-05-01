@@ -277,7 +277,7 @@ package myMultiTouch
 			var rectScale:Number ;
 			for(i=0;i<zoomAbles.length;i++)
 			{
-				absPose = zoomAbles[i].localToGlobal(new Point());
+				absPose = zoomAbles[i].parent.localToGlobal(firstPoint[i]);
 				controllingRect = stageRectangle[i].clone();
 				controllingRect.x+=absPose.x;
 				controllingRect.y+=absPose.y;
