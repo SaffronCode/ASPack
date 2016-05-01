@@ -272,9 +272,23 @@ package myMultiTouch
 			lastTouches = touchPoints.length ;
 			
 			//make effects on each zoomable objects
+			var controllingRect:Rectangle ;
+			var absPose:Point ;
+			var rectScale:Number ;
 			for(i=0;i<zoomAbles.length;i++)
 			{
-				if(lock[i] || !zoomAbles[i].hitTestPoint(lastCenter.x,lastCenter.y))
+				absPose = zoomAbles[i].localToGlobal(new Point());
+				controllingRect = stageRectangle[i].clone();
+				controllingRect.x+=absPose.x;
+				controllingRect.y+=absPose.y;
+				rectScale =	Obj.getScale(zoomAbles[i].parent);
+				
+				controllingRect.x *= rectScale;
+				controllingRect.y *= rectScale;
+				controllingRect.width *= rectScale;
+				controllingRect.height *= rectScale;
+				
+				if(lock[i] || !zoomAbles[i].hitTestPoint(lastCenter.x,lastCenter.y) || !controllingRect.contains(lastCenter.x,lastCenter.y))
 				{
 					//do not action for outsided Objects
 					continue ;
