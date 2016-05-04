@@ -1,0 +1,6 @@
+﻿<version>
+	<id>100.0.0</id>
+	<text>New version is available!!</text>
+	<url_ios>http://www.apple.com</url_ios>
+	<url_android>http://www.google.com</url_android>
+</version>
