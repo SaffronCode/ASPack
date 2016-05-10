@@ -67,6 +67,30 @@
 			onDone();
 		}
 		
+		
+		/**Open the video camera*/
+		public static function getVideoCamera(onVideoReady:Function):void
+		{
+			imageBytes = null;
+			imageBitmapData = null ;
+			
+			if(!CameraUI.isSupported)
+			{
+				return ;
+			}
+			
+			tempW = NaN;
+			tempH = NaN ;
+			
+			camera = new CameraUI();
+			camera.addEventListener(MediaEvent.COMPLETE,sendCameraImage);
+			camera.addEventListener(Event.CANCEL,mediaLoadingCanseled);
+			camera.launch(MediaType.VIDEO);
+			
+			onDone = onVideoReady ;
+		}
+		
+		
 		/**When the image is ready, you can get its image from imageBytes*/
 		public static function getCameraImage(onImageReady:Function,imageW:Number=NaN,imageH:Number=NaN,loadThisFileIfNotSupporting:String=null):void
 		{
