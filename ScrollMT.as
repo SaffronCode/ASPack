@@ -39,6 +39,7 @@ package
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.setTimeout;
 
 	public class ScrollMT extends EventDispatcher
 	{
@@ -252,7 +253,6 @@ package
 			//trace("Cursel generated");
 			
 			
-			targ.mask = scrollerMask;
 			
 			
 			onAdded();
@@ -295,9 +295,17 @@ package
 		
 	///////////////////////////////////////intialize the scroller class↓
 		
+		/**Debugg function*/
+		private function setMask():void
+		{
+			targ.parent.addChild(scrollerMask);
+			targ.mask = scrollerMask;
+		}
+		
 		/**set up the scroller variables and event listeners from now*/
 		private function setUpTheScroller()
 		{
+			setTimeout(setMask,1);
 			//1.3.1 to ask to delete old scrolleers
 			targ.dispatchEvent(new Event(KILL_OLD_SCROLLER));
 			
@@ -309,7 +317,6 @@ package
 			
 			targParent = targ.parent ;
 			
-			targ.parent.addChild(scrollerMask);
 			targ.parent.addChild(mouseLocker);
 			
 			targStage.addEventListener(MouseEvent.MOUSE_WHEEL,manageMouseWheel);
