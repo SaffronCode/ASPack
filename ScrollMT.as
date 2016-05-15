@@ -305,7 +305,7 @@ package
 		/**set up the scroller variables and event listeners from now*/
 		private function setUpTheScroller()
 		{
-			setTimeout(setMask,1);
+			setTimeout(setMask,0);
 			//1.3.1 to ask to delete old scrolleers
 			targ.dispatchEvent(new Event(KILL_OLD_SCROLLER));
 			
