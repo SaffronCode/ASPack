@@ -298,8 +298,11 @@ package
 		/**Debugg function*/
 		private function setMask():void
 		{
-			targ.parent.addChild(scrollerMask);
-			targ.mask = scrollerMask;
+			if(targ!=null && targ.parent!=null && scrollerMask!=null)
+			{
+				targ.parent.addChild(scrollerMask);
+				targ.mask = scrollerMask;
+			}
 		}
 		
 		/**set up the scroller variables and event listeners from now*/
