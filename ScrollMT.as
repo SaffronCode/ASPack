@@ -213,13 +213,12 @@ package
 			
 			//trace("unLockTopDown : "+unLockLeftRight);
 			
-			scrollerMask = new Sprite();
-			scrollerMask.graphics.beginFill(0,1);
-			scrollerMask.graphics.drawRect(0,0,maskRect.width,maskRect.height);
+			scrollerMask = new Sprite() ;
 			
 			//scroller locker is generated from now↓
 			mouseLocker = new Sprite();
-			mouseLocker.graphics.copyFrom(scrollerMask.graphics);
+			mouseLocker.graphics.beginFill(0xff0000,0.5) ;
+			mouseLocker.graphics.drawRect(0,0,maskRect.width,maskRect.height) ;
 			
 			//comment this line for debuging the museLocker displayObject ↓
 			mouseLocker.alpha = 0 ;
@@ -301,6 +300,8 @@ package
 			if(targ!=null && targ.parent!=null && scrollerMask!=null)
 			{
 				targ.parent.addChild(scrollerMask);
+				scrollerMask.graphics.beginFill(0x00ff00,0.0) ;
+				scrollerMask.graphics.drawRect(0,0,maskRect.width,maskRect.height) ;
 				targ.mask = scrollerMask;
 			}
 		}
@@ -308,9 +309,10 @@ package
 		/**set up the scroller variables and event listeners from now*/
 		private function setUpTheScroller()
 		{
-			setTimeout(setMask,0);
 			//1.3.1 to ask to delete old scrolleers
 			targ.dispatchEvent(new Event(KILL_OLD_SCROLLER));
+			
+			setTimeout(setMask,0);
 			
 			//trace("♠ now im added");
 			
