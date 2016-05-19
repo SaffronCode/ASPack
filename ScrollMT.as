@@ -80,6 +80,7 @@ package
 		
 		/**this number is the minimom scrolling speed that start to protect mouse events to the scrollable object*/
 		private var minAvailableScroll:Number = 20,
+					minScrollToLock:Number=10,
 					mouseWheelSpeed:Number = 8;
 		
 		/**speed of floating back for the scrollers*/
@@ -132,7 +133,8 @@ package
 					Vy:Number = 0 ;
 		
 		/**mouses first position */
-		private var mousePose:Point ;
+		private var mousePose:Point,
+					mousePose0:Point;
 		
 		
 		private var scrollLock:Boolean = false,
@@ -221,7 +223,7 @@ package
 			mouseLocker.graphics.drawRect(0,0,maskRect.width,maskRect.height) ;
 			
 			//comment this line for debuging the museLocker displayObject ↓
-			mouseLocker.alpha = 0 ;
+			mouseLocker.alpha = 0;
 			
 			//trace('mous lock checker');
 			
@@ -507,6 +509,7 @@ package
 				
 				isScrolling = true ;
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
+				mousePose0 = new Point(targStage.mouseX,targStage.mouseY);
 				//Added on version 1.2 ↓
 					//Removed on version 1.4.3 to prevent lock scroll when scroll is not started yet.
 					//targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
@@ -631,31 +634,47 @@ package
 				//trace('absScale : '+absScale);
 				if(unLockLeftRight)
 				{
-					if(!MouseLockAvailable() && curselLeftRight.alpha<1)
+					if(MouseLockAvailable() && Math.abs(mousePose0.x-mousePose.x)>minScrollToLock)
 					{
-						curselLeftRight.alpha+=fadeInSpeed;
-					}
-					Vx=(targStage.mouseX-mousePose.x)/absScale;
-					//lock the mosue↓
-					if(MouseLockAvailable() && Math.abs(Vx)>minAvailableScroll)
-					{
+						mousePose0 = null ;
 						MouseLock();
 					}
+					else if(mousePose0!=null)
+					{
+						//trace("Canseling");
+					}
+					else
+					{
+						if(!MouseLockAvailable() && curselLeftRight.alpha<1)
+						{
+							curselLeftRight.alpha+=fadeInSpeed;
+						}
+						Vx=(targStage.mouseX-mousePose.x)/absScale;
+					}
+					//lock the mosue↓
 				}
 				if(unLockTopDown)
 				{
-					if(!MouseLockAvailable() && curselTopDown.alpha<1)
-					{
-						curselTopDown.alpha+=fadeInSpeed;
-					}
-					Vy=(targStage.mouseY-mousePose.y)/absScale;
-					//lock the mosue↓
-					//trace('check to lock the container : '+MouseLockAvailable()+' && '+Math.abs(Vy)+' > '+minAvailableScroll+' = '+(Math.abs(Vy)>minAvailableScroll));
-					if(MouseLockAvailable() && Math.abs(Vy)>minAvailableScroll)
+					if(MouseLockAvailable() && Math.abs(mousePose0.y-mousePose.y)>minScrollToLock)
 					{
 						//this function was replaced with MouseUnLock() by mistake
+						mousePose0 = null ;
 						MouseLock();
 					}
+					else if(mousePose0!=null)
+					{
+						//trace("Canseling");
+					}
+					else
+					{
+						if(!MouseLockAvailable() && curselTopDown.alpha<1)
+						{
+							curselTopDown.alpha+=fadeInSpeed;
+						}
+						Vy=(targStage.mouseY-mousePose.y)/absScale;
+					}
+					//lock the mosue↓
+					//trace('check to lock the container : '+MouseLockAvailable()+' && '+Math.abs(Vy)+' > '+minAvailableScroll+' = '+(Math.abs(Vy)>minAvailableScroll));
 				}
 				
 				slowDownFloat(floatBackSpeed_on_touch,1);
@@ -914,10 +933,16 @@ package
 	/////////////////////////////////////////////////////
 		
 		/**This function will cause to scroll the page befor its starts to work*/
-		public static function showScrollEfect():void
+		public static function showScrollEfect(value:Boolean=true):void
 		{
 			// TODO Auto Generated method stub
-			ScrollEffect = true ;
+			ScrollEffect = value ;
+		}
+		
+		/**Returns the last scroll effect*/
+		public static function lastScrollEffect():Boolean
+		{
+			return ScrollEffect ;
 		}
 	}
 }
