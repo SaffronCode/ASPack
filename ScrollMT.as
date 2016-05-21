@@ -641,6 +641,7 @@ package
 					}
 					else if(mousePose0!=null)
 					{
+						Vx = 0 ;
 						//trace("Canseling");
 					}
 					else
@@ -664,6 +665,7 @@ package
 					else if(mousePose0!=null)
 					{
 						//trace("Canseling");
+						Vy = 0 ;
 					}
 					else
 					{
