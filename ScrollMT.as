@@ -446,8 +446,11 @@ package
 		public function unLock(e:*=null)
 		{
 			trace("**unlocked");
-			targStage.removeEventListener(MouseEvent.MOUSE_UP,unLock);
-			targStage.removeEventListener(UN_LOCK_SCROLL,unLock);
+			if(targStage)
+			{
+				targStage.removeEventListener(MouseEvent.MOUSE_UP,unLock);
+				targStage.removeEventListener(UN_LOCK_SCROLL,unLock);
+			}
 			scrollLock = false ;
 		}
 		
