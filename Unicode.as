@@ -276,6 +276,7 @@ package
 				lastIndex = l = yourTextField.text.length ;
 				lineW = 0 ;
 				lastSpace = -1 ;
+				var tim2:Number = getTimer() ;
 				for(i=l-1;i>=0;i--)
 				{
 					if(cashedText.charAt(i)==' ')
@@ -300,7 +301,7 @@ package
 						lastSpace = -1 ;
 					}
 				}
-				
+				trace("splitTime : "+(getTimer()-tim2));
 				linesTest.push(yourTextField.getXMLText(0,lastIndex));
 				
 				
