@@ -257,7 +257,7 @@ package stageManager
 		{
 			// TODO Auto-generated method stub
 			StageItem.remove(ev.currentTarget as StageItem);
-			var I:int = Items.indexOf(ev.currentTarget);
+			var I:int = Items.indexOf(ev.currentTarget as StageItem);
 			if(I!=-1)
 			{
 				//trace("Something removed");
@@ -266,7 +266,7 @@ package stageManager
 		}	
 		
 	////////////////////////Position manager
-		private static function ManageAllPositions()
+		private static function ManageAllPositions():void
 		{
 			for(var i = 0 ; i<Items.length ; i++)
 			{
