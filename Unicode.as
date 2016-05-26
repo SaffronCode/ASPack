@@ -224,7 +224,7 @@ package
 			
 			//for variables
 				var lastNumLines:uint;
-				var spaces:String;
+				//•var spaces:String;
 				var cnt:int;
 				var simpleText:String ;
 				//Wile varables
@@ -265,20 +265,22 @@ package
 				}//else V
 				cnt=0;
 				simpleText = yourTextField.text;
+				trace(" simpleText :"+simpleText);
 				splittedWordsOnParag = simpleText.split(' ');
-				while((lastNumLines = yourTextField.numLines)>1 && cnt<10000){
+				while(cnt<100000){
 					cnt++;
-					spaces = '' ;
-					var wordIndex:uint = splittedWordsOnParag.length-1 ; 
-					var totalWords:uint = wordIndex ;
+					//•spaces = '' ;
+					var totalWords:uint = splittedWordsOnParag.length ;
+					var wordIndex:int = totalWords-1 ; 
 					do{
-						spaces+='-';
+						//•spaces+='-';
 						cashedText = yourTextField.text ;
 						yourTextField.text = splittedWordsOnParag.slice(wordIndex,totalWords).join(' ') ;
-						trace("yourTextField.text : "+yourTextField.text);
+						trace("yourTextField.text : "+yourTextField.text+' , '+splittedWordsOnParag.length+' , wordIndex:'+wordIndex+"totalWords:"+totalWords);
 						wordIndex--;
-					}while(lastNumLines == yourTextField.numLines) ;
-					spaces = spaces.substring(1) ;
+					}while(yourTextField.numLines<=1 && wordIndex<0) ;
+					splittedWordsOnParag.splice(wordIndex,totalWords);
+					//•spaces = spaces.substring(1) ;
 					//•yourTextField.text = spaces+simpleText ;
 					
 					//trace("lastNumLines : "+lastNumLines)
@@ -287,7 +289,7 @@ package
 					//•lineIndex = yourTextField.getLineOffset(lastNumLines-1);
 					
 					
-					var indexOfSplitters = Infinity ;
+					/**•var indexOfSplitters = Infinity ;
 					for(i=0;i<splitters.length;i++){
 						var J = cashedText.indexOf(splitters[i]) ;
 						if(J!=-1){
@@ -296,16 +298,16 @@ package
 					}
 					if(indexOfSplitters == Infinity){
 						indexOfSplitters = 0 ;
-					}
+					}*/
 					yourTextField.text = '' ;
 					yourTextField.insertXMLText(0,0,parag[j]);
-					/**total charechter of line*/
+						//total charechter of line
 					tc = yourTextField.text.length;
-					linesTest.push(yourTextField.getXMLText(tc-cashedText.length+indexOfSplitters));
+					linesTest.push(yourTextField.getXMLText(tc-cashedText.length));
 					//cashedText = cashedText.substring(indexOfSplitters);
 					//trace(tc+'-'+cashedText+'+'+indexOfSplitters+' = '+(tc-cashedText.length+indexOfSplitters));
-					simpleText = simpleText.substring(0,tc-cashedText.length+indexOfSplitters);
-					parag[j] = yourTextField.getXMLText(0,tc-cashedText.length+indexOfSplitters);
+					simpleText = simpleText.substring(0,tc-cashedText.length);
+					parag[j] = yourTextField.getXMLText(0,tc-cashedText.length);
 					
 					
 					if(justify)
@@ -344,8 +346,12 @@ package
 					/*linesTest.push(cashedText);
 					parag[j] = parag[j].substring(0,lineIndex+indexOfSplitters-spaces.length);
 					yourTextField.htmlText = parag[j] ;*/
+					if(wordIndex<0)
+					{
+						break;
+					}
 				}
-				linesTest.push(parag[j]);
+				//•linesTest.push(parag[j]);
 			}
 			//debug line
 			//	yourTextField.text = cashedText ;
