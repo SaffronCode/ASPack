@@ -276,9 +276,12 @@ package
 				lastIndex = l = yourTextField.text.length ;
 				lineW = 0 ;
 				lastSpace = -1 ;
-				var tim2:Number = getTimer() ;
-				for(i=l-1;i>=0;i--)
+				var step:uint = 1 ;
+				var lastX:Number = yourTextField.getCharBoundaries(l-1).right; 
+				var lastCharRect:Rectangle ; 
+				for(i=l-2;i>=0;i-=step)
 				{
+					step = 1 ;
 					if(cashedText.charAt(i)==' ')
 					{
 						lastSpace = i ;
@@ -288,20 +291,25 @@ package
 					{
 						continue;
 					}
-					lineW += charRect.width ;
+					lineW += lastX-charRect.x ;
+					lastX = charRect.x ;
+					//trace("lineW : "+lineW);
 					
 					if(lineW>textWidth)
 					{
-						lineW=charRect.width;
+						lineW=0;
 						lastSpace = Math.max(lastSpace,i+1) ;
 						linesTest.push(yourTextField.getXMLText(lastSpace,lastIndex));
-						//trace("from : "+Math.max(lastSpace,i+1)+' to : '+lastIndex);
+						//trace("from : "+lastSpace+' to : '+lastIndex);
 						//trace("yourTextField.getXMLText(Math.max(lastSpace,i+1),lastIndex) : "+yourTextField.getXMLText(Math.max(lastSpace,i+1),lastIndex));
+						step = Math.ceil((lastIndex-lastSpace)/10*9);
+						//trace("step : "+step);
 						i = lastIndex = lastSpace ;
+						lastX = yourTextField.getCharBoundaries(i).right;
 						lastSpace = -1 ;
+						//i = lastSpace-1;
 					}
 				}
-				trace("splitTime : "+(getTimer()-tim2));
 				linesTest.push(yourTextField.getXMLText(0,lastIndex));
 				
 				
