@@ -266,7 +266,7 @@ package
 			//return
 			//debug end
 			var linesTest:Array = new Array();
-			trace("Starts");
+			//trace("Starts");
 			for(var j =0 ;j<parag.length;j++){
 				/// tamam e data haa bayad rooye textfield ha beran bad 
 				yourTextField.htmlText = parag[j] ;
@@ -283,14 +283,21 @@ package
 						lastSpace = i ;
 					}
 					charRect = yourTextField.getCharBoundaries(i) ;
+					if(charRect==null)
+					{
+						continue;
+					}
 					lineW += charRect.width ;
 					
 					if(lineW>textWidth)
 					{
-						lineW-=charRect.width;
-						linesTest.push(yourTextField.getXMLText(Math.max(lastSpace,i+1),lastIndex));
+						lineW=charRect.width;
+						lastSpace = Math.max(lastSpace,i+1) ;
+						linesTest.push(yourTextField.getXMLText(lastSpace,lastIndex));
+						//trace("from : "+Math.max(lastSpace,i+1)+' to : '+lastIndex);
+						//trace("yourTextField.getXMLText(Math.max(lastSpace,i+1),lastIndex) : "+yourTextField.getXMLText(Math.max(lastSpace,i+1),lastIndex));
+						i = lastIndex = lastSpace ;
 						lastSpace = -1 ;
-						lastIndex = i ;
 					}
 				}
 				
@@ -332,17 +339,19 @@ package
 			//	yourTextField.text = cashedText ;
 			//	return
 			///debug line ended
-			
+			var tim:Number = getTimer() ; 
+			yourTextField.wordWrap = lastWorldWrapMode ;
 			var enterXML:String = '<flashrichtext version="1"><textformat>(\n)</textformat></flashrichtext>' ;//yourTextField.getXMLText();
 			yourTextField.text = '';
+			l = linesTest.length ;
 			for(i=0;i<linesTest.length;i++){
-				yourTextField.insertXMLText(yourTextField.length,0,linesTest[i]);
-				if(i!=0)
+				yourTextField.insertXMLText(yourTextField.length,yourTextField.length,linesTest[i]);
+				if(i!=l-1)
 				{
-					yourTextField.insertXMLText(yourTextField.length,0,enterXML);
+					yourTextField.insertXMLText(yourTextField.length,yourTextField.length,enterXML);
 				}
 			}
-			yourTextField.wordWrap = lastWorldWrapMode ;
+			trace("insertXML time : "+(getTimer()-tim));
 			//yourTextField.text = yourTextField.text.substring(0,yourTextField.text.length-1);
 		}
 		
