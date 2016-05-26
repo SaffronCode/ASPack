@@ -29,6 +29,8 @@ package
 	
 	public class Unicode
 	{
+		/**This is still in beta version*/
+		public static var UseNewFastInLine:Boolean = false ;
 		
 		//From now there is no need to copy full class here, you can only copy and edite Unicode_string to your project folder.
 		//include "Unicode_strings.as"
@@ -214,10 +216,34 @@ package
 		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true)
 		{
 			var myTextcash = entersCorrection(tex).split(String.fromCharCode(10));
-			tex = '' ;
+			var parag:Array = [];
 			var i ;
+			var corrected:String ; 
+			
+			
+			
+			//for variables
+				var lastNumLines:uint;
+				var spaces:String;
+				var cnt:int;
+				var simpleText:String ;
+				//Wile varables
+					var cashedText:String;
+					var lineIndex;
+					var tc:uint ;
+					var xmlSpace:String ;
+					
+					var splittedWordsOnParag:Array ;
+					xmlSpace = '<flashrichtext version="1"><textformat>( )</textformat></flashrichtext>';
+						var spases:Array;
+						var savedXML:String ;
+						var cnt2:uint;
+					
+			tex = '' ;
 			for(i=0;i<myTextcash.length;i++){
-				tex += HTMLUnicode(myTextcash[i])+'\n';
+				corrected = HTMLUnicode(myTextcash[i]) ;
+				tex += corrected+'\n';
+				parag.push(corrected);
 			}
 			tex = tex.substring(0,tex.length-1);
 			var myText:String = (tex);
@@ -225,8 +251,8 @@ package
 			//yourTextField.text = myText;
 			//return
 			//debug end
-			var parag:Array = myText.split('\n');
 			var linesTest:Array = new Array();
+			trace("Starts");
 			for(var j =0 ;j<parag.length;j++){
 				/// tamam e data haa bayad rooye textfield ha beran bad 
 				yourTextField.htmlText = parag[j] ;
@@ -237,24 +263,28 @@ package
 					linesTest.push(parag[j]);
 					continue;
 				}//else V
-				var lastNumLines:uint;
-				var spaces;
-				var cnt=0;
-				var simpleText:String = yourTextField.text ;
+				cnt=0;
+				simpleText = yourTextField.text;
+				splittedWordsOnParag = simpleText.split(' ');
 				while((lastNumLines = yourTextField.numLines)>1 && cnt<10000){
 					cnt++;
 					spaces = '' ;
+					var wordIndex:uint = splittedWordsOnParag.length-1 ; 
+					var totalWords:uint = wordIndex ;
 					do{
 						spaces+='-';
-						yourTextField.text = spaces+simpleText ;
+						cashedText = yourTextField.text ;
+						yourTextField.text = splittedWordsOnParag.slice(wordIndex,totalWords).join(' ') ;
+						trace("yourTextField.text : "+yourTextField.text);
+						wordIndex--;
 					}while(lastNumLines == yourTextField.numLines) ;
 					spaces = spaces.substring(1) ;
-					yourTextField.text = spaces+simpleText ;
+					//•yourTextField.text = spaces+simpleText ;
 					
 					//trace("lastNumLines : "+lastNumLines)
 					
-					var cashedText:String = yourTextField.getLineText(lastNumLines-1);
-					var lineIndex = yourTextField.getLineOffset(lastNumLines-1);
+					//•cashedText = yourTextField.getLineText(lastNumLines-1);
+					//•lineIndex = yourTextField.getLineOffset(lastNumLines-1);
 					
 					
 					var indexOfSplitters = Infinity ;
@@ -270,7 +300,7 @@ package
 					yourTextField.text = '' ;
 					yourTextField.insertXMLText(0,0,parag[j]);
 					/**total charechter of line*/
-					var tc:uint = yourTextField.text.length ;
+					tc = yourTextField.text.length;
 					linesTest.push(yourTextField.getXMLText(tc-cashedText.length+indexOfSplitters));
 					//cashedText = cashedText.substring(indexOfSplitters);
 					//trace(tc+'-'+cashedText+'+'+indexOfSplitters+' = '+(tc-cashedText.length+indexOfSplitters));
@@ -278,14 +308,12 @@ package
 					parag[j] = yourTextField.getXMLText(0,tc-cashedText.length+indexOfSplitters);
 					
 					
-					var xmlSpace:String = '<flashrichtext version="1"><textformat>( )</textformat></flashrichtext>' ;
 					if(justify)
 					{
 						yourTextField.text = '' ;
 						yourTextField.insertXMLText(0,0,linesTest[linesTest.length-1]);
-						var spases:Array = getChars(yourTextField.text,' ');
-						var savedXML:String ;
-						var cnt2:uint = 0;
+						spases = getChars(yourTextField.text,' ');
+						cnt2 = 0;
 						do
 						{
 							cnt2++
