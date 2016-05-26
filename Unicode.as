@@ -24,7 +24,9 @@ package
 {
 	import com.mteamapp.StringFunctions;
 	
-	import flash.text.*;
+	import flash.geom.Rectangle;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 	
 	public class Unicode
@@ -220,6 +222,8 @@ package
 			var i ;
 			var corrected:String ; 
 			
+			var lastWorldWrapMode:Boolean = yourTextField.wordWrap ;
+			yourTextField.wordWrap = false ;
 			
 			
 			//for variables
@@ -238,15 +242,25 @@ package
 						var spases:Array;
 						var savedXML:String ;
 						var cnt2:uint;
+				/**Paragraph lengh*/
+				var l:uint ; 
+				var lastIndex:uint ;
+				/**Last splitted parag*/
+				var lastSpace:int ;
+				var lineW:Number ;
+				var textWidth:Number ; 
+				var charRect:Rectangle ;
+				
+			textWidth = yourTextField.width ;
 					
-			tex = '' ;
+			//tex = '' ;
 			for(i=0;i<myTextcash.length;i++){
 				corrected = HTMLUnicode(myTextcash[i]) ;
-				tex += corrected+'\n';
+				//tex += corrected+'\n';
 				parag.push(corrected);
 			}
-			tex = tex.substring(0,tex.length-1);
-			var myText:String = (tex);
+			//tex = tex.substring(0,tex.length-1);
+			//var myText:String = (tex);
 			//debug
 			//yourTextField.text = myText;
 			//return
@@ -256,61 +270,40 @@ package
 			for(var j =0 ;j<parag.length;j++){
 				/// tamam e data haa bayad rooye textfield ha beran bad 
 				yourTextField.htmlText = parag[j] ;
+				cashedText = yourTextField.text ;
 				/**parag become an xml string*/
-				parag[j] = yourTextField.getXMLText();
+				//parag[j] = yourTextField.getXMLText();
+				lastIndex = l = yourTextField.text.length ;
+				lineW = 0 ;
+				lastSpace = -1 ;
+				for(i=l-1;i>=0;i--)
+				{
+					if(cashedText.charAt(i)==' ')
+					{
+						lastSpace = i ;
+					}
+					charRect = yourTextField.getCharBoundaries(i) ;
+					lineW += charRect.width ;
+					
+					if(lineW>textWidth)
+					{
+						lineW-=charRect.width;
+						linesTest.push(yourTextField.getXMLText(Math.max(lastSpace,i+1),lastIndex));
+						lastSpace = -1 ;
+						lastIndex = i ;
+					}
+				}
 				
-				if(yourTextField.numLines==1){
+				linesTest.push(yourTextField.getXMLText(0,lastIndex));
+				
+				
+				if(linesTest.length==1){
 					linesTest.push(parag[j]);
 					continue;
 				}//else V
-				cnt=0;
-				simpleText = yourTextField.text;
-				trace(" simpleText :"+simpleText);
-				splittedWordsOnParag = simpleText.split(' ');
-				while(cnt<100000){
-					cnt++;
-					//•spaces = '' ;
-					var totalWords:uint = splittedWordsOnParag.length ;
-					var wordIndex:int = totalWords-1 ; 
-					do{
-						//•spaces+='-';
-						cashedText = yourTextField.text ;
-						yourTextField.text = splittedWordsOnParag.slice(wordIndex,totalWords).join(' ') ;
-						trace("yourTextField.text : "+yourTextField.text+' , '+splittedWordsOnParag.length+' , wordIndex:'+wordIndex+"totalWords:"+totalWords);
-						wordIndex--;
-					}while(yourTextField.numLines<=1 && wordIndex<0) ;
-					splittedWordsOnParag.splice(wordIndex,totalWords);
-					//•spaces = spaces.substring(1) ;
-					//•yourTextField.text = spaces+simpleText ;
+				
 					
-					//trace("lastNumLines : "+lastNumLines)
-					
-					//•cashedText = yourTextField.getLineText(lastNumLines-1);
-					//•lineIndex = yourTextField.getLineOffset(lastNumLines-1);
-					
-					
-					/**•var indexOfSplitters = Infinity ;
-					for(i=0;i<splitters.length;i++){
-						var J = cashedText.indexOf(splitters[i]) ;
-						if(J!=-1){
-							indexOfSplitters = Math.min(indexOfSplitters,J);
-						}
-					}
-					if(indexOfSplitters == Infinity){
-						indexOfSplitters = 0 ;
-					}*/
-					yourTextField.text = '' ;
-					yourTextField.insertXMLText(0,0,parag[j]);
-						//total charechter of line
-					tc = yourTextField.text.length;
-					linesTest.push(yourTextField.getXMLText(tc-cashedText.length));
-					//cashedText = cashedText.substring(indexOfSplitters);
-					//trace(tc+'-'+cashedText+'+'+indexOfSplitters+' = '+(tc-cashedText.length+indexOfSplitters));
-					simpleText = simpleText.substring(0,tc-cashedText.length);
-					parag[j] = yourTextField.getXMLText(0,tc-cashedText.length);
-					
-					
-					if(justify)
+					if(false && justify)
 					{
 						yourTextField.text = '' ;
 						yourTextField.insertXMLText(0,0,linesTest[linesTest.length-1]);
@@ -334,24 +327,6 @@ package
 					}
 					
 					
-					yourTextField.text = '' ;
-					yourTextField.insertXMLText(0,0,parag[j]);
-					//yourTextField.text = '' ;
-					//yourTextField.insertXMLText(0,0,linesTest[linesTest.length-1])
-					//return ;
-					/*cashedText = yourTextField.getXMLText(yourTextField.getLineOffset(lastNumLines-1)+indexOfSplitters
-					,yourTextField.getLineOffset(lastNumLines-1)
-					+yourTextField.getLineLength(lastNumLines-1));*/
-					
-					/*linesTest.push(cashedText);
-					parag[j] = parag[j].substring(0,lineIndex+indexOfSplitters-spaces.length);
-					yourTextField.htmlText = parag[j] ;*/
-					if(wordIndex<0)
-					{
-						break;
-					}
-				}
-				//•linesTest.push(parag[j]);
 			}
 			//debug line
 			//	yourTextField.text = cashedText ;
@@ -361,13 +336,13 @@ package
 			var enterXML:String = '<flashrichtext version="1"><textformat>(\n)</textformat></flashrichtext>' ;//yourTextField.getXMLText();
 			yourTextField.text = '';
 			for(i=0;i<linesTest.length;i++){
-				var tc2:uint = yourTextField.text.length ;
-				yourTextField.insertXMLText(tc2,tc2,linesTest[i]);
+				yourTextField.insertXMLText(yourTextField.length,0,linesTest[i]);
 				if(i!=0)
 				{
-					yourTextField.insertXMLText(tc2,tc2,enterXML);
+					yourTextField.insertXMLText(yourTextField.length,0,enterXML);
 				}
 			}
+			yourTextField.wordWrap = lastWorldWrapMode ;
 			//yourTextField.text = yourTextField.text.substring(0,yourTextField.text.length-1);
 		}
 		
