@@ -225,6 +225,10 @@ package
 			var lastWorldWrapMode:Boolean = yourTextField.wordWrap ;
 			yourTextField.wordWrap = false ;
 			
+			yourTextField.text = ' ' ;
+			var spaceWidth:Number = yourTextField.getCharBoundaries(0).width ;
+			trace("spaceWidth  : "+spaceWidth);
+			
 			
 			//for variables
 				var lastNumLines:uint;
@@ -247,9 +251,11 @@ package
 				var lastIndex:uint ;
 				/**Last splitted parag*/
 				var lastSpace:int ;
+				var lastSpacePose:Number ;
 				var lineW:Number ;
 				var textWidth:Number ; 
 				var charRect:Rectangle ;
+				var lineString:String ;
 				
 			textWidth = yourTextField.width ;
 					
@@ -276,17 +282,19 @@ package
 				lastIndex = l = yourTextField.text.length ;
 				lineW = 0 ;
 				lastSpace = -1 ;
+				lastSpacePose = Infinity ;
 				var step:uint = 1 ;
 				var lastX:Number = yourTextField.getCharBoundaries(l-1).right; 
 				var lastCharRect:Rectangle ; 
 				for(i=l-2;i>=0;i-=step)
 				{
 					step = 1 ;
+					charRect = yourTextField.getCharBoundaries(i) ;
 					if(cashedText.charAt(i)==' ')
 					{
 						lastSpace = i ;
+						lastSpacePose = charRect.x ;
 					}
-					charRect = yourTextField.getCharBoundaries(i) ;
 					if(charRect==null)
 					{
 						continue;
@@ -297,16 +305,25 @@ package
 					
 					if(lineW>textWidth)
 					{
-						lineW=0;
 						lastSpace = Math.max(lastSpace,i+1) ;
-						linesTest.push(yourTextField.getXMLText(lastSpace,lastIndex));
-						//trace("from : "+lastSpace+' to : '+lastIndex);
-						//trace("yourTextField.getXMLText(Math.max(lastSpace,i+1),lastIndex) : "+yourTextField.getXMLText(Math.max(lastSpace,i+1),lastIndex));
-						step = Math.ceil((lastIndex-lastSpace)/10*9);
+						lineString = yourTextField.getXMLText(lastSpace,lastIndex);
 						//trace("step : "+step);
 						i = lastIndex = lastSpace ;
+						var beforSpaceX:Number = lastX ;
 						lastX = yourTextField.getCharBoundaries(i).right;
+						trace("lineW : "+lineW);
+						trace("new lineW : "+(lineW-(lastX-beforSpaceX)));
+						if(justify)
+						{
+							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-(lineW-(lastX-beforSpaceX)))/spaceWidth)-1);
+						}
+						linesTest.push(lineString);
+						
+						step = Math.ceil((lastIndex-lastSpace)/10*9);
+						
 						lastSpace = -1 ;
+						lastSpacePose = Infinity ;
+						lineW=0;
 						//i = lastSpace-1;
 					}
 				}
@@ -348,7 +365,7 @@ package
 			//	yourTextField.text = cashedText ;
 			//	return
 			///debug line ended
-			var tim:Number = getTimer() ; 
+			//var tim:Number = getTimer() ; 
 			yourTextField.wordWrap = lastWorldWrapMode ;
 			var enterXML:String = '<flashrichtext version="1"><textformat>(\n)</textformat></flashrichtext>' ;//yourTextField.getXMLText();
 			yourTextField.text = '';
@@ -360,9 +377,44 @@ package
 					yourTextField.insertXMLText(yourTextField.length,yourTextField.length,enterXML);
 				}
 			}
-			trace("insertXML time : "+(getTimer()-tim));
+			//trace("insertXML time : "+(getTimer()-tim));
 			//yourTextField.text = yourTextField.text.substring(0,yourTextField.text.length-1);
 		}
+		
+		
+		/**Inserts spaces on the text field*/
+		private function insertSpaceInXML(xmlText:String,numSpaces:uint=0,removeExtraSpaces:Boolean=true):String
+		{
+			//trace("Start from : "+xmlText);
+			trace("Required spaces are : "+numSpaces);
+			var purString:String = xmlText.substring(xmlText.indexOf('>(')+2,xmlText.lastIndexOf(')<'));
+			var removedSpaces:uint = purString.length ;
+			purString = purString.replace(/^[\s]+/gi,'');
+			purString = purString.replace(/[\s]+$/gi,'');
+			removedSpaces -= purString.length ;
+			trace("removedSpaces : "+removedSpaces);
+			numSpaces += removedSpaces;
+			//trace("purString : "+purString);
+			
+			var splitedWorld:Array = purString.split(' ');
+			trace("Insert "+numSpaces+" spaces")
+			if(splitedWorld.length>1)
+			{
+				for(var i = 0 ; i<numSpaces ; i++)
+				{
+					var selectedWorld:uint = Math.floor((splitedWorld.length-1)*Math.random()) ;
+					splitedWorld[selectedWorld] = splitedWorld[selectedWorld]+' ';
+				}
+				purString = splitedWorld.join(' ');
+			}
+			trace("purString : > "+purString);
+			
+			//var regexp:RegExp = /(>[\(])([^\)]+)/gi;
+			//xmlText = str.replace(regexp,'$1'+purString)
+			xmlText = xmlText.substring(0,xmlText.indexOf('>(')+2)+purString+xmlText.substring(xmlText.lastIndexOf(')<'));
+			return xmlText ;
+		}
+		
 		
 		
 		
