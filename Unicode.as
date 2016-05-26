@@ -227,7 +227,7 @@ package
 			
 			yourTextField.text = ' ' ;
 			var spaceWidth:Number = yourTextField.getCharBoundaries(0).width ;
-			trace("spaceWidth  : "+spaceWidth);
+			//trace("spaceWidth  : "+spaceWidth);
 			
 			
 			//for variables
@@ -286,6 +286,7 @@ package
 				var step:uint = 1 ;
 				var lastX:Number = yourTextField.getCharBoundaries(l-1).right; 
 				var lastCharRect:Rectangle ; 
+				var realLineSize:Number ;
 				for(i=l-2;i>=0;i-=step)
 				{
 					step = 1 ;
@@ -308,14 +309,13 @@ package
 						lastSpace = Math.max(lastSpace,i+1) ;
 						lineString = yourTextField.getXMLText(lastSpace,lastIndex);
 						//trace("step : "+step);
+						lastX = yourTextField.getCharBoundaries(lastSpace).right;
+						realLineSize = (yourTextField.getCharBoundaries(lastIndex-1).right-yourTextField.getCharBoundaries(lastSpace).left) ;
 						i = lastIndex = lastSpace ;
 						var beforSpaceX:Number = lastX ;
-						lastX = yourTextField.getCharBoundaries(i).right;
-						trace("lineW : "+lineW);
-						trace("new lineW : "+(lineW-(lastX-beforSpaceX)));
 						if(justify)
 						{
-							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-(lineW-(lastX-beforSpaceX)))/spaceWidth)-1);
+							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-(realLineSize))/spaceWidth)-1);
 						}
 						linesTest.push(lineString);
 						
@@ -383,21 +383,22 @@ package
 		
 		
 		/**Inserts spaces on the text field*/
-		private function insertSpaceInXML(xmlText:String,numSpaces:uint=0,removeExtraSpaces:Boolean=true):String
+		private function insertSpaceInXML(xmlText:String,numSpaces:int=0,removeExtraSpaces:Boolean=true):String
 		{
+			numSpaces = Math.max(0,numSpaces);
 			//trace("Start from : "+xmlText);
-			trace("Required spaces are : "+numSpaces);
+			//trace("Required spaces are : "+numSpaces);
 			var purString:String = xmlText.substring(xmlText.indexOf('>(')+2,xmlText.lastIndexOf(')<'));
 			var removedSpaces:uint = purString.length ;
 			purString = purString.replace(/^[\s]+/gi,'');
 			purString = purString.replace(/[\s]+$/gi,'');
 			removedSpaces -= purString.length ;
-			trace("removedSpaces : "+removedSpaces);
+			//trace("removedSpaces : "+removedSpaces);
 			numSpaces += removedSpaces;
 			//trace("purString : "+purString);
 			
 			var splitedWorld:Array = purString.split(' ');
-			trace("Insert "+numSpaces+" spaces")
+			//trace("Insert "+numSpaces+" spaces")
 			if(splitedWorld.length>1)
 			{
 				for(var i = 0 ; i<numSpaces ; i++)
@@ -407,7 +408,7 @@ package
 				}
 				purString = splitedWorld.join(' ');
 			}
-			trace("purString : > "+purString);
+			//trace("purString : > "+purString);
 			
 			//var regexp:RegExp = /(>[\(])([^\)]+)/gi;
 			//xmlText = str.replace(regexp,'$1'+purString)
