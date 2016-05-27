@@ -427,12 +427,15 @@ package
 			//trace("Start from : "+xmlText);
 			trace("Required spaces are : "+numSpaces);
 			var purString:String = xmlText.substring(xmlText.indexOf('>(')+2,xmlText.lastIndexOf(')<'));
-			var removedSpaces:uint = purString.length ;
-			purString = purString.replace(/^[\s]+/gi,'');
-			purString = purString.replace(/[\s]+$/gi,'');
-			removedSpaces -= purString.length ;
-			//trace("removedSpaces : "+removedSpaces);
-			numSpaces += removedSpaces;
+			if(false)//remove extra spaces
+			{
+				var removedSpaces:uint = purString.length ;
+				purString = purString.replace(/^[\s]+/gi,'');
+				purString = purString.replace(/[\s]+$/gi,'');
+				removedSpaces -= purString.length ;
+				//trace("removedSpaces : "+removedSpaces);
+				numSpaces += removedSpaces;
+			}
 			//trace("purString : "+purString);
 			
 			var splitedWorld:Array = purString.split(' ');
