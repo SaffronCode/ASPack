@@ -227,31 +227,17 @@ package
 			
 			yourTextField.text = ' ' ;
 			var spaceWidth:Number = yourTextField.getCharBoundaries(0).width ;
-			//trace("spaceWidth  : "+spaceWidth);
 			
 			
-			//for variables
-				var lastNumLines:uint;
-				//•var spaces:String;
-				var cnt:int;
-				var simpleText:String ;
-				//Wile varables
 					var cashedText:String;
-					var lineIndex;
-					var tc:uint ;
 					var xmlSpace:String ;
 					
-					var splittedWordsOnParag:Array ;
 					xmlSpace = '<flashrichtext version="1"><textformat>( )</textformat></flashrichtext>';
-						var spases:Array;
-						var savedXML:String ;
-						var cnt2:uint;
 				/**Paragraph lengh*/
 				var l:uint ; 
 				var lastIndex:uint ;
 				/**Last splitted parag*/
 				var lastSpace:int ;
-				//var lastSpacePose:Number ;
 				var lineW:Number ;
 				var textWidth:Number ; 
 				var charRect:Rectangle ;
@@ -259,20 +245,11 @@ package
 				
 			textWidth = yourTextField.width ;
 					
-			//tex = '' ;
 			for(i=0;i<myTextcash.length;i++){
 				corrected = HTMLUnicode(myTextcash[i]) ;
-				//tex += corrected+'\n';
 				parag.push(corrected);
 			}
-			//tex = tex.substring(0,tex.length-1);
-			//var myText:String = (tex);
-			//debug
-			//yourTextField.text = myText;
-			//return
-			//debug end
 			var linesTest:Array = new Array();
-			//trace("Starts");
 			for(var j =0 ;j<parag.length;j++){
 				/// tamam e data haa bayad rooye textfield ha beran bad 
 				yourTextField.htmlText = parag[j] ;
@@ -283,11 +260,6 @@ package
 				lineW = 0 ;
 				lastSpace = -1 ;
 				var step:uint = 1 ;
-				//var firstCharInLineRect:Rectangle = yourTextField.getCharBoundaries(l-1); 
-				//trace("last Char rect for : "+yourTextField.text.charAt(l-1));
-				//var lastX:Number = firstCharInLineRect.right; 
-				//var lastCharRect:Rectangle ;
-				//var lastSpaceRect:Rectangle ;
 				var realLineSize:Number ;
 				
 				var lastW:Number;
@@ -297,17 +269,13 @@ package
 				var charLeft:Number;
 				var spaceLeft:Number;
 				
-				const stepPrecent:Number = 0.9 ;
+				const stepPrecent:Number = 0.8 ;
 				
 				for( i=l-1 ; i>=0 ; i-=step )
 				{
 					step = 1 ;
 					//lastCharRect = charRect ;
 					charRect = yourTextField.getCharBoundaries(i) ;
-					/*if( firstCharInLineRect == null )
-					{
-						firstCharInLineRect = charRect ;
-					}*/
 					if(charRect==null)
 					{
 						continue;
@@ -317,8 +285,6 @@ package
 					lastW = lineW ;
 					lineW = lastCharInLineLeftX-charLeft ;
 					
-					//lastX = charRect.left ;
-					//trace(i+". lineW : "+lineW+' vs '+textWidth+'  rectWidth is : '+charRect.width+' char is : '+yourTextField.text.charAt(i));
 					
 					if(lineW>textWidth)
 					{
@@ -372,38 +338,7 @@ package
 					linesTest.push(parag[j]);
 					continue;
 				}//else V
-				
-					
-					if(false && justify)
-					{
-						yourTextField.text = '' ;
-						yourTextField.insertXMLText(0,0,linesTest[linesTest.length-1]);
-						spases = getChars(yourTextField.text,' ');
-						cnt2 = 0;
-						do
-						{
-							cnt2++
-								savedXML = yourTextField.getXMLText();
-							var index:uint = spases[Math.floor(Math.random()*spases.length)];
-							yourTextField.insertXMLText(index,index,xmlSpace);
-							for(var k = 0 ; k<spases.length;k++)
-							{
-								if(spases[k]>index)
-								{
-									spases[k]++;
-								}
-							}
-						}while(spases.length>0 && yourTextField.numLines<2 && cnt2<100);
-						linesTest[linesTest.length-1] = savedXML ;
-					}
-					
-					
 			}
-			//debug line
-			//	yourTextField.text = cashedText ;
-			//	return
-			///debug line ended
-			//var tim:Number = getTimer() ; 
 			yourTextField.wordWrap = lastWorldWrapMode ;
 			var enterXML:String = '<flashrichtext version="1"><textformat>(\n)</textformat></flashrichtext>' ;//yourTextField.getXMLText();
 			yourTextField.text = '';
@@ -425,7 +360,7 @@ package
 		{
 			numSpaces = Math.max(0,numSpaces);
 			//trace("Start from : "+xmlText);
-			trace("Required spaces are : "+numSpaces);
+			//trace("Required spaces are : "+numSpaces);
 			var purString:String = xmlText.substring(xmlText.indexOf('>(')+2,xmlText.lastIndexOf(')<'));
 			if(false)//remove extra spaces
 			{
