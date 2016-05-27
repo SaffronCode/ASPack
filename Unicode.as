@@ -217,6 +217,7 @@ package
 		///92-9-3  fast html unicode
 		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true)
 		{
+			//trace("tex : "+tex);
 			var myTextcash = entersCorrection(tex).split(String.fromCharCode(10));
 			var parag:Array = [];
 			var i ;
@@ -243,7 +244,7 @@ package
 				var charRect:Rectangle ;
 				var lineString:String ;
 				
-			textWidth = yourTextField.width ;
+			textWidth = Math.floor(yourTextField.width) ;
 					
 			for(i=0;i<myTextcash.length;i++){
 				corrected = HTMLUnicode(myTextcash[i]) ;
@@ -263,9 +264,8 @@ package
 				var realLineSize:Number ;
 				
 				var lastW:Number;
-				var lastSpaceW:Number;
-				var lastCharInLineLeftX:Number = yourTextField.getCharBoundaries(l-1).right ;
-				var lastCharLeft:Number = lastCharInLineLeftX;
+				var lastCharInLineLeftX:Number = NaN ;
+				var lastCharLeft:Number ;
 				var charLeft:Number;
 				var spaceLeft:Number;
 				
@@ -280,11 +280,16 @@ package
 					{
 						continue;
 					}
+					else if(isNaN(lastCharInLineLeftX))
+					{
+						lastCharInLineLeftX = charRect.right+1 ;
+					}
 					lastCharLeft = charLeft ;
 					charLeft = charRect.left ;
 					lastW = lineW ;
 					lineW = lastCharInLineLeftX-charLeft ;
 					
+					//trace(lineW+' vs '+textWidth);
 					
 					if(lineW>textWidth)
 					{
@@ -301,7 +306,7 @@ package
 						}
 						else
 						{
-							//trace("From "+(i+1)+" to "+lastIndex);
+							//trace("From i "+(i+1)+" to "+lastIndex);
 							lineString = yourTextField.getXMLText(i+1,lastIndex);
 							step = Math.ceil((lastIndex-i+1)*stepPrecent);
 							lastIndex = i ;
@@ -327,15 +332,16 @@ package
 					else if( cashedText.charAt(i) == ' ' )
 					{
 						lastSpace = i ;
-						lastSpaceW = lineW ;
 						spaceLeft = charLeft ;
 					}
 				}
+				//trace("Generate line to : "+lastIndex);
+				//trace("Generate line to : "+lastIndex);
 				linesTest.push(yourTextField.getXMLText(0,lastIndex));
 				
 				
 				if(linesTest.length==1){
-					linesTest.push(parag[j]);
+					//linesTest.push(parag[j]);
 					continue;
 				}//else V
 			}
@@ -344,6 +350,7 @@ package
 			yourTextField.text = '';
 			l = linesTest.length ;
 			for(i=0;i<linesTest.length;i++){
+				//trace("linesTest["+i+"] : "+linesTest[i]);
 				yourTextField.insertXMLText(yourTextField.length,yourTextField.length,linesTest[i]);
 				if(i!=l-1)
 				{
@@ -379,7 +386,7 @@ package
 			{
 				for(var i = 0 ; i<numSpaces ; i++)
 				{
-					var selectedWorld:uint = Math.floor((splitedWorld.length-1)*Math.random()) ;
+					var selectedWorld:uint = randGen(i,splitedWorld.length-1);
 					splitedWorld[selectedWorld] = splitedWorld[selectedWorld]+' ';
 				}
 				purString = splitedWorld.join(' ');
@@ -390,6 +397,11 @@ package
 			//xmlText = str.replace(regexp,'$1'+purString)
 			xmlText = xmlText.substring(0,xmlText.indexOf('>(')+2)+purString+xmlText.substring(xmlText.lastIndexOf(')<'));
 			return xmlText ;
+		}
+		
+		private function randGen(seed:uint,length:uint):uint
+		{
+			return Math.floor(length*0.9*seed)%length;//Math.floor((length-1)*Math.random()) ; 
 		}
 		
 		
