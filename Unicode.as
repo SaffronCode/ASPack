@@ -294,6 +294,10 @@ package
 					step = 1 ;
 					lastCharRect = charRect ;
 					charRect = yourTextField.getCharBoundaries(i) ;
+					if(firstCharInLineRect==null)
+					{
+						firstCharInLineRect = charRect ;
+					}
 					if(cashedText.charAt(i)==' ')
 					{
 						lastSpace = i ;
@@ -303,8 +307,8 @@ package
 					{
 						continue;
 					}
-					lineW += lastX-charRect.x ;
-					lastX = charRect.x ;
+					lineW = firstCharInLineRect.right-charRect.left ;
+					lastX = charRect.left ;
 					//trace("lineW : "+lineW);
 					
 					if(lineW>textWidth)
@@ -326,7 +330,13 @@ package
 						var beforSpaceX:Number = lastX ;
 						if(justify)
 						{
-							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-(realLineSize))/spaceWidth)-1);
+							trace("Justif");
+							trace("textWidth : "+textWidth);
+							trace("realLineSize : "+realLineSize);
+							trace("(textWidth-realLineSize) : "+(textWidth-realLineSize));
+							trace("spaceWidth : "+spaceWidth);
+							trace("Math.floor((textWidth-realLineSize)/spaceWidth) : "+Math.floor((realLineSize-textWidth)/spaceWidth));
+							lineString = insertSpaceInXML(lineString,Math.floor((realLineSize-textWidth)/spaceWidth));
 						}
 						linesTest.push(lineString);
 						
@@ -336,8 +346,8 @@ package
 						//lastSpacePose = Infinity ;
 						lineW=0;
 						//i = lastSpace-1;
+						firstCharInLineRect = null ;
 						charRect = null ;
-						firstCharInLineRect = lastSpaceRect ;
 					}
 				}
 				linesTest.push(yourTextField.getXMLText(0,lastIndex));
@@ -400,7 +410,7 @@ package
 		{
 			numSpaces = Math.max(0,numSpaces);
 			//trace("Start from : "+xmlText);
-			//trace("Required spaces are : "+numSpaces);
+			trace("Required spaces are : "+numSpaces);
 			var purString:String = xmlText.substring(xmlText.indexOf('>(')+2,xmlText.lastIndexOf(')<'));
 			var removedSpaces:uint = purString.length ;
 			purString = purString.replace(/^[\s]+/gi,'');
