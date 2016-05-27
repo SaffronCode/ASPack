@@ -283,51 +283,67 @@ package
 				lineW = 0 ;
 				lastSpace = -1 ;
 				var step:uint = 1 ;
-				var firstCharInLineRect:Rectangle = yourTextField.getCharBoundaries(l-1); 
-				trace("last Char rect for : "+yourTextField.text.charAt(l-1));
-				var lastX:Number = firstCharInLineRect.right; 
-				var lastCharRect:Rectangle ;
-				var lastSpaceRect:Rectangle ;
+				//var firstCharInLineRect:Rectangle = yourTextField.getCharBoundaries(l-1); 
+				//trace("last Char rect for : "+yourTextField.text.charAt(l-1));
+				//var lastX:Number = firstCharInLineRect.right; 
+				//var lastCharRect:Rectangle ;
+				//var lastSpaceRect:Rectangle ;
 				var realLineSize:Number ;
-				for(i=l-2;i>=0;i-=step)
+				
+				var lastW:Number;
+				var lastSpaceW:Number;
+				var lastCharInLineLeftX:Number = yourTextField.getCharBoundaries(l-1).right ;
+				var lastCharLeft:Number = lastCharInLineLeftX;
+				var charLeft:Number;
+				var spaceLeft:Number;
+				
+				const stepPrecent:Number = 0.9 ;
+				
+				for( i=l-1 ; i>=0 ; i-=step )
 				{
 					step = 1 ;
-					lastCharRect = charRect ;
+					//lastCharRect = charRect ;
 					charRect = yourTextField.getCharBoundaries(i) ;
-					if(firstCharInLineRect==null)
+					/*if( firstCharInLineRect == null )
 					{
 						firstCharInLineRect = charRect ;
-					}
-					if(cashedText.charAt(i)==' ')
-					{
-						lastSpace = i ;
-						lastSpaceRect = charRect ;
-					}
+					}*/
 					if(charRect==null)
 					{
 						continue;
 					}
-					lineW = firstCharInLineRect.right-charRect.left ;
-					lastX = charRect.left ;
-					//trace("lineW : "+lineW);
+					lastCharLeft = charLeft ;
+					charLeft = charRect.left ;
+					lastW = lineW ;
+					lineW = lastCharInLineLeftX-charLeft ;
+					
+					//lastX = charRect.left ;
+					trace(i+". lineW : "+lineW+' vs '+textWidth+'  rectWidth is : '+charRect.width+' char is : '+yourTextField.text.charAt(i));
 					
 					if(lineW>textWidth)
 					{
-						lastSpace = Math.max(lastSpace,i+1) ;
-						lineString = yourTextField.getXMLText(lastSpace,lastIndex);
-						//trace("step : "+step);
-						if(charRect!=null)
+						if(lastSpace!=-1)
 						{
-							lastSpaceRect = charRect ;
+							trace("From "+lastSpace+" to "+lastIndex);
+							lineString = yourTextField.getXMLText(lastSpace+1,lastIndex);
+							step = Math.ceil((lastIndex-lastSpace)*stepPrecent);
+							/**change the lineW from the deltaW here to make stepps accesible*/
+							lastIndex = lastSpace ;
+							i = lastSpace;
+							realLineSize = lastCharInLineLeftX-spaceLeft ;
+							lastCharInLineLeftX = spaceLeft ;
 						}
 						else
 						{
-							lastSpaceRect = lastCharRect ;
+							trace("From "+(i+1)+" to "+lastIndex);
+							lineString = yourTextField.getXMLText(i+1,lastIndex);
+							step = Math.ceil((lastIndex-i+1)*stepPrecent);
+							lastIndex = i ;
+							i++;
+							realLineSize = lastCharInLineLeftX-lastCharLeft ;
+							lastCharInLineLeftX = lastCharLeft ;
 						}
-						lastX = lastSpaceRect.right;
-						realLineSize = (firstCharInLineRect.right-lastSpaceRect.left) ;
-						i = lastIndex = lastSpace ;
-						var beforSpaceX:Number = lastX ;
+						trace("realLineSize : "+realLineSize);
 						if(justify)
 						{
 							trace("Justif");
@@ -335,19 +351,18 @@ package
 							trace("realLineSize : "+realLineSize);
 							trace("(textWidth-realLineSize) : "+(textWidth-realLineSize));
 							trace("spaceWidth : "+spaceWidth);
-							trace("Math.floor((textWidth-realLineSize)/spaceWidth) : "+Math.floor((realLineSize-textWidth)/spaceWidth));
-							lineString = insertSpaceInXML(lineString,Math.floor((realLineSize-textWidth)/spaceWidth));
+							trace("Math.floor((textWidth-realLineSize)/spaceWidth) : "+Math.floor((textWidth-realLineSize)/spaceWidth));
+							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-realLineSize)/spaceWidth));
 						}
 						linesTest.push(lineString);
-						
-						step = Math.ceil((lastIndex-lastSpace)/10*9);
-						
 						lastSpace = -1 ;
-						//lastSpacePose = Infinity ;
 						lineW=0;
-						//i = lastSpace-1;
-						firstCharInLineRect = null ;
-						charRect = null ;
+					}
+					else if( cashedText.charAt(i) == ' ' )
+					{
+						lastSpace = i ;
+						lastSpaceW = lineW ;
+						spaceLeft = charLeft ;
 					}
 				}
 				linesTest.push(yourTextField.getXMLText(0,lastIndex));
