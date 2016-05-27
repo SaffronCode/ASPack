@@ -318,13 +318,13 @@ package
 					lineW = lastCharInLineLeftX-charLeft ;
 					
 					//lastX = charRect.left ;
-					trace(i+". lineW : "+lineW+' vs '+textWidth+'  rectWidth is : '+charRect.width+' char is : '+yourTextField.text.charAt(i));
+					//trace(i+". lineW : "+lineW+' vs '+textWidth+'  rectWidth is : '+charRect.width+' char is : '+yourTextField.text.charAt(i));
 					
 					if(lineW>textWidth)
 					{
 						if(lastSpace!=-1)
 						{
-							trace("From "+lastSpace+" to "+lastIndex);
+							//trace("From "+lastSpace+" to "+lastIndex);
 							lineString = yourTextField.getXMLText(lastSpace+1,lastIndex);
 							step = Math.ceil((lastIndex-lastSpace)*stepPrecent);
 							/**change the lineW from the deltaW here to make stepps accesible*/
@@ -335,7 +335,7 @@ package
 						}
 						else
 						{
-							trace("From "+(i+1)+" to "+lastIndex);
+							//trace("From "+(i+1)+" to "+lastIndex);
 							lineString = yourTextField.getXMLText(i+1,lastIndex);
 							step = Math.ceil((lastIndex-i+1)*stepPrecent);
 							lastIndex = i ;
@@ -343,15 +343,15 @@ package
 							realLineSize = lastCharInLineLeftX-lastCharLeft ;
 							lastCharInLineLeftX = lastCharLeft ;
 						}
-						trace("realLineSize : "+realLineSize);
+						//trace("realLineSize : "+realLineSize);
 						if(justify)
 						{
-							trace("Justif");
-							trace("textWidth : "+textWidth);
-							trace("realLineSize : "+realLineSize);
-							trace("(textWidth-realLineSize) : "+(textWidth-realLineSize));
-							trace("spaceWidth : "+spaceWidth);
-							trace("Math.floor((textWidth-realLineSize)/spaceWidth) : "+Math.floor((textWidth-realLineSize)/spaceWidth));
+							//trace("Justif");
+							//trace("textWidth : "+textWidth);
+							//trace("realLineSize : "+realLineSize);
+							//trace("(textWidth-realLineSize) : "+(textWidth-realLineSize));
+							//trace("spaceWidth : "+spaceWidth);
+							//trace("Math.floor((textWidth-realLineSize)/spaceWidth) : "+Math.floor((textWidth-realLineSize)/spaceWidth));
 							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-realLineSize)/spaceWidth));
 						}
 						linesTest.push(lineString);
