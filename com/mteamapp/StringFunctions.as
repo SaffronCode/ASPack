@@ -49,7 +49,7 @@ package com.mteamapp
 			var max:uint;
 			if(isNaN(stringLength))
 			{
-				max = Math.min(str.length , 300);
+				max = Math.min(str.length , 200);
 			}
 			else
 			{
@@ -59,6 +59,7 @@ package com.mteamapp
 			{
 				if(str.charCodeAt(i)>300)
 				{
+					//trace('This is arabic : '+str.charAt(i)+' at '+i+' the char code is : '+str.charCodeAt(i));
 					return true ;
 				}
 			}

@@ -164,7 +164,9 @@ package
 			
 			if(detectArabicScript)
 			{
+				//trace("***************************Detect arabic************************");
 				detectedArabicScript = StringFunctions.isPersian(tx) ;
+				//trace("This is arabic ***********************"+detectedArabicScript);
 			}
 			
 			//trace('add this : '+tx.substr(0,20));
@@ -195,16 +197,23 @@ package
 					target.text = 'MESepehr' ;
 					//I don't remember why did I do below check to prevent justify on CenterAlighn
 					var tf:TextFormat;
-					if(justify/* && target.defaultTextFormat.align == TextAlign.CENTER*/)
-					{
-						tf = target.getTextFormat();
-						tf.align = TextFormatAlign.JUSTIFY ;
-						target.defaultTextFormat = tf ;
-						//target.defaultTextFormat.align = TextAlign.JUSTIFY ;
-					}
 					//This line will prevent added html tags override with old and static ones. This is for Contents class use.
 					target.htmlText = target.htmlText.split(target.text).join(tx) ;
 						//target.text = tx ;
+					tf = target.getTextFormat();
+					//trace("******* Englisher ******* detected");
+					if(justify/* && target.defaultTextFormat.align == TextAlign.CENTER*/)
+					{
+						tf.align = TextFormatAlign.JUSTIFY ;
+						//target.defaultTextFormat = tf ;
+						target.setTextFormat(tf) ;
+						//target.defaultTextFormat.align = TextAlign.JUSTIFY ;
+					}
+					else if(tf.align==TextFormatAlign.RIGHT)
+					{
+						tf.align = TextFormatAlign.LEFT ;
+						target.setTextFormat(tf) ;
+					}
 					
 					//The below line makes html text effects remove.
 					/*if(tf!=null)
