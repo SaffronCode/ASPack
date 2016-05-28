@@ -103,9 +103,11 @@ package
 		/**this object will visible on the scrollable object to prevent its mouse click*/
 		private var mouseLocker:Sprite;
 		
+		
+		private static var targStage:Stage;
+		
 		/**main scrollable object*/
 		private var targ:DisplayObject,
-					targStage:Stage,
 					targParent:DisplayObjectContainer;
 					
 		private var curselLeftRight:Sprite,
