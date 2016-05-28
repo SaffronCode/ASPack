@@ -44,9 +44,17 @@ package com.mteamapp
 		}
 		
 		/**Returns true if currenct string has at least one persian script.*/
-		public static function isPersian(str:String):Boolean
+		public static function isPersian(str:String,stringLength:Number=NaN):Boolean
 		{
-			var max:uint = Math.min(str.length , 10);
+			var max:uint;
+			if(isNaN(stringLength))
+			{
+				max = Math.min(str.length , 300);
+			}
+			else
+			{
+				max = Math.min(str.length , stringLength) ;
+			}
 			for(var i = 0 ; i<max ; i++)
 			{
 				if(str.charCodeAt(i)>300)
