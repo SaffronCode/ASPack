@@ -375,6 +375,7 @@ package
 				targ.parent.removeChild(mouseLocker);
 			}catch(e){};
 			
+			targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
 			targStage.removeEventListener(MouseEvent.MOUSE_WHEEL,manageMouseWheel);
 			
 			//remove currsels if can
@@ -448,6 +449,7 @@ package
 			trace("**unlocked");
 			if(targStage)
 			{
+				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
 				targStage.removeEventListener(MouseEvent.MOUSE_UP,unLock);
 				targStage.removeEventListener(UN_LOCK_SCROLL,unLock);
 			}
@@ -517,7 +519,15 @@ package
 					//Removed on version 1.4.3 to prevent lock scroll when scroll is not started yet.
 					//targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
 				//scrolling starts
+				targStage.addEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
 			}
+		}
+		
+		/**Update scroll animation after MouseMove*/
+		protected function updateScrollAnim(event:MouseEvent):void
+		{
+			scrollAnim(null);
+			event.updateAfterEvent();
 		}
 		
 		private function stopScroll(e:MouseEvent=null)
@@ -526,6 +536,7 @@ package
 			{
 				isScrolling = false;
 				MouseUnLock();
+				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
 				//scrolling is stoped
 			}
 		}
@@ -563,6 +574,12 @@ package
 				targ.x = targetRect.x ;
 				targ.y = targetRect.y ;
 			}*/
+			var isCalledByMouse:Boolean = false ;
+			if(e==null)
+			{
+				isCalledByMouse = true ;
+			}
+			
 			if(scrollLock)
 			{
 				//trace('scroll is lock')
@@ -570,7 +587,7 @@ package
 			}
 			var temp:Number ;
 			
-			if(freeScrollOnTarget_TD)
+			if(!isCalledByMouse && freeScrollOnTarget_TD)
 			{
 				targetRect.height = targ.height;
 				if(maskRect.height>=targetRect.height)
@@ -596,7 +613,7 @@ package
 				}
 			}
 			
-			if(freeScrollOnTarget_LR)
+			if(!isCalledByMouse && freeScrollOnTarget_LR)
 			{
 				targetRect.width = targ.width;
 				if(maskRect.width>=targetRect.width)
@@ -682,7 +699,7 @@ package
 					//trace('check to lock the container : '+MouseLockAvailable()+' && '+Math.abs(Vy)+' > '+minAvailableScroll+' = '+(Math.abs(Vy)>minAvailableScroll));
 				}
 				
-				slowDownFloat(floatBackSpeed_on_touch,1);
+				//slowDownFloat(floatBackSpeed_on_touch,1);
 
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
 			}
