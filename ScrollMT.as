@@ -380,7 +380,6 @@ package
 				targ.parent.removeChild(mouseLocker);
 			}catch(e){};
 			
-			targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
 			targStage.removeEventListener(MouseEvent.MOUSE_WHEEL,manageMouseWheel);
 			
 			//remove currsels if can
@@ -395,6 +394,7 @@ package
 				curselTopDown.parent.removeChild(curselTopDown);
 			}
 			
+			targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
 			targStage.removeEventListener(MouseEvent.MOUSE_UP,unLock);
 			
 			targParent.removeEventListener(MouseEvent.MOUSE_DOWN,startScroll);
@@ -454,7 +454,7 @@ package
 			trace("**unlocked");
 			if(targStage)
 			{
-				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
+				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
 				targStage.removeEventListener(MouseEvent.MOUSE_UP,unLock);
 				targStage.removeEventListener(UN_LOCK_SCROLL,unLock);
 			}
@@ -524,31 +524,24 @@ package
 					//Removed on version 1.4.3 to prevent lock scroll when scroll is not started yet.
 					//targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
 				//scrolling starts
-				targStage.addEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
+				targStage.addEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
 			}
 		}
 		
-		/**Update scroll animation after MouseMove*/
-		protected function updateScrollAnim(event:MouseEvent):void
+		/**Update the animation instantly after mouseMove Event*/
+		private function updateAnimation(e:MouseEvent):void
 		{
 			scrollAnim(null);
-			event.updateAfterEvent();
-		}
-		
-		
-		private function canselMouseMoveControll():void
-		{
-			targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
+			e.updateAfterEvent();
 		}
 		
 		private function stopScroll(e:MouseEvent=null)
 		{
 			if(isScrolling)
 			{
-				scrollAnim(null);
 				isScrolling = false;
 				MouseUnLock();
-				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
+				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
 				//scrolling is stoped
 			}
 		}
@@ -560,10 +553,7 @@ package
 			mouseLocker.visible = true ;
 			
 			//Added on version 1.4.3 to make this event dispatches when all buttons locked
-			if(targ.parent!=null)
-			{
-				targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
-			}
+			targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
 		}
 		
 		/**disable mouseEvent*/
@@ -589,10 +579,10 @@ package
 				targ.x = targetRect.x ;
 				targ.y = targetRect.y ;
 			}*/
-			var isCalledByMouse:Boolean = false ;
+			var calledByMouseDrag:Boolean = false  ; 
 			if(e==null)
 			{
-				isCalledByMouse = true ;
+				calledByMouseDrag = true ;
 			}
 			
 			if(scrollLock)
@@ -602,7 +592,7 @@ package
 			}
 			var temp:Number ;
 			
-			if(!isCalledByMouse && freeScrollOnTarget_TD)
+			if(!calledByMouseDrag && freeScrollOnTarget_TD)
 			{
 				targetRect.height = targ.height;
 				if(maskRect.height>=targetRect.height)
@@ -628,7 +618,7 @@ package
 				}
 			}
 			
-			if(!isCalledByMouse && freeScrollOnTarget_LR)
+			if(!calledByMouseDrag && freeScrollOnTarget_LR)
 			{
 				targetRect.width = targ.width;
 				if(maskRect.width>=targetRect.width)
@@ -672,7 +662,6 @@ package
 					{
 						mousePose0 = null ;
 						MouseLock();
-						canselMouseMoveControll();
 					}
 					else if(mousePose0!=null)
 					{
@@ -696,7 +685,6 @@ package
 						//this function was replaced with MouseUnLock() by mistake
 						mousePose0 = null ;
 						MouseLock();
-						canselMouseMoveControll();
 					}
 					else if(mousePose0!=null)
 					{
@@ -715,8 +703,11 @@ package
 					//trace('check to lock the container : '+MouseLockAvailable()+' && '+Math.abs(Vy)+' > '+minAvailableScroll+' = '+(Math.abs(Vy)>minAvailableScroll));
 				}
 				
-				//slowDownFloat(floatBackSpeed_on_touch,1);
-
+				if(!calledByMouseDrag)
+				{
+					//slowDownFloat(floatBackSpeed_on_touch,1);
+				}
+				
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
 			}
 			else
@@ -834,8 +825,6 @@ package
 		/**this function will slow down the floating speeds if targRectangle was got out from the mask rectangle*/
 		private function slowDownFloat(slowDownSpeed:Number,slowDownMu:Number)
 		{
-			
-			
 			if(unLockTopDown)
 			{
 				var y0:Number = targetRect.y,
@@ -968,7 +957,7 @@ package
 		
 		
 		
-	/////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////
 		
 		/**This function will cause to scroll the page befor its starts to work*/
 		public static function showScrollEfect(value:Boolean=true):void
