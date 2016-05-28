@@ -24,11 +24,15 @@ package
 {
 	import com.mteamapp.StringFunctions;
 	
-	import flash.text.*;
+	import flash.geom.Rectangle;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 	
 	public class Unicode
 	{
+		/**This is still in beta version*/
+		public static var UseNewFastInLine:Boolean = false ;
 		
 		//From now there is no need to copy full class here, you can only copy and edite Unicode_string to your project folder.
 		//include "Unicode_strings.as"
@@ -213,129 +217,193 @@ package
 		///92-9-3  fast html unicode
 		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true)
 		{
+			//trace("tex : "+tex);
 			var myTextcash = entersCorrection(tex).split(String.fromCharCode(10));
-			tex = '' ;
+			var parag:Array = [];
 			var i ;
+			var corrected:String ; 
+			
+			var lastWorldWrapMode:Boolean = yourTextField.wordWrap ;
+			yourTextField.wordWrap = false ;
+			
+			yourTextField.text = ' ' ;
+			var spaceWidth:Number = yourTextField.getCharBoundaries(0).width ;
+			
+			
+					var cashedText:String;
+					var xmlSpace:String ;
+					
+					xmlSpace = '<flashrichtext version="1"><textformat>( )</textformat></flashrichtext>';
+				/**Paragraph lengh*/
+				var l:uint ; 
+				var lastIndex:uint ;
+				/**Last splitted parag*/
+				var lastSpace:int ;
+				var lineW:Number ;
+				var textWidth:Number ; 
+				var charRect:Rectangle ;
+				var lineString:String ;
+				
+			textWidth = Math.floor(yourTextField.width) ;
+					
 			for(i=0;i<myTextcash.length;i++){
-				tex += HTMLUnicode(myTextcash[i])+'\n';
+				corrected = HTMLUnicode(myTextcash[i]) ;
+				parag.push(corrected);
 			}
-			tex = tex.substring(0,tex.length-1);
-			var myText:String = (tex);
-			//debug
-			//yourTextField.text = myText;
-			//return
-			//debug end
-			var parag:Array = myText.split('\n');
 			var linesTest:Array = new Array();
 			for(var j =0 ;j<parag.length;j++){
 				/// tamam e data haa bayad rooye textfield ha beran bad 
 				yourTextField.htmlText = parag[j] ;
+				cashedText = yourTextField.text ;
 				/**parag become an xml string*/
-				parag[j] = yourTextField.getXMLText();
+				//parag[j] = yourTextField.getXMLText();
+				lastIndex = l = yourTextField.text.length ;
+				lineW = 0 ;
+				lastSpace = -1 ;
+				var step:uint = 1 ;
+				var realLineSize:Number ;
 				
-				if(yourTextField.numLines==1){
-					linesTest.push(parag[j]);
+				var lastW:Number;
+				var lastCharInLineLeftX:Number = NaN ;
+				var lastCharLeft:Number ;
+				var charLeft:Number;
+				var spaceLeft:Number;
+				
+				const stepPrecent:Number = 0.8 ;
+				
+				for( i=l-1 ; i>=0 ; i-=step )
+				{
+					step = 1 ;
+					//lastCharRect = charRect ;
+					charRect = yourTextField.getCharBoundaries(i) ;
+					if(charRect==null)
+					{
+						continue;
+					}
+					else if(isNaN(lastCharInLineLeftX))
+					{
+						lastCharInLineLeftX = charRect.right+1 ;
+					}
+					lastCharLeft = charLeft ;
+					charLeft = charRect.left ;
+					lastW = lineW ;
+					lineW = lastCharInLineLeftX-charLeft ;
+					
+					//trace(lineW+' vs '+textWidth);
+					
+					if(lineW>textWidth)
+					{
+						if(lastSpace!=-1)
+						{
+							//trace("From "+lastSpace+" to "+lastIndex);
+							lineString = yourTextField.getXMLText(lastSpace+1,lastIndex);
+							step = Math.ceil((lastIndex-lastSpace)*stepPrecent);
+							/**change the lineW from the deltaW here to make stepps accesible*/
+							lastIndex = lastSpace ;
+							i = lastSpace;
+							realLineSize = lastCharInLineLeftX-spaceLeft ;
+							lastCharInLineLeftX = spaceLeft ;
+						}
+						else
+						{
+							//trace("From i "+(i+1)+" to "+lastIndex);
+							lineString = yourTextField.getXMLText(i+1,lastIndex);
+							step = Math.ceil((lastIndex-i+1)*stepPrecent);
+							lastIndex = i ;
+							i++;
+							realLineSize = lastCharInLineLeftX-lastCharLeft ;
+							lastCharInLineLeftX = lastCharLeft ;
+						}
+						//trace("realLineSize : "+realLineSize);
+						if(justify)
+						{
+							//trace("Justif");
+							//trace("textWidth : "+textWidth);
+							//trace("realLineSize : "+realLineSize);
+							//trace("(textWidth-realLineSize) : "+(textWidth-realLineSize));
+							//trace("spaceWidth : "+spaceWidth);
+							//trace("Math.floor((textWidth-realLineSize)/spaceWidth) : "+Math.floor((textWidth-realLineSize)/spaceWidth));
+							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-realLineSize)/spaceWidth));
+						}
+						linesTest.push(lineString);
+						lastSpace = -1 ;
+						lineW=0;
+					}
+					else if( cashedText.charAt(i) == ' ' )
+					{
+						lastSpace = i ;
+						spaceLeft = charLeft ;
+					}
+				}
+				//trace("Generate line to : "+lastIndex);
+				//trace("Generate line to : "+lastIndex);
+				linesTest.push(yourTextField.getXMLText(0,lastIndex));
+				
+				
+				if(linesTest.length==1){
+					//linesTest.push(parag[j]);
 					continue;
 				}//else V
-				var lastNumLines:uint;
-				var spaces;
-				var cnt=0;
-				var simpleText:String = yourTextField.text ;
-				while((lastNumLines = yourTextField.numLines)>1 && cnt<10000){
-					cnt++;
-					spaces = '' ;
-					do{
-						spaces+='-';
-						yourTextField.text = spaces+simpleText ;
-					}while(lastNumLines == yourTextField.numLines) ;
-					spaces = spaces.substring(1) ;
-					yourTextField.text = spaces+simpleText ;
-					
-					//trace("lastNumLines : "+lastNumLines)
-					
-					var cashedText:String = yourTextField.getLineText(lastNumLines-1);
-					var lineIndex = yourTextField.getLineOffset(lastNumLines-1);
-					
-					
-					var indexOfSplitters = Infinity ;
-					for(i=0;i<splitters.length;i++){
-						var J = cashedText.indexOf(splitters[i]) ;
-						if(J!=-1){
-							indexOfSplitters = Math.min(indexOfSplitters,J);
-						}
-					}
-					if(indexOfSplitters == Infinity){
-						indexOfSplitters = 0 ;
-					}
-					yourTextField.text = '' ;
-					yourTextField.insertXMLText(0,0,parag[j]);
-					/**total charechter of line*/
-					var tc:uint = yourTextField.text.length ;
-					linesTest.push(yourTextField.getXMLText(tc-cashedText.length+indexOfSplitters));
-					//cashedText = cashedText.substring(indexOfSplitters);
-					//trace(tc+'-'+cashedText+'+'+indexOfSplitters+' = '+(tc-cashedText.length+indexOfSplitters));
-					simpleText = simpleText.substring(0,tc-cashedText.length+indexOfSplitters);
-					parag[j] = yourTextField.getXMLText(0,tc-cashedText.length+indexOfSplitters);
-					
-					
-					var xmlSpace:String = '<flashrichtext version="1"><textformat>( )</textformat></flashrichtext>' ;
-					if(justify)
-					{
-						yourTextField.text = '' ;
-						yourTextField.insertXMLText(0,0,linesTest[linesTest.length-1]);
-						var spases:Array = getChars(yourTextField.text,' ');
-						var savedXML:String ;
-						var cnt2:uint = 0;
-						do
-						{
-							cnt2++
-								savedXML = yourTextField.getXMLText();
-							var index:uint = spases[Math.floor(Math.random()*spases.length)];
-							yourTextField.insertXMLText(index,index,xmlSpace);
-							for(var k = 0 ; k<spases.length;k++)
-							{
-								if(spases[k]>index)
-								{
-									spases[k]++;
-								}
-							}
-						}while(spases.length>0 && yourTextField.numLines<2 && cnt2<100);
-						linesTest[linesTest.length-1] = savedXML ;
-					}
-					
-					
-					yourTextField.text = '' ;
-					yourTextField.insertXMLText(0,0,parag[j]);
-					//yourTextField.text = '' ;
-					//yourTextField.insertXMLText(0,0,linesTest[linesTest.length-1])
-					//return ;
-					/*cashedText = yourTextField.getXMLText(yourTextField.getLineOffset(lastNumLines-1)+indexOfSplitters
-					,yourTextField.getLineOffset(lastNumLines-1)
-					+yourTextField.getLineLength(lastNumLines-1));*/
-					
-					/*linesTest.push(cashedText);
-					parag[j] = parag[j].substring(0,lineIndex+indexOfSplitters-spaces.length);
-					yourTextField.htmlText = parag[j] ;*/
-				}
-				linesTest.push(parag[j]);
 			}
-			//debug line
-			//	yourTextField.text = cashedText ;
-			//	return
-			///debug line ended
-			
+			yourTextField.wordWrap = lastWorldWrapMode ;
 			var enterXML:String = '<flashrichtext version="1"><textformat>(\n)</textformat></flashrichtext>' ;//yourTextField.getXMLText();
 			yourTextField.text = '';
+			l = linesTest.length ;
 			for(i=0;i<linesTest.length;i++){
-				var tc2:uint = yourTextField.text.length ;
-				yourTextField.insertXMLText(tc2,tc2,linesTest[i]);
-				if(i!=0)
+				//trace("linesTest["+i+"] : "+linesTest[i]);
+				yourTextField.insertXMLText(yourTextField.length,yourTextField.length,linesTest[i]);
+				if(i!=l-1)
 				{
-					yourTextField.insertXMLText(tc2,tc2,enterXML);
+					yourTextField.insertXMLText(yourTextField.length,yourTextField.length,enterXML);
 				}
 			}
+			//trace("insertXML time : "+(getTimer()-tim));
 			//yourTextField.text = yourTextField.text.substring(0,yourTextField.text.length-1);
 		}
+		
+		
+		/**Inserts spaces on the text field*/
+		private function insertSpaceInXML(xmlText:String,numSpaces:int=0,removeExtraSpaces:Boolean=true):String
+		{
+			numSpaces = Math.max(0,numSpaces);
+			//trace("Start from : "+xmlText);
+			//trace("Required spaces are : "+numSpaces);
+			var purString:String = xmlText.substring(xmlText.indexOf('>(')+2,xmlText.lastIndexOf(')<'));
+			if(false)//remove extra spaces
+			{
+				var removedSpaces:uint = purString.length ;
+				purString = purString.replace(/^[\s]+/gi,'');
+				purString = purString.replace(/[\s]+$/gi,'');
+				removedSpaces -= purString.length ;
+				//trace("removedSpaces : "+removedSpaces);
+				numSpaces += removedSpaces;
+			}
+			//trace("purString : "+purString);
+			
+			var splitedWorld:Array = purString.split(' ');
+			//trace("Insert "+numSpaces+" spaces")
+			if(splitedWorld.length>1)
+			{
+				for(var i = 0 ; i<numSpaces ; i++)
+				{
+					var selectedWorld:uint = randGen(i,splitedWorld.length-1);
+					splitedWorld[selectedWorld] = splitedWorld[selectedWorld]+' ';
+				}
+				purString = splitedWorld.join(' ');
+			}
+			//trace("purString : > "+purString);
+			
+			//var regexp:RegExp = /(>[\(])([^\)]+)/gi;
+			//xmlText = str.replace(regexp,'$1'+purString)
+			xmlText = xmlText.substring(0,xmlText.indexOf('>(')+2)+purString+xmlText.substring(xmlText.lastIndexOf(')<'));
+			return xmlText ;
+		}
+		
+		private function randGen(seed:uint,length:uint):uint
+		{
+			return Math.floor(length*0.9*seed)%length;//Math.floor((length-1)*Math.random()) ; 
+		}
+		
 		
 		
 		
