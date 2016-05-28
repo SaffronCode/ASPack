@@ -558,7 +558,10 @@ package
 			mouseLocker.visible = true ;
 			
 			//Added on version 1.4.3 to make this event dispatches when all buttons locked
-			targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
+			if(targ.parent!=null)
+			{
+				targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
+			}
 		}
 		
 		/**disable mouseEvent*/
