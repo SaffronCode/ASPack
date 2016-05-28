@@ -533,10 +533,17 @@ package
 			event.updateAfterEvent();
 		}
 		
+		
+		private function canselMouseMoveControll():void
+		{
+			targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
+		}
+		
 		private function stopScroll(e:MouseEvent=null)
 		{
 			if(isScrolling)
 			{
+				scrollAnim(null);
 				isScrolling = false;
 				MouseUnLock();
 				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateScrollAnim);
@@ -660,6 +667,7 @@ package
 					{
 						mousePose0 = null ;
 						MouseLock();
+						canselMouseMoveControll();
 					}
 					else if(mousePose0!=null)
 					{
@@ -683,6 +691,7 @@ package
 						//this function was replaced with MouseUnLock() by mistake
 						mousePose0 = null ;
 						MouseLock();
+						canselMouseMoveControll();
 					}
 					else if(mousePose0!=null)
 					{
