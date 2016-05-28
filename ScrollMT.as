@@ -156,6 +156,8 @@ package
 					
 		private var acceptSetEfectOnMe:Boolean = true ;
 		private var UnlockOnFirstClick:Boolean;
+
+		private var absScale:Number;
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -311,6 +313,7 @@ package
 		/**set up the scroller variables and event listeners from now*/
 		private function setUpTheScroller()
 		{
+			absScale = absoluteScale();
 			//1.3.1 to ask to delete old scrolleers
 			targ.dispatchEvent(new Event(KILL_OLD_SCROLLER));
 			
@@ -650,7 +653,6 @@ package
 					unLock();
 					return;
 				}
-				var absScale:Number = absoluteScale();
 				//trace('absScale : '+absScale);
 				if(unLockLeftRight)
 				{
