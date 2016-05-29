@@ -39,6 +39,7 @@ package
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 
 	public class ScrollMT extends EventDispatcher
@@ -92,7 +93,9 @@ package
 		
 		
 		
-		
+		private var mouseDownTime:Number,
+					VxRound:Number=0,
+					VyRound:Number=0;
 		
 		
 		
@@ -516,6 +519,8 @@ package
 			{
 				//Lock the parent scoller imediatly
 				//targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
+				mouseDownTime = getTimer();
+				VxRound = VyRound = 0 ;
 				
 				isScrolling = true ;
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
@@ -539,6 +544,9 @@ package
 		{
 			if(isScrolling)
 			{
+				var deltaFrame:uint = (getTimer()-mouseDownTime)/(1000/targStage.frameRate);
+				Vx+=(VxRound)/(deltaFrame);
+				Vy+=(VyRound)/(deltaFrame);
 				isScrolling = false;
 				MouseUnLock();
 				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
@@ -660,6 +668,7 @@ package
 				{
 					if(MouseLockAvailable() && Math.abs(mousePose0.x-mousePose.x)>minScrollToLock)
 					{
+						Vx=(targStage.mouseX-mousePose0.x)/absScale;
 						mousePose0 = null ;
 						MouseLock();
 					}
@@ -683,6 +692,8 @@ package
 					if(MouseLockAvailable() && Math.abs(mousePose0.y-mousePose.y)>minScrollToLock)
 					{
 						//this function was replaced with MouseUnLock() by mistake
+						Vy=(targStage.mouseY-mousePose0.y)/absScale;
+						trace("Extra vy : "+Vy);
 						mousePose0 = null ;
 						MouseLock();
 					}
@@ -707,6 +718,9 @@ package
 				{
 					//slowDownFloat(floatBackSpeed_on_touch,1);
 				}
+				
+				VxRound+=Vx;
+				VyRound+=Vy;
 				
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
 			}
