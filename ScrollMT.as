@@ -545,8 +545,8 @@ package
 			if(isScrolling)
 			{
 				var deltaFrame:uint = (getTimer()-mouseDownTime)/(1000/targStage.frameRate);
-				Vx+=(VxRound)/(deltaFrame);
-				Vy+=(VyRound)/(deltaFrame);
+				Vx+=(VxRound)/Math.max(1,deltaFrame);
+				Vy+=(VyRound)/Math.max(1,deltaFrame);
 				isScrolling = false;
 				MouseUnLock();
 				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
