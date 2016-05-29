@@ -57,7 +57,7 @@ package com.mteamapp
 			}
 			for(var i = 0 ; i<max ; i++)
 			{
-				if(str.charCodeAt(i)>300)
+				if(str.charCodeAt(i)>1000)
 				{
 					//trace('This is arabic : '+str.charAt(i)+' at '+i+' the char code is : '+str.charCodeAt(i));
 					return true ;
