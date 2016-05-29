@@ -94,7 +94,11 @@ package
 		
 		
 		private var mouseDownTime:Number,
+					maxDelayToSave:uint=100,//This means the last Vs on this time will save
 					VxRound:Number=0,
+					VxHistory:Vector.<Number>,
+					VyHistory:Vector.<Number>,
+					VDates:Vector.<Number >,
 					VyRound:Number=0;
 		
 		
@@ -521,6 +525,9 @@ package
 				//targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
 				mouseDownTime = getTimer();
 				VxRound = VyRound = 0 ;
+				VxHistory = new Vector.<Number>();
+				VyHistory = new Vector.<Number>();
+				VDates = new Vector.<Number>();
 				
 				isScrolling = true ;
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
@@ -544,7 +551,21 @@ package
 		{
 			if(isScrolling)
 			{
-				var deltaFrame:uint = (getTimer()-mouseDownTime)/(1000/targStage.frameRate);
+				var deltaFrame:uint = Math.min(maxDelayToSave,(getTimer()-mouseDownTime))/(1000/targStage.frameRate);
+				var lastAcceptableTime:uint = getTimer()-maxDelayToSave ;
+				VxRound = VyRound = 0 ;
+				for(var i = VDates.length-1 ; i>=0 ; i--)
+				{
+					if(VDates[i]>lastAcceptableTime)
+					{
+						VxRound+=VxHistory[i];
+						VyRound+=VyHistory[i];
+					}
+					else
+					{
+						break ;
+					}
+				}
 				Vx+=(VxRound)/Math.max(1,deltaFrame);
 				Vy+=(VyRound)/Math.max(1,deltaFrame);
 				isScrolling = false;
@@ -693,7 +714,7 @@ package
 					{
 						//this function was replaced with MouseUnLock() by mistake
 						Vy=(targStage.mouseY-mousePose0.y)/absScale;
-						trace("Extra vy : "+Vy);
+						//trace("Extra vy : "+Vy);
 						mousePose0 = null ;
 						MouseLock();
 					}
@@ -719,8 +740,9 @@ package
 					//slowDownFloat(floatBackSpeed_on_touch,1);
 				}
 				
-				VxRound+=Vx;
-				VyRound+=Vy;
+				VxHistory.push(Vx);
+				VyHistory.push(Vy);
+				VDates.push(getTimer());
 				
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
 			}
