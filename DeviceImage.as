@@ -32,6 +32,12 @@
 		/**Device images are always in jpeg*/
 		public static var imageBytes:ByteArray ;
 		
+		/**Video bytes*/
+		public static var videoBytes:ByteArray ;
+		
+		/**This will save the video camera status*/
+		private static var onLoadingVideo:Boolean ; 
+		
 		/**This is the loaded image bitmap data*/
 		public static var imageBitmapData:BitmapData ;
 		
@@ -62,6 +68,7 @@
 		/**No image selected*/
 		private static function mediaLoadingCanseled(e:Event):void
 		{
+			videoBytes = null ;
 			imageBytes==null;
 			imageBitmapData = null;
 			onDone();
@@ -71,6 +78,7 @@
 		/**Open the video camera*/
 		public static function getVideoCamera(onVideoReady:Function):void
 		{
+			onLoadingVideo = true ;
 			imageBytes = null;
 			imageBitmapData = null ;
 			
@@ -94,6 +102,7 @@
 		/**When the image is ready, you can get its image from imageBytes*/
 		public static function getCameraImage(onImageReady:Function,imageW:Number=NaN,imageH:Number=NaN,loadThisFileIfNotSupporting:String=null):void
 		{
+			onLoadingVideo = false ;
 			imageBytes = null;
 			imageBitmapData = null ;
 			
@@ -116,8 +125,6 @@
 		
 		protected static function sendCameraImage(ev:MediaEvent):void
 		{
-			// TODO Auto-generated method stub
-			
 			if(ev.data.file!=null)
 			{
 				loadThisImageToSend(ev.data.file)	;
@@ -143,7 +150,7 @@
 			dataSource.readBytes(imageBytes);
 			imageBytes.position = 0 ;
 			
-			if(autoResize || !isNaN(tempW))
+			if( !onLoadingVideo && (autoResize || !isNaN(tempW)))
 			{
 				resizeLoadedImage(onDone,tempW,tempH,imageBytes);
 			}
@@ -155,6 +162,7 @@
 		
 		public static function loadFile(onImageReady:Function,file:File,imageW:Number=NaN,imageH:Number=NaN)
 		{
+			onLoadingVideo = false ;
 			tempW = imageW;
 			tempH = imageH ;
 			
@@ -172,7 +180,7 @@
 			imageBytes.position = 0 ;
 			fileStream.close();
 			
-			if(autoResize || !isNaN(tempW))
+			if( !onLoadingVideo && (autoResize || !isNaN(tempW)))
 			{
 				resizeLoadedImage(onDone,tempW,tempH,imageBytes);
 			}
@@ -186,6 +194,7 @@
 		/**Load image from file then it will call your function*/
 		public static function loadImageFromGallery(onImageLoaded:Function,rect:Rectangle=null,imageW:Number=NaN,imageH:Number=NaN,loadThisFileIfNotSupporting:String=null):void
 		{
+			onLoadingVideo = false ;
 			imageBitmapData = null;
 			imageBytes = null ;
 			
@@ -239,6 +248,7 @@
 		/**This function can also uses to convert byteArray to BitmapData in requseted size*/
 		public static function resizeLoadedImage(onResized:Function,newWidth:Number=NaN,newHeight:Number=NaN,fileBytes:ByteArray=null,forceToResize:Boolean=true):void
 		{
+			onLoadingVideo = false ;
 			onDone = onResized ;
 			
 			if(fileBytes == null && imageBytes==null)
@@ -315,6 +325,7 @@
 		
 		public static function saveImageToGallery(file:ByteArray, onImageSaved:Function):void
 		{
+			onLoadingVideo = false ;
 			// TODO Auto Generated method stub
 			cashedOnDone = onDone = onImageSaved ;
 			
