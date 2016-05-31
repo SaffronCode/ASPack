@@ -244,7 +244,7 @@ package
 				var charRect:Rectangle ;
 				var lineString:String ;
 				
-			textWidth = Math.floor(yourTextField.width) ;
+			textWidth = yourTextField.width-7 ;
 					
 			for(i=0;i<myTextcash.length;i++){
 				corrected = HTMLUnicode(myTextcash[i]) ;
