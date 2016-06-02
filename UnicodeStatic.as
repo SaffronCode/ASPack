@@ -202,7 +202,7 @@ package
 						//target.text = tx ;
 					tf = target.getTextFormat();
 					//trace("******* Englisher ******* detected");
-					if(justify/* && target.defaultTextFormat.align == TextAlign.CENTER*/)
+					if(justify && target.defaultTextFormat.align != TextFormatAlign.CENTER)
 					{
 						tf.align = TextFormatAlign.JUSTIFY ;
 						//target.defaultTextFormat = tf ;
