@@ -240,6 +240,7 @@ package
 			var lineHeight:Number = 0 ;
 			lastInfo_realTextHeight = 0 ; 
 			var descent:Number ;
+			var metric:TextLineMetrics;
 			
 			if(VerticalAlign_verticalHeight>0)
 			{
@@ -248,7 +249,7 @@ package
 				//trace(" ♠ : textField.textHeight1 : "+firstLineHieght);
 				//textField.text = '-\n-';
 				
-				var metric:TextLineMetrics = textField.getLineMetrics(0);
+				metric = textField.getLineMetrics(0);
 				
 			//	trace(" ♠ : textField.textHeight2 : "+textField.textHeight);
 				//lineHeight = textField.textHeight - firstLineHieght ;
@@ -298,16 +299,32 @@ package
 			
 			if(arabic)
 			{
+				//trace("text is arabic : "+text);
 				var cashedColor:uint = textField.textColor ;
 				UnicodeStatic.htmlText(textField,text,useCash,true,align);
 				textField.textColor = cashedColor;
 			}
 			else
 			{
+				//trace("text is English : "+text);
 				textField.text = text ;
 			}
 			
-			lastInfo_realTextHeight = lineHeight*textField.numLines;
+			//trace("textField : "+textField.text);
+			//trace("textField.numLines : "+textField.numLines);
+			metric = textField.getLineMetrics(0);
+			lineHeight = metric.height ;
+			descent = metric.descent ;
+			
+			var numLines:uint = textField.numLines ;
+			var checkIndex:uint = textField.text.length-1;
+			while(textField.text.charCodeAt(checkIndex)==13 && checkIndex>=0)
+			{
+				numLines--;
+				checkIndex--;
+			}
+			
+			lastInfo_realTextHeight = lineHeight*numLines;
 			//trace("♠ calculated height is : "+lastInfo_realTextHeight+" vs real text height : "+textField.textHeight);
 			//lastInfo_realTextHeight = textField.textHeight ;
 			
@@ -351,8 +368,8 @@ package
 					trace(" ♦ what is capturedObject ? :"+capturedObject);
 					trace(" ♦ : lastInfo_realTextHeight : "+lastInfo_realTextHeight);
 					trace(" ♦ : lineHeight : "+lineHeight);*/
-					//trace("• lastInfo_realTextHeight : "+lastInfo_realTextHeight);
-					//trace("• VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
+					trace("• lastInfo_realTextHeight : "+lastInfo_realTextHeight);
+					trace("• VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
 					capturedObject.y = (VerticalAlign_verticalHeight-lastInfo_realTextHeight)/2-descent;
 				}
 			}
