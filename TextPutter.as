@@ -30,6 +30,7 @@ package
 	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.text.TextField;
+	import flash.text.TextLineMetrics;
 
 	/**for the menus and objects that has'nt enaugh space for larg strings , you can use this class
 	 * to add your thex in to a TextField. it will check if the string is larger than TextField area
@@ -238,16 +239,26 @@ package
 			
 			var lineHeight:Number = 0 ;
 			lastInfo_realTextHeight = 0 ; 
+			var descent:Number ;
 			
 			if(VerticalAlign_verticalHeight>0)
 			{
 				textField.text = '-';
 				var firstLineHieght:Number = textField.textHeight ;
 				//trace(" ♠ : textField.textHeight1 : "+firstLineHieght);
-				textField.text = '-\n-';
+				//textField.text = '-\n-';
+				
+				var metric:TextLineMetrics = textField.getLineMetrics(0);
+				
 			//	trace(" ♠ : textField.textHeight2 : "+textField.textHeight);
-				lineHeight = textField.textHeight - firstLineHieght ;
+				//lineHeight = textField.textHeight - firstLineHieght ;
+				
+				//trace("metric : "+JSON.stringify(metric,null,' '));
+				
 				//trace(" ♦ : lineHeight : "+lineHeight);
+				//trace("VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
+				lineHeight = metric.height ;
+				descent = metric.descent ;
 			}
 			
 			if(text==null)
@@ -298,7 +309,7 @@ package
 			
 			lastInfo_realTextHeight = lineHeight*textField.numLines;
 			//trace("♠ calculated height is : "+lastInfo_realTextHeight+" vs real text height : "+textField.textHeight);
-			lastInfo_realTextHeight = textField.textHeight ;
+			//lastInfo_realTextHeight = textField.textHeight ;
 			
 			lastInfo_numLines = textField.numLines ;
 			lastInfo_textWidth = textField.textWidth;
@@ -340,7 +351,9 @@ package
 					trace(" ♦ what is capturedObject ? :"+capturedObject);
 					trace(" ♦ : lastInfo_realTextHeight : "+lastInfo_realTextHeight);
 					trace(" ♦ : lineHeight : "+lineHeight);*/
-					capturedObject.y = (VerticalAlign_verticalHeight-lastInfo_realTextHeight)/2;
+					//trace("• lastInfo_realTextHeight : "+lastInfo_realTextHeight);
+					//trace("• VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
+					capturedObject.y = (VerticalAlign_verticalHeight-lastInfo_realTextHeight)/2-descent;
 				}
 			}
 			
