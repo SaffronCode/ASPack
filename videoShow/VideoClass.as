@@ -7,6 +7,7 @@ package videoShow
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
+	import flash.events.StatusEvent;
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
@@ -20,7 +21,7 @@ package videoShow
 		private var 	W:Number = 0,
 						H:Number = 0 ;
 		
-		private var video:Video ;
+		public var videoObject:Video ;
 		
 		
 		private var netStream:NetStream ;
@@ -46,6 +47,7 @@ package videoShow
 			videoClient = new VideoClient();
 			videoClient.OnMetaData = videoLoaded ;
 			videoClient.OnPlayStatus = getPlayStatus;
+			videoClient.OnSeekPoint = seekUpdated ;
 
 			netStream = new NetStream(netConnetction);
 			netStream.addEventListener(NetStatusEvent.NET_STATUS,listenToNetStatus);
@@ -53,10 +55,9 @@ package videoShow
 			netStream.addEventListener(AsyncErrorEvent.ASYNC_ERROR,noFileExists);
 			netStream.addEventListener(DRMErrorEvent.DRM_ERROR,noFileExists);
 			netStream.client = videoClient ;
-			
-			video = new Video();
-			video.attachNetStream(netStream);
-			this.addChild(video);
+			videoObject = new Video();
+			videoObject.attachNetStream(netStream);
+			this.addChild(videoObject);
 			
 			this.addEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 		}
@@ -88,11 +89,11 @@ package videoShow
 		}
 		
 		/**stop the video and unload every thing*/
-		private function unLoad(e)
+		public function unLoad(e:*=null)
 		{
 			netConnetction.close();
 			netStream.close();
-			video.clear();
+			videoObject.clear();
 		}
 		
 		/**net status changed*/
@@ -104,6 +105,7 @@ package videoShow
 		
 		private function getPlayStatus(e)
 		{
+			trace("Play statis updated : "+JSON.stringify(e,null,' '));
 			if(e.code == "NetStream.Play.Complete")
 			{
 				setseek(0);
@@ -116,12 +118,24 @@ package videoShow
 		
 		
 		/**load this video file*/
-		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true)
+		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN)
 		{
+			trace("***14.6.1");
+			if(!isNaN(Width))
+			{
+				W = Width ;
+			}
+			if(!isNaN(Width))
+			{
+				H = Height ;
+			}
 			played = autoPlay ;
 			netStream.useHardwareDecoder = true ;
+			trace("***14.6.2");
 			netStream.play(videoURL);
-			video.smoothing = true ;
+			trace("***14.6.3");
+			videoObject.smoothing = true ;
+			trace("***14.6.4");
 		}
 		
 		/**pause the video*/
@@ -152,6 +166,11 @@ package videoShow
 					netStream.seek(Math.floor(position*videoDuration));
 				}catch(e){};
 			}
+		}
+		
+		protected function seekUpdated(event:*):void
+		{
+			trace("Seek updated????"+event);
 		}
 		
 		/**play the video*/
@@ -189,11 +208,25 @@ package videoShow
 		/**video is loaded*/
 		private function videoLoaded(metaData)
 		{
+			trace("VIDOIEFIOJIEOFJOE JIFOJIO "+JSON.stringify(metaData,null,' '));
 			videoDuration = metaData.duration ;
 			if(!played)
 			{
 				pause();
 			}
+			
+			if(W!=0 && H!=0)
+			{
+				this.graphics.clear();
+				this.graphics.beginFill(0x000000,0);
+				this.graphics.drawRect(0,0,W,H);
+				videoObject.width = W ;
+				videoObject.height = H ;
+				videoObject.scaleX = videoObject.scaleY = Math.min(videoObject.scaleX,videoObject.scaleY);
+				videoObject.x = (W-videoObject.width)/2;
+				videoObject.y = (H-videoObject.height)/2;
+			}
+			
 			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_LOADED));
 			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_STATUS_CHANGED,played));
 		}
