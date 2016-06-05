@@ -23,6 +23,10 @@
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
 	import flash.utils.getQualifiedClassName;
+	import flash.utils.setTimeout;
+	
+	import videoShow.VideoClass;
+	import videoShow.VideoEvents;
 	
 
 	public class DeviceImage
@@ -34,6 +38,12 @@
 		
 		/**Video bytes*/
 		public static var videoBytes:ByteArray ;
+		
+		/**This is the location of the video to save for capturing demo*/
+		private static var videoTempFile:File ;
+		
+		/**This will help to load videoPreview for demoImage*/
+		private static var videoDemoLoader:VideoClass ;
 		
 		/**This will save the video camera status*/
 		private static var onLoadingVideo:Boolean ; 
@@ -211,12 +221,78 @@
 			{
 				resizeLoadedImage(onDone,tempW,tempH,imageBytes);
 			}
+			else if(onLoadingVideo)
+			{
+				captureVideoDemo(onDone);
+			}
 			else
 			{
 				onDone();
 			}
 		}
 		
+		
+		
+		public static function captureVideoDemo(OnDone:Function, VideoBytes:ByteArray=null):void
+		{
+			onDone = onDone ;
+			if(VideoBytes!=null)
+			{
+				videoBytes = VideoBytes ;
+			}
+			if(videoDemoLoader)
+			{
+				videoDemoLoader.unLoad();
+			}
+			videoDemoLoader = new VideoClass();
+			if(videoTempFile!=null && videoTempFile.exists)
+			{
+				videoTempFile.deleteFileAsync();
+			}
+			videoTempFile = File.createTempFile() ;
+			FileManager.seveFile(videoTempFile,videoBytes,true,onVideoSavedToHard);
+		}
+		
+		private static function onVideoSavedToHard():void
+		{
+			trace("Video file is saved to load its image"); 
+			videoDemoLoader.addEventListener(VideoEvents.VIDEO_LOADED,videoDemoIsLoaded);
+			videoDemoLoader.loadThiwVideo(videoTempFile.url,false);
+		}
+		
+			protected static function videoDemoIsLoaded(event:Event):void
+			{
+				trace("Video is playing to get captured");
+				videoDemoLoader.removeEventListener(VideoEvents.VIDEO_LOADED,videoDemoIsLoaded);
+				videoDemoLoader.pause();
+				videoDemoLoader.seek = 0.5;
+				videoDemoLoader.addEventListener(VideoEvents.VIDEO_STATUS_CHANGED,videoGosToSelectedFrame);
+			}
+			
+			protected static function videoGosToSelectedFrame(event:Event):void
+			{
+				trace("Seek changed");
+				videoDemoLoader.removeEventListener(VideoEvents.VIDEO_STATUS_CHANGED,videoGosToSelectedFrame);
+				videoDemoLoader.pause();
+				
+				setTimeout(captureVideo,1000);
+			}
+			
+			private static function captureVideo():void
+			{
+				trace("Capture the video frame : "+videoDemoLoader.seek+' > '+videoDemoLoader.width,videoDemoLoader.height);
+				imageBitmapData = new BitmapData(videoDemoLoader.width,videoDemoLoader.height,false,0xffffff);
+				imageBitmapData.draw(videoDemoLoader.videoObject);
+				trace("Now what??");
+				//videoDemoLoader.unLoad();
+				//videoDemoLoader = null ;
+				trace("remove vvideo??");
+				
+				imageBytes = BitmapEffects.createJPG(imageBitmapData);
+				
+				onDone()
+			}
+			
 	/////////////////////////////////////////////////////////////////
 		/**Load image from file then it will call your function*/
 		public static function loadImageFromGallery(onImageLoaded:Function,rect:Rectangle=null,imageW:Number=NaN,imageH:Number=NaN,loadThisFileIfNotSupporting:String=null):void

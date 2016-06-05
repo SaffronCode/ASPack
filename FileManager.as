@@ -1,5 +1,6 @@
 package
 {
+	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
@@ -8,6 +9,7 @@ package
 
 	public class FileManager
 	{
+		private static var onDone:Function;
 		/**This will load local file instantly*/
 		public static function loadFile(fileTarget:File):ByteArray
 		{
@@ -29,10 +31,15 @@ package
 		
 		/**Save thesebytes to selected location<br>
 		 * This function will return the exeption string to*/
-		public static function seveFile(fileTarget:File,bytes:ByteArray,openAsync:Boolean=false):String
+		public static function seveFile(fileTarget:File,bytes:ByteArray,openAsync:Boolean=false,onSaved:Function=null):String
 		{
 			//The async file saver had problem. it cannot save all binary datas by one request.
 			openAsync = false ;
+			onDone = onSaved ;
+			if(onDone==null)
+			{
+				onDone = new Function();
+			}
 			try
 			{
 				if(fileTarget.exists)
@@ -43,6 +50,7 @@ package
 				var fileStream:FileStream = new FileStream();
 				if(openAsync)
 				{
+					fileStream.addEventListener(Event.CLOSE,savingDone);
 					fileStream.addEventListener(IOErrorEvent.IO_ERROR,cannotSaveThisFile);
 					fileStream.openAsync(fileTarget,FileMode.WRITE);
 				}
@@ -60,7 +68,17 @@ package
 			{
 				return e.message ;
 			}
+			if(!openAsync)
+			{
+				onDone();
+			}
 			return '' ;
+		}
+		
+		protected static function savingDone(event:Event):void
+		{
+			trace("File Saved async");
+			onDone();
 		}
 		
 		private static function cannotSaveThisFile(e:IOErrorEvent):void
