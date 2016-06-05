@@ -39,6 +39,7 @@ package
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.utils.clearTimeout;
 	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 
@@ -167,6 +168,7 @@ package
 		private var UnlockOnFirstClick:Boolean;
 
 		private var absScale:Number;
+		private var myTimeOutId:uint;
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -326,7 +328,7 @@ package
 			//1.3.1 to ask to delete old scrolleers
 			targ.dispatchEvent(new Event(KILL_OLD_SCROLLER));
 			
-			setTimeout(setMask,0);
+			myTimeOutId = setTimeout(setMask,0);
 			
 			//trace("♠ now im added");
 			
@@ -386,6 +388,8 @@ package
 			{
 				targ.parent.removeChild(mouseLocker);
 			}catch(e){};
+			
+			clearTimeout(myTimeOutId);
 			
 			targStage.removeEventListener(MouseEvent.MOUSE_WHEEL,manageMouseWheel);
 			
