@@ -75,6 +75,22 @@
 		}
 		
 		
+		public static function loadVideo(onVideoReady:Function,videoFileTarget:File):void
+		{
+			onLoadingVideo = true ;
+			imageBytes = null;
+			imageBitmapData = null ;
+			
+			onDone = onVideoReady ;
+			
+			
+			tempW = NaN;
+			tempH = NaN ;
+			
+			loadThisImageToSend(videoFileTarget);
+		}
+		
+		
 		/**Open the video camera*/
 		public static function getVideoCamera(onVideoReady:Function):void
 		{
@@ -82,8 +98,11 @@
 			imageBytes = null;
 			imageBitmapData = null ;
 			
+			onDone = onVideoReady ;
+			
 			if(!CameraUI.isSupported)
 			{
+				onDone()
 				return ;
 			}
 			
@@ -94,8 +113,6 @@
 			camera.addEventListener(MediaEvent.COMPLETE,sendCameraImage);
 			camera.addEventListener(Event.CANCEL,mediaLoadingCanseled);
 			camera.launch(MediaType.VIDEO);
-			
-			onDone = onVideoReady ;
 		}
 		
 		
@@ -175,9 +192,19 @@
 			// TODO Auto Generated method stub
 			var fileStream:FileStream = new FileStream();
 			fileStream.open(file,FileMode.READ);
-			imageBytes = new ByteArray();
-			fileStream.readBytes(imageBytes,0,fileStream.bytesAvailable);
-			imageBytes.position = 0 ;
+			
+			if(!onLoadingVideo)
+			{
+				imageBytes = new ByteArray();
+				fileStream.readBytes(imageBytes,0,fileStream.bytesAvailable);
+				imageBytes.position = 0 ;
+			}
+			else
+			{
+				videoBytes = new ByteArray();
+				fileStream.readBytes(videoBytes,0,fileStream.bytesAvailable);
+				videoBytes.position = 0 ;
+			}
 			fileStream.close();
 			
 			if( !onLoadingVideo && (autoResize || !isNaN(tempW)))
