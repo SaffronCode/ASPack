@@ -221,7 +221,7 @@
 			{
 				resizeLoadedImage(onDone,tempW,tempH,imageBytes);
 			}
-			else if(onLoadingVideo)
+			else if(false && onLoadingVideo)
 			{
 				captureVideoDemo(onDone);
 			}
@@ -275,7 +275,7 @@
 				videoDemoLoader.removeEventListener(VideoEvents.VIDEO_STATUS_CHANGED,videoGosToSelectedFrame);
 				videoDemoLoader.pause();
 				
-				setTimeout(captureVideo,1000);
+				setTimeout(captureVideo,10000);
 			}
 			
 			private static function captureVideo():void
