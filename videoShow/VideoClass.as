@@ -8,6 +8,7 @@ package videoShow
 	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
 	import flash.events.StatusEvent;
+	import flash.media.StageWebView;
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
@@ -33,6 +34,12 @@ package videoShow
 		private var videoDuration:Number ; 
 		
 		private var played:Boolean = false;
+		
+		
+		private const STAGE_VIDEO_URL:String = "STAGE_VIDEO_URL";
+		
+		private var stageVideo:StageWebView,
+					videoHTML:String='<video controls><source src="'+STAGE_VIDEO_URL+'" type="video/mp4"></video>';// width="320" height="240" 
 		
 		
 		public function VideoClass()
@@ -94,6 +101,11 @@ package videoShow
 			netConnetction.close();
 			netStream.close();
 			videoObject.clear();
+			this.removeEventListener(Event.ENTER_FRAME,controllStageVideoPose);
+			if(stageVideo)
+			{
+				stageVideo.stage = null ;
+			}
 		}
 		
 		/**net status changed*/
@@ -129,13 +141,56 @@ package videoShow
 			{
 				H = Height ;
 			}
-			played = autoPlay ;
-			netStream.useHardwareDecoder = true ;
-			trace("***14.6.2");
-			netStream.play(videoURL);
-			trace("***14.6.3");
-			videoObject.smoothing = true ;
-			trace("***14.6.4");
+			if(true || DevicePrefrence.isIOS() && videoURL.toLocaleLowerCase().lastIndexOf('.mp4')!=-1)
+			{
+				if(W==0)
+				{
+					W = 320 ;
+				}
+				if(H==0)
+				{
+					H = 480 ;
+				}
+				
+				this.graphics.clear();
+				this.graphics.beginFill(0,0);
+				this.graphics.drawRect(0,0,W,H);
+				
+				stageVideo = new StageWebView();
+				//stageVideo.loadString(videoHTML.split(stageVideo).join(videoURL));
+				trace("videoURL : "+videoURL);
+				stageVideo.loadURL(videoURL);
+				controllVideostage();
+			}
+			else
+			{
+				played = autoPlay ;
+				netStream.useHardwareDecoder = true ;
+				trace("***14.6.2");
+				netStream.play(videoURL);
+				trace("***14.6.3");
+				videoObject.smoothing = true ;
+				trace("***14.6.4");
+			}
+		}
+		
+		private function controllVideostage(e:*=null):void
+		{
+			if(this.stage!=null)
+			{
+				stageVideo.stage = this.stage ;
+				this.addEventListener(Event.ENTER_FRAME,controllStageVideoPose);
+				controllStageVideoPose();
+			}
+			else
+			{
+				this.addEventListener(Event.ADDED_TO_STAGE,controllVideostage);
+			}
+		}
+		
+		private function controllStageVideoPose(e:*=null):void
+		{
+			stageVideo.viewPort = this.getBounds(stage);
 		}
 		
 		/**pause the video*/
