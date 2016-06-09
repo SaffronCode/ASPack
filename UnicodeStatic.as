@@ -78,12 +78,8 @@ package
 		public static function convert(str:String,useCash:Boolean=false,arabicNumber:Boolean=false)
 		{
 			//trace('♣');
-			if(deactiveConvertor)
-			{
-				return str ;
-			}
 			
-			if(detectArabicScript && !StringFunctions.isPersian(str))
+			if(deactiveConvertor && (!detectArabicScript || detectArabicScript && !StringFunctions.isPersian(str)))
 			{
 				//Continue in default way
 				return str ;
@@ -166,6 +162,8 @@ package
 			{
 				//trace("***************************Detect arabic************************");
 				detectedArabicScript = StringFunctions.isPersian(tx) ;
+				trace("+++++++++++++++ detectedArabicScript : "+detectedArabicScript);
+				trace("+++++++++++++++ tx : "+tx);
 				//trace("This is arabic ***********************"+detectedArabicScript);
 			}
 			
@@ -192,7 +190,7 @@ package
 			else
 			{
 				tx = correctHTMLS(tx) ;
-				if(deactiveConvertor || !detectedArabicScript)
+				if((deactiveConvertor || !detectedArabicScript ) && !(detectArabicScript && detectedArabicScript))
 				{
 					target.text = 'MESepehr' ;
 					//I don't remember why did I do below check to prevent justify on CenterAlighn
