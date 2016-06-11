@@ -8,6 +8,7 @@ package videoShow
 	import flash.events.IOErrorEvent;
 	import flash.events.NetStatusEvent;
 	import flash.events.StatusEvent;
+	import flash.filesystem.File;
 	import flash.media.StageWebView;
 	import flash.media.Video;
 	import flash.net.NetConnection;
@@ -130,9 +131,9 @@ package videoShow
 		
 		
 		/**load this video file*/
-		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN)
+		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN,videoExtention:String=null)
 		{
-			trace("***14.6.1");
+			trace("loadThiwVideo : "+videoURL);
 			if(!isNaN(Width))
 			{
 				W = Width ;
@@ -141,7 +142,7 @@ package videoShow
 			{
 				H = Height ;
 			}
-			if(true || DevicePrefrence.isIOS() && videoURL.toLocaleLowerCase().lastIndexOf('.mp4')!=-1)
+			if(DevicePrefrence.isIOS() && (videoURL.toLocaleLowerCase().lastIndexOf('.mp4')!=-1 || videoExtention.indexOf("mp4")!=-1))
 			{
 				if(W==0)
 				{
@@ -158,19 +159,29 @@ package videoShow
 				
 				stageVideo = new StageWebView();
 				//stageVideo.loadString(videoHTML.split(stageVideo).join(videoURL));
-				trace("videoURL : "+videoURL);
-				stageVideo.loadURL(videoURL);
+				var correctedURL:String = videoURL ;
+				try
+				{
+					if(correctedURL.indexOf('http')==-1)
+					{
+						correctedURL = new File(correctedURL).nativePath;
+					}
+				}
+				catch(e)
+				{
+					trace("****The video location may be wrong : "+videoURL);
+					correctedURL = videoURL ;
+				}
+				trace("load the video location on stage web: "+correctedURL);
+				stageVideo.loadURL(correctedURL);
 				controllVideostage();
 			}
 			else
 			{
 				played = autoPlay ;
 				netStream.useHardwareDecoder = true ;
-				trace("***14.6.2");
 				netStream.play(videoURL);
-				trace("***14.6.3");
 				videoObject.smoothing = true ;
-				trace("***14.6.4");
 			}
 		}
 		
@@ -191,6 +202,14 @@ package videoShow
 		private function controllStageVideoPose(e:*=null):void
 		{
 			stageVideo.viewPort = this.getBounds(stage);
+			if(Obj.isAccesibleByMouse(this))
+			{
+				stageVideo.stage == this.stage ;
+			}
+			else
+			{
+				stageVideo.stage == null ;
+			}
 		}
 		
 		/**pause the video*/

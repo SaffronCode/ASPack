@@ -221,7 +221,7 @@
 			{
 				resizeLoadedImage(onDone,tempW,tempH,imageBytes);
 			}
-			else if(false && onLoadingVideo)
+			else if(false && onLoadingVideo)//Capturing video had problem
 			{
 				captureVideoDemo(onDone);
 			}
@@ -244,6 +244,15 @@
 			{
 				videoDemoLoader.unLoad();
 			}
+			
+			if(DevicePrefrence.isIOS())
+			{
+				imageBitmapData = new BitmapData(200,200,false,0x222222);
+				imageBytes = BitmapEffects.createJPG(imageBitmapData);
+				OnDone();
+				return ;
+			}
+			
 			videoDemoLoader = new VideoClass();
 			if(videoTempFile!=null && videoTempFile.exists)
 			{
@@ -275,7 +284,7 @@
 				videoDemoLoader.removeEventListener(VideoEvents.VIDEO_STATUS_CHANGED,videoGosToSelectedFrame);
 				videoDemoLoader.pause();
 				
-				setTimeout(captureVideo,10000);
+				setTimeout(captureVideo,1000);
 			}
 			
 			private static function captureVideo():void
