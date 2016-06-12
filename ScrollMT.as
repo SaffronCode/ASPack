@@ -53,6 +53,9 @@ package
 		
 		private static const KILL_OLD_SCROLLER:String = "KILL_OLD_SCROLLER" ;
 		
+		/**This event dispatches to parent. the container scrollers must listen to this to stop their scroll controlling*/
+		private static const TRY_TO_SCROLL:String = "TRY_TO_SCROLL" ;
+		
 		private const 	cursolCollor:Number = 0x000000,
 						cursolAlpha:Number = 0.1;
 		
@@ -391,6 +394,7 @@ package
 			
 			clearTimeout(myTimeOutId);
 			
+			targ.removeEventListener(TRY_TO_SCROLL,stopScroll);
 			targStage.removeEventListener(MouseEvent.MOUSE_WHEEL,manageMouseWheel);
 			
 			//remove currsels if can
@@ -541,6 +545,7 @@ package
 					//targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
 				//scrolling starts
 				targStage.addEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
+				targ.addEventListener(TRY_TO_SCROLL,stopScroll);
 			}
 		}
 		
@@ -551,11 +556,12 @@ package
 			e.updateAfterEvent();
 		}
 		
-		private function stopScroll(e:MouseEvent=null)
+		private function stopScroll(e:*=null)
 		{
+			targ.removeEventListener(TRY_TO_SCROLL,stopScroll);
 			if(isScrolling)
 			{
-				scrollAnim(null);
+				scrollAnim(null,true);
 				
 				var deltaFrame:uint = Math.min(maxDelayToSave,(getTimer()-mouseDownTime))/(1000/targStage.frameRate);
 				var lastAcceptableTime:uint = getTimer()-maxDelayToSave ;
@@ -606,7 +612,7 @@ package
 		
 	//////////////////////////////////////scroll animation↓
 		
-		private function scrollAnim(e:Event)
+		private function scrollAnim(e:Event,imCalledFromStopScrollFunction:Boolean=false)
 		{
 			/*if(e==null)
 			{
@@ -633,7 +639,10 @@ package
 				if(maskRect.height>=targetRect.height)
 				{
 					//unLockTopDown = false ;
-					stopScroll();
+					if(!imCalledFromStopScrollFunction)
+					{
+						stopScroll();
+					}
 				}
 				else
 				{
@@ -659,7 +668,10 @@ package
 				if(maskRect.width>=targetRect.width)
 				{
 					//unLockLeftRight = false ;
-					stopScroll();
+					if(!imCalledFromStopScrollFunction)
+					{
+						stopScroll();
+					}
 				}
 				else
 				{
@@ -688,7 +700,10 @@ package
 				stepBack = false ;
 				if(!Obj.isAccesibleByMouse(targParent,false,new Point(targStage.mouseX,targStage.mouseY)))
 				{
-					stopScroll();
+					if(!imCalledFromStopScrollFunction)
+					{
+						stopScroll();
+					}
 					unLock();
 					return;
 				}
@@ -705,6 +720,7 @@ package
 					{
 						vxHist = Vx = 0 ;
 						//trace("Canseling");
+						targParent.dispatchEvent(new Event(TRY_TO_SCROLL,true));
 					}
 					else
 					{
@@ -730,6 +746,7 @@ package
 					{
 						//trace("Canseling");
 						vyHist = Vy = 0 ;
+						targParent.dispatchEvent(new Event(TRY_TO_SCROLL,true));
 					}
 					else
 					{
