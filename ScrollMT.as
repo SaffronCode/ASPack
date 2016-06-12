@@ -555,6 +555,8 @@ package
 		{
 			if(isScrolling)
 			{
+				scrollAnim(null);
+				
 				var deltaFrame:uint = Math.min(maxDelayToSave,(getTimer()-mouseDownTime))/(1000/targStage.frameRate);
 				var lastAcceptableTime:uint = getTimer()-maxDelayToSave ;
 				VxRound = VyRound = 0 ;
@@ -681,6 +683,8 @@ package
 			
 			if(isScrolling)
 			{
+				var vxHist:Number=Vx;
+				var vyHist:Number=Vy;
 				stepBack = false ;
 				if(!Obj.isAccesibleByMouse(targParent,false,new Point(targStage.mouseX,targStage.mouseY)))
 				{
@@ -693,13 +697,13 @@ package
 				{
 					if(MouseLockAvailable() && Math.abs(mousePose0.x-mousePose.x)>minScrollToLock)
 					{
-						Vx=(targStage.mouseX-mousePose0.x)/absScale;
+						vxHist =(targStage.mouseX-mousePose0.x)/absScale;
 						mousePose0 = null ;
 						MouseLock();
 					}
 					else if(mousePose0!=null)
 					{
-						Vx = 0 ;
+						vxHist = Vx = 0 ;
 						//trace("Canseling");
 					}
 					else
@@ -708,7 +712,7 @@ package
 						{
 							curselLeftRight.alpha+=fadeInSpeed;
 						}
-						Vx=(targStage.mouseX-mousePose.x)/absScale;
+						vxHist = Vx=(targStage.mouseX-mousePose.x)/absScale;
 					}
 					//lock the mosue↓
 				}
@@ -717,7 +721,7 @@ package
 					if(MouseLockAvailable() && Math.abs(mousePose0.y-mousePose.y)>minScrollToLock)
 					{
 						//this function was replaced with MouseUnLock() by mistake
-						Vy=(targStage.mouseY-mousePose0.y)/absScale;
+						vyHist=(targStage.mouseY-mousePose0.y)/absScale;
 						//trace("Extra vy : "+Vy);
 						mousePose0 = null ;
 						MouseLock();
@@ -725,7 +729,7 @@ package
 					else if(mousePose0!=null)
 					{
 						//trace("Canseling");
-						Vy = 0 ;
+						vyHist = Vy = 0 ;
 					}
 					else
 					{
@@ -733,7 +737,7 @@ package
 						{
 							curselTopDown.alpha+=fadeInSpeed;
 						}
-						Vy=(targStage.mouseY-mousePose.y)/absScale;
+						vyHist = Vy=(targStage.mouseY-mousePose.y)/absScale;
 					}
 					//lock the mosue↓
 					//trace('check to lock the container : '+MouseLockAvailable()+' && '+Math.abs(Vy)+' > '+minAvailableScroll+' = '+(Math.abs(Vy)>minAvailableScroll));
@@ -744,8 +748,8 @@ package
 					//slowDownFloat(floatBackSpeed_on_touch,1);
 				}
 				
-				VxHistory.push(Vx);
-				VyHistory.push(Vy);
+				VxHistory.push(vxHist);
+				VyHistory.push(vyHist);
 				VDates.push(getTimer());
 				
 				mousePose = new Point(targStage.mouseX,targStage.mouseY);
