@@ -41,6 +41,7 @@ package
 		public static var splitters:Array = [',','.',' ','-',')',':'];
 		public static var adad = '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹۰۱۲۳۴۵۶۷۸۹����٪٪';
 		public static var estesna = '-[]»«)("/\\:';
+		public static var forceToEnglish:String = '' ;
 		
 		private var MESlistChr:Object = {};
 		
@@ -569,7 +570,7 @@ package
 			{
 				return test ;
 			}
-			if(MESlistChr[megh]==undefined && megh.charCodeAt(0)<1417 && estesna.indexOf(megh)==-1 || adad.indexOf(megh)!=-1){
+			if((forceToEnglish.indexOf(megh)!=-1 || (MESlistChr[megh]==undefined && megh.charCodeAt(0)<1417 && estesna.indexOf(megh)==-1 ) || ( adad.indexOf(megh)!=-1))){
 				helperObject[megh] = true ;
 				return true
 			}else{
