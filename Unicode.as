@@ -345,7 +345,7 @@ package
 					continue;
 				}//else V
 			}
-			yourTextField.wordWrap = lastWorldWrapMode ;
+			//yourTextField.wordWrap = lastWorldWrapMode ;
 			var enterXML:String = '<flashrichtext version="1"><textformat>(\n)</textformat></flashrichtext>' ;//yourTextField.getXMLText();
 			yourTextField.text = '';
 			l = linesTest.length ;
