@@ -13,6 +13,7 @@ package stageManager
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
+	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
@@ -110,13 +111,19 @@ package stageManager
 				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 				lastStageFW = myStage.fullScreenWidth ;
 				lastStageFH = myStage.fullScreenHeight ;
+				
+				myStage.scaleMode = StageScaleMode.NO_SCALE ;
+				var stageWidth:Number = myStage.stageWidth;
+				var stageHeight:Number = myStage.stageHeight;
+				myStage.scaleMode = StageScaleMode.SHOW_ALL ;
+				
 				if(debugW!=0 && debugH!=0)
 				{
 					controlStageProperties(debugW,debugH);
 				}
 				else
 				{
-					controlStageProperties(lastStageFW,lastStageFH);
+					controlStageProperties(stageWidth,stageHeight);
 				}
 				ManageAllPositions();
 				//trace("All managed");
