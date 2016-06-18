@@ -374,6 +374,7 @@ package
 			{
 				oldTextField.text = myStageText.text;
 			}
+			oldTextField.text = UnicodeStatic.KaafYe(myStageText.text);
 			
 			oldTextField.removeEventListener(Event.CHANGE,changeTheDisplayedText);	
 			oldTextField.removeEventListener(Event.CHANGE,changeTheStageText);
