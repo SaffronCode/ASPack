@@ -292,6 +292,10 @@ package
 			}
 		}
 		
-		
+		/**Returns true if the application is fullScreen*/
+		public static function isFullScreen():Boolean
+		{
+			return (appDescriptor.toString().indexOf("<fullScreen>true</fullScreen>")!=-1)
+		}
 	}
 }
