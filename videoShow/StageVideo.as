@@ -109,7 +109,6 @@ package videoShow
 				}
 				else if(DevicePrefrence.isIOS())
 				{
-					useOnHMLTag = false ;
 				}
 			}
 			
@@ -131,7 +130,8 @@ package videoShow
 		protected function openVideoFile(event:MouseEvent):void
 		{
 			// TODO Auto-generated method stub
-			navigateToURL(new URLRequest(correctedURL));
+			trace("Open corrected video targer: "+correctedURL);
+			navigateToURL(new URLRequest("file://"+correctedURL));
 		}
 		
 		private function controllVideostage(e:*=null):void
