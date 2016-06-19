@@ -7,6 +7,7 @@ package videoShow
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.IOErrorEvent;
+	import flash.events.MouseEvent;
 	import flash.events.NetStatusEvent;
 	import flash.events.StatusEvent;
 	import flash.filesystem.File;
@@ -15,6 +16,8 @@ package videoShow
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
 
 	public class StageVideo extends Sprite
 	{
@@ -39,6 +42,8 @@ package videoShow
 					'</video>'+
 					'<script>var scrHeight=window.innerHeight;document.getElementById("showVideo1").style.height=scrHeight +"px";</script>'+
 					'</body>\n</html>';// width="320" height="240" 
+
+					private var correctedURL:String;
 		
 		
 		public function StageVideo(Width:Number=0,Height:Number=0)
@@ -73,8 +78,9 @@ package videoShow
 		
 		
 		/**load this video file*/
-		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN,videoExtention:String=null,useOnHMLTag:Boolean=true)
+		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN,videoExtention:String=null)
 		{
+			var useOnHMLTag:Boolean=true;
 			trace("loadThiwVideo : "+videoURL);
 			if(!isNaN(Width))
 			{
@@ -90,30 +96,42 @@ package videoShow
 			
 			stageVideo = new StageWebView(userNativeStageWiew);
 			//stageVideo.loadString(videoHTML.split(stageVideo).join(videoURL));
-			var correctedURL:String = videoURL ;
-			try
+			correctedURL = videoURL ;
+			if(correctedURL.indexOf('http')==-1)
 			{
-				if(correctedURL.indexOf('http')==-1)
+				if(DevicePrefrence.isAndroid())
 				{
-					correctedURL = new File(correctedURL).nativePath;
+					this.graphics.beginFill(0,1);
+					this.graphics.drawRect(0,0,W,H);
+					this.buttonMode = true ;
+					this.addEventListener(MouseEvent.MOUSE_DOWN,openVideoFile);
+					return;
+				}
+				else if(DevicePrefrence.isIOS())
+				{
+					useOnHMLTag = false ;
 				}
 			}
-			catch(e)
-			{
-				trace("****The video location may be wrong : "+videoURL);
-				correctedURL = videoURL ;
-			}
+			
 			trace("load the video location on stage web: "+correctedURL);
 			//stageVideo.loadURL(correctedURL);
 			if(useOnHMLTag)
 			{
-				stageVideo.loadString(videoHTML.split(STAGE_VIDEO_URL).join(correctedURL));
+				var videoHTMLString:String = videoHTML.split(STAGE_VIDEO_URL).join(correctedURL) ;
+				trace("Video HTML string is : "+videoHTMLString);
+				stageVideo.loadString(videoHTMLString);
 			}
 			else
 			{
 				stageVideo.loadURL(correctedURL);
 			}
 			controllVideostage();
+		}
+		
+		protected function openVideoFile(event:MouseEvent):void
+		{
+			// TODO Auto-generated method stub
+			navigateToURL(new URLRequest(correctedURL));
 		}
 		
 		private function controllVideostage(e:*=null):void
@@ -137,19 +155,23 @@ package videoShow
 			{
 				var stageScaleX:Number = stage.nativeWindow.width/stage.stageWidth;
 				var stageScaleY:Number = stage.nativeWindow.height/stage.stageHeight ;
-				viewPort.width *= Math.min(stageScaleX,stageScaleY) ;
-				viewPort.height *= Math.min(stageScaleX,stageScaleY) ;
-				viewPort.x += (stage.nativeWindow.width-stage.stageWidth)/2//*Math.max(stageScaleX-stageScaleY) ;
-				//viewPort.y += (stage.nativeWindow.height-stage.stageHeight)/2*Math.max(stageScaleY-stageScaleX) ;
+				
+				var minScale:Number = Math.min(stageScaleY,stageScaleX);
+				
+				viewPort.width *= minScale ;
+				viewPort.height *= minScale ;
+				
+				viewPort.x = Math.max(0,(stage.nativeWindow.width-stage.stageWidth*minScale)/2)+(viewPort.x*minScale) ;
+				viewPort.y = Math.max(0,(stage.nativeWindow.height-stage.stageHeight*minScale)/2)+(viewPort.y*minScale) ;
 			}
 			stageVideo.viewPort = viewPort ;
 			if(Obj.isAccesibleByMouse(this))
 			{
-				stageVideo.stage == this.stage ;
+				stageVideo.stage = this.stage ;
 			}
 			else
 			{
-				stageVideo.stage == null ;
+				stageVideo.stage = null ;
 			}
 		}
 		
