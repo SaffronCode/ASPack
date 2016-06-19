@@ -516,6 +516,7 @@ package
 							if(itemIndex>targInsex)
 							{
 								//trace("Hitted!!  itemIndex:"+itemIndex+' targInsex:'+targInsex+' >>> '+item);
+								//trace("The item is : "+displayObjectInfo(item));
 								return false ;
 							}
 							//trace("Nothing founded");
