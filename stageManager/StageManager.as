@@ -9,13 +9,13 @@
 
 package stageManager
 {
+	import flash.desktop.NativeApplication;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.Stage;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
-	import flash.events.EventDispatcher;
 	import flash.geom.Rectangle;
 
 	public class StageManager
@@ -94,6 +94,15 @@ package stageManager
 			controllStageSizes();
 			
 			myStage.addEventListener(Event.ADDED,controllFromMe,false,1);
+			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
+			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
+		}
+		
+		private static function controllStageSizesOnFullScreen(e:*):void
+		{
+			lastStageFW = NaN ;
+			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
+			controllStageSizes(null);
 		}
 		
 		public static function deactiveRotationListening():void
@@ -112,10 +121,21 @@ package stageManager
 				lastStageFW = myStage.fullScreenWidth ;
 				lastStageFH = myStage.fullScreenHeight ;
 				
-				myStage.scaleMode = StageScaleMode.NO_SCALE ;
-				var stageWidth:Number = myStage.stageWidth;
-				var stageHeight:Number = myStage.stageHeight;
-				myStage.scaleMode = StageScaleMode.SHOW_ALL ;
+				var stageWidth:Number;
+				var stageHeight:Number;
+				
+				if(!DevicePrefrence.isFullScreen())
+				{
+					myStage.scaleMode = StageScaleMode.NO_SCALE ;
+					stageWidth = myStage.stageWidth ;
+					stageHeight = myStage.stageHeight ;
+					myStage.scaleMode = StageScaleMode.SHOW_ALL ;
+				}
+				else
+				{
+					stageWidth = lastStageFW ;
+					stageHeight = lastStageFH ;
+				}
 				
 				if(debugW!=0 && debugH!=0)
 				{
