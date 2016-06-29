@@ -302,7 +302,9 @@ package
 				//trace("text is arabic : "+text);
 				var cashedColor:uint = textField.textColor ;
 				UnicodeStatic.htmlText(textField,text,useCash,true,align);
-				textField.textColor = cashedColor;
+				
+				//You loose the html colors!!! why should I change the color??
+					//textField.textColor = cashedColor;
 			}
 			else
 			{
