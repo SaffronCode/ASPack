@@ -139,7 +139,7 @@ package com.mteamapp
 			var colorTagEnd:String = '';
 			if(linkColors!=-1)
 			{
-				colorTagStart = '<font color="'+linkColors.toString(16)+'">';
+				colorTagStart = '<font color="#'+linkColors.toString(16)+'">';
 				colorTagEnd = '</font>';
 			}
 			var str:String = str;
