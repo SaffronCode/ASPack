@@ -303,8 +303,14 @@ package
 				var cashedColor:uint = textField.textColor ;
 				UnicodeStatic.htmlText(textField,text,useCash,true,align);
 				
-				//You loose the html colors!!! why should I change the color??
-					//textField.textColor = cashedColor;
+				if(text.indexOf('<')!=-1 && text.indexOf('>')!=-1 && text.toLocaleLowerCase().indexOf('color')!=-1)
+				{
+					//You loose the html colors!!! why should I change the color??
+				}
+				else
+				{
+					textField.textColor = cashedColor;
+				}
 			}
 			else
 			{
