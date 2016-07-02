@@ -48,7 +48,8 @@ package
 		private var MESlistChr:Object = {};
 		
 		
-		/**this will improving the app performance after one time runing*/
+		/**this will improving the app performance after one time runing<br>
+		 * it is still in beta version*/
 		private var helperObject:Object = {},
 			typeHirostic:Object = {};
 		
