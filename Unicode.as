@@ -29,6 +29,8 @@ package
 	import flash.text.TextFieldAutoSize;
 	import flash.utils.getTimer;
 	
+	import mx.core.UIComponent;
+	
 	public class Unicode
 	{
 		/**This is still in beta version*/
@@ -49,6 +51,12 @@ package
 		/**this will improving the app performance after one time runing*/
 		private var helperObject:Object = {},
 			typeHirostic:Object = {};
+		
+		/**Numeric characters will not have absolute direction.*/
+		public static var	smartTextAlign:Boolean = false ,
+							floatingChars:String = "-/\\+=. ",
+							notSureChars:String = "0123456789",
+							lastRtlStatus:Boolean = true ;
 		
 		public function Unicode(numCorrection:Boolean = true)
 		{
@@ -414,21 +422,25 @@ package
 			{
 				return '' ;
 			}
+			lastRtlStatus = true ;
 			ch = farsiCorrection(ch);
 			var matn = "";
 			var v0:int,v1:int,v2:int;
 			var numString='';
 			var parantez;
 			var chC1,chC2;
+			var stringLenght:uint = ch.length ;
 			
 			if(ch=='')
 			{
 				return ch;
 			}
 			
+			
+			
 			for(var i=0;i<ch.length;i++)
 			{
-				if(MESisEnglish(ch.charAt(i)))
+				if(MESisEnglish(ch.charAt(i),ch,i,stringLenght))
 				{
 					parantez = ch.charAt(i)
 					if(parantez==')' || parantez=='(')
@@ -461,7 +473,7 @@ package
 				}
 				else
 				{
-					matn =MESbekesh(numString)+matn;
+					matn = MESbekesh(numString)+matn;
 					numString=''
 				}
 				
@@ -564,17 +576,58 @@ package
 		
 		
 		
-		private function MESisEnglish(megh:String){
-			var test = helperObject[megh];
+		private function MESisEnglish(megh:String,copleteString:String=null,charIndex:uint=0,stringLength:uint=0,lookingForard:Boolean=false){
+			var test:*;
+			trace("lookingForard : "+lookingForard);
+			if(smartTextAlign && copleteString!=null)
+			{
+				trace("Controll on floating chars..."+megh);
+				if(floatingChars.indexOf(megh)!=-1)
+				{
+					trace("Megh is floating char, so the next char for : "+megh)
+					for(var i = charIndex+1 ; i<stringLength ; i++)
+					{
+						test = MESisEnglish(copleteString.charAt(i),copleteString,i,stringLength,true);
+						trace(".... is English??? "+test);
+						if(!lookingForard)
+						{
+							lastRtlStatus = test ;
+						}
+						return test ;
+					}
+					return lastRtlStatus ;
+				}
+				else if(lookingForard && notSureChars.indexOf(megh)!=-1)
+				{
+					trace("Megh is floating char, so the next char for : "+megh+" on looking forward and isEnglish is : "+lastRtlStatus)
+					return lastRtlStatus ;
+				}
+			}
+			test = helperObject[megh];
 			if(test!=undefined)
 			{
+				if(!lookingForard && notSureChars.indexOf(megh)==-1)
+				{
+					lastRtlStatus = test ;
+				}
+				trace("Megh status : "+megh+" is English??"+test);
 				return test ;
 			}
 			if((forceToEnglish.indexOf(megh)!=-1 || (MESlistChr[megh]==undefined && megh.charCodeAt(0)<1417 && estesna.indexOf(megh)==-1 ) || ( adad.indexOf(megh)!=-1))){
 				helperObject[megh] = true ;
+				if(!lookingForard && notSureChars.indexOf(megh)==-1)
+				{
+					lastRtlStatus = true ;
+				}
+				trace("Megh status : "+megh+" is English");
 				return true
 			}else{
 				helperObject[megh] = false;
+				if(!lookingForard && notSureChars.indexOf(megh)==-1)
+				{
+					lastRtlStatus = false ;
+				}
+				trace("Megh status : "+megh+" is Persian");
 				return false;
 			}
 		}
