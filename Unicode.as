@@ -578,17 +578,17 @@ package
 		
 		private function MESisEnglish(megh:String,copleteString:String=null,charIndex:uint=0,stringLength:uint=0,lookingForard:Boolean=false){
 			var test:*;
-			trace("lookingForard : "+lookingForard);
+			//trace("lookingForard : "+lookingForard);
 			if(smartTextAlign && copleteString!=null)
 			{
-				trace("Controll on floating chars..."+megh);
+				//trace("Controll on floating chars..."+megh);
 				if(floatingChars.indexOf(megh)!=-1)
 				{
-					trace("Megh is floating char, so the next char for : "+megh)
+					//trace("Megh is floating char, so the next char for : "+megh)
 					for(var i = charIndex+1 ; i<stringLength ; i++)
 					{
 						test = MESisEnglish(copleteString.charAt(i),copleteString,i,stringLength,true);
-						trace(".... is English??? "+test);
+						//trace(".... is English??? "+test);
 						if(!lookingForard)
 						{
 							lastRtlStatus = test ;
@@ -599,7 +599,7 @@ package
 				}
 				else if(lookingForard && notSureChars.indexOf(megh)!=-1)
 				{
-					trace("Megh is floating char, so the next char for : "+megh+" on looking forward and isEnglish is : "+lastRtlStatus)
+					//trace("Megh is floating char, so the next char for : "+megh+" on looking forward and isEnglish is : "+lastRtlStatus)
 					return lastRtlStatus ;
 				}
 			}
@@ -610,7 +610,7 @@ package
 				{
 					lastRtlStatus = test ;
 				}
-				trace("Megh status : "+megh+" is English??"+test);
+				//trace("Megh status : "+megh+" is English??"+test);
 				return test ;
 			}
 			if((forceToEnglish.indexOf(megh)!=-1 || (MESlistChr[megh]==undefined && megh.charCodeAt(0)<1417 && estesna.indexOf(megh)==-1 ) || ( adad.indexOf(megh)!=-1))){
@@ -619,7 +619,7 @@ package
 				{
 					lastRtlStatus = true ;
 				}
-				trace("Megh status : "+megh+" is English");
+				//trace("Megh status : "+megh+" is English");
 				return true
 			}else{
 				helperObject[megh] = false;
@@ -627,7 +627,7 @@ package
 				{
 					lastRtlStatus = false ;
 				}
-				trace("Megh status : "+megh+" is Persian");
+				//trace("Megh status : "+megh+" is Persian");
 				return false;
 			}
 		}
