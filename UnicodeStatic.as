@@ -132,7 +132,7 @@ package
 			target.multiline = true;
 			target.wordWrap = true ;
 			//trace("detectArabicScript : "+detectArabicScript+' && '+"!StringFunctions.isArabic(tx) : "+!StringFunctions.isPersian(tx));
-			if(deactiveConvertor || (detectArabicScript && !StringFunctions.isPersian(tx)))
+			if(deactiveConvertor && (!detectArabicScript || !StringFunctions.isPersian(tx)))
 			{
 				target.text = tx;
 			}
