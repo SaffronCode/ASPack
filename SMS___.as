@@ -14,7 +14,7 @@ package
 	import flash.net.navigateToURL;
 	import flash.system.Capabilities;
 
-	public class SMS
+	public class SMS___
 	{
 		public static function Send(receverNumber:*,content:*)
 		{
