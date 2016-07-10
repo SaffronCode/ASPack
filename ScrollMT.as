@@ -698,7 +698,7 @@ package
 				var vxHist:Number=Vx;
 				var vyHist:Number=Vy;
 				stepBack = false ;
-				if(!Obj.isAccesibleByMouse(targParent,false,new Point(targStage.mouseX,targStage.mouseY)))
+				if(false && !Obj.isAccesibleByMouse(targParent,false,new Point(targStage.mouseX,targStage.mouseY)))
 				{
 					if(!imCalledFromStopScrollFunction)
 					{
