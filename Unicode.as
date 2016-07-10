@@ -22,14 +22,9 @@
  */
 package
 {
-	import com.mteamapp.StringFunctions;
-	
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
-	import flash.utils.getTimer;
-	
-	import mx.core.UIComponent;
 	
 	public class Unicode
 	{
