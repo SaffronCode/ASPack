@@ -45,6 +45,7 @@ package
 
 	public class ScrollMT extends EventDispatcher
 	{
+		
 		public static const LOCK_SCROLL_TILL_MOUSE_UP:String = "LOCK_SCROLL_TILL_MOUSE_UP";
 		
 		public static const UN_LOCK_SCROLL:String = "UN_LOCK_SCROLL";
@@ -53,8 +54,8 @@ package
 		
 		private static const KILL_OLD_SCROLLER:String = "KILL_OLD_SCROLLER" ;
 		
-		/**This event dispatches to parent. the container scrollers must listen to this to stop their scroll controlling*/
-		private static const TRY_TO_SCROLL:String = "TRY_TO_SCROLL" ;
+		/**This event dispatches to parent. the container scrollers must listen to this to stop their scroll controlling
+		private static var TRY_TO_SCROLL:String = "TRY_TO_SCROLL" ;*///This event moved to ScrollMTEvent class
 		
 		private const 	cursolCollor:Number = 0x000000,
 						cursolAlpha:Number = 0.1;
@@ -193,6 +194,7 @@ package
 			
 			targ.addEventListener(LOCK_SCROLL_TILL_MOUSE_UP,lockTheScrollThillMouseUp);
 			targ.addEventListener(THEMP_LOCK,lockTheScrollThempurarily);
+			targ.addEventListener(ScrollMTEvent.YOU_ARE_SCROLLING_FROM_YOUR_PARENT,lockTheScrollThillMouseUp);
 			
 			freeScrollOnTarget_TD = FreeScrollOnTarget_TD ;
 			freeScrollOnTarget_LR = FreeScrollOnTarget_LR ;
@@ -329,7 +331,7 @@ package
 		{
 			absScale = absoluteScale();
 			//1.3.1 to ask to delete old scrolleers
-			targ.dispatchEvent(new Event(KILL_OLD_SCROLLER));
+			targ.dispatchEvent(new Event(KILL_OLD_SCROLLER,false,false));
 			
 			myTimeOutId = setTimeout(setMask,0);
 			
@@ -394,7 +396,7 @@ package
 			
 			clearTimeout(myTimeOutId);
 			
-			targ.removeEventListener(TRY_TO_SCROLL,stopScroll);
+			targ.removeEventListener(ScrollMTEvent.TRY_TO_SCROLL,stopScroll);
 			targStage.removeEventListener(MouseEvent.MOUSE_WHEEL,manageMouseWheel);
 			
 			//remove currsels if can
@@ -545,7 +547,7 @@ package
 					//targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
 				//scrolling starts
 				targStage.addEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
-				targ.addEventListener(TRY_TO_SCROLL,stopScroll);
+				targ.addEventListener(ScrollMTEvent.TRY_TO_SCROLL,stopScroll);
 			}
 		}
 		
@@ -558,7 +560,11 @@ package
 		
 		private function stopScroll(e:*=null)
 		{
-			targ.removeEventListener(TRY_TO_SCROLL,stopScroll);
+			if(e is ScrollMTEvent && ((e as ScrollMTEvent).freeScrollOnTarget_LR != freeScrollOnTarget_LR && (e as ScrollMTEvent).freeScrollOnTarget_TD != freeScrollOnTarget_TD))
+			{
+				return ;
+			}
+			targ.removeEventListener(ScrollMTEvent.TRY_TO_SCROLL,stopScroll);
 			if(isScrolling)
 			{
 				scrollAnim(null,true);
@@ -591,10 +597,28 @@ package
 		private function MouseLock()
 		{
 			//trace('mouse s are locked');
+			if(!mouseLocker.visible)
+			{
+				dispatchChildScrollLockerOn(targ as Sprite);
+			}
 			mouseLocker.visible = true ;
 			
 			//Added on version 1.4.3 to make this event dispatches when all buttons locked
-			targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true));
+			targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true,false));
+		}
+		
+		/**This will dispatches YOU_ARE_SCROLLING_FROM_YOUR_PARENT event to all children*/
+		private function dispatchChildScrollLockerOn(target:Sprite):void
+		{
+			//trace("Dispatch events on : "+target)
+			for(var i = 0 ; i<target.numChildren ; i++)
+			{
+				if(target.getChildAt(i) is Sprite)
+				{
+					(target.getChildAt(i) as Sprite).dispatchEvent(new ScrollMTEvent(ScrollMTEvent.YOU_ARE_SCROLLING_FROM_YOUR_PARENT,false,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR));
+					dispatchChildScrollLockerOn((target.getChildAt(i) as Sprite));
+				}
+			}
 		}
 		
 		/**disable mouseEvent*/
@@ -720,7 +744,7 @@ package
 					{
 						vxHist = Vx = 0 ;
 						//trace("Canseling");
-						targParent.dispatchEvent(new Event(TRY_TO_SCROLL,true));
+						targParent.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TRY_TO_SCROLL,true,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR));
 					}
 					else
 					{
@@ -746,7 +770,7 @@ package
 					{
 						//trace("Canseling");
 						vyHist = Vy = 0 ;
-						targParent.dispatchEvent(new Event(TRY_TO_SCROLL,true));
+						targParent.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TRY_TO_SCROLL,true,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR));
 					}
 					else
 					{
