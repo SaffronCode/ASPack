@@ -101,6 +101,7 @@ package com.mteamapp.camera
 			targ = target ;
 			targWidth = targ.width ;
 			targHeight = targ.height;
+			targ.scaleX = targ.scaleY = 1 ;
 			
 			if(dont_controll_portrate_screen || targ.stage.stageWidth > targ.stage.stageHeight || DevicePrefrence.isItPC)
 			{
@@ -122,13 +123,13 @@ package com.mteamapp.camera
 			
 			if(landScape)
 			{
-				camWidth = targ.getBounds(targ.stage).width*2;
-				camHeight = targ.getBounds(targ.stage).height*2;
+				camWidth = targWidth*2;
+				camHeight = targHeight*2;
 			}
 			else
 			{
-				camHeight = targ.getBounds(targ.stage).width*2;
-				camWidth = targ.getBounds(targ.stage).height*2;
+				camHeight = targWidth*2;
+				camWidth = targHeight*2;
 			}
 			
 			targMask = new MovieClip();
