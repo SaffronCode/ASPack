@@ -189,6 +189,7 @@ package
 			{
 				//Reset the input text field if needed.
 				oldTextField.text = '' ;
+				newTextField.textColor = grayScale(oldTextField.textColor);
 			}
 			
 			var stageTextOption:StageTextInitOptions = new StageTextInitOptions(oldTextField.multiline);
@@ -270,6 +271,22 @@ package
 			oldTextField.addEventListener(REMOVE_OLD_TEXT,unLoad);
 		}
 		
+		/**Create grayscale color from the mail color*/
+		private function grayScale(textColor:uint):uint
+		{
+			var R:uint = textColor&0xff0000;//1111111100000000
+											//1021010101001010
+											//1021010100000000
+			var G:uint = textColor&0x00ff00;
+			var B:uint = textColor&0x0000ff;
+			
+			R = Math.min(0xff0000,uint(R+0xff0000)/2&0xff0000);
+			G = Math.min(0x00FF00,uint(G+0x00ff00)/2&0x00ff00);
+			B = Math.min(0x0000ff,uint(B+0x0000ff)/2&0x0000ff);
+			
+			return R|G|B;
+		}
+		
 		protected function changeTheStageText(event:Event):void
 		{
 			// TODO Auto-generated method stub
@@ -320,6 +337,7 @@ package
 				trace("This text is only on stageText");
 				return ;
 			}
+			newTextField.textColor = oldTextField.textColor;
 			if(itsArabic ||  ( detectArabic && StringFunctions.isPersian(oldTextField.text) ))
 			{
 				UnicodeStatic.fastUnicodeOnLines(newTextField,oldTextField.text,false);
