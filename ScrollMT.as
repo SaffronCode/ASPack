@@ -74,7 +74,12 @@ package
 					stepVF:Number=10,
 					stepVF2:Number=10,
 					stepVMu2:Number=0.9,
+					
+					slowDownToStopMu:Number = 0.8,
+					
 					stepBack:Boolean = false ;
+		
+		private var minV:Number = 4 ;
 		
 		
 	//animate controllers ↓
@@ -584,8 +589,14 @@ package
 						break ;
 					}
 				}
-				Vx+=(VxRound)/Math.max(1,deltaFrame);
-				Vy+=(VyRound)/Math.max(1,deltaFrame);
+				if(Math.abs(VxRound)>minAvailableScroll)
+				{
+					Vx+=(VxRound)/Math.max(1,deltaFrame);
+				}
+				if(Math.abs(VyRound)>minAvailableScroll)
+				{
+					Vy+=(VyRound)/Math.max(1,deltaFrame);
+				}
 				isScrolling = false;
 				MouseUnLock();
 				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
@@ -910,6 +921,14 @@ package
 		/**this function will slow down the floating speeds if targRectangle was got out from the mask rectangle*/
 		private function slowDownFloat(slowDownSpeed:Number,slowDownMu:Number)
 		{
+			if(Math.abs(Vx)<minV)
+			{
+				Vx*=slowDownToStopMu ;
+			}
+			if(Math.abs(Vy)<minV)
+			{
+				Vy*=slowDownToStopMu ;
+			}
 			if(unLockTopDown)
 			{
 				var y0:Number = targetRect.y,
