@@ -589,13 +589,16 @@ package
 						break ;
 					}
 				}
-				if(Math.abs(VxRound)>minAvailableScroll)
+				
+				var vmaxDeltaFrame:Number = Math.max(1,deltaFrame) ;
+				
+				if(Math.abs(VxRound/vmaxDeltaFrame)>minAvailableScroll)
 				{
-					Vx+=(VxRound)/Math.max(1,deltaFrame);
+					Vx+=(VxRound)/vmaxDeltaFrame;
 				}
-				if(Math.abs(VyRound)>minAvailableScroll)
+				if(Math.abs(VyRound/vmaxDeltaFrame)>minAvailableScroll)
 				{
-					Vy+=(VyRound)/Math.max(1,deltaFrame);
+					Vy+=(VyRound)/vmaxDeltaFrame;
 				}
 				isScrolling = false;
 				MouseUnLock();
