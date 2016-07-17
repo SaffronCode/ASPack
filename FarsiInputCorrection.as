@@ -31,6 +31,7 @@ package
 	import flash.events.TimerEvent;
 	import flash.geom.Rectangle;
 	import flash.text.AutoCapitalize;
+	import flash.text.ReturnKeyLabel;
 	import flash.text.SoftKeyboardType;
 	import flash.text.StageText;
 	import flash.text.StageTextInitOptions;
@@ -59,6 +60,8 @@ package
 		private var itsArabic:Boolean,
 					keyFormat:String,
 					
+					returnLable:String,
+					
 					editing:Boolean = false;
 					
 		/**This value will prevent the convertor to convert the text to Unicode, and the texts will only show on native stage text*/
@@ -75,19 +78,25 @@ package
 		/**Works only for native texts and make it editable or not*/
 		private var editableNativeText:Boolean;
 		
+		private var onDone:Function ;
+		
 		/**Add change listener to the stage text*/
 		private var listenToChangesAllTheTime:Boolean = false ;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
 		 * CLOSE event dispatches when the keyboard leaved the text area*/
-		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true):FarsiInputCorrection
+		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null):FarsiInputCorrection
 		{
 			if(softKeyFormat == null)
 			{
 				softKeyFormat = SoftKeyboardType.DEFAULT ;
 			}
-			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo);
+			if(ReturnLable == null)
+			{
+				ReturnLable=ReturnKeyLabel.DEFAULT ;
+			}
+			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo,ReturnLable,onDoneFunction);
 		}
 		
 		/**reset all added effects on this text field*/
@@ -97,15 +106,17 @@ package
 		}
 
 		
-		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true,controllStageTextsToo:Boolean=false)
+		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true,controllStageTextsToo:Boolean=false,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null)
 		{
 			listenToChangesAllTheTime = controllStageTextsToo ;
 			clearInputText = clearAfterClicked ;
 			correctNums = correctNumbers ;
 			oldTextField = textField ;
 			keyFormat = softKeyFormat ;
+			returnLable = ReturnLable ;
 			onlyNativeText = justShowNativeText ;
 			editableNativeText = editableNative ;
+			onDone = onDoneFunction ;
 			if(preventConvertor)
 			{
 				itsArabic = false ;
@@ -215,6 +226,7 @@ package
 			if(editableNativeText)
 			{
 				myStageText.softKeyboardType = keyFormat;
+				myStageText.returnKeyLabel = returnLable;
 			}
 			
 			if(textFormat.align == null)
