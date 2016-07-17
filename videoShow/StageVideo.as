@@ -69,8 +69,11 @@ package videoShow
 			this.removeEventListener(Event.ENTER_FRAME,controllStageVideoPose);
 			if(stageVideo)
 			{
-				stageVideo.stage = null ;
-				stageVideo.dispose()
+				try
+				{
+					stageVideo.stage = null ;
+					stageVideo.dispose()
+				}catch(e){};
 			}
 		}
 		
