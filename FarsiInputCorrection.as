@@ -26,6 +26,7 @@ package
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.FocusEvent;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.events.SoftKeyboardEvent;
 	import flash.events.TimerEvent;
@@ -39,10 +40,15 @@ package
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import flash.utils.clearTimeout;
+	import flash.utils.setTimeout;
 
 	public class FarsiInputCorrection
 	{
 		private static const REMOVE_OLD_TEXT:String = "REMOVE_OLD_TEXT" ;
+		
+		/**Dispatch it on a textField that you whant to fucus on*/
+		public static const FOCUS_IN:String = "FOCUS_ON" ;
 		
 		/**Prevent any unicode changing on texts<br>
 		 * NOT TEST YET*/
@@ -82,6 +88,7 @@ package
 		
 		/**Add change listener to the stage text*/
 		private var listenToChangesAllTheTime:Boolean = false ;
+		private var focusOutTimeOutId:uint;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
@@ -149,6 +156,7 @@ package
 			//trace('item is added to stage');
 			
 			oldTextField.dispatchEvent(new Event(REMOVE_OLD_TEXT));
+			oldTextField.addEventListener(FOCUS_IN,focuseOnStageText);
 			
 			oldTextField.alpha = 0 ;
 			
@@ -262,6 +270,12 @@ package
 				myStageText.addEventListener(Event.CHANGE,onlyChangeTheCoreText);
 			}
 			myStageText.addEventListener(FocusEvent.FOCUS_OUT,saveChanges);
+			
+			
+			
+			myStageText.addEventListener(KeyboardEvent.KEY_UP,traceTheKeyCode,false,1000);
+				
+				
 			if(!onlyNativeText)
 			{
 				hideAllTexts.addEventListener(HIDE_OTEHER_TEXTS,saveChanges);
@@ -282,6 +296,44 @@ package
 			oldTextField.addEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 			oldTextField.addEventListener(REMOVE_OLD_TEXT,unLoad);
 		}
+		
+		
+		private function traceTheKeyCode(e:KeyboardEvent)
+		{
+			//Only next and Default button type can dispatch this event
+			trace("e.keyCode : "+e.keyCode);
+			if(e.keyCode == 16777230 || (!oldTextField.multiline && e.keyCode==13))
+			{
+				trace("On closed event");
+				if(oldTextField.stage!=null)
+				{
+					oldTextField.stage.focus = null ;
+				}
+				dispatchOnDone();
+			}
+		}
+		
+			/**This will dispatches on done with delay*/
+			private function dispatchOnDone():void
+			{
+				clearTimeout(focusOutTimeOutId);
+				if(onDone!=null)
+				{
+					focusOutTimeOutId = setTimeout(onDone,1);
+				}
+			}
+		
+		/**On done key selected on keyboard*/
+		protected function imDone(event:Event):void
+		{
+			trace("Stage text completed");
+			if(onDone!=null)
+			{
+				onDone();
+			}
+		}		
+		
+		
 		
 		/**Create grayscale color from the mail color*/
 		private function grayScale(textColor:uint):uint
@@ -367,6 +419,7 @@ package
 			oldTextField.removeEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 			oldTextField.removeEventListener(REMOVE_OLD_TEXT,unLoad);
 			oldTextField.removeEventListener(Event.CHANGE,changeTheDisplayedText);
+			oldTextField.removeEventListener(FOCUS_IN,focuseOnStageText);
 			
 			oldTextField.alpha = 1 ;
 			//oldTextField.text = "I'm removed";
@@ -376,6 +429,7 @@ package
 			}
 			myStageText.stage = null ;
 			myStageText = null ;
+			clearTimeout(focusOutTimeOutId);
 		}
 		
 		/**start typing*/
