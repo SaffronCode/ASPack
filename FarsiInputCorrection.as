@@ -92,7 +92,9 @@ package
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
-		 * CLOSE event dispatches when the keyboard leaved the text area*/
+		 * CLOSE event dispatches when the keyboard leaved the text area<br>
+		 * OnDoneFunction can get the selectedTextField
+		 */
 		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null):FarsiInputCorrection
 		{
 			if(softKeyFormat == null)
@@ -319,19 +321,22 @@ package
 				clearTimeout(focusOutTimeOutId);
 				if(onDone!=null)
 				{
-					focusOutTimeOutId = setTimeout(onDone,1);
+					focusOutTimeOutId = setTimeout(callDone,1);
 				}
 			}
-		
-		/**On done key selected on keyboard*/
-		protected function imDone(event:Event):void
-		{
-			trace("Stage text completed");
-			if(onDone!=null)
-			{
-				onDone();
-			}
-		}		
+				
+				/**Call the onDone function in bet way*/
+				protected function callDone():void
+				{
+					if(onDone.length==1)
+					{
+						onDone.apply(this,[oldTextField]);
+					}
+					else
+					{
+						onDone();
+					}
+				}		
 		
 		
 		
