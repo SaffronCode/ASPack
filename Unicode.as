@@ -274,7 +274,7 @@ package
 				var charLeft:Number;
 				var spaceLeft:Number;
 				
-				const stepPrecent:Number = 0.8 ;
+				const stepPrecent:Number = 0.78 ;
 				
 				for( i=l-1 ; i>=0 ; i-=step )
 				{
