@@ -139,7 +139,7 @@ package
 			}
 			
 			createdDate = new Date(Number(dateSplitter[2]),Number(dateSplitter[0])-1,Number(dateSplitter[1]),Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
-			if(splitter[2] == "PM")
+			if(splitter[2] == "PM" && Number(timeSplitter[0])<12)
 			{
 				createdDate.hours+=12 ;
 			}
