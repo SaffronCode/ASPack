@@ -220,8 +220,8 @@ package com.mteamapp
 				if(String(v).indexOf("\/Date(")!=-1)
 				{
 					var V:String = String(v) ;
-					trace("Get date :"+V);
-					trace("It is : "+ new Date(Number(V.substring(6,V.length-2))));
+				//	trace("Get date :"+V);
+					//trace("It is : "+ new Date(Number(V.substring(6,V.length-2))));
 					return new Date(Number(V.substring(6,V.length-2))) ;
 				}
 				//Other date format is : 2015-10-27T10:46:56.9335483+03:30
