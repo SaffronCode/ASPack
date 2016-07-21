@@ -8,6 +8,7 @@
 
 package
 {
+	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.JPEGEncoderOptions;
 	import flash.display.PNGEncoderOptions;
@@ -16,6 +17,11 @@ package
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
+	
+	import mx.utils.Base64Decoder;
+	import mx.utils.Base64Encoder;
+	
+	
 
 	public class BitmapEffects
 	{
@@ -140,7 +146,15 @@ package
 			rotatedBitmap.draw(bitmapData,matrix,null,null,null,true);
 			return rotatedBitmap ;
 		}
+		public static function createBase64(bitmapData:BitmapData,quality:int=100):String
+		{
+
+			var jpg:JPEGEncoderOptions = new JPEGEncoderOptions(quality);	
+			bitmapData.encode(bitmapData.rect,jpg)
+			var toBase46Encoder:Base64Encoder = new Base64Encoder()
+			toBase46Encoder.encodeBytes(bitmapData.encode(bitmapData.rect,jpg));				
+			return toBase46Encoder.toString().split('\n').join('')				
+		}
 		
-	
 	}
 }
