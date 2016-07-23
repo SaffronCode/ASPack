@@ -25,6 +25,9 @@
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.setTimeout;
 	
+	import jp.shichiseki.exif.ExifInfo;
+	import jp.shichiseki.exif.IFD;
+	
 	import videoShow.VideoClass;
 	import videoShow.VideoEvents;
 	
@@ -66,6 +69,14 @@
 		public static var autoResize:Boolean = true ;
 		
 		private static var tempW:Number,tempH:Number; 
+		
+		/**1: //normal<br>
+		 3 //rotated 180 degrees (upside down)<br>
+		 6: //rotated 90 degrees CW<br>
+		 8: //rotated 90 degrees CCW<br>
+		 9: //unknown<br>
+		 */
+		private static var currentImageOriented:uint;
 							
 		
 		public static function get isSupported():Boolean
@@ -146,7 +157,6 @@
 			camera.addEventListener(MediaEvent.COMPLETE,sendCameraImage);
 			camera.addEventListener(Event.CANCEL,mediaLoadingCanseled);
 			camera.launch(MediaType.IMAGE);
-			
 			onDone = onImageReady ;
 		}
 		
@@ -378,6 +388,8 @@
 			}
 			imageBytes = fileBytes ;
 			
+			currentImageOriented = getOrientation(fileBytes);
+			
 			W = newWidth;
 			H = newHeight ;
 			
@@ -398,6 +410,35 @@
 			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,fileLoaderError);
 			loader.loadBytes(fileBytes,loaderContext);
 		}
+		
+		/**1: //normal<br>
+			3 //rotated 180 degrees (upside down)<br>
+			6: //rotated 90 degrees CW<br>
+			8: //rotated 90 degrees CCW<br>
+			9: //unknown<br>
+			*/
+		public static function getOrientation(ImageBytes:ByteArray):uint
+		{
+			var exif:ExifInfo = new ExifInfo(ImageBytes);
+			
+			var ifd:IFD = exif.ifds.primary ;
+			
+			var str:String = "";
+			
+			for (var entry:String in ifd) {
+				
+				if(entry == "Orientation"){
+					
+					str = ifd[entry];
+					break;
+				}
+				
+			}
+			
+			return uint(str);
+			
+		}
+		
 		
 		protected static function fileLoaderError(event:IOErrorEvent):void
 		{
