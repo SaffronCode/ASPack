@@ -420,23 +420,28 @@
 		public static function getOrientation(ImageBytes:ByteArray):uint
 		{
 			var exif:ExifInfo = new ExifInfo(ImageBytes);
-			
-			var ifd:IFD = exif.ifds.primary ;
-			
-			var str:String = "";
-			
-			for (var entry:String in ifd) {
+			if(exif.ifds != null)
+			{
+				var ifd:IFD = exif.ifds.primary ;
 				
-				if(entry == "Orientation"){
+				var str:String = "";
+				
+				for (var entry:String in ifd) {
 					
-					str = ifd[entry];
-					break;
+					if(entry == "Orientation"){
+						
+						str = ifd[entry];
+						break;
+					}
+					
 				}
 				
+				return uint(str);
 			}
-			
-			return uint(str);
-			
+			else
+			{
+				return 9 ;
+			}
 		}
 		
 		
