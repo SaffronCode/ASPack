@@ -452,15 +452,51 @@
 			// TODO Auto-generated method stub
 			var bitmap:Bitmap = loader.content as Bitmap ;
 			var resizedPhoto:BitmapData ;
+			
+			trace("currentImageOriented : "+currentImageOriented);
+			
+			var rotateDegree:Number = 0 ;
+			
+			switch(currentImageOriented)
+			{
+				case 3:
+				{
+					rotateDegree = 180 ;
+					break;
+				}
+				case 6:
+				{
+					rotateDegree = 90 ;
+					break;
+				}
+				case 8:
+				{
+					rotateDegree = -90 ;
+					break;
+				}
+			}
+			
+			if(rotateDegree!=0)
+			{
+				resizedPhoto = BitmapEffects.rotateBitmapData(bitmap.bitmapData,rotateDegree);
+			}
 			if(!isNaN(W) && !isNaN(H) && ( bitmap.width>W || bitmap.height>H ))
 			{
-				resizedPhoto = BitmapEffects.changeSize(bitmap.bitmapData,W,H,true,true,false);
-				imageBytes = resizedPhoto.encode(resizedPhoto.rect,new JPEGEncoderOptions(70));
-				imageBitmapData = resizedPhoto.clone() ;
+				if(resizedPhoto==null)
+				{
+					resizedPhoto = bitmap.bitmapData ;
+				}
+				resizedPhoto = BitmapEffects.changeSize(resizedPhoto,W,H,true,true,false);
 			}
 			else
 			{
 				imageBitmapData = bitmap.bitmapData.clone() ;
+			}
+			
+			if(resizedPhoto!=null)
+			{
+				imageBytes = resizedPhoto.encode(resizedPhoto.rect,new JPEGEncoderOptions(70));
+				imageBitmapData = resizedPhoto.clone() ;
 			}
 			
 			trace("Stored bitmapData is : "+imageBitmapData);
