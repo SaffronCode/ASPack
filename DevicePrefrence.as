@@ -28,6 +28,7 @@ package
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.system.Capabilities;
+	import flash.utils.setTimeout;
 
 	public class DevicePrefrence
 	{
@@ -41,7 +42,6 @@ package
 		private static var bigScreen:int = -1 ;
 		
 		private static const ranked_sharedObject_id:String = "ranked_id_2" ;
-		
 		
 		
 		
@@ -69,6 +69,76 @@ package
 			
 			return Boolean(bigScreen);
 		}
+		
+		/**This function calls apple webservice to generate application id to make a download link for*/
+		public static function createDownloadLink():void
+		{
+			if(idCode.data.id == undefined)
+			{
+				loadToCashAppStoreid();
+			}
+			else
+			{
+				trace("The apple id is ready: "+("http://itunes.apple.com/app/id"+idCode.data.id));
+			}
+			trace("The Android url is : "+"market://details?id=air."+appID);
+		}
+			
+			private static function loadToCashAppStoreid():void
+			{
+				if(urlLoader2)
+				{
+					try
+					{
+						urlLoader2.close();
+					}
+					catch(e){};
+				}
+				urlLoader2 = new URLLoader();
+				urlLoader2.addEventListener(Event.COMPLETE,idLoaded);
+				urlLoader2.addEventListener(IOErrorEvent.IO_ERROR,loadURLAgain);
+				urlLoader2.load(new URLRequest("https://itunes.apple.com/lookup?bundleId="+appID));
+				trace("Load apple id : "+urlLoader2);
+			}
+			
+				protected static function idLoaded(event:Event):void
+				{
+					var info:Object = JSON.parse(urlLoader2.data);
+					trace("urlLoader2.data : "+JSON.stringify(info,null,' '));
+					if(info.resultCount == 0)
+					{
+						trace("iOS service bug");
+					}
+					else
+					{
+						idCode.data.id = info.results[0].trackId;
+						idCode.flush();
+						trace("iOS url is ready now");
+						trace("The apple id is ready: "+("http://itunes.apple.com/app/id"+idCode.data.id));
+					}
+				}
+			
+				/**try to load the id again*/
+				private static function loadURLAgain(e:Event):void
+				{
+					setTimeout(createDownloadLink,10000);
+				}
+				
+					/**Returns iOS download link*/
+					public static function get downloadLink_iOS():String
+					{
+						if(idCode.data.id!=undefined)
+						{
+							return "http://itunes.apple.com/app/id"+idCode.data.id ;
+						}
+						return '';
+					}
+				
+					/**Returns the Android download link. but you have to call createDownloadLink() first*/
+					public static function get downloadLink_Android():String
+					{
+						return "market://details?id=air."+appID;
+					}
 		
 		/**returns true if it is a pc with ability of quite and etc.<br>
 		 * IT HAVE TO COMPLETE ON IOS DEVICES AND MACINTOSH PCS*/
@@ -187,27 +257,14 @@ package
 		
 		private static var onDone:Function,onFaild:Function ;
 
-		private static var urlLoader:URLLoader;
+		private static var 	urlLoader:URLLoader,
+							urlLoader2:URLLoader;
 		
 		/**Open the ranking page for any os*/
 		public static function rankThisApp(onCanseled:Function=null,onRedirected:Function=null):void
 		{
-			if(onRedirected == null) 
-			{
-				onDone = new Function();
-			}
-			else
-			{
 				onDone = onRedirected ; 
-			}
-			if(onCanseled == null)
-			{
-				onFaild = new Function();
-			}
-			else
-			{
 				onFaild = onCanseled ;
-			}
 			
 			
 			
@@ -231,9 +288,16 @@ package
 			//https://itunes.apple.com/lookup?bundleId=com.mteamapps.NabatNorooz
 		}
 		
-		private static function loadForAppNumericId():void
+		private static function loadForAppNumericId(forceToGetId:Boolean=false):void
 		{
 			// TODO Auto Generated method stub
+			if(urlLoader)
+			{
+				try
+				{
+					urlLoader.close();
+				}catch(e){};
+			}
 			urlLoader = new URLLoader();
 			urlLoader.addEventListener(Event.COMPLETE,codeLoaded);
 			urlLoader.addEventListener(IOErrorEvent.IO_ERROR,connectionFails);
@@ -243,7 +307,11 @@ package
 		protected static function connectionFails(event:IOErrorEvent):void
 		{
 			// TODO Auto-generated method stub
-			onFaild();
+			if(onFaild!=null)
+			{
+				onFaild();
+				onFaild = null ;
+			}
 		}
 		
 		protected static function codeLoaded(event:Event):void
@@ -253,7 +321,11 @@ package
 			var info:Object = JSON.parse(urlLoader.data);
 			if(info.resultCount == 0)
 			{
-				onFaild();
+				if(onFaild!=null)
+				{
+					onFaild();
+					onFaild = null ;
+				}
 			}
 			else
 			{
@@ -266,7 +338,11 @@ package
 		/**Opening the rank page for this application*/
 		private static function openItuneStoreFor(appCodeID:String)
 		{
-			onDone();
+			if(onDone!=null)
+			{
+				onDone();
+				onDone = null ;
+			}
 			navigateToURL(new URLRequest("http://itunes.apple.com/app/id"+appCodeID));
 			
 			GlobalStorage.save(ranked_sharedObject_id,true);
