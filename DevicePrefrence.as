@@ -41,8 +41,12 @@ package
 		
 		private static var bigScreen:int = -1 ;
 		
-		private static const ranked_sharedObject_id:String = "ranked_id_2" ;
+		private static const relodDelay:uint = 10000 ;
 		
+		private static const ranked_sharedObject_id:String = "ranked_id_2",
+							cafeBazarSharedObjectId:String="cafeid";
+		
+		private static var cafeBazarLoader:URLLoader ;
 		
 		
 		/**retuens true if this is big screened tablet*/
@@ -82,8 +86,51 @@ package
 				trace("The apple id is ready: "+("http://itunes.apple.com/app/id"+idCode.data.id));
 			}
 			trace("The Android url is : "+"market://details?id=air."+appID);
+			if(idCode.data[cafeBazarSharedObjectId] == undefined)
+			{
+				loadCafeBazarLink();
+			}
+			else
+			{
+				trace("The cafe bazar id is ready: "+downloadLink_Android);
+			}
 		}
-			
+		
+		private static function loadCafeBazarLink():void
+		{
+			if(cafeBazarLoader)
+			{
+				try
+				{
+					cafeBazarLoader.close();
+				}
+				catch(e){};
+			}
+			cafeBazarLoader = new URLLoader();
+			cafeBazarLoader.addEventListener(Event.COMPLETE,cafeBazarContentLoaded);
+			cafeBazarLoader.addEventListener(IOErrorEvent.IO_ERROR,connectionErrorOnLoadingCafeBazar);
+			cafeBazarLoader.load(new URLRequest(_downloadLink_cafeBazar()));
+			trace("Control cafe bazar for this application .... "+_downloadLink_cafeBazar());
+		}
+		
+			private static function cafeBazarContentLoaded(e:Event):void
+			{
+				if(String(cafeBazarLoader.data).split(appID).length>2)
+				{
+					trace("<<<<Yesss, this app is released on caffe bazar");
+					idCode.data[cafeBazarSharedObjectId] = true ;
+				}
+				else
+				{
+					trace("<<<<This app is not released on caffe bazar");
+				}
+			}
+		
+			protected static function connectionErrorOnLoadingCafeBazar(event:IOErrorEvent):void
+			{
+				trace("<<<<<<<This app has not published on Caffe Bazar");
+			}
+		
 			private static function loadToCashAppStoreid():void
 			{
 				if(urlLoader2)
@@ -121,7 +168,7 @@ package
 				/**try to load the id again*/
 				private static function loadURLAgain(e:Event):void
 				{
-					setTimeout(createDownloadLink,10000);
+					setTimeout(createDownloadLink,relodDelay);
 				}
 				
 					/**Returns iOS download link*/
@@ -138,6 +185,22 @@ package
 					public static function get downloadLink_Android():String
 					{
 						return "market://details?id=air."+appID;
+					}
+				
+					/**Returns the Android download link. but you have to call createDownloadLink() first*/
+					public static function get downloadLink_cafeBazar():String
+					{
+						if(idCode.data[cafeBazarSharedObjectId] != undefined )
+						{
+							return _downloadLink_cafeBazar();
+						}
+						return '' ;
+					}
+					
+					/**This will returns the cafe bazar link in any case*/
+					private static function _downloadLink_cafeBazar():String
+					{
+						return 'https://cafebazaar.ir/app/air.'+appID;
 					}
 		
 		/**returns true if it is a pc with ability of quite and etc.<br>
