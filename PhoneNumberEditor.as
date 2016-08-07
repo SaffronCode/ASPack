@@ -80,7 +80,7 @@ package
 				else
 				{
 					//sample 04127785180
-					return num;//'false';
+					return 'false';//So the user must enter the 0 befor his number
 				}
 			}
 			else if(num.charAt(0) == '9')
