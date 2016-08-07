@@ -44,9 +44,12 @@ package
 		private static const relodDelay:uint = 10000 ;
 		
 		private static const ranked_sharedObject_id:String = "ranked_id_2",
-							cafeBazarSharedObjectId:String="cafeid";
+							cafeBazarSharedObjectId:String="cafeid",
+							playStoreId:String="playStoreid";
 		
-		private static var cafeBazarLoader:URLLoader ;
+		private static var cafeBazarLoader:URLLoader,
+							playStoreLoader:URLLoader;
+		
 		
 		
 		/**retuens true if this is big screened tablet*/
@@ -94,7 +97,43 @@ package
 			{
 				trace("The cafe bazar id is ready: "+downloadLink_Android);
 			}
+			if(idCode.data[playStoreId] == undefined)
+			{
+				loadPlayStoreLink();
+			}
+			else
+			{
+				trace("The playStore id is ready: "+downloadLink_Android);
+			}
 		}
+		
+		private static function loadPlayStoreLink():void
+		{
+			if(playStoreLoader)
+			{
+				try
+				{
+					playStoreLoader.close();
+				}
+				catch(e){};
+			}
+			playStoreLoader = new URLLoader();
+			playStoreLoader.addEventListener(Event.COMPLETE,playStoreContentLoaded);
+			playStoreLoader.addEventListener(IOErrorEvent.IO_ERROR,connectionErrorOnLoadingPlayStore);
+			playStoreLoader.load(new URLRequest(_downloadLink_playStore()));
+			trace("Control playStore for this application .... "+_downloadLink_playStore());
+		}
+		
+			private static function playStoreContentLoaded(e:Event):void
+			{
+				trace(">>>>>This app is released on playstore");
+				idCode.data[playStoreId] = true ;
+			}
+			
+			private static function connectionErrorOnLoadingPlayStore(e:*)
+			{
+				trace(">>>>>This app is not released on PlayStore");
+			}
 		
 		private static function loadCafeBazarLink():void
 		{
@@ -201,6 +240,22 @@ package
 					private static function _downloadLink_cafeBazar():String
 					{
 						return 'https://cafebazaar.ir/app/air.'+appID;
+					}
+				
+					/**Returns the Android download link. but you have to call createDownloadLink() first*/
+					public static function get downloadLink_playStore():String
+					{
+						if(idCode.data[playStoreId] != undefined )
+						{
+							return _downloadLink_playStore();
+						}
+						return '' ;
+					}
+					
+					/**This will returns the playStore link in any case*/
+					private static function _downloadLink_playStore():String
+					{
+						return 'https://play.google.com/store/apps/details?id=air.'+appID;
 					}
 		
 		/**returns true if it is a pc with ability of quite and etc.<br>
