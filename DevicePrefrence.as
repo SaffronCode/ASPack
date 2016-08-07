@@ -45,10 +45,12 @@ package
 		
 		private static const ranked_sharedObject_id:String = "ranked_id_2",
 							cafeBazarSharedObjectId:String="cafeid",
+							myketSharedObjectId:String="myketid3",
 							playStoreId:String="playStoreid";
 		
 		private static var cafeBazarLoader:URLLoader,
-							playStoreLoader:URLLoader;
+							playStoreLoader:URLLoader,
+							myketLoader:URLLoader;
 		
 		
 		
@@ -89,24 +91,70 @@ package
 				trace("The apple id is ready: "+("http://itunes.apple.com/app/id"+idCode.data.id));
 			}
 			trace("The Android url is : "+"market://details?id=air."+appID);
+		//Cafe bazar
 			if(idCode.data[cafeBazarSharedObjectId] == undefined)
 			{
 				loadCafeBazarLink();
 			}
 			else
 			{
-				trace("The cafe bazar id is ready: "+downloadLink_Android);
+				trace("The cafe bazar id is ready: "+downloadLink_cafeBazar);
 			}
+		//myket
+			if(idCode.data[myketSharedObjectId] == undefined)
+			{
+				loadmyketLink();
+			}
+			else
+			{
+				trace("The myket id is ready: "+downloadLink_myketStore);
+			}
+		//Playstore
 			if(idCode.data[playStoreId] == undefined)
 			{
 				loadPlayStoreLink();
 			}
 			else
 			{
-				trace("The playStore id is ready: "+downloadLink_Android);
+				trace("The playStore id is ready: "+downloadLink_playStore);
 			}
 		}
+		//myket
+		private static function loadmyketLink():void
+		{
+			if(myketLoader)
+			{
+				try
+				{
+					myketLoader.close();
+				}
+				catch(e){};
+			}
+			myketLoader = new URLLoader();
+			myketLoader.addEventListener(Event.COMPLETE,myketContentLoaded);
+			myketLoader.addEventListener(IOErrorEvent.IO_ERROR,connectionErrorOnLoadingmyket);
+			myketLoader.load(new URLRequest(_downloadLink_myketStore()));
+			trace("Control myket for this application .... "+_downloadLink_myketStore());
+		}
 		
+			private static function myketContentLoaded(e:Event):void
+			{
+				if(String(myketLoader.data).split(appID).length>2)
+				{
+					idCode.data[myketSharedObjectId] = true ;
+					trace("+++++This app is released on myket");
+				}
+				else
+				{
+					connectionErrorOnLoadingmyket(null);
+				}
+			}
+			
+			private static function connectionErrorOnLoadingmyket(e:*)
+			{
+				trace("+++++This app is not released on myket");
+			}
+		//Play store
 		private static function loadPlayStoreLink():void
 		{
 			if(playStoreLoader)
@@ -134,7 +182,7 @@ package
 			{
 				trace(">>>>>This app is not released on PlayStore");
 			}
-		
+		//cafe
 		private static function loadCafeBazarLink():void
 		{
 			if(cafeBazarLoader)
@@ -187,6 +235,9 @@ package
 				trace("Load apple id : "+urlLoader2);
 			}
 			
+			
+			
+		////////////////////////////////////
 				protected static function idLoaded(event:Event):void
 				{
 					var info:Object = JSON.parse(urlLoader2.data);
@@ -256,6 +307,23 @@ package
 					private static function _downloadLink_playStore():String
 					{
 						return 'https://play.google.com/store/apps/details?id=air.'+appID;
+					}
+				
+					//myket
+					/**Returns the Android download link. but you have to call createDownloadLink() first*/
+					public static function get downloadLink_myketStore():String
+					{
+						if(idCode.data[myketSharedObjectId] != undefined )
+						{
+							return _downloadLink_myketStore();
+						}
+						return '' ;
+					}
+					
+					/**This will returns the playStore link in any case*/
+					private static function _downloadLink_myketStore():String
+					{
+						return 'https://myket.ir/app/air.'+appID;
 					}
 		
 		/**returns true if it is a pc with ability of quite and etc.<br>
