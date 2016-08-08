@@ -29,6 +29,7 @@ package com.mteamapp
 		
 		public static function setUp(myStage:Stage,myRoot:DisplayObject):void
 		{
+			trace("Black screen problem didn't see on Android 5+");
 			if(DevicePrefrence.isAndroid())
 			{
 				trace("BlackScreen debugger on android...");
