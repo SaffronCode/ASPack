@@ -25,6 +25,12 @@ package
 			
 			num = UnicodeStatic.numberCorrection(num);
 			
+			if(num.length<11)
+			{
+				trace("The number is to short");
+				return 'false';
+			}
+			
 			
 			if(num.charAt(0)=='+')
 			{
