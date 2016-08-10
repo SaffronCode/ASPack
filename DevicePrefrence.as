@@ -49,8 +49,13 @@ package
 							playStoreId:String="playStoreid";
 		
 		private static var cafeBazarLoader:URLLoader,
+							secondCheck_cafe:Boolean = false,
 							playStoreLoader:URLLoader,
-							myketLoader:URLLoader;
+							secondCheck_play:Boolean = false,
+							myketLoader:URLLoader,
+							secondCheck_myket:Boolean = false;
+							
+		private static var androidOtherId:String ;
 		
 		
 		
@@ -175,11 +180,17 @@ package
 			private static function playStoreContentLoaded(e:Event):void
 			{
 				trace(">>>>>This app is released on playstore");
-				idCode.data[playStoreId] = true ;
+				idCode.data[playStoreId] = secondCheck_play ;
 			}
 			
 			private static function connectionErrorOnLoadingPlayStore(e:*)
 			{
+				if(appCorrectedID!='' && secondCheck_play==false)
+				{
+					secondCheck_play = true ;
+					playStoreLoader.load(new URLRequest(_downloadLink_playStore(true)));
+					trace("Control playStore for this application .... "+_downloadLink_playStore(true));
+				}
 				trace(">>>>>This app is not released on PlayStore");
 			}
 		//cafe
@@ -202,15 +213,15 @@ package
 		
 			private static function cafeBazarContentLoaded(e:Event):void
 			{
-				if(String(cafeBazarLoader.data).split(appID).length>2)
-				{
-					trace("<<<<Yesss, this app is released on caffe bazar");
-					idCode.data[cafeBazarSharedObjectId] = true ;
-				}
+				/*if(String(cafeBazarLoader.data).split(appID).length>2)
+				{*/
+				trace("<<<<Yesss, this app is released on caffe bazar");
+				idCode.data[cafeBazarSharedObjectId] = true ;
+				/*}
 				else
 				{
 					trace("<<<<This app is not released on caffe bazar");
-				}
+				}*/
 			}
 		
 			protected static function connectionErrorOnLoadingCafeBazar(event:IOErrorEvent):void
@@ -288,9 +299,16 @@ package
 					}
 					
 					/**This will returns the cafe bazar link in any case*/
-					private static function _downloadLink_cafeBazar():String
+					private static function _downloadLink_cafeBazar(secondId:Boolean=false):String
 					{
-						return 'https://cafebazaar.ir/app/air.'+appID;
+						if(secondId)
+						{
+							return 'https://cafebazaar.ir/app/air.'+appCorrectedID;
+						}
+						else
+						{
+							return 'https://cafebazaar.ir/app/air.'+appID;
+						}
 					}
 				
 					/**Returns the Android download link. but you have to call createDownloadLink() first*/
@@ -298,15 +316,22 @@ package
 					{
 						if(idCode.data[playStoreId] != undefined )
 						{
-							return _downloadLink_playStore();
+							return _downloadLink_playStore(idCode.data[playStoreId]);
 						}
 						return '' ;
 					}
 					
 					/**This will returns the playStore link in any case*/
-					private static function _downloadLink_playStore():String
+					private static function _downloadLink_playStore(secondId:Boolean=false):String
 					{
-						return 'https://play.google.com/store/apps/details?id=air.'+appID;
+						if(secondId)
+						{
+							return 'https://play.google.com/store/apps/details?id=air.'+appCorrectedID;
+						}
+						else
+						{
+							return 'https://play.google.com/store/apps/details?id=air.'+appID;
+						}
 					}
 				
 					//myket
@@ -321,9 +346,16 @@ package
 					}
 					
 					/**This will returns the playStore link in any case*/
-					private static function _downloadLink_myketStore():String
+					private static function _downloadLink_myketStore(secondId = false):String
 					{
-						return 'https://myket.ir/app/air.'+appID;
+						if(secondId)
+						{
+							return 'https://myket.ir/app/air.'+appCorrectedID;
+						}
+						else
+						{
+							return 'https://myket.ir/app/air.'+appID;
+						}
 					}
 		
 		/**returns true if it is a pc with ability of quite and etc.<br>
@@ -397,6 +429,36 @@ package
 		{
 			//return "com.mteamapps.NabatNorooz";
 			return NativeApplication.nativeApplication.applicationID ;
+		}
+		
+		/**If the id contains numeric index, it will cause problem. so this will returns the id without numeric ids index*/
+		public static function get appCorrectedID():String
+		{
+			if(androidOtherId==null)
+			{
+				var wrongId:String = appID ;
+				var wrongIdParts:Array = wrongId.split('.');
+				var itIsWrong:Boolean = false ;
+				for(var i = 0 ; i<wrongIdParts.length ; i++)
+				{
+					if(String('0123456789').indexOf((wrongIdParts[i] as String).charAt(0))!=-1)
+					{
+						wrongIdParts[i] = 'A'+wrongIdParts[i] ;
+						itIsWrong = true ;
+					}
+				}
+				
+				if(itIsWrong)
+				{
+					androidOtherId = wrongIdParts.join('.');
+				}
+				else
+				{
+					androidOtherId = '' ;
+				}
+			}
+			trace("androidOtherId : " +androidOtherId);
+			return androidOtherId ;
 		}
 		
 		/**Returns the app name*/
