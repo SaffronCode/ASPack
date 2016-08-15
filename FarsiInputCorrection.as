@@ -495,6 +495,7 @@ package
 				{
 					oldTextField.text = myStageText.text;
 				}
+				oldTextField.text = UnicodeStatic.KaafYe(oldTextField.text);
 				if(!onlyNativeText)
 				{
 					myStageText.visible = false;
