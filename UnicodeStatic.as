@@ -317,7 +317,7 @@ package
 		/**this function will remove all persian ک and ی and will repace them with ي and ك*/
 		public static function KaafYe(str:String):String
 		{
-			return str.split('ی').join('ي').split('ک').join('ك');
+			return str.split('ی').join('ي').split('ک').join('ك').split('ى').join('ي');
 		}
 		
 		
