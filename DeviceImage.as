@@ -313,6 +313,41 @@
 			}
 			
 	/////////////////////////////////////////////////////////////////
+		/**Returns true if videoGallery is reachable*/
+		public static function isVideoFromGallerySupports():Boolean
+		{
+			return VideoManaerAsist.isSupports();
+		}
+		
+		/**Load a video from the video gallery*/
+		public static function loadVideoFromGallery(onImageLoaded:Function,loadThisFileIfOnPC:File=null):void
+		{
+			onLoadingVideo = true ;
+			imageBitmapData = null;
+			imageBytes = null ;
+			
+			onDone = onImageLoaded ;
+			
+			if(VideoManaerAsist.isSupports())
+			{
+				VideoManaerAsist.loadVideoFromGallery(onVideoLoaderFromGalleryByVideoManager);
+			}
+			else if(DevicePrefrence.isItPC && loadThisFileIfOnPC!=null)
+			{
+				videoBytes = FileManager.loadFile(loadThisFileIfOnPC);
+				onDone();
+			}
+		}
+		
+			/**Video loaded from VideoManagerAsist*/
+			private static function onVideoLoaderFromGalleryByVideoManager():void
+			{
+				trace("Video raw path is : "+VideoManaerAsist.rawPath);
+				videoBytes = FileManager.loadFile(new File(VideoManaerAsist.rawPath));
+				onDone();
+			}
+		
+			
 		/**Load image from file then it will call your function*/
 		public static function loadImageFromGallery(onImageLoaded:Function,rect:Rectangle=null,imageW:Number=NaN,imageH:Number=NaN,loadThisFileIfNotSupporting:String=null):void
 		{
