@@ -237,11 +237,11 @@ package videoShow
 			stageVideo.viewPort = viewPort ;
 			if(Obj.isAccesibleByMouse(this))
 			{
-				stageVideo.stage == this.stage ;
+				stageVideo.stage = this.stage ;
 			}
 			else
 			{
-				stageVideo.stage == null ;
+				stageVideo.stage = null ;
 			}
 		}
 		
