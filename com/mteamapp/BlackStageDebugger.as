@@ -5,6 +5,7 @@ package com.mteamapp
 	import flash.display.Stage;
 	import flash.display.StageOrientation;
 	import flash.events.Event;
+	import flash.system.Capabilities;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 
@@ -29,7 +30,7 @@ package com.mteamapp
 		
 		public static function setUp(myStage:Stage,myRoot:DisplayObject):void
 		{
-			trace("Black screen problem didn't see on Android 5+");
+			trace("Black screen problem didn't see on Android 5+. The device OS is : "+Capabilities.os );
 			if(DevicePrefrence.isAndroid())
 			{
 				trace("BlackScreen debugger on android...");
