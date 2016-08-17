@@ -102,7 +102,7 @@ package videoShow
 			correctedURL = videoURL ;
 			if(correctedURL.indexOf('http')==-1)
 			{
-				if(DevicePrefrence.isAndroid())
+				if(DevicePrefrence.isItPC || DevicePrefrence.isAndroid())
 				{
 					this.graphics.beginFill(0,1);
 					this.graphics.drawRect(0,0,W,H);
@@ -112,6 +112,7 @@ package videoShow
 				}
 				else if(DevicePrefrence.isIOS())
 				{
+					useOnHMLTag = false ;
 				}
 			}
 			
