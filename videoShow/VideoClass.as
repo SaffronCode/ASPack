@@ -41,30 +41,15 @@ package videoShow
 		private var played:Boolean = false;
 		
 		
-	//	private const STAGE_VIDEO_URL:String = "STAGE_VIDEO_URL";
 		
-		private var stageVideo:StageWebView;/*,
-					videoHTML:String='<!DOCTYPE html>\n<html> ' +
-						'<meta name="viewport" content="width=device-width, user-scalable=no, target-densitydpi=device-dpi"/>'+
-					'<style>*{margin:0;}.showVideo{width:100%;}</style>'+
-					'<body>'+
-					'<video class="showVideo" id="showVideo1" controls>'+
-					'<source src="'+STAGE_VIDEO_URL+'" type="video/mp4">'+
-					'Your browser does not support the video tag.'+
-					'</video>'+
-					'<script>var scrHeight=window.innerHeight;document.getElementById("showVideo1").style.height=scrHeight +"px";</script>'+
-					'</body>\n</html>';// width="320" height="240" */
+		private var stageVideo:StageWebView;
+					
 		
 		
 		public function VideoClass(Width:Number=0,Height:Number=0)
 		{
 			super();
-			
-/*			if(DevicePrefrence.isItPC)
-			{
-				userNativeStageWiew = true ;
-			}
-*/			
+	
 			W = Width ;
 			H = Height ;
 			
