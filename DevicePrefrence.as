@@ -431,12 +431,21 @@ package
 			return NativeApplication.nativeApplication.applicationID ;
 		}
 		
-		/**If the id contains numeric index, it will cause problem. so this will returns the id without numeric ids index*/
+		/**If the id contains numeric index or -(dash), it will cause problem. so this will returns the id without numeric ids index*/
 		public static function get appCorrectedID():String
 		{
 			if(androidOtherId==null)
 			{
-				var wrongId:String = appID ;
+				var wrongId:String ;
+				if(appID.indexOf('-')!=-1)
+				{
+					itIsWrong = true ;
+					wrongId = appID.split('-').join('_') ;
+				}
+				else
+				{
+					wrongId = appID;
+				}
 				var wrongIdParts:Array = wrongId.split('.');
 				var itIsWrong:Boolean = false ;
 				for(var i = 0 ; i<wrongIdParts.length ; i++)
