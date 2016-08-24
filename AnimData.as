@@ -119,7 +119,14 @@ package
 			deleteDataAbout(targ);
 			if(func != null)
 			{
-				func();
+				if(func.length==1)
+				{
+					func.apply(targ,[targ]);
+				}
+				else
+				{
+					func();
+				}
 			}
 		}
 		
