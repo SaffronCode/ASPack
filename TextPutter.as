@@ -232,7 +232,7 @@ package
 		
 		/**Return textwidth.<br>
 		 * pass the vertical height to the verticalAlign to make it align on the vertical direction*/
-		public static function onTextArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,align:Boolean = true,convertSerevHTML:Boolean=false,linksColor:int=-1,generateLinksForURLs:Boolean=false,VerticalAlign_verticalHeight:Number=0):Number
+		public static function onTextArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,align:Boolean = true,convertSerevHTML:Boolean=false,linksColor:int=-1,generateLinksForURLs:Boolean=false,VerticalAlign_verticalHeight:Number=0,splitIfToLong:Boolean=false):Number
 		{
 			//I dont need the extra line any more. please controll the scroller size your self
 			//text+=' \n ';
@@ -301,7 +301,7 @@ package
 			{
 				//trace("text is arabic : "+text);
 				var cashedColor:uint = textField.textColor ;
-				UnicodeStatic.htmlText(textField,text,useCash,true,align);
+				UnicodeStatic.htmlText(textField,text,useCash,true,align,splitIfToLong);
 				
 				if(text.indexOf('<')!=-1 && text.indexOf('>')!=-1 && text.toLocaleLowerCase().indexOf('color')!=-1)
 				{

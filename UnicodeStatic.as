@@ -151,12 +151,13 @@ package
 			}
 		}
 		
-		public static function htmlText(target:TextField,tx:String,useCash:Boolean=true,autoSize:Boolean=false,justify:Boolean=true):void
+		public static function htmlText(target:TextField,tx:String,useCash:Boolean=true,autoSize:Boolean=false,justify:Boolean=true,splitIfToLong:Boolean=false):void
 		{
 			firstSetUp();
 			target.multiline = true;
 			
 			var detectedArabicScript:Boolean = true ;
+			var wasArabic:Boolean = false ;
 			
 			if(detectArabicScript)
 			{
@@ -186,6 +187,7 @@ package
 					//This will not use with deactiveConvertor. so dont care about htmls
 					target.htmlText = cashed ;
 				}
+				wasArabic = false ;
 			}
 			else
 			{
@@ -223,9 +225,47 @@ package
 				{
 					uni.HTMLfastUnicodeOnLines(target,tx,justify);
 				}
+				wasArabic = true ;
 			}
-			
-			if(autoSize)
+			if(splitIfToLong)//This is not supports html now
+			{
+				if(target.maxScrollV>1)
+				{
+					var axxeptedText:String = '' ;
+					var maxAxxeptedTextLine:uint = target.numLines - (target.maxScrollV-1) ;
+					var lineText:String ;
+					for(var i = 0 ; i<maxAxxeptedTextLine ; i++)
+					{
+						lineText = target.getLineText(i);
+						if(i == maxAxxeptedTextLine-1)
+						{
+							var spaceIndex:uint ;
+							if(wasArabic)
+							{
+								spaceIndex = lineText.indexOf(' ',2);
+							}
+							else
+							{
+								spaceIndex = lineText.lastIndexOf(' ',lineText.length-3);
+							}
+							if(spaceIndex!=-1)
+							{
+								if(wasArabic)
+								{
+									lineText = '...'+lineText.substring(spaceIndex+1);
+								}
+								else
+								{
+									lineText = lineText.substring(spaceIndex+1)+'...';
+								}
+							}
+						}
+						axxeptedText += lineText ;
+					}
+					target.text = axxeptedText ;
+				}
+			}
+			else if(autoSize)
 			{
 				target.height = target.textHeight+10;
 			}
