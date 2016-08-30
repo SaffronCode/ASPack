@@ -1,4 +1,4 @@
-// *************************
+﻿// *************************
 // * COPYRIGHT
 // * DEVELOPER: MTEAM ( info@mteamapp.com )
 // * ALL RIGHTS RESERVED FOR MTEAM
@@ -193,9 +193,9 @@ package soundPlayer
 		
 		private static function deActivate(e)
 		{
-			isActive = false ;
 			if(diactiveAllOnBack)
 			{
+				isActive = false ;
 				SoundMixer.soundTransform = new SoundTransform(0);
 			}
 		}
