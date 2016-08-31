@@ -147,6 +147,16 @@ package stageManager
 					stageHeight = lastStageFH ;
 				}
 				
+				if(debugW!=0 && debugH!=0)
+				{
+					controlStageProperties(debugW,debugH);
+				}
+				else
+				{
+					controlStageProperties(stageWidth,stageHeight);
+				}
+				
+				
 				if(resolutionControll)
 				{
 					if(myRoot==null)
@@ -159,14 +169,6 @@ package stageManager
 					myRoot.y = (stageHeight-stageHeight*scaleFactor)/2;
 				}
 				
-				if(debugW!=0 && debugH!=0)
-				{
-					controlStageProperties(debugW,debugH);
-				}
-				else
-				{
-					controlStageProperties(stageWidth,stageHeight);
-				}
 				ManageAllPositions();
 				//trace("All managed");
 				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
