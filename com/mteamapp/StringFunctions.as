@@ -323,5 +323,69 @@ package com.mteamapp
 			var htmlDeleter:RegExp = /<\/?[^>]*>/gi;
 			return ReferText.replace(htmlDeleter,'');
 		}
+		
+		
+		/**Returns -1 if string1 < str2, 1 if str1>str2*/
+		public static function compairFarsiString(str1:String,str2:String):int
+		{
+			if(str1 == null)
+			{
+				str1 = '';
+			}
+			if(str2 == null)
+			{
+				str2 = '' ;
+			}
+			
+			if(str1=='' && str2=='')
+			{
+				return 0 ;
+			}
+			
+			if(str1=='')
+			{
+				return -1 ;
+			}
+			if(str2=='')
+			{
+				return 1 ;
+			}
+			
+			var alephba:String = "ابپتثجچهخدذرزژسشصضطظعغفقكگلمنوهیي";
+			var farsiStr1:String = UnicodeStatic.KaafYe(str1);
+			var farsiStr2:String = UnicodeStatic.KaafYe(str2);
+			
+			var index1:int = alephba.indexOf(farsiStr1.charAt(0));
+			var index2:int = alephba.indexOf(farsiStr2.charAt(0));
+			
+			if(index1==-1 || index2 ==-1)
+			{
+				if(str1<str2)
+				{
+					return -1 ;
+				}
+				else if(str1>str2)
+				{
+					return 1 ;
+				}
+				else
+				{
+					return 0 ;
+				}
+			}
+			
+			if(index1<index2)
+			{
+				return -1 ;
+			}
+			else if(index1>index2)
+			{
+				return 1 ;
+			}
+			else
+			{
+				return 0 ;
+			}
+		}
 	}
 }
