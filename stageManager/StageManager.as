@@ -1,4 +1,4 @@
-/***Versions
+﻿/***Versions
  * 1.0.1 4/19/2015 : stageRect():Rectangle added to this class.
  * 
  * 
@@ -25,7 +25,8 @@ package stageManager
 		public static var eventDispatcher:StageEventDispatcher = new StageEventDispatcher();
 		
 		/**Main stage object*/
-		private static var 	myStage:Stage;
+		private static var 	myStage:Stage,
+							myRoot:DisplayObject;
 							//debugTF:TextField ;
 							
 		/**Current stage Width and height*/
@@ -42,6 +43,10 @@ package stageManager
 							stageScaleWidth:Number,stageScaleHeight:Number;
 		
 		private static var lastStageFW:Number,lastStageFH:Number;
+		
+		/**Activate resolution controll*/
+		private static var resolutionControll:Boolean,
+							scaleFactor:Number=1;
 		
 		
 	///
@@ -73,11 +78,14 @@ package stageManager
 		}
 		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
-		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=true)
+		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=true,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null)
 		{
 			myStage = yourStage ;
+			myRoot = yourRoot ;
 			OptionsList = new Vector.<StageOption>();
 			Items = new Vector.<StageItem>();
+			resolutionControll = activateResolutionControll ;
+			
 			
 			debugW = debugWidth ;
 			debugH = debugHeight ;
@@ -137,6 +145,18 @@ package stageManager
 				{
 					stageWidth = lastStageFW ;
 					stageHeight = lastStageFH ;
+				}
+				
+				if(resolutionControll)
+				{
+					if(myRoot==null)
+					{
+						throw "You have to pass the root to the stageManagager to"
+					}
+					scaleFactor = 0.5 ;
+					myRoot.scaleX = myRoot.scaleY = scaleFactor ;
+					myRoot.x = (stageWidth-stageWidth*scaleFactor)/2;
+					myRoot.y = (stageHeight-stageHeight*scaleFactor)/2;
 				}
 				
 				if(debugW!=0 && debugH!=0)
