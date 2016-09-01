@@ -612,10 +612,26 @@ package
 				if(Math.abs(VxRound/vmaxDeltaFrame)>minAvailableScroll)
 				{
 					Vx+=(VxRound)/vmaxDeltaFrame;
+					if(Vx>0)
+					{
+						autoScrollSpeedX = Math.abs(autoScrollSpeedX);
+					}
+					else
+					{
+						autoScrollSpeedX = -Math.abs(autoScrollSpeedX);
+					}
 				}
 				if(Math.abs(VyRound/vmaxDeltaFrame)>minAvailableScroll)
 				{
 					Vy+=(VyRound)/vmaxDeltaFrame;
+					if(Vy>0)
+					{
+						autoScrollSpeedY = Math.abs(autoScrollSpeedY);
+					}
+					else
+					{
+						autoScrollSpeedY = -Math.abs(autoScrollSpeedY);
+					}
 				}
 				isScrolling = false;
 				MouseUnLock();
