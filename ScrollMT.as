@@ -178,6 +178,8 @@ package
 
 		private var absScale:Number;
 		private var myTimeOutId:uint;
+		private var autoScrollSpeedX:Number=0,
+					autoScrollSpeedY:Number=0;
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -281,6 +283,13 @@ package
 			
 			
 			onAdded();
+		}
+		
+		/**Activate scroller auto scrolling*/
+		public function activateAutoScroll(scrollSpeedX:Number = 0,scrollSpeedY:Number = 0):void
+		{
+			autoScrollSpeedX = scrollSpeedX ;
+			autoScrollSpeedY = scrollSpeedY ;
 		}
 		
 		
@@ -956,6 +965,7 @@ package
 			}
 			if(unLockTopDown)
 			{
+				Vy+=autoScrollSpeedY;
 				var y0:Number = targetRect.y,
 					Y0:Number = targetRect.bottom ,
 					y1:Number = maskRect.y ,
@@ -965,11 +975,13 @@ package
 				{
 					if(y0<Y1)
 					{
+						autoScrollSpeedY = Math.abs(autoScrollSpeedY);
 						Vy*=slowDownMu ;
 						Vy+=(Y1-y0)/slowDownSpeed;
 					}
 					else if(y0-targetRect.height>y1 && y0!=Y1)
 					{
+						autoScrollSpeedY = -Math.abs(autoScrollSpeedY);
 						Vy*=slowDownMu ;
 						Vy+=(y1-(y0-targetRect.height))/slowDownSpeed;
 					}
@@ -978,11 +990,13 @@ package
 				{
 					if(y0>y1)//↑
 					{
+						autoScrollSpeedY = -Math.abs(autoScrollSpeedY);
 						Vy*=slowDownMu ;
 						Vy+=(y1-y0)/slowDownSpeed;
 					}
 					else if(Y0<Y1 && y0!=y1)//↓
 					{
+						autoScrollSpeedY = Math.abs(autoScrollSpeedY);
 						Vy*=slowDownMu ;
 						Vy+=(Y1-Y0)/slowDownSpeed;
 					}
@@ -993,6 +1007,7 @@ package
 			
 			if(unLockLeftRight)
 			{
+				Vx+=autoScrollSpeedX;
 				var x0:Number = targetRect.x,
 					X0:Number = targetRect.right,
 					x1:Number = maskRect.x ,
@@ -1002,11 +1017,13 @@ package
 				{
 					if(x0<X1)//→
 					{
+						autoScrollSpeedX = Math.abs(autoScrollSpeedX)
 						Vx*=slowDownMu ;
 						Vx+=(X1-x0)/slowDownSpeed;
 					}
 					else if(x0-targetRect.width>x1 && x0!=X1)//←
 					{
+						autoScrollSpeedX = -Math.abs(autoScrollSpeedX)
 						Vx*=slowDownMu ;
 						Vx+=(x1-(x0-targetRect.width))/slowDownSpeed;//Vy+=(y1-(y0-targetRect.height))/slowDownSpeed;
 					}
@@ -1015,11 +1032,13 @@ package
 				{
 					if(x0>x1)//→
 					{
+						autoScrollSpeedX = -Math.abs(autoScrollSpeedX)
 						Vx*=slowDownMu ;
 						Vx+=(x1-x0)/slowDownSpeed;
 					}
 					else if(X0<X1)//←
 					{
+						autoScrollSpeedX = Math.abs(autoScrollSpeedX)
 						Vx*=slowDownMu ;
 						Vx+=(X1-X0)/slowDownSpeed;
 					}
