@@ -188,6 +188,7 @@ package
 				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0)
 		{
 			revertY = RevertY ;
+			revertX = RevertX ;
 			stepSizes = stepSize ;
 			
 			//remember target
@@ -489,7 +490,14 @@ package
 			//trace('reset the scroller position');
 			
 			stopFloat();
-			targ.x = targetRect.x =  maskRect.x+imageFirstPose.x ;
+			if(revertX)
+			{
+				targ.x = targetRect.x =  maskRect.x+imageFirstPose.x+maskRect.width ;
+			}
+			else
+			{
+				targ.x = targetRect.x =  maskRect.x+imageFirstPose.x ;
+			}
 			
 			if(revertY)
 			{
@@ -851,7 +859,21 @@ package
 				//trace('move left to right');
 				targetRect.x+=Vx;
 				targ.x = targetRect.x+imageFirstPose.x;
-				var precentX:Number = Math.min(1,Math.max(0,(maskRect.x-targetRect.x)/(targetRect.width-maskRect.width)));
+				var precentX:Number;
+				var precentXRaw:Number;
+				
+				
+				if(revertX)
+				{
+					precentXRaw = 1+((maskRect.x-(targetRect.x-maskRect.width))/(targetRect.width-maskRect.width));
+					//trace("precentYRaw : "+precentYRaw);
+				}
+				else
+				{
+					precentXRaw = (maskRect.x-targetRect.x)/(targetRect.width-maskRect.width);
+				}
+				
+				precentX = Math.min(1,Math.max(0,precentXRaw));
 				curselLeftRight.x = currselXArea*precentX+maskRect.x+currselMargin+currselW ;
 			}
 			
@@ -938,6 +960,7 @@ package
 					Y0:Number = targetRect.bottom ,
 					y1:Number = maskRect.y ,
 					Y1:Number = maskRect.bottom ;
+				
 				if(revertY)
 				{
 					if(y0<Y1)
@@ -964,6 +987,8 @@ package
 						Vy+=(Y1-Y0)/slowDownSpeed;
 					}
 				}
+				
+				//Step controll on Y is missed here
 			}
 			
 			if(unLockLeftRight)
@@ -973,14 +998,31 @@ package
 					x1:Number = maskRect.x ,
 					X1:Number = maskRect.right;
 				
-				if(x0>x1)//→
+				if(revertX)
 				{
-					Vx*=slowDownMu ;
-					Vx+=(x1-x0)/slowDownSpeed;
-				}else if(X0<X1)//←
+					if(x0<X1)//→
+					{
+						Vx*=slowDownMu ;
+						Vx+=(X1-x0)/slowDownSpeed;
+					}
+					else if(x0-targetRect.width>x1 && x0!=X1)//←
+					{
+						Vx*=slowDownMu ;
+						Vx+=(x1-(x0-targetRect.width))/slowDownSpeed;//Vy+=(y1-(y0-targetRect.height))/slowDownSpeed;
+					}
+				}
+				else
 				{
-					Vx*=slowDownMu ;
-					Vx+=(X1-X0)/slowDownSpeed;
+					if(x0>x1)//→
+					{
+						Vx*=slowDownMu ;
+						Vx+=(x1-x0)/slowDownSpeed;
+					}
+					else if(X0<X1)//←
+					{
+						Vx*=slowDownMu ;
+						Vx+=(X1-X0)/slowDownSpeed;
+					}
 				}
 				
 				if(stepSizes!=0 && targetRect.width>maskRect.width)
