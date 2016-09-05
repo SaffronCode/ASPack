@@ -981,7 +981,8 @@ package
 			}
 			if(unLockTopDown)
 			{
-				Vy+=autoScrollSpeedY;
+				if(maskRect.height<targetRect.height)
+					Vy+=autoScrollSpeedY;
 				var y0:Number = targetRect.y,
 					Y0:Number = targetRect.bottom ,
 					y1:Number = maskRect.y ,
@@ -1023,7 +1024,8 @@ package
 			
 			if(unLockLeftRight)
 			{
-				Vx+=autoScrollSpeedX;
+				if(maskRect.width<targetRect.width)
+					Vx+=autoScrollSpeedX;
 				var x0:Number = targetRect.x,
 					X0:Number = targetRect.right,
 					x1:Number = maskRect.x ,
