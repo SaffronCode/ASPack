@@ -126,7 +126,7 @@ package stageManager
 				var stageWidth:Number;
 				var stageHeight:Number;
 				
-				if(!DevicePrefrence.isFullScreen())
+				if(!DevicePrefrence.isFullScreen)
 				{
 					myStage.scaleMode = StageScaleMode.NO_SCALE ;
 					stageWidth = myStage.stageWidth ;
