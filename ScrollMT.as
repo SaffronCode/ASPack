@@ -180,6 +180,8 @@ package
 		private var myTimeOutId:uint;
 		private var autoScrollSpeedX:Number=0,
 					autoScrollSpeedY:Number=0;
+		
+		private var minAreaToAutoScroll:Number = 100 ;
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -981,7 +983,7 @@ package
 			}
 			if(unLockTopDown)
 			{
-				if(maskRect.height<targetRect.height)
+				if(maskRect.height<targetRect.height-minAreaToAutoScroll)
 					Vy+=autoScrollSpeedY;
 				var y0:Number = targetRect.y,
 					Y0:Number = targetRect.bottom ,
@@ -1024,7 +1026,7 @@ package
 			
 			if(unLockLeftRight)
 			{
-				if(maskRect.width<targetRect.width)
+				if(maskRect.width<targetRect.width-minAreaToAutoScroll)
 					Vx+=autoScrollSpeedX;
 				var x0:Number = targetRect.x,
 					X0:Number = targetRect.right,
