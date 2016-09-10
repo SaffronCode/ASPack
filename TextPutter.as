@@ -92,6 +92,7 @@ package
 			{
 				text = '' ;
 			}
+			text = text.split('\n').join(' ').split('\r').join(' ');
 			
 			textField.wordWrap = false ;
 			textField.multiline = false;
