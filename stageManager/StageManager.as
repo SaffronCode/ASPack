@@ -48,6 +48,8 @@ package stageManager
 		private static var resolutionControll:Boolean,
 							scaleFactor:Number=1;
 		
+		/**If this was true, it means that the stage.fullScreen sizes are not correct so the application should controll the stage.stageWidth*/
+		private static var haveToCheckStageSize:Boolean = false ;
 		
 	///
 		private static var OptionsList:Vector.<StageOption>,
@@ -86,6 +88,10 @@ package stageManager
 			Items = new Vector.<StageItem>();
 			resolutionControll = activateResolutionControll ;
 			
+			if(activateResolutionControll)
+			{
+				throw "activateResolutionControll is not working yet.";
+			}
 			
 			debugW = debugWidth ;
 			debugH = debugHeight ;
@@ -100,7 +106,7 @@ package stageManager
 			{
 				myStage.addEventListener(Event.ENTER_FRAME,controllStageSizes);
 			}
-			controllStageSizes();
+			controllStageSizes(null,true);
 			
 			myStage.addEventListener(Event.ADDED,controllFromMe,false,1);
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
@@ -121,10 +127,10 @@ package stageManager
 		}
 		
 		/**Controll the stage each frame*/
-		protected static function controllStageSizes(event:Event=null):void
+		protected static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
 		{
 			// TODO Auto-generated method stub
-			//trace("Controll stage");
+			trace("Controll stage : myStage.fullScreenHeight "+myStage.fullScreenHeight);
 			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) )
 			{
 				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
@@ -134,12 +140,21 @@ package stageManager
 				var stageWidth:Number;
 				var stageHeight:Number;
 				
-				if(!DevicePrefrence.isFullScreen())
+				if(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize)
 				{
 					myStage.scaleMode = StageScaleMode.NO_SCALE ;
 					stageWidth = myStage.stageWidth ;
 					stageHeight = myStage.stageHeight ;
 					myStage.scaleMode = StageScaleMode.SHOW_ALL ;
+					
+					if(testTheStageSizeTo)
+					{
+						if(stageWidth != lastStageFW || stageHeight != lastStageFH)
+						{
+							trace("The stage.fullScreen size is not trustable");
+							haveToCheckStageSize = true ;
+						}
+					}
 				}
 				else
 				{
