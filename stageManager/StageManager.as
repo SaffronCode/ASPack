@@ -1,4 +1,4 @@
-/***Versions
+﻿/***Versions
  * 1.0.1 4/19/2015 : stageRect():Rectangle added to this class.
  * 
  * 
@@ -25,7 +25,8 @@ package stageManager
 		public static var eventDispatcher:StageEventDispatcher = new StageEventDispatcher();
 		
 		/**Main stage object*/
-		private static var 	myStage:Stage;
+		private static var 	myStage:Stage,
+							myRoot:DisplayObject;
 							//debugTF:TextField ;
 							
 		/**Current stage Width and height*/
@@ -43,6 +44,12 @@ package stageManager
 		
 		private static var lastStageFW:Number,lastStageFH:Number;
 		
+		/**Activate resolution controll*/
+		private static var resolutionControll:Boolean,
+							scaleFactor:Number=1;
+		
+		/**If this was true, it means that the stage.fullScreen sizes are not correct so the application should controll the stage.stageWidth*/
+		private static var haveToCheckStageSize:Boolean = false ;
 		
 	///
 		private static var OptionsList:Vector.<StageOption>,
@@ -73,11 +80,18 @@ package stageManager
 		}
 		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
-		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=true)
+		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=true,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null)
 		{
 			myStage = yourStage ;
+			myRoot = yourRoot ;
 			OptionsList = new Vector.<StageOption>();
 			Items = new Vector.<StageItem>();
+			resolutionControll = activateResolutionControll ;
+			
+			if(activateResolutionControll)
+			{
+				throw "activateResolutionControll is not working yet.";
+			}
 			
 			debugW = debugWidth ;
 			debugH = debugHeight ;
@@ -92,7 +106,7 @@ package stageManager
 			{
 				myStage.addEventListener(Event.ENTER_FRAME,controllStageSizes);
 			}
-			controllStageSizes();
+			controllStageSizes(null,true);
 			
 			myStage.addEventListener(Event.ADDED,controllFromMe,false,1);
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
@@ -113,10 +127,10 @@ package stageManager
 		}
 		
 		/**Controll the stage each frame*/
-		protected static function controllStageSizes(event:Event=null):void
+		protected static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
 		{
 			// TODO Auto-generated method stub
-			//trace("Controll stage");
+			trace("Controll stage : myStage.fullScreenHeight "+myStage.fullScreenHeight);
 			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) )
 			{
 				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
@@ -126,12 +140,21 @@ package stageManager
 				var stageWidth:Number;
 				var stageHeight:Number;
 				
-				if(!DevicePrefrence.isFullScreen())
+				if(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize)
 				{
 					myStage.scaleMode = StageScaleMode.NO_SCALE ;
 					stageWidth = myStage.stageWidth ;
 					stageHeight = myStage.stageHeight ;
 					myStage.scaleMode = StageScaleMode.SHOW_ALL ;
+					
+					if(testTheStageSizeTo)
+					{
+						if(stageWidth != lastStageFW || stageHeight != lastStageFH)
+						{
+							trace("The stage.fullScreen size is not trustable");
+							haveToCheckStageSize = true ;
+						}
+					}
 				}
 				else
 				{
@@ -147,6 +170,20 @@ package stageManager
 				{
 					controlStageProperties(stageWidth,stageHeight);
 				}
+				
+				
+				if(resolutionControll)
+				{
+					if(myRoot==null)
+					{
+						throw "You have to pass the root to the stageManagager to"
+					}
+					scaleFactor = 0.5 ;
+					myRoot.scaleX = myRoot.scaleY = scaleFactor ;
+					myRoot.x = (stageWidth-stageWidth*scaleFactor)/2;
+					myRoot.y = (stageHeight-stageHeight*scaleFactor)/2;
+				}
+				
 				ManageAllPositions();
 				//trace("All managed");
 				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
