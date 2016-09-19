@@ -118,7 +118,7 @@ package stageManager
 		{
 			lastStageFW = NaN ;
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
-			controllStageSizes(null);
+			controllStageSizes(null,true);
 		}
 		
 		public static function deactiveRotationListening():void
