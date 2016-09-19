@@ -170,7 +170,7 @@ package
 			}
 			
 			//trace('add this : '+tx.substr(0,20));
-			if(useCash && !deactiveConvertor && detectedArabicScript)
+			if((useCash && !splitIfToLong) && !deactiveConvertor && detectedArabicScript)
 			{
 				var ID = textID(target,tx);
 				var cashed:String = loadStringFromData(ID);
