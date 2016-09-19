@@ -157,7 +157,7 @@ package
 			target.multiline = true;
 			
 			var detectedArabicScript:Boolean = true ;
-			var wasArabic:Boolean = false ;
+			var wasArabic:Boolean = true ;
 			
 			if(detectArabicScript)
 			{
@@ -166,10 +166,11 @@ package
 				trace("+++++++++++++++ detectedArabicScript : "+detectedArabicScript);
 				trace("+++++++++++++++ tx : "+tx);
 				//trace("This is arabic ***********************"+detectedArabicScript);
+				wasArabic = detectedArabicScript ;
 			}
 			
 			//trace('add this : '+tx.substr(0,20));
-			if(useCash && !deactiveConvertor && detectedArabicScript)
+			if((useCash && !splitIfToLong) && !deactiveConvertor && detectedArabicScript)
 			{
 				var ID = textID(target,tx);
 				var cashed:String = loadStringFromData(ID);
@@ -187,7 +188,6 @@ package
 					//This will not use with deactiveConvertor. so dont care about htmls
 					target.htmlText = cashed ;
 				}
-				wasArabic = false ;
 			}
 			else
 			{
@@ -225,7 +225,6 @@ package
 				{
 					uni.HTMLfastUnicodeOnLines(target,tx,justify);
 				}
-				wasArabic = true ;
 			}
 			if(splitIfToLong)//This is not supports html now
 			{

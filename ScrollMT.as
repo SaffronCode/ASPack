@@ -178,6 +178,10 @@ package
 
 		private var absScale:Number;
 		private var myTimeOutId:uint;
+		private var autoScrollSpeedX:Number=0,
+					autoScrollSpeedY:Number=0;
+		
+		private var minAreaToAutoScroll:Number = 100 ;
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -188,6 +192,7 @@ package
 				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0)
 		{
 			revertY = RevertY ;
+			revertX = RevertX ;
 			stepSizes = stepSize ;
 			
 			//remember target
@@ -280,6 +285,13 @@ package
 			
 			
 			onAdded();
+		}
+		
+		/**Activate scroller auto scrolling*/
+		public function activateAutoScroll(scrollSpeedX:Number = 0,scrollSpeedY:Number = 0):void
+		{
+			autoScrollSpeedX = scrollSpeedX ;
+			autoScrollSpeedY = scrollSpeedY ;
 		}
 		
 		
@@ -489,7 +501,14 @@ package
 			//trace('reset the scroller position');
 			
 			stopFloat();
-			targ.x = targetRect.x =  maskRect.x+imageFirstPose.x ;
+			if(revertX)
+			{
+				targ.x = targetRect.x =  maskRect.x+imageFirstPose.x+maskRect.width ;
+			}
+			else
+			{
+				targ.x = targetRect.x =  maskRect.x+imageFirstPose.x ;
+			}
 			
 			if(revertY)
 			{
@@ -595,10 +614,26 @@ package
 				if(Math.abs(VxRound/vmaxDeltaFrame)>minAvailableScroll)
 				{
 					Vx+=(VxRound)/vmaxDeltaFrame;
+					if(Vx>0)
+					{
+						autoScrollSpeedX = Math.abs(autoScrollSpeedX);
+					}
+					else
+					{
+						autoScrollSpeedX = -Math.abs(autoScrollSpeedX);
+					}
 				}
 				if(Math.abs(VyRound/vmaxDeltaFrame)>minAvailableScroll)
 				{
 					Vy+=(VyRound)/vmaxDeltaFrame;
+					if(Vy>0)
+					{
+						autoScrollSpeedY = Math.abs(autoScrollSpeedY);
+					}
+					else
+					{
+						autoScrollSpeedY = -Math.abs(autoScrollSpeedY);
+					}
 				}
 				isScrolling = false;
 				MouseUnLock();
@@ -851,7 +886,21 @@ package
 				//trace('move left to right');
 				targetRect.x+=Vx;
 				targ.x = targetRect.x+imageFirstPose.x;
-				var precentX:Number = Math.min(1,Math.max(0,(maskRect.x-targetRect.x)/(targetRect.width-maskRect.width)));
+				var precentX:Number;
+				var precentXRaw:Number;
+				
+				
+				if(revertX)
+				{
+					precentXRaw = 1+((maskRect.x-(targetRect.x-maskRect.width))/(targetRect.width-maskRect.width));
+					//trace("precentYRaw : "+precentYRaw);
+				}
+				else
+				{
+					precentXRaw = (maskRect.x-targetRect.x)/(targetRect.width-maskRect.width);
+				}
+				
+				precentX = Math.min(1,Math.max(0,precentXRaw));
 				curselLeftRight.x = currselXArea*precentX+maskRect.x+currselMargin+currselW ;
 			}
 			
@@ -934,19 +983,24 @@ package
 			}
 			if(unLockTopDown)
 			{
+				if(maskRect.height<targetRect.height-minAreaToAutoScroll)
+					Vy+=autoScrollSpeedY;
 				var y0:Number = targetRect.y,
 					Y0:Number = targetRect.bottom ,
 					y1:Number = maskRect.y ,
 					Y1:Number = maskRect.bottom ;
+				
 				if(revertY)
 				{
 					if(y0<Y1)
 					{
+						autoScrollSpeedY = Math.abs(autoScrollSpeedY);
 						Vy*=slowDownMu ;
 						Vy+=(Y1-y0)/slowDownSpeed;
 					}
 					else if(y0-targetRect.height>y1 && y0!=Y1)
 					{
+						autoScrollSpeedY = -Math.abs(autoScrollSpeedY);
 						Vy*=slowDownMu ;
 						Vy+=(y1-(y0-targetRect.height))/slowDownSpeed;
 					}
@@ -955,32 +1009,59 @@ package
 				{
 					if(y0>y1)//↑
 					{
+						autoScrollSpeedY = -Math.abs(autoScrollSpeedY);
 						Vy*=slowDownMu ;
 						Vy+=(y1-y0)/slowDownSpeed;
 					}
 					else if(Y0<Y1 && y0!=y1)//↓
 					{
+						autoScrollSpeedY = Math.abs(autoScrollSpeedY);
 						Vy*=slowDownMu ;
 						Vy+=(Y1-Y0)/slowDownSpeed;
 					}
 				}
+				
+				//Step controll on Y is missed here
 			}
 			
 			if(unLockLeftRight)
 			{
+				if(maskRect.width<targetRect.width-minAreaToAutoScroll)
+					Vx+=autoScrollSpeedX;
 				var x0:Number = targetRect.x,
 					X0:Number = targetRect.right,
 					x1:Number = maskRect.x ,
 					X1:Number = maskRect.right;
 				
-				if(x0>x1)//→
+				if(revertX)
 				{
-					Vx*=slowDownMu ;
-					Vx+=(x1-x0)/slowDownSpeed;
-				}else if(X0<X1)//←
+					if(x0<X1)//→
+					{
+						autoScrollSpeedX = Math.abs(autoScrollSpeedX)
+						Vx*=slowDownMu ;
+						Vx+=(X1-x0)/slowDownSpeed;
+					}
+					else if(x0-targetRect.width>x1 && x0!=X1)//←
+					{
+						autoScrollSpeedX = -Math.abs(autoScrollSpeedX)
+						Vx*=slowDownMu ;
+						Vx+=(x1-(x0-targetRect.width))/slowDownSpeed;//Vy+=(y1-(y0-targetRect.height))/slowDownSpeed;
+					}
+				}
+				else
 				{
-					Vx*=slowDownMu ;
-					Vx+=(X1-X0)/slowDownSpeed;
+					if(x0>x1)//→
+					{
+						autoScrollSpeedX = -Math.abs(autoScrollSpeedX)
+						Vx*=slowDownMu ;
+						Vx+=(x1-x0)/slowDownSpeed;
+					}
+					else if(X0<X1)//←
+					{
+						autoScrollSpeedX = Math.abs(autoScrollSpeedX)
+						Vx*=slowDownMu ;
+						Vx+=(X1-X0)/slowDownSpeed;
+					}
 				}
 				
 				if(stepSizes!=0 && targetRect.width>maskRect.width)
