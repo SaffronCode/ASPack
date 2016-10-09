@@ -283,6 +283,10 @@ package soundPlayer
 				{
 					return myPosition[I]/myLength[I];
 				}
+				else if(myChan[I]==null)
+				{
+					return 0 ;
+				}
 				else
 				{
 					return myChan[I].position/myLength[I];
