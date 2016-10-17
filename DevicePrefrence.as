@@ -538,6 +538,11 @@ package
 			}
 			else
 			{
+				if(onDone!=null)
+				{
+					onDone();
+					onDone = null ;
+				}
 				navigateToURL(new URLRequest("market://details?id=air."+appID));
 				GlobalStorage.save(ranked_sharedObject_id,true);
 				trace("The rank url is : "+"market://details?id=air."+appID);
