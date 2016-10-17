@@ -29,16 +29,18 @@ package
 		public static var backGroundColor:uint = 0x00000000 ;
 		
 		
-		public static function setGrayScale( obj:BitmapData ) : BitmapData
+		public static function setGrayScale( obj:BitmapData ,RedPercent:Number=1,GreenPercent:Number=1,BluePercent:Number=1) : BitmapData
 		{
 			var rLum : Number = 0.2225;
 			var gLum : Number = 0.7169;
 			var bLum : Number = 0.0606;
 			
-			var matrix:Array = [ rLum, gLum, bLum, 0, 0,
-				rLum, gLum, bLum, 0, 0,
-				rLum, gLum, bLum, 0, 0,
-				0, 0, 0, 1, 0 ];
+			var matrix:Array = 
+				[ 	rLum*RedPercent, gLum*RedPercent, bLum*RedPercent, 0, 0,
+					rLum*GreenPercent, gLum*GreenPercent, bLum*GreenPercent, 0, 0,
+					rLum*BluePercent, gLum*BluePercent, bLum*BluePercent, 0, 0,
+					0, 0, 0, 1, 0
+				];
 			
 			var filter:ColorMatrixFilter = new ColorMatrixFilter( matrix );
 			obj.applyFilter( obj, new Rectangle( 0,0,obj.width,obj.height ), new Point(0,0), filter );
