@@ -300,8 +300,11 @@ package
 		/**lock the scroller till the next mouse up event from the stage*/
 		private function lockTheScrollThillMouseUp(e:Event)
 		{
-			targStage.addEventListener(MouseEvent.MOUSE_UP,unLock);
-			lock();
+			if(!scrollLock)
+			{
+				targStage.addEventListener(MouseEvent.MOUSE_UP,unLock);
+				lock();
+			}
 		}
 		
 		/**lock the scroller till the next mouse up event from the stage or UN_LOCK_SCROLL dispatches*/
