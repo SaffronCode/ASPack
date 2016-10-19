@@ -74,6 +74,8 @@ package
 				/**+ or -*/
 				var zoneMinutes:int = 0 ;
 				
+				var noZoneAvailable:Boolean = true ;
+				
 				var second:String ;
 				if(splitedTimePart[2].indexOf('+')!=-1)
 				{
@@ -82,6 +84,7 @@ package
 					{
 						zoneMinutes = -1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
 					}
+					noZoneAvailable = false ;
 				}
 				else if(splitedTimePart[2].indexOf('-')!=-1)
 				{
@@ -90,6 +93,7 @@ package
 					{
 						zoneMinutes = 1*TimeToString.stringToNumBased60(splitedZoneAndSecond[1]+':'+splitedTimePart[3]) ;
 					}
+					noZoneAvailable = false ;
 				}
 				else
 				{
@@ -101,10 +105,19 @@ package
 				myDate.fullYearUTC = uint(splitedDatePart[0]);
 				myDate.monthUTC = uint(splitedDatePart[1])-1;
 				myDate.dateUTC = uint(splitedDatePart[2]);
-				myDate.hoursUTC = uint(splitedTimePart[0]);
-				myDate.minutesUTC = uint(splitedTimePart[1]);
-				myDate.secondsUTC = uint(splitedZoneAndSecond[0]);
-				myDate.minutes+=zoneMinutes;
+				if(noZoneAvailable)
+				{
+					myDate.hours = uint(splitedTimePart[0]);
+					myDate.minutes = uint(splitedTimePart[1]);
+					myDate.seconds = uint(splitedZoneAndSecond[0]);
+				}
+				else
+				{
+					myDate.hoursUTC = uint(splitedTimePart[0]);
+					myDate.minutesUTC = uint(splitedTimePart[1]);
+					myDate.secondsUTC = uint(splitedZoneAndSecond[0]);
+					myDate.minutes+=zoneMinutes;
+				}
 			}
 			catch(e)
 			{
