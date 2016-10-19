@@ -210,7 +210,10 @@ package
 			{
 				//Reset the input text field if needed.
 				oldTextField.text = '' ;
-				newTextField.textColor = grayScale(oldTextField.textColor);
+				if(!onlyNativeText)
+				{
+					newTextField.textColor = grayScale(oldTextField.textColor);
+				}
 			}
 			
 			var stageTextOption:StageTextInitOptions = new StageTextInitOptions(oldTextField.multiline);
