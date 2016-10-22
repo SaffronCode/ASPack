@@ -1,5 +1,6 @@
 package videoShow
 {
+	import flash.display.BitmapData;
 	import flash.display.NativeWindow;
 	import flash.display.Sprite;
 	import flash.events.AsyncErrorEvent;
@@ -43,6 +44,8 @@ package videoShow
 		
 		
 		private var stageVideo:StageWebView;
+		
+		private var videoIsOnTheStage:Boolean = false ;
 					
 		
 		
@@ -183,6 +186,8 @@ package videoShow
 					stageVideo.loadURL(correctedURL);
 				/*}*/
 				controllVideostage();
+				
+				videoIsOnTheStage = true ;
 			}
 			else
 			{
@@ -190,6 +195,7 @@ package videoShow
 				netStream.useHardwareDecoder = true ;
 				netStream.play(videoURL);
 				videoObject.smoothing = true ;
+				videoIsOnTheStage = false ;
 			}
 		}
 		
@@ -321,6 +327,24 @@ package videoShow
 			
 			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_LOADED));
 			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_STATUS_CHANGED,played));
+		}
+		
+		
+		/**Creates bitmap from the preview*/
+		public function createBitmap():BitmapData
+		{
+			var capturedBitmap:BitmapData ;
+			if(videoIsOnTheStage)
+			{
+				capturedBitmap = new BitmapData(stageVideo.viewPort.width,stageVideo.viewPort.height,false,0x000000);
+				stageVideo.drawViewPortToBitmapData(capturedBitmap);
+			}
+			else
+			{
+				capturedBitmap = new BitmapData(videoObject.width/videoObject.scaleX,videoObject.height/videoObject.scaleY,false,0x000000);
+				capturedBitmap.draw(videoObject);
+			}
+			return capturedBitmap;
 		}
 	}
 }
