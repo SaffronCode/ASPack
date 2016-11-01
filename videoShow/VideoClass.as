@@ -341,8 +341,9 @@ package videoShow
 			}
 			else
 			{
-				capturedBitmap = new BitmapData(videoObject.width/videoObject.scaleX,videoObject.height/videoObject.scaleY,false,0x000000);
-				capturedBitmap.draw(videoObject);
+				capturedBitmap = new BitmapData(W,H,false,0x000000);
+				capturedBitmap.draw(this
+				);
 			}
 			return capturedBitmap;
 		}
