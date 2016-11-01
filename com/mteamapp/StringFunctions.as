@@ -179,6 +179,12 @@ package com.mteamapp
 			}while(str!=lastStr)
 			return str ;
 		}
+		
+		/**This function will remove all spaces and tabs and enters from a string*/
+		public static function clearSpacesAndTabs(str:String):String
+		{
+			return str.split('\n').join('').split('\r').join('').split('\t').join('').split(' ').join('');
+		}
 	
 		
 		
