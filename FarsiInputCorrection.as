@@ -89,6 +89,9 @@ package
 		/**Add change listener to the stage text*/
 		private var listenToChangesAllTheTime:Boolean = false ;
 		private var focusOutTimeOutId:uint;
+		
+		/**This text will show on output whenever the input field was empty*/
+		private var inputLableText:String = '' ;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
@@ -209,6 +212,7 @@ package
 			if(clearInputText)
 			{
 				//Reset the input text field if needed.
+				inputLableText = oldTextField.text ; 
 				oldTextField.text = '' ;
 				if(!onlyNativeText)
 				{
@@ -409,14 +413,24 @@ package
 				trace("This text is only on stageText");
 				return ;
 			}
-			newTextField.textColor = oldTextField.textColor;
-			if(itsArabic ||  ( detectArabic && StringFunctions.isPersian(oldTextField.text) ))
+			var updatedText:String ;
+			if(oldTextField.text!='')
 			{
-				UnicodeStatic.fastUnicodeOnLines(newTextField,oldTextField.text,false);
+				updatedText = oldTextField.text ;
+				newTextField.textColor = oldTextField.textColor;
 			}
 			else
 			{
-				newTextField.text = oldTextField.text ;
+				updatedText = inputLableText ;
+				newTextField.textColor = grayScale(oldTextField.textColor);
+			}
+			if(itsArabic ||  ( detectArabic && StringFunctions.isPersian(updatedText)))
+			{
+				UnicodeStatic.fastUnicodeOnLines(newTextField,updatedText,false);
+			}
+			else
+			{
+				newTextField.text = updatedText ;
 			}
 		}
 		
