@@ -4,8 +4,6 @@ package utils
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.utils.getTimer;
-	
-	import mx.core.UIComponent;
 
 	
 	[Event(name="PERVECT_CPU", type="utils.CPUEvents")]
