@@ -160,7 +160,7 @@ package
 		
 		
 		///92-9-3  fast html unicode
-		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true)
+		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true,maxLines:uint = uint.MAX_VALUE)
 		{
 			//trace("tex : "+tex);
 			var myTextcash = entersCorrection(tex).split(String.fromCharCode(10));
@@ -279,6 +279,11 @@ package
 						linesTest.push(lineString);
 						lastSpace = -1 ;
 						lineW=0;
+						if(linesTest.length>=maxLines)
+						{
+							lastIndex = 0 ;
+							break ; 
+						}
 					}
 					else if( cashedText.charAt(i) == ' ' )
 					{
@@ -288,7 +293,10 @@ package
 				}
 				//trace("Generate line to : "+lastIndex);
 				//trace("Generate line to : "+lastIndex);
-				linesTest.push(yourTextField.getXMLText(0,lastIndex));
+				if(lastIndex!=0)
+				{
+					linesTest.push(yourTextField.getXMLText(0,lastIndex));
+				}
 				
 				
 				if(linesTest.length==1){
