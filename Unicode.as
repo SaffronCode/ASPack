@@ -252,7 +252,7 @@ package
 						else
 						{
 							//trace("From i "+(i+1)+" to "+lastIndex);
-							lineString = yourTextField.getXMLText(i+1,lastIndex);
+							lineString = yourTextField.getXMLText(i,lastIndex);
 							step = Math.ceil((lastIndex-i+1)*stepPrecent);
 							lastIndex = i ;
 							i++;
