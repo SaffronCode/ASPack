@@ -154,73 +154,13 @@ package
 		/**if html boolean set to true , it will act on input tex as a HTML text*/
 		public function fastUnicodeOnLines(yourTextField:TextField,tex:String,detectLanguage:Boolean = true)
 		{
-			var myTextcash = entersCorrection(tex).split(String.fromCharCode(10));
-			tex = '' ;
-			var i ;
-			for(i=0;i<myTextcash.length;i++){
-				tex += toUnicode(myTextcash[i])+'\n';
-			}
-			tex = tex.substring(0,tex.length-1);
-			var myText:String = (tex);
-			//debug
-			//yourTextField.text = myText;
-			//return
-			//debug end
-			var parag:Array = myText.split('\n');
-			var linesTest:Array = new Array();
-			for(var j =0 ;j<parag.length;j++){
-				yourTextField.text = parag[j] ;
-				if(yourTextField.numLines==1){
-					linesTest.push(parag[j]);
-					continue;
-				}//else V
-				var lastNumLines:uint;
-				var spaces;
-				var cnt=0;
-				while((lastNumLines = yourTextField.numLines)>1 && cnt<1000){
-					cnt++;
-					spaces = '' ;
-					do{
-						spaces+='-';
-						yourTextField.text = spaces+parag[j] ;
-					}while(lastNumLines == yourTextField.numLines) ;
-					spaces = spaces.substring(1) ;
-					yourTextField.text = spaces+parag[j] ;
-					var cashedText:String = yourTextField.getLineText(lastNumLines-1);
-					var lineIndex = yourTextField.getLineOffset(lastNumLines-1);
-					
-					var indexOfSplitters = Infinity ;
-					for(i=0;i<splitters.length;i++){
-						var J = cashedText.indexOf(splitters[i]) ;
-						if(J!=-1){
-							indexOfSplitters = Math.min(indexOfSplitters,J);
-						}
-					}
-					if(indexOfSplitters == Infinity){
-						indexOfSplitters = 0 ;
-					}
-					cashedText = cashedText.substring(indexOfSplitters);
-					linesTest.push(cashedText);
-					parag[j] = parag[j].substring(0,lineIndex+indexOfSplitters-spaces.length);
-					yourTextField.text = parag[j] ;
-				}
-				linesTest.push(parag[j]);
-			}
-			//debug line
-			//	yourTextField.text = cashedText ;
-			//	return
-			///debug line ended
-			yourTextField.text = '' ;
-			for(i=0;i<linesTest.length;i++){
-				yourTextField.appendText(linesTest[i]+'\n');
-			}
-			yourTextField.text = yourTextField.text.substring(0,yourTextField.text.length-1);
+			HTMLfastUnicodeOnLines(yourTextField,tex,false);
 		}
 		
 		
 		
 		///92-9-3  fast html unicode
-		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true)
+		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true,maxLines:uint = uint.MAX_VALUE)
 		{
 			//trace("tex : "+tex);
 			var myTextcash = entersCorrection(tex).split(String.fromCharCode(10));
@@ -249,7 +189,8 @@ package
 				var charRect:Rectangle ;
 				var lineString:String ;
 				
-			textWidth = yourTextField.width-7 ;
+			textWidth = yourTextField.width-4 ;
+			var fromChar:uint ;
 					
 			for(i=0;i<myTextcash.length;i++){
 				corrected = HTMLUnicode(myTextcash[i]) ;
@@ -274,7 +215,7 @@ package
 				var charLeft:Number;
 				var spaceLeft:Number;
 				
-				const stepPrecent:Number = 0.78 ;
+				const maxWordLength = 15 ;
 				
 				for( i=l-1 ; i>=0 ; i-=step )
 				{
@@ -301,8 +242,13 @@ package
 						if(lastSpace!=-1)
 						{
 							//trace("From "+lastSpace+" to "+lastIndex);
-							lineString = yourTextField.getXMLText(lastSpace+1,lastIndex);
-							step = Math.ceil((lastIndex-lastSpace)*stepPrecent);
+							fromChar = lastSpace
+							if(lastSpace!=lastIndex)
+							{
+								fromChar = Math.min(fromChar+1,lastIndex) ;
+							}
+							lineString = yourTextField.getXMLText(fromChar,lastIndex);
+							step = Math.max(1,(lastIndex-lastSpace)-maxWordLength);
 							/**change the lineW from the deltaW here to make stepps accesible*/
 							lastIndex = lastSpace ;
 							i = lastSpace;
@@ -312,8 +258,8 @@ package
 						else
 						{
 							//trace("From i "+(i+1)+" to "+lastIndex);
-							lineString = yourTextField.getXMLText(i+1,lastIndex);
-							step = Math.ceil((lastIndex-i+1)*stepPrecent);
+							lineString = yourTextField.getXMLText(i,lastIndex);
+							step = Math.max(0,(lastIndex-lastSpace)-maxWordLength);
 							lastIndex = i ;
 							i++;
 							realLineSize = lastCharInLineLeftX-lastCharLeft ;
@@ -330,9 +276,18 @@ package
 							//trace("Math.floor((textWidth-realLineSize)/spaceWidth) : "+Math.floor((textWidth-realLineSize)/spaceWidth));
 							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-realLineSize)/spaceWidth));
 						}
-						linesTest.push(lineString);
 						lastSpace = -1 ;
 						lineW=0;
+						if(linesTest.length>=maxLines-1)
+						{
+							linesTest.push(lineString.replace(/>\([^\s^\)]+[\s]/g,">\(..."));
+							lastIndex = 0 ;
+							break ; 
+						}
+						else
+						{
+							linesTest.push(lineString);
+						}
 					}
 					else if( cashedText.charAt(i) == ' ' )
 					{
@@ -342,7 +297,10 @@ package
 				}
 				//trace("Generate line to : "+lastIndex);
 				//trace("Generate line to : "+lastIndex);
-				linesTest.push(yourTextField.getXMLText(0,lastIndex));
+				if(lastIndex!=0)
+				{
+					linesTest.push(yourTextField.getXMLText(0,lastIndex));
+				}
 				
 				
 				if(linesTest.length==1){
