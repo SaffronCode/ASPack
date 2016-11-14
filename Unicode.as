@@ -214,7 +214,7 @@ package
 				var charLeft:Number;
 				var spaceLeft:Number;
 				
-				const stepPrecent:Number = 0.78 ;
+				const maxWordLength = 15 ;
 				
 				for( i=l-1 ; i>=0 ; i-=step )
 				{
@@ -242,7 +242,7 @@ package
 						{
 							//trace("From "+lastSpace+" to "+lastIndex);
 							lineString = yourTextField.getXMLText(lastSpace+1,lastIndex);
-							step = Math.ceil((lastIndex-lastSpace)*stepPrecent);
+							step = Math.max(0,(lastIndex-lastSpace)-maxWordLength);
 							/**change the lineW from the deltaW here to make stepps accesible*/
 							lastIndex = lastSpace ;
 							i = lastSpace;
@@ -253,7 +253,7 @@ package
 						{
 							//trace("From i "+(i+1)+" to "+lastIndex);
 							lineString = yourTextField.getXMLText(i,lastIndex);
-							step = Math.ceil((lastIndex-i+1)*stepPrecent);
+							step = Math.max(0,(lastIndex-lastSpace)-maxWordLength);
 							lastIndex = i ;
 							i++;
 							realLineSize = lastCharInLineLeftX-lastCharLeft ;
