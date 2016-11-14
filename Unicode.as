@@ -189,7 +189,8 @@ package
 				var charRect:Rectangle ;
 				var lineString:String ;
 				
-			textWidth = yourTextField.width-7 ;
+			textWidth = yourTextField.width-4 ;
+			var fromChar:uint ;
 					
 			for(i=0;i<myTextcash.length;i++){
 				corrected = HTMLUnicode(myTextcash[i]) ;
@@ -241,8 +242,13 @@ package
 						if(lastSpace!=-1)
 						{
 							//trace("From "+lastSpace+" to "+lastIndex);
-							lineString = yourTextField.getXMLText(lastSpace+1,lastIndex);
-							step = Math.max(0,(lastIndex-lastSpace)-maxWordLength);
+							fromChar = lastSpace
+							if(lastSpace!=lastIndex)
+							{
+								fromChar = Math.min(fromChar+1,lastIndex) ;
+							}
+							lineString = yourTextField.getXMLText(fromChar,lastIndex);
+							step = Math.max(1,(lastIndex-lastSpace)-maxWordLength);
 							/**change the lineW from the deltaW here to make stepps accesible*/
 							lastIndex = lastSpace ;
 							i = lastSpace;
