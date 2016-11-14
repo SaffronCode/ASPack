@@ -276,13 +276,17 @@ package
 							//trace("Math.floor((textWidth-realLineSize)/spaceWidth) : "+Math.floor((textWidth-realLineSize)/spaceWidth));
 							lineString = insertSpaceInXML(lineString,Math.floor((textWidth-realLineSize)/spaceWidth));
 						}
-						linesTest.push(lineString);
 						lastSpace = -1 ;
 						lineW=0;
-						if(linesTest.length>=maxLines)
+						if(linesTest.length>=maxLines-1)
 						{
+							linesTest.push(lineString.replace(/>\([^\s^\)]+[\s]/g,">\(..."));
 							lastIndex = 0 ;
 							break ; 
+						}
+						else
+						{
+							linesTest.push(lineString);
 						}
 					}
 					else if( cashedText.charAt(i) == ' ' )
