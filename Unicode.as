@@ -297,7 +297,7 @@ package
 				}
 				//trace("Generate line to : "+lastIndex);
 				//trace("Generate line to : "+lastIndex);
-				if(lastIndex!=0)
+				if(linesTest.length<maxLines-1)
 				{
 					linesTest.push(yourTextField.getXMLText(0,lastIndex));
 				}

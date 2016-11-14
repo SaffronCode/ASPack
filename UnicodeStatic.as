@@ -156,8 +156,6 @@ package
 			firstSetUp();
 			target.multiline = true;
 			
-			tx = tx.split('\n').join('').split('\r').join('');
-			
 			var detectedArabicScript:Boolean = true ;
 			var wasArabic:Boolean = true ;
 			
