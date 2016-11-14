@@ -1,4 +1,4 @@
-// *************************
+﻿// *************************
 // * COPYRIGHT
 // * DEVELOPER: MTEAM ( info@mteamapp.com )
 // * ALL RIGHTS RESERVED FOR MTEAM
@@ -151,10 +151,12 @@ package
 			}
 		}
 		
-		public static function htmlText(target:TextField,tx:String,useCash:Boolean=true,autoSize:Boolean=false,justify:Boolean=true,splitIfToLong:Boolean=false):void
+		public static function htmlText(target:TextField,tx:String,useCash:Boolean=true,autoSize:Boolean=false,justify:Boolean=true,splitIfToLong:Boolean=false,maxLines:uint = uint.MAX_VALUE):void
 		{
 			firstSetUp();
 			target.multiline = true;
+			
+			tx = tx.split('\n').join('').split('\r').join('');
 			
 			var detectedArabicScript:Boolean = true ;
 			var wasArabic:Boolean = true ;
@@ -169,8 +171,18 @@ package
 				wasArabic = detectedArabicScript ;
 			}
 			
+			if(splitIfToLong)
+			{
+				target.text = '-';
+				while(target.maxScrollV<=1)
+				{
+					target.appendText('\n-');
+				}
+				maxLines = target.numLines-1;
+			}
+			
 			//trace('add this : '+tx.substr(0,20));
-			if((useCash && !splitIfToLong) && !deactiveConvertor && detectedArabicScript)
+			if((useCash) && !deactiveConvertor && detectedArabicScript)
 			{
 				var ID = textID(target,tx);
 				var cashed:String = loadStringFromData(ID);
@@ -179,7 +191,7 @@ package
 					//trace('not founded');
 					tx = correctHTMLS(tx) ;
 					//trace("tx : "+tx);
-					uni.HTMLfastUnicodeOnLines(target,tx,justify);
+					uni.HTMLfastUnicodeOnLines(target,tx,justify,maxLines);
 					saveStringOnID(ID,target.htmlText);
 				}
 				else
@@ -223,48 +235,10 @@ package
 				}
 				else
 				{
-					uni.HTMLfastUnicodeOnLines(target,tx,justify);
+					uni.HTMLfastUnicodeOnLines(target,tx,justify,maxLines);
 				}
 			}
-			if(splitIfToLong)//This is not supports html now
-			{
-				if(target.maxScrollV>1)
-				{
-					var axxeptedText:String = '' ;
-					var maxAxxeptedTextLine:uint = target.numLines - (target.maxScrollV-1) ;
-					var lineText:String ;
-					for(var i = 0 ; i<maxAxxeptedTextLine ; i++)
-					{
-						lineText = target.getLineText(i);
-						if(i == maxAxxeptedTextLine-1)
-						{
-							var spaceIndex:uint ;
-							if(wasArabic)
-							{
-								spaceIndex = lineText.indexOf(' ',2);
-							}
-							else
-							{
-								spaceIndex = lineText.lastIndexOf(' ',lineText.length-3);
-							}
-							if(spaceIndex!=-1)
-							{
-								if(wasArabic)
-								{
-									lineText = '...'+lineText.substring(spaceIndex+1);
-								}
-								else
-								{
-									lineText = lineText.substring(spaceIndex+1)+'...';
-								}
-							}
-						}
-						axxeptedText += lineText ;
-					}
-					target.text = axxeptedText ;
-				}
-			}
-			else if(autoSize)
+			if(autoSize)
 			{
 				target.height = target.textHeight+10;
 			}
