@@ -154,67 +154,7 @@ package
 		/**if html boolean set to true , it will act on input tex as a HTML text*/
 		public function fastUnicodeOnLines(yourTextField:TextField,tex:String,detectLanguage:Boolean = true)
 		{
-			var myTextcash = entersCorrection(tex).split(String.fromCharCode(10));
-			tex = '' ;
-			var i ;
-			for(i=0;i<myTextcash.length;i++){
-				tex += toUnicode(myTextcash[i])+'\n';
-			}
-			tex = tex.substring(0,tex.length-1);
-			var myText:String = (tex);
-			//debug
-			//yourTextField.text = myText;
-			//return
-			//debug end
-			var parag:Array = myText.split('\n');
-			var linesTest:Array = new Array();
-			for(var j =0 ;j<parag.length;j++){
-				yourTextField.text = parag[j] ;
-				if(yourTextField.numLines==1){
-					linesTest.push(parag[j]);
-					continue;
-				}//else V
-				var lastNumLines:uint;
-				var spaces;
-				var cnt=0;
-				while((lastNumLines = yourTextField.numLines)>1 && cnt<1000){
-					cnt++;
-					spaces = '' ;
-					do{
-						spaces+='-';
-						yourTextField.text = spaces+parag[j] ;
-					}while(lastNumLines == yourTextField.numLines) ;
-					spaces = spaces.substring(1) ;
-					yourTextField.text = spaces+parag[j] ;
-					var cashedText:String = yourTextField.getLineText(lastNumLines-1);
-					var lineIndex = yourTextField.getLineOffset(lastNumLines-1);
-					
-					var indexOfSplitters = Infinity ;
-					for(i=0;i<splitters.length;i++){
-						var J = cashedText.indexOf(splitters[i]) ;
-						if(J!=-1){
-							indexOfSplitters = Math.min(indexOfSplitters,J);
-						}
-					}
-					if(indexOfSplitters == Infinity){
-						indexOfSplitters = 0 ;
-					}
-					cashedText = cashedText.substring(indexOfSplitters);
-					linesTest.push(cashedText);
-					parag[j] = parag[j].substring(0,lineIndex+indexOfSplitters-spaces.length);
-					yourTextField.text = parag[j] ;
-				}
-				linesTest.push(parag[j]);
-			}
-			//debug line
-			//	yourTextField.text = cashedText ;
-			//	return
-			///debug line ended
-			yourTextField.text = '' ;
-			for(i=0;i<linesTest.length;i++){
-				yourTextField.appendText(linesTest[i]+'\n');
-			}
-			yourTextField.text = yourTextField.text.substring(0,yourTextField.text.length-1);
+			HTMLfastUnicodeOnLines(yourTextField,tex,false);
 		}
 		
 		
