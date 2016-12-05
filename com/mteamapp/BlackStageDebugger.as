@@ -73,11 +73,16 @@ package com.mteamapp
 			// TODO Auto-generated method stub
 			
 			trace("deraultOriented : "+defaultOriented+' vs deviceOrientation : '+stage.deviceOrientation+' and orientation : '+stage.orientation);
-			switch(stage.orientation)
-			{
-				case(StageOrientation.UNKNOWN):
-					//trace("Oriented to : "+StageOrientation.ROTATED_RIGHT);
-					toOrientation = (StageOrientation.ROTATED_RIGHT);
+			switch(stage.orientation) {
+                case(StageOrientation.UNKNOWN):
+                    //trace("Oriented to : "+StageOrientation.ROTATED_RIGHT);
+                    if (DevicePrefrence.isPortrait()) {
+                    	toOrientation = (StageOrientation.ROTATED_RIGHT);
+					}
+					else
+					{
+                        toOrientation = (StageOrientation.UPSIDE_DOWN);
+					}
 					break;
 				case(StageOrientation.UPSIDE_DOWN):
 					//trace("Oriented to : "+StageOrientation.ROTATED_LEFT);
@@ -91,9 +96,21 @@ package com.mteamapp
 					//trace("Oriented to : "+StageOrientation.UPSIDE_DOWN);
 					toOrientation = (StageOrientation.UPSIDE_DOWN);
 					break;
+				case(StageOrientation.DEFAULT):
+					trace("Oriented was "+StageOrientation.DEFAULT+" change it to ... ");
+                    if (DevicePrefrence.isPortrait()) {
+						trace("... "+StageOrientation.ROTATED_LEFT);
+                        toOrientation = (StageOrientation.ROTATED_LEFT);
+                    }
+                    else
+                    {
+                        trace("... "+StageOrientation.UPSIDE_DOWN);
+                        toOrientation = (StageOrientation.UPSIDE_DOWN);
+                    }
+					break;
 				default:
 					//trace("Oriented to ... "+StageOrientation.ROTATED_LEFT);
-					toOrientation = (StageOrientation.ROTATED_LEFT);
+                    toOrientation = (StageOrientation.ROTATED_LEFT);
 					break;
 			}
 			
@@ -113,8 +130,17 @@ package com.mteamapp
 			
 			private static function backOriention():void
 			{
-				trace("now make it back to : "+defaultOriented)
-				stage.setOrientation(defaultOriented);
+				trace("now make it back to : "+defaultOriented);
+				if(defaultOriented == StageOrientation.DEFAULT && DevicePrefrence.isLandScape())
+				{
+					trace("This app was landscape so change the oriention to "+StageOrientation.ROTATED_RIGHT)
+                    stage.setOrientation(StageOrientation.ROTATED_RIGHT);
+				}
+				else
+				{
+					trace("This was a portrait application")
+                    stage.setOrientation(defaultOriented);
+				}
 				timeOutId2 = setTimeout(visibleScreen,visibleActivated);
 			}
 			

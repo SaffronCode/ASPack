@@ -83,6 +83,18 @@ package
 			
 			return Boolean(bigScreen);
 		}
+
+        /**Returns true if the application was landscape*/
+        public static function isLandScape():Boolean
+        {
+            return appDescriptor.toString().indexOf("<aspectRatio>landscape</aspectRatio>")!=-1
+        }
+
+        /**Returns true if the application was landscape*/
+        public static function isPortrait():Boolean
+        {
+            return appDescriptor.toString().indexOf("<aspectRatio>portrait</aspectRatio>")!=-1
+        }
 		
 		/**This function calls apple webservice to generate application id to make a download link for*/
 		public static function createDownloadLink():void
