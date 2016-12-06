@@ -393,5 +393,20 @@ package com.mteamapp
 				return 0 ;
 			}
 		}
+		public static function htmlCharacterEncoder(str:String):String
+		{
+			var _htmlCar:Array = [{from:"&nbsp;",to:" "},{from:'&lt;',to:"<"},{from:"&gt;",to:">"},{from:"&amp;",to:"&"},{from:"&quot;",to:"\\\""},{from:"&apos;",to:"'"},{from:"&cent;",to:"¢"},{from:"&pound;",to:"£"},{from:"&yen;",to:"¥"},{from:"&euro;",to:"€"},{from:"&copy;",to:"©"},{from:"&reg;",to:"®"},{from:"&zwnj;",to:" "}]
+			for(var i:int=0;i<_htmlCar.length;i++)
+			{
+				trace('from :',_htmlCar[i].from,'to :',_htmlCar[i].to)
+				str = str.split(_htmlCar[i].from).join(_htmlCar[i].to)
+			}
+			return str		
+		}
+		public static function jsonCorrector(oldJson:String)
+		{
+			return oldJson.split('\n').join(' \\n').split('\r').join(' \\r').split('"').join('\"').split('\t').join('\\t')
+		}
+
 	}
 }
