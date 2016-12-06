@@ -225,7 +225,7 @@ package com.mteamapp
 					return new Date(Number(V.substring(6,V.length-2))) ;
 				}
 				//Other date format is : 2015-10-27T10:46:56.9335483+03:30
-				if(String(v).indexOf('-')!=-1 && String(v).indexOf('T')!=-1 && String(v).indexOf(':')!=-1)
+				if(String(v).indexOf('-')!=-1 && String(v).indexOf('T')!=-1 && String(v).indexOf(':')!=-1 && String(v).length>20 && String(v).length<35)
 				{
 					var tryTheDate:Date = ServerDate.serverDateToDate2(v);
 					if(tryTheDate!=null)
