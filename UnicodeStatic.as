@@ -223,7 +223,7 @@ package
 					{
 						tf.align = TextFormatAlign.LEFT ;
 					}
-					target.setTextFormat(tf) ;
+					//target.setTextFormat(tf) ;
 					target.defaultTextFormat = tf ;
 					//The below line makes html text effects remove.
 					/*if(tf!=null)
