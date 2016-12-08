@@ -655,12 +655,13 @@ package
 		
 	//////////////////////////////////////////////////////
 		private static var createdKeyIs:String ;
+		private static var uniqueId:String ;
 		
 		
 		/**This function will creates securityKey*/
 		private static function createDeviceKeyForMoreSecurity():void
 		{
-			if(createdKeyIs==null)
+			if(createdKeyIs==null && uniqueId==null)
 			{
 				var isNativeAdded:Boolean = false ;
 				try
@@ -675,11 +676,13 @@ package
 				}
 				if(isNativeAdded)
 				{
-					createdKeyIs = (fPUniqueId as Object).id;
+					uniqueId = (fPUniqueId as Object).id;
+					createdKeyIs= '';
 				}
 				else
 				{
 					createdKeyIs = appID+Capabilities.cpuArchitecture+Capabilities.manufacturer+Capabilities.screenResolutionX+','+Capabilities.screenResolutionY;
+					uniqueId = '' ;
 				}	
 			}
 		}
@@ -691,9 +694,20 @@ package
 			if(passWord=="478239472389")
 			{
 				createDeviceKeyForMoreSecurity();
-				return MD5.hash(createdKeyIs+'بپ') ;
+				return MD5.hash(createdKeyIs+uniqueId+'بپ') ;
 			}
 			return MD5.hash('notmatched'+'بپ');
+		}
+		
+		/**You should have a native code to have this*/
+		public static function DeviceUniqueId():String
+		{
+			createDeviceKeyForMoreSecurity();
+			if(uniqueId=='' && isItPC)
+			{
+				throw "*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project" ;
+			}
+			return uniqueId ;
 		}
 	}
 }
