@@ -705,7 +705,7 @@ package
 			createDeviceKeyForMoreSecurity();
 			if(uniqueId=='' && isItPC)
 			{
-				throw "*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project" ;
+				throw "*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project. get the file from below link:\n\n\thttps://github.com/flashpress/FPUniqueId/\n\n" ;
 			}
 			return uniqueId ;
 		}
