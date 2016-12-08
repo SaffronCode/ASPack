@@ -18,6 +18,8 @@
 
 package
 {
+	import com.adobe.crypto.MD5;
+	
 	import dataManager.GlobalStorage;
 	
 	import flash.desktop.NativeApplication;
@@ -28,6 +30,7 @@ package
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.system.Capabilities;
+	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
 
 	public class DevicePrefrence
@@ -646,6 +649,51 @@ package
 		public static function isFullScreen():Boolean
 		{
 			return (appDescriptor.toString().indexOf("<fullScreen>true</fullScreen>")!=-1)
+		}
+		
+		
+		
+	//////////////////////////////////////////////////////
+		private static var createdKeyIs:String ;
+		
+		
+		/**This function will creates securityKey*/
+		private static function createDeviceKeyForMoreSecurity():void
+		{
+			if(createdKeyIs==null)
+			{
+				var isNativeAdded:Boolean = false ;
+				try
+				{
+					var fPUniqueId:Class = getDefinitionByName("ru.flashpress.uid.FPUniqueId") as Class;
+					isNativeAdded = true ;
+				}
+				catch(e)
+				{
+					trace("*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project");
+					isNativeAdded = false ;
+				}
+				if(isNativeAdded)
+				{
+					createdKeyIs = (fPUniqueId as Object).id;
+				}
+				else
+				{
+					createdKeyIs = appID+Capabilities.cpuArchitecture+Capabilities.manufacturer+Capabilities.screenResolutionX+','+Capabilities.screenResolutionY;
+				}	
+			}
+		}
+		
+		/**Pass 478239472389 to make it work. (this password created to prevent injection)*/
+		public static function DeviceEncryptedKey(passWord:String):String
+		{
+			trace("***some one needs the DeviceEncryptedKey");
+			if(passWord=="478239472389")
+			{
+				createDeviceKeyForMoreSecurity();
+				return MD5.hash(createdKeyIs+'بپ') ;
+			}
+			return MD5.hash('notmatched'+'بپ');
 		}
 	}
 }
