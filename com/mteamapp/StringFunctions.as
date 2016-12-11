@@ -147,7 +147,7 @@ package com.mteamapp
 			if(true || !DevicePrefrence.isItPC)
 			{
 				//trace('phone enabled');
-				var regNumberDetection:RegExp = /([\n\r\s\t,^])([\d-]{8,})/gi;//([\n\r\s\t,])([\d-]{8,})([\t\n\r\s,])
+				var regNumberDetection:RegExp = /([\n\r\s\t,^])([\d-+]{7,})/gi;//([\n\r\s\t,])([\d-]{8,})([\t\n\r\s,])
 				trace("Find the phone : "+str);
 				str = str.replace(regNumberDetection,'$1'+colorTagStart+'<a href="tel:$2">$2</a>'+colorTagEnd);//
 			}
