@@ -216,6 +216,8 @@ package
 				oldTextField.text = '' ;
 				if(!onlyNativeText)
 				{
+					newTextField.displayAsPassword = false ;
+					newTextField.embedFonts = oldTextField.embedFonts  ;
 					newTextField.textColor = grayScale(oldTextField.textColor);
 				}
 			}
@@ -414,15 +416,18 @@ package
 				return ;
 			}
 			var updatedText:String ;
+			var targetColor:uint ;
 			if(oldTextField.text!='')
 			{
 				updatedText = oldTextField.text ;
-				newTextField.textColor = oldTextField.textColor;
+				targetColor = oldTextField.textColor;
+				newTextField.displayAsPassword = oldTextField.displayAsPassword ;
 			}
 			else
 			{
 				updatedText = inputLableText ;
-				newTextField.textColor = grayScale(oldTextField.textColor);
+				targetColor = grayScale(oldTextField.textColor);
+				newTextField.displayAsPassword = false ;
 			}
 			if(itsArabic ||  ( detectArabic && StringFunctions.isPersian(updatedText)))
 			{
@@ -432,6 +437,8 @@ package
 			{
 				newTextField.text = updatedText ;
 			}
+			newTextField.textColor = targetColor ;
+			newTextField.embedFonts = !newTextField.displayAsPassword  ;
 		}
 		
 		/**Clear the native text */
