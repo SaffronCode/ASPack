@@ -287,6 +287,30 @@ package
 			onAdded();
 		}
 		
+		/**Set scrolling item y*/
+		public function set y(value:Number):void
+		{
+			mouseLocker.y = value ;
+			scrollerMask.y = value ;
+			curselLeftRight.y = value ;
+			maskRect.y = value ;
+			targetRect.y = value ;
+			targ.y = value ;
+			Vy = 0 ;
+		}
+		
+		/**Set scrollng*/
+		public function set x(value:Number):void
+		{
+			mouseLocker.x = value ;
+			scrollerMask.x = value ;
+			curselLeftRight.x = value ;
+			maskRect.x = value ;
+			targetRect.x = value ;
+			targ.x = value ;
+			Vx = 0 ;
+		}
+		
 		/**Activate scroller auto scrolling*/
 		public function activateAutoScroll(scrollSpeedX:Number = 0,scrollSpeedY:Number = 0):void
 		{
