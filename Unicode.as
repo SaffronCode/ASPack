@@ -37,7 +37,7 @@ package
 		
 		public static var splitters:Array = [',','.',' ','-',')',':'];
 		public static var adad = '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹۰۱۲۳۴۵۶۷۸۹����٪٪';
-		public static var estesna = '-[]»«)("/\\:';
+		public static var estesna:String = '-[]»«)("/\\:';
 		public static var forceToEnglish:String = '' ;
 		
 		private var MESlistChr:Object = {};
