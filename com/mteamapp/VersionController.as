@@ -45,7 +45,7 @@ package com.mteamapp
 			</version>*/
 		protected static function onVersinoStringReceved(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace("XML is receved");
 			var xmlController:XML = new XML();
 			try
@@ -66,7 +66,7 @@ package com.mteamapp
 		
 		private static function controllCashedDatas():void
 		{
-			// TODO Auto Generated method stub
+			
 			var xmlController:XML ;
 			
 			if(lastData.data.version == undefined)
@@ -128,7 +128,7 @@ package com.mteamapp
 		protected static function noConnection(event:IOErrorEvent):void
 		{
 			trace("No connection stablished");
-			// TODO Auto-generated method stub
+			
 			controllCashedDatas();
 		}
 		

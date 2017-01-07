@@ -177,7 +177,7 @@ package
 		
 		protected static function disposeThisBitmap(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			(event.target as Bitmap).bitmapData.dispose();
 		}
 		

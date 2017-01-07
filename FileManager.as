@@ -89,7 +89,7 @@ package
 		/**Delete all files in this folder*/
 		public static function deleteAllFiles(folder:File):void
 		{
-			// TODO Auto Generated method stub
+			
 			if(!folder.exists)
 			{
 				trace("The folder : "+folder.url+" dosn't exist");

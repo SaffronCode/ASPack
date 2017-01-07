@@ -64,7 +64,7 @@ package
 		/**Return string in format YYYY/MM/DD HH:MM:SS*/
 		public static function dateToString(date:Date,showClock:Boolean=false,showSeconds:Boolean=false,showDate:Boolean=true):String
 		{
-			// TODO Auto Generated method stub
+			
 			var str:String = '' ;
 			if(showDate)
 			{

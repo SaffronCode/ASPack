@@ -367,7 +367,7 @@ package
 		
 		protected function changeTheStageText(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			myStageText.text = oldTextField.text ;
 		}
 		

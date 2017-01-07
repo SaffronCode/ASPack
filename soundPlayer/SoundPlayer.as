@@ -591,7 +591,7 @@ package soundPlayer
 		/**Extract the sound to byte array*/
 		public static function getExtractedData(ID:uint, extractedBytes:ByteArray):void
 		{
-			// TODO Auto Generated method stub
+			
 			var callerID:Number = gI(ID);
 			mySound[callerID].extract(extractedBytes,Math.floor((mySound[callerID].length/1000)*44100));
 			extractedBytes.position = 0 ;

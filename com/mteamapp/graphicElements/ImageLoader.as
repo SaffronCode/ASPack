@@ -71,7 +71,7 @@ package com.mteamapp.graphicElements
 		private function stageTest(e:Event=null):void
 		{
 			this.removeEventListener(Event.ADDED_TO_STAGE,stageTest);
-			// TODO Auto Generated method stub
+			
 			if(this.stage == null)
 			{
 				this.addEventListener(Event.ADDED_TO_STAGE,stageTest);
@@ -85,7 +85,7 @@ package com.mteamapp.graphicElements
 		
 		protected function unLoad(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			myURLSaver.cansel();
 			try
 			{
@@ -95,7 +95,7 @@ package com.mteamapp.graphicElements
 		
 		private function loadImage():void
 		{
-			// TODO Auto Generated method stub
+			
 			if(imageURL == "")
 			{
 				this.dispatchEvent(new Event(IMAGE_URL_NOT_FOUNDS));
@@ -111,7 +111,7 @@ package com.mteamapp.graphicElements
 		
 		protected function imageLoadingStarted(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			if(myPreLoader == null)
 			{
 				myPreLoader = new preLoader() ;
@@ -124,7 +124,7 @@ package com.mteamapp.graphicElements
 		protected function imageURLChagedToLocal(event:URLSaverEvent):void
 		{
 			myURLSaver.cansel();
-			// TODO Auto-generated method stub
+			
 			imageURL = event.offlineTarget ;
 			loader.contentLoaderInfo.addEventListener(Event.COMPLETE,imageLoaded);
 			loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR,urlProblem);
@@ -138,13 +138,13 @@ package com.mteamapp.graphicElements
 		
 		protected function urlProblem(event:IOErrorEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			this.dispatchEvent(new Event(IMAGE_LOADED));
 		}
 		
 		protected function imageLoaded(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			var image:Bitmap = loader.content as Bitmap ;
 			image.smoothing = true ;
 			this.addChild(image);

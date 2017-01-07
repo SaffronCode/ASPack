@@ -46,7 +46,7 @@ package com.mteamapp
 		
 		protected static function resetScreend(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			clearTimeout(timeOutId0);
 			clearTimeout(timeOutId1);
 			clearTimeout(timeOutId2);
@@ -70,7 +70,7 @@ package com.mteamapp
 			}
 			onTheRotationing = true;
 			
-			// TODO Auto-generated method stub
+			
 			
 			trace("deraultOriented : "+defaultOriented+' vs deviceOrientation : '+stage.deviceOrientation+' and orientation : '+stage.orientation);
 			switch(stage.orientation) {

@@ -567,7 +567,7 @@ package
 		
 		private static function loadForAppNumericId(forceToGetId:Boolean=false):void
 		{
-			// TODO Auto Generated method stub
+			
 			if(urlLoader)
 			{
 				try
@@ -583,7 +583,7 @@ package
 		
 		protected static function connectionFails(event:IOErrorEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			if(onFaild!=null)
 			{
 				onFaild();
@@ -593,7 +593,7 @@ package
 		
 		protected static function codeLoaded(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace('information loaded : '+urlLoader.data);
 			var info:Object = JSON.parse(urlLoader.data);
 			if(info.resultCount == 0)

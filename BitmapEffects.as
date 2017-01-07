@@ -55,7 +55,7 @@ package
 	//Imgage processing
 		public static function changeSize(bitmapData:BitmapData,newWidth:Number,newHeight:Number,keepRatio:Boolean=true,keepAllImageInFrame:Boolean=false,changePhotoDymention:Boolean=true):flash.display.BitmapData
 		{
-			// TODO Auto Generated method stub
+			
 			var imageW:Number = bitmapData.width;
 			var imageH:Number = bitmapData.height;
 			
@@ -115,7 +115,7 @@ package
 		/**This function will rotate current bitmap to 90 degrees*/
 		public static function rotateBitmapData(bitmapData:BitmapData,rad:Number=90):BitmapData
 		{
-			// TODO Auto Generated method stub
+			
 			var r:Number = rad/180*Math.PI;
 			/*var W:Number = Math.abs(bitmapData.width*Math.cos(r)+bitmapData.height*Math.sin(r));
 			var H:Number = Math.abs(bitmapData.height*Math.cos(r)+bitmapData.width*Math.sin(r));*/

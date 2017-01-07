@@ -191,7 +191,7 @@ package com.mteamapp
 	///////////////////New Funciton on String funciont
 		public static function utfToUnicode(utfString:String):String
 		{
-			// TODO Auto Generated method stub
+			
 			var reg:RegExp = /u[0-9a-f][0-9a-f][0-9a-f][0-9a-f]/gi;
 			
 			var searchResult:Object = reg.exec(utfString);
@@ -215,7 +215,7 @@ package com.mteamapp
 		
 		private static function correctUTF(utfWord:String):String
 		{
-			// TODO Auto Generated method stub
+			
 			var num:String = utfWord.substring(1) ;
 			return String.fromCharCode(parseInt(num,16)) ;
 		}
@@ -321,7 +321,7 @@ package com.mteamapp
 		/**Remove all html tags from the text*/
 		public static function removeHTML(ReferText:String):String
 		{
-			// TODO Auto Generated method stub
+			
 			if(ReferText==null)
 			{
 				return '' ;

@@ -95,7 +95,7 @@ package
 		
 		protected static function anim(ev:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			var targ:MovieClip = ev.target as MovieClip ;
 			var I:int = targets.indexOf(targ);
 			
@@ -132,7 +132,7 @@ package
 		
 		protected static function unLoad(ev:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			deleteDataAbout(ev.target as MovieClip);
 		}		
 		

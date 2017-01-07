@@ -532,7 +532,7 @@ package
 		/**Move the item to the front of others*/
 		public static function moveFront(item:DisplayObject):void
 		{
-			// TODO Auto Generated method stub
+			
 			if(item.parent!=null)
 			{
 				item.parent.addChild(item);
@@ -541,13 +541,13 @@ package
 		
 		public static function stopAll(target:MovieClip):void
 		{
-			// TODO Auto Generated method stub
+			
 			target.stopAllMovieClips();
 		}
 		
 		public static function displayObjectInfo(target:DisplayObject):String
 		{
-			// TODO Auto Generated method stub
+			
 			var info:String = "" ;
 			var locationString:String ='';
 			info += "\tName: "+target.name+'\n' ;

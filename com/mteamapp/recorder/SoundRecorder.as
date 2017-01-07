@@ -64,7 +64,7 @@ package com.mteamapp.recorder
 		
 		protected static function onRecordComplete(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace("Record is stopped!");
 			
 			dispatcher.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS));
@@ -90,7 +90,7 @@ package com.mteamapp.recorder
 		
 		protected static function mp3EncodeError(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace("Mp3 convertor error on SoundRecorder class");
 			_isRecording = false ;
 			dispatcher.dispatchEvent(new ErrorEvent(ErrorEvent.ERROR));
@@ -98,14 +98,14 @@ package com.mteamapp.recorder
 		
 		protected static function mp3EncodeProgress(event:ProgressEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace("On recording progress : "+event.bytesLoaded,event.bytesTotal);
 			dispatcher.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS,false,false,event.bytesLoaded,event.bytesTotal));
 		}
 		
 		protected static function mp3EncodeComplete(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			MP3Bytes = new ByteArray();
 			MP3Bytes.writeBytes(mp3Encoder.mp3Data);
 			trace("MP3 is ready");

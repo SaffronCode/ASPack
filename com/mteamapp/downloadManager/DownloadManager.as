@@ -116,7 +116,7 @@ package com.mteamapp.downloadManager
 		/**forget all reserved urls*/
 		protected static function deleteReservedURLs(event:TimerEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			for(var i:int = 0 ; i<reservedURLs.length ; i++)
 			{
 				forget(reservedURLs[i]);

@@ -81,7 +81,7 @@ package videoShow
 		
 		protected function noFileExists(event:*):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace("File dose not exists");
 			this.dispatchEvent(new VideoEvents(VideoEvents.VIDEO_NOT_FOUND));
 		}

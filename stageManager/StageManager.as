@@ -129,7 +129,7 @@ package stageManager
 		/**Controll the stage each frame*/
 		protected static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace("Controll stage : myStage.fullScreenHeight "+myStage.fullScreenHeight);
 			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) )
 			{
@@ -264,7 +264,7 @@ package stageManager
 		/**Controll stage from this element*/
 		protected static function controllFromMe(ev:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			//detectItemsIn(ev.target as DisplayObjectContainer);
 			if(ev.target is MovieClip)
 			{
@@ -321,7 +321,7 @@ package stageManager
 		
 		protected static function deleteItem(ev:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			StageItem.remove(ev.currentTarget as StageItem);
 			var I:int = Items.indexOf(ev.currentTarget as StageItem);
 			if(I!=-1)

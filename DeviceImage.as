@@ -209,7 +209,7 @@
 		
 		private static function loadThisImageToSend(file:File):void
 		{
-			// TODO Auto Generated method stub
+			
 			var fileStream:FileStream = new FileStream();
 			fileStream.open(file,FileMode.READ);
 			
@@ -379,7 +379,7 @@
 		
 		private static function addThisImageTo(ev:MediaEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			var media:MediaPromise = ev.data ;
 			
 			if(media.file!=null)
@@ -482,14 +482,14 @@
 		
 		protected static function fileLoaderError(event:IOErrorEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace(new Error("File cannot load"));
 		}
 		
 		protected static function fileLoaderToResize(event:Event):void
 		{
 			trace("Image loaded to resize");
-			// TODO Auto-generated method stub
+			
 			var bitmap:Bitmap = loader.content as Bitmap ;
 			var resizedPhoto:BitmapData ;
 			
@@ -555,7 +555,7 @@
 		public static function saveImageToGallery(file:ByteArray, onImageSaved:Function):void
 		{
 			onLoadingVideo = false ;
-			// TODO Auto Generated method stub
+			
 			cashedOnDone = onDone = onImageSaved ;
 			
 			createBitmapFromByteOrURL(file,saveToGall);
@@ -596,7 +596,7 @@
 		
 		protected static function fileIsReady(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			lastBitmap = imageLoder.content as Bitmap ;
 			onDone();
 		}

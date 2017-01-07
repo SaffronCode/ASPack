@@ -133,7 +133,7 @@ package videoShow
 		
 		protected function openVideoFile(event:MouseEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace("Open corrected video targer: "+correctedURL);
 			navigateToURL(new URLRequest("file://"+correctedURL));
 		}

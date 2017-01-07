@@ -71,7 +71,7 @@ package stageManager
 		
 		protected function dispatchItForMe(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			this.dispatchEvent(new Event(Event.REMOVED_FROM_STAGE));
 		}
 		

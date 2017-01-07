@@ -152,7 +152,7 @@ package com.mteamapp.camera
 		
 		private function controllStage(e:*=null):void
 		{
-			// TODO Auto Generated method stub
+			
 			if(targ.stage==null)
 			{
 				targ.addEventListener(Event.ADDED_TO_STAGE,controllStage);
@@ -169,7 +169,7 @@ package com.mteamapp.camera
 		
 		protected function unLoad(event:Event):void
 		{
-			// TODO Auto-generated method stub
+			
 			deactivateCamera();
 		}
 		
@@ -196,7 +196,7 @@ package com.mteamapp.camera
 		
 		public function createCamera():void
 		{
-			// TODO Auto Generated method stub
+			
 			
 			//remove every thing↓
 			targ.removeChildren();
@@ -290,7 +290,7 @@ package com.mteamapp.camera
 		/***Rotate the camera in the custom user rotation*/
 		private function updateCustomRotationInterface():void
 		{
-			// TODO Auto Generated method stub
+			
 			//trace("customRotation is : "+customRotation);
 			vid.rotation = rotation0 + customRotation ;
 			switch(vid.rotation)
@@ -351,7 +351,7 @@ package com.mteamapp.camera
 	
 		public function rotateLeft():void
 		{
-			// TODO Auto Generated method stub
+			
 			//trace("customRotation : "+customRotation);
 			//trace("customRotation-90 : "+(customRotation-90));
 			setCustonRotation(customRotation-90) ;
@@ -372,7 +372,7 @@ package com.mteamapp.camera
 		
 		public function rotateRight():void
 		{
-			// TODO Auto Generated method stub
+			
 			//trace("customRotation : "+customRotation);
 			//trace("customRotation+90 : "+(customRotation+90));
 			setCustonRotation(customRotation+90) ;

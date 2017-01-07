@@ -228,7 +228,7 @@ package
 		
 		public static function copyDate(date:Date):Date
 		{
-			// TODO Auto Generated method stub
+			
 			if(date==null)
 			{
 				return null;

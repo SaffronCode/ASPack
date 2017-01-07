@@ -1136,7 +1136,7 @@ package
 		public function setPose(X:Number = NaN, Y:Number = NaN):void
 		{
 			stopFloat();
-			// TODO Auto Generated method stub
+			
 			if(!isNaN(X))
 			{
 				targetRect.x = maskRect.x+X ;
@@ -1155,7 +1155,7 @@ package
 		public function setAbsolutePose(X:Number = NaN, Y:Number = NaN):void
 		{
 			stopFloat();
-			// TODO Auto Generated method stub
+			
 			if(!isNaN(X))
 			{
 				targetRect.x = X ;
@@ -1177,7 +1177,7 @@ package
 		/**This function will cause to scroll the page befor its starts to work*/
 		public static function showScrollEfect(value:Boolean=true):void
 		{
-			// TODO Auto Generated method stub
+			
 			ScrollEffect = value ;
 		}
 		

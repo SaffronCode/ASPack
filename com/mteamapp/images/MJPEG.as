@@ -89,14 +89,14 @@ package com.mteamapp.images
 		
 		protected function connectionFaild(event:*):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace("mjpeg connection faild");
 			noStream();
 		}
 		
 		protected function getThisImage(event:ProgressEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			//trace(loader2.bytesAvailable+' vs '+event.bytesLoaded);
 			var readedBytes:ByteArray = new ByteArray();
 			
@@ -182,7 +182,7 @@ package com.mteamapp.images
 		
 		protected function didntLoad(event:IOErrorEvent):void
 		{
-			// TODO Auto-generated method stub
+			
 			trace('dont understand');
 		}
 		
