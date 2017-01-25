@@ -55,6 +55,15 @@ package
 		public static function addFunctions(next_f:Function,preve_f:Function,rect:Rectangle)
 		{
 			//trace("▬ Listen to mouse drag");
+			var prevIndex:int = prevFunc.indexOf(preve_f);
+			var nextIndex:int = nextFunc.indexOf(next_f);
+			
+			if(prevIndex!=-1 && nextIndex!=-1)
+			{
+				prevFunc.splice(prevIndex,1);
+				nextFunc.splice(prevIndex,1);
+				myRect.splice(prevIndex,1);
+			}
 			prevFunc.push(preve_f);
 			nextFunc.push(next_f);
 			myRect.push(rect);
