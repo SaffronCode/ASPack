@@ -428,6 +428,10 @@ package
 		/**unload the scroller functions*/
 		public function unLoad(e:Event=null)
 		{
+			if(targ)
+			{
+				targ.mask = null;
+			}
 			try
 			{
 				targ.parent.removeChild(scrollerMask);
