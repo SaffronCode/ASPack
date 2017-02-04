@@ -66,9 +66,10 @@ package
 		private var itsArabic:Boolean,
 					keyFormat:String,
 					
-					returnLable:String,
+					returnLable:String;
 					
-					editing:Boolean = false;
+		/**Is text editing?*/
+		public var editing:Boolean = false;
 					
 		/**This value will prevent the convertor to convert the text to Unicode, and the texts will only show on native stage text*/
 		private var onlyNativeText:Boolean = false ;
@@ -316,12 +317,24 @@ package
 			if(e.keyCode == 16777230 || (!oldTextField.multiline && e.keyCode==13))
 			{
 				trace("On closed event");
-				if(oldTextField.stage!=null)
-				{
-					oldTextField.stage.focus = null ;
-				}
-				dispatchOnDone();
+				closeSoftKeyBoard();
 			}
+		}
+		
+		/**Close the keyboard*/
+		public function closeKeyBoard():void
+		{
+			closeSoftKeyBoard();
+			changeTheDisplayedText();
+		}
+		
+		private function closeSoftKeyBoard():void
+		{
+			if(oldTextField.stage!=null)
+			{
+				oldTextField.stage.focus = null ;
+			}
+			dispatchOnDone();
 		}
 		
 			/**This will dispatches on done with delay*/
