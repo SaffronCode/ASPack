@@ -703,9 +703,10 @@ package
 		public static function DeviceUniqueId():String
 		{
 			createDeviceKeyForMoreSecurity();
-			if(uniqueId=='' && isItPC)
+			if(uniqueId=='')
 			{
-				throw "*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project. get the file from below link:\n\n\thttps://github.com/flashpress/FPUniqueId/\n\nthe xml description:\n\n\t<extensionID>ru.flashpress.FPUniqueId</extensionID>\n\n\n" ;
+				trace("*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project. get the file from below link:\n\n\thttps://github.com/flashpress/FPUniqueId/\n\nthe xml description:\n\n\t<extensionID>ru.flashpress.FPUniqueId</extensionID>\n\n\n") ;
+				return createdKeyIs;
 			}
 			return uniqueId ;
 		}
