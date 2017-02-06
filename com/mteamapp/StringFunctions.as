@@ -12,6 +12,8 @@ package com.mteamapp
 
 	public class StringFunctions
 	{
+		private static const EnglishEstesna:Array = ['’'];
+		
 		private static var 	arabicChars:String = 'ًٌٍَُِّْٰٜٕٖۣٞٝٓٔٗ٘ٙٚٛؕؔؓؐؑؒۖۘۗۙۚۛۜۢ‌ـ?',
 							arabicSames:Array = ['ؤو','11','22','33','44','55','66','77','88','99','00',
 							'0٠۰','1١۱','9٩۹','8٨۸','7٧۷','6٦۶','5٥۵','4٤۴','3٣۳','2٢۲'
@@ -57,7 +59,7 @@ package com.mteamapp
 			}
 			for(var i = 0 ; i<max ; i++)
 			{
-				if(str.charCodeAt(i)>1000)
+				if(str.charCodeAt(i)>1000 && EnglishEstesna.indexOf(str.charAt(i))==-1)
 				{
 					//trace('This is arabic : '+str.charAt(i)+' at '+i+' the char code is : '+str.charCodeAt(i));
 					return true ;
