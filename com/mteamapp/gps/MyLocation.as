@@ -20,12 +20,18 @@ package  com.mteamapp.gps
 		private static var distriqtLocationClass:Class ;
 		
 		
-		public static function start(distriqtCode:String=null):void
+		public static function start(distriqtCode:String=null,DebugGPS:Boolean=false):void
 		{
+			if(DebugGPS)
+			{
+				GPSLatitude = 35.7137559;
+				GPSLongitude = 51.4149215;
+			}
 			if(geo==null)
 			{
 				geo = new Geolocation();
 				geo.addEventListener(GeolocationEvent.UPDATE,iGotGeo);
+				trace('geo :',geo)
 				
 				try
 				{
