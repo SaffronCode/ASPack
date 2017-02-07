@@ -20,7 +20,7 @@ package  com.mteamapp.gps
 		private static var distriqtLocationClass:Class ;
 		
 		
-		public static function start(distriqtCode:String=null):void
+		public static function start(distriqtCode:String=null,DebugGPS:Boolean=false):void
 		{
 			if(DebugGPS)
 			{
