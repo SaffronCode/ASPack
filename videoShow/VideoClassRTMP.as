@@ -32,6 +32,7 @@ package videoShow
 		protected function unLoad(event:Event):void
 		{
 			// TODO Clear every thing
+			close();
 		}
 		
 		/**Controll the stage to start application*/
@@ -109,25 +110,18 @@ package videoShow
 		
 		private function received_Meta (data:Object):void
 		{
-			var _stageW:int = stage.stageWidth;
-			var _stageH:int = stage.stageHeight;
-			
-			var _videoW:int;
-			var _videoH:int;
-			var _aspectH:int; 
-			
+	
 			var Aspect_num:Number; //should be an "int" but that gives blank picture with sound
 			Aspect_num = data.width / data.height;
 			
-			//Aspect ratio calculated here..
-			_videoW = _stageW;
-			_videoH = _videoW / Aspect_num;
-			_aspectH = (_stageH - _videoH) / 2;
-			
 			vid.x = 0;
-			vid.y = _aspectH;
-			vid.width = _videoW;
-			vid.height = _videoH;
+			vid.y = 0;
+			vid.width = W;
+			vid.height = H;
+		}
+		public function close():void
+		{
+			nc.close();
 		}
 		
 	} //end class
