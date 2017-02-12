@@ -710,5 +710,22 @@ package
 			}
 			return uniqueId ;
 		}
+		
+		/**If any problem detected to pare version, it will return Infinty*/
+		public static function airVersion():Number
+		{
+			try
+			{
+				var version:String = Capabilities.version ;
+				var vers:String = version.split(' ')[1];
+				var ver:String = vers.split(',')[0];
+				return uint(ver);
+			}
+			catch(e:*)
+			{
+				trace("Version parsing error : "+e)
+			}
+			return Infinity ;
+		}
 	}
 }
