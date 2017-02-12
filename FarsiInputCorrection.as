@@ -389,7 +389,12 @@ package
 		{
 			//var changedString:String = str.split('\n').join('\r').split('\r').join('\n\r');
 			//trace('****************************\n'+visualString(str)+'\n'+visualString(changedString));
-			return str.split('\n').join('\r').split('\r').join('\n\r');
+			return RemoveEnters(str).split('\n').join('\r').split('\r').join('\n\r');
+		}
+		
+		public function RemoveEnters(str:String):String
+		{
+			return str;//.split('\r').join('');
 		}
 		
 		private function visualString(str:String):String
@@ -494,11 +499,11 @@ package
 			}
 			if(correctNums)
 			{
-				oldTextField.text = UnicodeStatic.numberCorrection(myStageText.text);
+				oldTextField.text = RemoveEnters(UnicodeStatic.numberCorrection(myStageText.text));
 			}
 			else
 			{
-				oldTextField.text = myStageText.text;
+				oldTextField.text = RemoveEnters(myStageText.text);
 			}
 			oldTextField.text = UnicodeStatic.KaafYe(oldTextField.text);
 			
@@ -526,11 +531,11 @@ package
 				editing = false;
 				if(correctNums)
 				{
-					oldTextField.text = UnicodeStatic.numberCorrection(myStageText.text);
+					oldTextField.text = RemoveEnters(UnicodeStatic.numberCorrection(myStageText.text));
 				}
 				else
 				{
-					oldTextField.text = myStageText.text;
+					oldTextField.text = RemoveEnters(myStageText.text);
 				}
 				oldTextField.text = UnicodeStatic.KaafYe(oldTextField.text);
 				if(!onlyNativeText)
