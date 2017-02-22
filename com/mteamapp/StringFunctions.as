@@ -410,8 +410,11 @@ package com.mteamapp
 			return oldJson.split('\n').join(' \\n').split('\r').join(' \\r').split('"').join('\"').split('\t').join('\\t')
 		}
 
-		/***0902-hello > hello . it will remove any number befor - sign. if there was a - sign*/
-		public static function removeNumberFromBegining(str:String):void
+		/***0902-hello > hello . it will remove any number befor - sign. if there was a - sign<br>
+		 * 0000helo > 0000helo<br>
+		 * abs02-hello > abs02-hello*/
+		
+		public static function removeNumberFromBegining(str:String):String
 		{
 			var firstDashIndex:int = str.indexOf('-');
 			if(firstDashIndex!=-1)
