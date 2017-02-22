@@ -51,11 +51,18 @@ package videoShow
 		/**Load the rtmpURL*/
 		public function load(rtmpURL:String):void
 		{
-			streamURL = rtmpURL.substring(0,rtmpURL.lastIndexOf('/')+1) ;
-			streamID = rtmpURL.substring(rtmpURL.lastIndexOf('/')+1) ;
-			trace("streamURL : "+streamURL);
-			trace("streamID : "+streamID);
-			controllStage();
+			if(rtmpURL!=null && rtmpURL!='')
+			{
+				streamURL = rtmpURL.substring(0,rtmpURL.lastIndexOf('/')+1) ;
+				streamID = rtmpURL.substring(rtmpURL.lastIndexOf('/')+1) ;
+				trace("streamURL : "+streamURL);
+				trace("streamID : "+streamID);
+				controllStage();
+			}
+			else
+			{
+				trace('trmp is empty')
+			}
 		}
 		
 		
@@ -121,7 +128,7 @@ package videoShow
 		}
 		public function close():void
 		{
-			nc.close();
+			if(nc!=null)nc.close();
 		}
 		
 	} //end class
