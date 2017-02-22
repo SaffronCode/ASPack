@@ -426,6 +426,7 @@ package com.mteamapp
 				}
 				return str.substr(firstDashIndex+1);
 			}
+			return str ;
 		}
 	}
 }
