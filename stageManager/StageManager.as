@@ -201,7 +201,7 @@ package stageManager
 			//trace("scaleX : "+scaleX);
 			//trace("scaleY : "+scaleY);
 			
-			var scl:Number ;
+			
 			
 			
 			scl = Math.min(scaleX,scaleY);
@@ -234,6 +234,8 @@ package stageManager
 	////////////////////////////////////////////////////
 		
 		private static var controlleLocked:Boolean = false ;
+
+		private static var scl:Number=0;
 		
 		/**This function will lock the stage controller when you are adding items and you need to controll all stage once after all items are added.*/
 		public static function lock():void
@@ -246,6 +248,12 @@ package stageManager
 		{
 			controlleLocked = false ;
 			controllAllOptions();
+		}
+		
+		/**Returns the stage scale factor*/
+		public static function stageScaleFactor():Number
+		{
+			return scl ;
 		}
 		
 		/**Add stageManager item. <br>
