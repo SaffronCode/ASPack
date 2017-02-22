@@ -410,5 +410,22 @@ package com.mteamapp
 			return oldJson.split('\n').join(' \\n').split('\r').join(' \\r').split('"').join('\"').split('\t').join('\\t')
 		}
 
+		/***0902-hello > hello . it will remove any number befor - sign. if there was a - sign*/
+		public static function removeNumberFromBegining(str:String):void
+		{
+			var firstDashIndex:int = str.indexOf('-');
+			if(firstDashIndex!=-1)
+			{
+				for(var i = 0 ; i<firstDashIndex ; i++)
+				{
+					if(isNaN(Number(str.charAt(i))))
+					{
+						trace("---there is no number befor - sign in : "+str);
+						return str ;
+					}
+				}
+				return str.substr(firstDashIndex+1);
+			}
+		}
 	}
 }
