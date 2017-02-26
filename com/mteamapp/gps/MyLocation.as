@@ -10,10 +10,24 @@ package  com.mteamapp.gps
 
 	public class MyLocation
 	{
+		private static const roundLevel:uint = 100000;
+		
 		public static var 	GPSLatitude:Number=0,
 							GPSLongitude:Number=0
 					
 		public static var geo:Geolocation;
+		
+		/**This will returns the round number for gps Longitude*/
+		public static function get GPSLongitudeRound():Number
+		{
+			return Math.round(GPSLatitude*roundLevel)/roundLevel;
+		}
+		
+		/**This will returns the round number for gps latitude*/
+		public static function get GPSLatitudeRound():Number
+		{
+			return Math.round(GPSLongitude*roundLevel)/roundLevel;
+		}
 		
 		
 		/**com.distriqt.extension.location.Location*/
