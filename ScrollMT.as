@@ -736,7 +736,6 @@ package
 				return ;
 			}
 			var temp:Number ;
-			
 			if(!calledByMouseDrag && freeScrollOnTarget_TD)
 			{
 				targetRect.height = targ.height;
@@ -750,14 +749,18 @@ package
 				}
 				else
 				{
-					curselTopDown.graphics.clear();
-					curselTopDown.graphics.beginFill(cursolCollor,cursolAlpha);
-					temp = (maskRect.height/targetRect.height)*maskRect.height ;
-					curselTopDown.graphics.drawRoundRect(0,0,currselW,temp,currselRound,currselRound);
-					currselYArea = maskRect.height-temp - currselMargin*2 - currselW*2 ;
-					
-					curselTopDown.x = maskRect.right-currselMargin-currselW ;
-					curselTopDown.y = maskRect.y+currselMargin+currselW ;
+					if(false)
+					{
+						trace("These lines was increase performance");
+						curselTopDown.graphics.clear();
+						curselTopDown.graphics.beginFill(cursolCollor,cursolAlpha);
+						temp = (maskRect.height/targetRect.height)*maskRect.height ;
+						curselTopDown.graphics.drawRoundRect(0,0,currselW,temp,currselRound,currselRound);
+						currselYArea = maskRect.height-temp - currselMargin*2 - currselW*2 ;
+						
+						curselTopDown.x = maskRect.right-currselMargin-currselW ;
+						curselTopDown.y = maskRect.y+currselMargin+currselW ;
+					}
 					if(unLockTopDown == false)
 					{
 						targ.parent.addChild(curselLeftRight);
@@ -779,14 +782,18 @@ package
 				}
 				else
 				{
-					curselLeftRight.graphics.clear();
-					curselLeftRight.graphics.beginFill(cursolCollor,cursolAlpha);
-					temp = (maskRect.width/targetRect.width)*maskRect.width ;
-					curselLeftRight.graphics.drawRoundRect(0,0,temp,currselW,currselRound,currselRound);
-					currselXArea = maskRect.width-temp - currselMargin*2 - currselW*2 ;
-					
-					curselLeftRight.x = maskRect.x+currselMargin+currselW;
-					curselLeftRight.y = maskRect.y+currselMargin;
+					if(false)
+					{
+						trace("These lines was increase performance");
+						curselLeftRight.graphics.clear();
+						curselLeftRight.graphics.beginFill(cursolCollor,cursolAlpha);
+						temp = (maskRect.width/targetRect.width)*maskRect.width ;
+						curselLeftRight.graphics.drawRoundRect(0,0,temp,currselW,currselRound,currselRound);
+						currselXArea = maskRect.width-temp - currselMargin*2 - currselW*2 ;
+						
+						curselLeftRight.x = maskRect.x+currselMargin+currselW;
+						curselLeftRight.y = maskRect.y+currselMargin;
+					}
 					
 					if(unLockLeftRight == false)
 					{
