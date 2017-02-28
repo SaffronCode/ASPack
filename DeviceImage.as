@@ -8,10 +8,12 @@
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.MediaEvent;
+	import flash.events.PermissionEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.geom.Rectangle;
+	import flash.media.Camera;
 	import flash.media.CameraRoll;
 	import flash.media.CameraRollBrowseOptions;
 	import flash.media.CameraUI;
@@ -24,6 +26,8 @@
 	import flash.utils.IDataInput;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.setTimeout;
+	
+	import flash.permissions.PermissionStatus;
 	
 	import jp.shichiseki.exif.ExifInfo;
 	import jp.shichiseki.exif.IFD;
@@ -133,6 +137,37 @@
 			camera = new CameraUI();
 			camera.addEventListener(MediaEvent.COMPLETE,sendCameraImage);
 			camera.addEventListener(Event.CANCEL,mediaLoadingCanseled);
+			
+			if (Camera.permissionStatus != PermissionStatus.GRANTED)
+			{
+				camera.addEventListener(PermissionEvent.PERMISSION_STATUS,
+					function(e:PermissionEvent):void {
+						if (e.status == PermissionStatus.GRANTED)
+						{
+							launchVideo();
+						}
+						else
+						{
+							trace("Use had no permission to open camera");
+							return ;
+						}
+					});
+				try {
+					camera.requestPermission();
+				} catch(e:Error)
+				{
+					trace("another request is in progress");
+					return ;
+				} 
+			}
+			else
+			{
+				launchVideo()
+			}
+		}
+		
+		private static function launchVideo():void
+		{
 			camera.launch(MediaType.VIDEO);
 		}
 		
@@ -153,11 +188,43 @@
 			tempW = imageW;
 			tempH = imageH ;
 			
+			onDone = onImageReady ;
+			
 			camera = new CameraUI();
 			camera.addEventListener(MediaEvent.COMPLETE,sendCameraImage);
 			camera.addEventListener(Event.CANCEL,mediaLoadingCanseled);
+			
+			if (Camera.permissionStatus != PermissionStatus.GRANTED)
+			{
+				camera.addEventListener(PermissionEvent.PERMISSION_STATUS,
+				function(e:PermissionEvent):void {
+					if (e.status == PermissionStatus.GRANTED)
+					{
+						launchImage();
+					}
+					else
+					{
+						trace("Use had no permission to open camera");
+						return ;
+					}
+				});
+				try {
+					camera.requestPermission();
+				} catch(e:Error)
+				{
+					trace("another request is in progress");
+					return ;
+				} 
+			}
+			else
+			{
+				launchImage()
+			}
+		}
+		
+		private static function launchImage():void
+		{
 			camera.launch(MediaType.IMAGE);
-			onDone = onImageReady ;
 		}
 		
 		protected static function sendCameraImage(ev:MediaEvent):void
@@ -366,7 +433,7 @@
 			onDone = onImageLoaded ;
 			
 			cameraRoll = new CameraRoll();
-			var browsOptions:CameraRollBrowseOptions;
+			
 			if(rect!=null)
 			{
 				browsOptions = new CameraRollBrowseOptions();
@@ -374,6 +441,37 @@
 			}
 			cameraRoll.addEventListener(MediaEvent.SELECT,addThisImageTo);
 			cameraRoll.addEventListener(Event.CANCEL,mediaLoadingCanseled);
+			
+			if (CameraRoll.permissionStatus != PermissionStatus.GRANTED)
+			{
+				cameraRoll.addEventListener(PermissionEvent.PERMISSION_STATUS,
+					function(e:PermissionEvent):void {
+						if (e.status == PermissionStatus.GRANTED)
+						{
+							launchCameraRoll();
+						}
+						else
+						{
+							trace("Use had no permission to open camera");
+							return ;
+						}
+					});
+				try {
+					cameraRoll.requestPermission();
+				} catch(e:Error)
+				{
+					trace("another request is in progress");
+					return ;
+				} 
+			}
+			else
+			{
+				launchCameraRoll()
+			}
+		}
+		
+		private static function launchCameraRoll():void
+		{
 			cameraRoll.browseForImage(browsOptions);
 		}
 		
@@ -551,6 +649,8 @@
 		private static var imageLoder:Loader ;
 		
 		private static var cashedOnDone:Function ;
+
+		private static var browsOptions:CameraRollBrowseOptions;
 		
 		public static function saveImageToGallery(file:ByteArray, onImageSaved:Function):void
 		{
