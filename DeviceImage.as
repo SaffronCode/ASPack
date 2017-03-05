@@ -8,7 +8,6 @@
 	import flash.events.IEventDispatcher;
 	import flash.events.IOErrorEvent;
 	import flash.events.MediaEvent;
-	import flash.events.PermissionEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
@@ -24,10 +23,9 @@
 	import flash.system.LoaderContext;
 	import flash.utils.ByteArray;
 	import flash.utils.IDataInput;
+	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	import flash.utils.setTimeout;
-	
-	import flash.permissions.PermissionStatus;
 	
 	import jp.shichiseki.exif.ExifInfo;
 	import jp.shichiseki.exif.IFD;
@@ -81,7 +79,26 @@
 		 9: //unknown<br>
 		 */
 		private static var currentImageOriented:uint;
+		
+		/**flash.events.PermissionEvent*/
+		private static var PermissionEventClass:Class;
+		/**flash.permissions.PermissionStatus*/
+		private static var PermissionStatusClass:Class;
 							
+		
+		private static function setUpPermissionClasses():void
+		{
+			try
+			{
+				PermissionEventClass = getDefinitionByName("flash.events.PermissionEvent") as Class;
+				PermissionStatusClass = getDefinitionByName("flash.permissions.PermissionStatus") as Class;
+			}
+			catch(e)
+			{
+				PermissionEventClass = null ;
+				PermissionStatusClass = null ;
+			}
+		}
 		
 		public static function get isSupported():Boolean
 		{
@@ -138,11 +155,11 @@
 			camera.addEventListener(MediaEvent.COMPLETE,sendCameraImage);
 			camera.addEventListener(Event.CANCEL,mediaLoadingCanseled);
 			
-			if (Camera.permissionStatus != PermissionStatus.GRANTED)
+			if (PermissionEventClass!=null && (Camera as Object).permissionStatus != (PermissionStatusClass as Object).GRANTED)
 			{
-				camera.addEventListener(PermissionEvent.PERMISSION_STATUS,
-					function(e:PermissionEvent):void {
-						if (e.status == PermissionStatus.GRANTED)
+				camera.addEventListener((PermissionEventClass as Object).PERMISSION_STATUS,
+					function(e:*):void {
+						if (e.status == (PermissionStatusClass as Object).GRANTED)
 						{
 							launchVideo();
 						}
@@ -153,7 +170,7 @@
 						}
 					});
 				try {
-					camera.requestPermission();
+					(camera as Object).requestPermission();
 				} catch(e:Error)
 				{
 					trace("another request is in progress");
@@ -193,12 +210,12 @@
 			camera = new CameraUI();
 			camera.addEventListener(MediaEvent.COMPLETE,sendCameraImage);
 			camera.addEventListener(Event.CANCEL,mediaLoadingCanseled);
-			
-			if (Camera.permissionStatus != PermissionStatus.GRANTED)
+			setUpPermissionClasses();
+			if (PermissionEventClass!=null && (Camera as Object).permissionStatus != (PermissionStatusClass as Object).GRANTED)
 			{
-				camera.addEventListener(PermissionEvent.PERMISSION_STATUS,
-				function(e:PermissionEvent):void {
-					if (e.status == PermissionStatus.GRANTED)
+				camera.addEventListener((PermissionEventClass as Object).PERMISSION_STATUS,
+				function(e:*):void {
+					if (e.status == (PermissionStatusClass as Object).GRANTED)
 					{
 						launchImage();
 					}
@@ -209,7 +226,7 @@
 					}
 				});
 				try {
-					camera.requestPermission();
+					(camera as Object).requestPermission();
 				} catch(e:Error)
 				{
 					trace("another request is in progress");
@@ -441,12 +458,12 @@
 			}
 			cameraRoll.addEventListener(MediaEvent.SELECT,addThisImageTo);
 			cameraRoll.addEventListener(Event.CANCEL,mediaLoadingCanseled);
-			
-			if (CameraRoll.permissionStatus != PermissionStatus.GRANTED)
+			setUpPermissionClasses();
+			if (PermissionStatusClass!=null && (CameraRoll as Object).permissionStatus != (PermissionStatusClass as Object).GRANTED)
 			{
-				cameraRoll.addEventListener(PermissionEvent.PERMISSION_STATUS,
-					function(e:PermissionEvent):void {
-						if (e.status == PermissionStatus.GRANTED)
+				cameraRoll.addEventListener((PermissionEventClass as Object).PERMISSION_STATUS,
+					function(e:*):void {
+						if (e.status == (PermissionStatusClass as Object).GRANTED)
 						{
 							launchCameraRoll();
 						}
@@ -457,7 +474,7 @@
 						}
 					});
 				try {
-					cameraRoll.requestPermission();
+					(cameraRoll as Object).requestPermission();
 				} catch(e:Error)
 				{
 					trace("another request is in progress");
