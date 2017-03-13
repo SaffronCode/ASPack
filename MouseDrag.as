@@ -23,19 +23,20 @@ package
 		private static var myRect:Vector.<Rectangle>;
 		
 		private static var nextFunc:Vector.<Function>,
-							prevFunc:Vector.<Function>;
+							prevFunc:Vector.<Function>,
+							funcId:Vector.<uint> ;
 		
 		private static var mouseFirstX:Number,
 							dragTime:Number;
+							
+		private static var currentFuncId:uint = 0 ;
 		
 		public static function setUp(getStage:Stage,sens:Number=0.7)
 		{
 			if(myStage == null)
 			{
 				myStage = getStage ;
-				nextFunc = new Vector.<Function>();
-				prevFunc = new Vector.<Function>();
-				myRect = new Vector.<Rectangle>();
+				reset();
 				
 				myStage.addEventListener(MouseEvent.MOUSE_DOWN,mouseDragStarted);
 				myStage.addEventListener(MouseEvent.MOUSE_UP,mouseDragStopd);
@@ -50,9 +51,11 @@ package
 			nextFunc = new Vector.<Function>();
 			prevFunc = new Vector.<Function>();
 			myRect = new Vector.<Rectangle>();
+			funcId = new Vector.<uint>();
 		}
 		
-		public static function addFunctions(next_f:Function,preve_f:Function,rect:Rectangle)
+		/**This function will return the nextPrevFunction id to make you able to remove it*/
+		public static function addFunctions(next_f:Function,preve_f:Function,rect:Rectangle):uint
 		{
 			//trace("▬ Listen to mouse drag");
 			var prevIndex:int = prevFunc.indexOf(preve_f);
@@ -67,6 +70,23 @@ package
 			prevFunc.push(preve_f);
 			nextFunc.push(next_f);
 			myRect.push(rect);
+			funcId.push(currentFuncId);
+			currentFuncId++;
+			
+			return currentFuncId-1 ;
+		}
+		
+		/**Remove function listener*/
+		public static function removeFunction(addFunctionId:uint):void
+		{
+			var funcIndex:int = funcId.indexOf(addFunctionId);
+			if(funcIndex!=-1)
+			{
+				prevFunc.splice(funcIndex,1);
+				nextFunc.splice(funcIndex,1);
+				myRect.splice(funcIndex,1);
+				funcId.splice(funcIndex,1);
+			}
 		}
 		
 		
