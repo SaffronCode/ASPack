@@ -431,5 +431,14 @@ package com.mteamapp
 			}
 			return str ;
 		}
+		
+	////////////////////////////String controll
+		
+		/**Returns true if this was an email*/
+		public static function isEmail(email:String):Boolean
+		{
+			var reg:RegExp = /^[\w.-]+@\w[\w.-]+\.[\w.-]*[a-z][a-z]$/i;
+			return reg.test(email);
+		}
 	}
 }
