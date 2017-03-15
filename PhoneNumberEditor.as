@@ -21,6 +21,7 @@ package
 		/**this class will modify all numbers to standard style*/
 		public static function clearPhoneNumber(num:String):String
 		{
+			num = num.split(' ').join('').split('-').join('') ;
 			var minNum:String = '9127785180';
 			
 			num = UnicodeStatic.numberCorrection(num);
