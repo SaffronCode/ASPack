@@ -397,7 +397,8 @@ package com.mteamapp
 		}
 		public static function htmlCharacterEncoder(str:String):String
 		{
-			var _htmlCar:Array = [{from:"&nbsp;",to:" "},{from:'&lt;',to:"<"},{from:"&gt;",to:">"},{from:"&amp;",to:"&"},{from:"&quot;",to:"\\\""},{from:"&apos;",to:"'"},{from:"&cent;",to:"¢"},{from:"&pound;",to:"£"},{from:"&yen;",to:"¥"},{from:"&euro;",to:"€"},{from:"&copy;",to:"©"},{from:"&reg;",to:"®"},{from:"&zwnj;",to:" "}]
+			
+			var _htmlCar:Array = [{from:"&laquo;",to:"«"},{from:"&raquo;",to:"»"},{from:"&nbsp;",to:" "},{from:'&lt;',to:"<"},{from:"&gt;",to:">"},{from:"&amp;",to:"&"},{from:"&quot;",to:"\\\""},{from:"&apos;",to:"'"},{from:"&cent;",to:"¢"},{from:"&pound;",to:"£"},{from:"&yen;",to:"¥"},{from:"&euro;",to:"€"},{from:"&copy;",to:"©"},{from:"&reg;",to:"®"},{from:"&zwnj;",to:" "}]
 			for(var i:int=0;i<_htmlCar.length;i++)
 			{
 				trace('from :',_htmlCar[i].from,'to :',_htmlCar[i].to)
