@@ -342,7 +342,7 @@ package
 		/**clear ي or ة */
 		public static function clearArabicStyles(str:String):String
 		{
-			return str.split('ي').join('ی').split('ة').join('ه').split('‏').join(' ');
+			return str.split('ي').join('ی').split('ة').join('ه').split('‏').join(' ').split('ك').join('ک');
 		}
 		
 		
