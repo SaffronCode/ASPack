@@ -26,7 +26,7 @@ package
 			
 			num = UnicodeStatic.numberCorrection(num);
 			
-			if(num.length<11)
+			if(num.length<minNum.length)
 			{
 				trace("The number is to short");
 				return 'false';
