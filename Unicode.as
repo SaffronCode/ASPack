@@ -172,7 +172,17 @@ package
 			yourTextField.wordWrap = false ;
 			
 			yourTextField.text = ' ' ;
-			var spaceWidth:Number = yourTextField.getCharBoundaries(0).width ;
+			var spaceWidth:Number ;
+			try
+			{
+				spaceWidth = yourTextField.getCharBoundaries(0).width ;
+			}
+			catch(e)
+			{
+				spaceWidth = 1 ;
+				throw("!!!!!!!!!!!!!!!!!!!!!!!!!!!Font is not embeded on : " +yourTextField);
+				return ;
+			}
 			
 			
 					var cashedText:String;
