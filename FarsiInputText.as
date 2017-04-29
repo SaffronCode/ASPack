@@ -1,4 +1,4 @@
-// *************************
+﻿// *************************
 // * COPYRIGHT
 // * DEVELOPER: MTEAM ( info@mteamapp.com )
 // * ALL RIGHTS RESERVED FOR MTEAM
@@ -90,11 +90,11 @@ package
 			}
 			
 			yourTextField.addEventListener(FocusEvent.FOCUS_IN,focused);
-			yourTextField.addEventListener(FocusEvent.FOCUS_OUT,focusedOut);
-			newTextField.addEventListener(Event.ENTER_FRAME,pakkonCheck);
+			//yourTextField.addEventListener(FocusEvent.FOCUS_OUT,focusedOut);
+			//newTextField.addEventListener(Event.ENTER_FRAME,pakkonCheck);
 			newTextField.addEventListener(Event.REMOVED_FROM_STAGE,removver);
 			
-			yourTextField.addEventListener(Event.CHANGE,manageSisters);
+			//yourTextField.addEventListener(Event.CHANGE,manageSisters);
 			yourTextField.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATING,focused);
 			yourTextField.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_DEACTIVATE,focusedOut);
 			yourTextField.addEventListener(Event.REMOVED_FROM_STAGE,pakkon2);
