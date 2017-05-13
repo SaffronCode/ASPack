@@ -47,7 +47,7 @@ package
 		private static const relodDelay:uint = 10000 ;
 		
 		private static const ranked_sharedObject_id:String = "ranked_id_2",
-							cafeBazarSharedObjectId:String="cafeid2",
+							cafeBazarSharedObjectId:String="cafeid3",
 							myketSharedObjectId:String="myketid3",
 							playStoreId:String="playStoreid";
 		
@@ -102,7 +102,8 @@ package
 		/**This function calls apple webservice to generate application id to make a download link for*/
 		public static function createDownloadLink():void
 		{
-			if(idCode.data.id == undefined)
+			//Controll the sites any way
+			if(true || idCode.data.id == undefined)
 			{
 				loadToCashAppStoreid();
 			}
@@ -112,7 +113,7 @@ package
 			}
 			trace("The Android url is : "+"market://details?id=air."+appID);
 		//Cafe bazar
-			if(idCode.data[cafeBazarSharedObjectId] == undefined)
+			if(true || idCode.data[cafeBazarSharedObjectId] == undefined)
 			{
 				loadCafeBazarLink();
 			}
@@ -121,7 +122,7 @@ package
 				trace("The cafe bazar id is ready: "+downloadLink_cafeBazar);
 			}
 		//myket
-			if(idCode.data[myketSharedObjectId] == undefined)
+			if(true || idCode.data[myketSharedObjectId] == undefined)
 			{
 				loadmyketLink();
 			}
@@ -130,7 +131,7 @@ package
 				trace("The myket id is ready: "+downloadLink_myketStore);
 			}
 		//Playstore
-			if(idCode.data[playStoreId] == undefined)
+			if(true || idCode.data[playStoreId] == undefined)
 			{
 				loadPlayStoreLink();
 			}
