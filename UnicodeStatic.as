@@ -295,8 +295,8 @@ package
 		private static function zipTheText(tex:String):uint
 		{
 			var tim:Number = getTimer();
-			var myNum:uint = 0 ;
-			for(var i=0;i<tex.length;i++)
+			var myNum:uint = 0 ;var l:uint = tex.length ;
+			for(var i=0;i<l;i++)
 			{
 				myNum += tex.charCodeAt(i);
 			}
