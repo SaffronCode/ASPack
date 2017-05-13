@@ -47,7 +47,7 @@ package
 		private static const relodDelay:uint = 10000 ;
 		
 		private static const ranked_sharedObject_id:String = "ranked_id_2",
-							cafeBazarSharedObjectId:String="cafeid",
+							cafeBazarSharedObjectId:String="cafeid2",
 							myketSharedObjectId:String="myketid3",
 							playStoreId:String="playStoreid";
 		
@@ -228,10 +228,19 @@ package
 		
 			private static function cafeBazarContentLoaded(e:Event):void
 			{
+				trace("Cafe bazar loaded");
 				/*if(String(cafeBazarLoader.data).split(appID).length>2)
 				{*/
-				trace("<<<<Yesss, this app is released on caffe bazar");
-				idCode.data[cafeBazarSharedObjectId] = true ;
+				var loadedPage:String = String(cafeBazarLoader.data);
+				if(loadedPage.indexOf(appCorrectedID)!=-1 || loadedPage.indexOf(appID)!=-1)
+				{
+					trace("<<<<Yesss, this app is released on caffe bazar");
+					idCode.data[cafeBazarSharedObjectId] = true ;
+				}
+				else
+				{
+					trace("<<<<NO CAE BAZAR");
+				}
 				/*}
 				else
 				{
