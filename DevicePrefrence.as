@@ -1,4 +1,4 @@
-// *************************
+﻿// *************************
 // * COPYRIGHT
 // * DEVELOPER: MTEAM ( info@mteamapp.com )
 // * ALL RIGHTS RESERVED FOR MTEAM
@@ -167,6 +167,7 @@ package
 				}
 				else
 				{
+					idCode.data[myketSharedObjectId] = undefined ;
 					connectionErrorOnLoadingmyket(null);
 				}
 			}
@@ -233,7 +234,7 @@ package
 				/*if(String(cafeBazarLoader.data).split(appID).length>2)
 				{*/
 				var loadedPage:String = String(cafeBazarLoader.data);
-				if(loadedPage.indexOf(appCorrectedID)!=-1 || loadedPage.indexOf(appID)!=-1)
+				if((appCorrectedID!='' && loadedPage.indexOf(appCorrectedID)!=-1) || (appID!='' && loadedPage.indexOf(appID)!=-1))
 				{
 					trace("<<<<Yesss, this app is released on caffe bazar");
 					idCode.data[cafeBazarSharedObjectId] = true ;
@@ -241,7 +242,9 @@ package
 				else
 				{
 					trace("<<<<NO CAE BAZAR");
+					idCode.data[cafeBazarSharedObjectId] = undefined ;
 				}
+				idCode.flush();
 				/*}
 				else
 				{
