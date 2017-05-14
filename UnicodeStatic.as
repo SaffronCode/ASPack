@@ -274,7 +274,7 @@ package
 		
 		
 		
-		private static function textID(yourTextField:TextField,tex:String):String
+		public static function textID(yourTextField:TextField,tex:String):String
 		{
 			if(yourTextField==null)
 			{
