@@ -285,7 +285,7 @@ package
 			var font:String = tf.font ;
 			var bold:String = String(tf.bold);
 			/**text height removed from id generator , each text hav to had one id*/
-			var ID:String = yourTextField.width/*+','+yourTextField.height*/+','+tex.length+','+tex.substring(0,5)+','+tex.substring(tex.length-5,tex.length)+','+zipTheText(tex.substr(tex.length/2))+','+zipTheText(tex.substr(0,tex.length/2))+','+size+','+font+bold;
+			var ID:String = yourTextField.width/*+','+yourTextField.height*/+','+tex.length+','+tex.substring(0,20)+','+tex.substring(tex.length-5,tex.length)+','+zipTheText(tex.substr(tex.length/2))+','+zipTheText(tex.substr(0,tex.length/2))+','+size+','+font+bold;
 			//trace("ID is : "+ID);
 			return ID ;
 		}
