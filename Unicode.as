@@ -292,6 +292,7 @@ package
 						{
 							linesTest.push(lineString.replace(/>\([^\s^\)]+[\s]/g,">\(..."));
 							lastIndex = 0 ;
+							j = parag.length+1 ;
 							break ; 
 						}
 						else
