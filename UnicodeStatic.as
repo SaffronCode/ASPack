@@ -182,7 +182,7 @@ package
 			//trace('add this : '+tx.substr(0,20));
 			if((useCash) && !deactiveConvertor && detectedArabicScript)
 			{
-				var ID = textID(target,tx);
+				var ID = textID(target,tx,maxLines);
 				var cashed:String = loadStringFromData(ID);
 				if (cashed == null || cashed == 'undefined' || cashed == '')
 				{
@@ -274,7 +274,7 @@ package
 		
 		
 		
-		public static function textID(yourTextField:TextField,tex:String):String
+		public static function textID(yourTextField:TextField,tex:String,textMaxLine:uint=0):String
 		{
 			if(yourTextField==null)
 			{
@@ -285,7 +285,7 @@ package
 			var font:String = tf.font ;
 			var bold:String = String(tf.bold);
 			/**text height removed from id generator , each text hav to had one id*/
-			var ID:String = yourTextField.width/*+','+yourTextField.height*/+','+tex.length+','+tex.substring(0,20)+','+tex.substring(tex.length-5,tex.length)+','+zipTheText(tex.substr(tex.length/2))+','+zipTheText(tex.substr(0,tex.length/2))+','+size+','+font+bold;
+			var ID:String = yourTextField.width/*+','+yourTextField.height*/+','+tex.length+','+tex.substring(0,20)+','+tex.substring(tex.length-5,tex.length)+','+zipTheText(tex.substr(tex.length/2))+','+zipTheText(tex.substr(0,tex.length/2))+','+size+','+font+bold+','+textMaxLine;
 			//trace("ID is : "+ID);
 			return ID ;
 		}
