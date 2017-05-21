@@ -100,7 +100,7 @@ package
 					splitedZoneAndSecond = [splitedTimePart[2]]
 				}
 				
-				trace("splitedZoneAndSecond : "+splitedZoneAndSecond);
+			//	trace("splitedZoneAndSecond : "+splitedZoneAndSecond);
 				
 				myDate.fullYearUTC = uint(splitedDatePart[0]);
 				myDate.monthUTC = uint(splitedDatePart[1])-1;
