@@ -441,5 +441,13 @@ package com.mteamapp
 			var reg:RegExp = /^[\w.-]+@\w[\w.-]+\.[\w.-]*[a-z][a-z]$/i;
 			return reg.test(email);
 		}
+		
+		/**Returns sized html text*/
+		public static function makeHTMLWithSize(pureHML:String, defaultFontSize:uint):String
+		{
+			//<P ALIGN="LEFT"><FONT FACE="B Yekan Bold Bold" SIZE="38" COLOR="#000000" LETTERSPACING="0" KERNING="1">f<FONT SIZE="96">s</FONT>d</FONT></P>
+			return pureHML ;
+			return '<FONT SIZE="'+defaultFontSize+'">'+pureHML+'</FONT>';
+		}
 	}
 }
