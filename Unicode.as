@@ -209,9 +209,10 @@ package
 				parag.push(corrected);
 			}
 			var linesTest:Array = new Array();
+			var defaultFontSize:uint = yourTextField.defaultTextFormat.size as uint ;
 			for(var j =0 ;j<parag.length;j++){
 				/// tamam e data haa bayad rooye textfield ha beran bad 
-				yourTextField.htmlText = StringFunctions.makeHTMLWithSize(parag[j] as String,yourTextField.defaultTextFormat.size as uint) ;
+				yourTextField.htmlText = StringFunctions.makeHTMLWithSize(parag[j] as String,defaultFontSize) ;
 				cashedText = yourTextField.text ;
 				/**parag become an xml string*/
 				//parag[j] = yourTextField.getXMLText();
