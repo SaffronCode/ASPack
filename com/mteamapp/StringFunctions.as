@@ -446,7 +446,6 @@ package com.mteamapp
 		public static function makeHTMLWithSize(pureHML:String, defaultFontSize:uint):String
 		{
 			//<P ALIGN="LEFT"><FONT FACE="B Yekan Bold Bold" SIZE="38" COLOR="#000000" LETTERSPACING="0" KERNING="1">f<FONT SIZE="96">s</FONT>d</FONT></P>
-			return pureHML ;
 			return '<FONT SIZE="'+defaultFontSize+'">'+pureHML+'</FONT>';
 		}
 	}
