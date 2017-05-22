@@ -22,6 +22,8 @@
  */
 package
 {
+	import com.mteamapp.StringFunctions;
+	
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
@@ -209,7 +211,7 @@ package
 			var linesTest:Array = new Array();
 			for(var j =0 ;j<parag.length;j++){
 				/// tamam e data haa bayad rooye textfield ha beran bad 
-				yourTextField.htmlText = parag[j] ;
+				yourTextField.htmlText = StringFunctions.makeHTMLWithSize(parag[j] as String,yourTextField.defaultTextFormat.size as uint) ;
 				cashedText = yourTextField.text ;
 				/**parag become an xml string*/
 				//parag[j] = yourTextField.getXMLText();
