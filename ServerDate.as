@@ -34,22 +34,26 @@ package
 		}
 		
 		
-		/**2015-10-27T10:46:56.9335483+03:30*/
-		public static function dateToServerDate2(date:Date):String
+		/**2015-10-27T10:46:56.9335483+03:30*///2017-05-25T17:27:38.503Z
+		public static function dateToServerDate2(date:Date,addTimeZone:Boolean=true):String
 		{
 			if(date==null)
 			{
 				return '' ;
 			}
-			var zone:String = TimeToString.timeInString(Math.abs(date.timezoneOffset));
-			if(date.timezoneOffset<0)
-			{
-				zone = '+'+zone ;
-			}
-			else
-			{
-				zone = '-'+zone ;
-			}
+			var zone:String = '' ;
+            if(addTimeZone)
+            {
+                zone = TimeToString.timeInString(Math.abs(date.timezoneOffset));
+				if(date.timezoneOffset<0)
+				{
+					zone = '+'+zone ;
+				}
+				else
+				{
+					zone = '-'+zone ;
+				}
+            }
 			var stringedDate:String = date.fullYear+'-'+(date.month+1)+'-'+date.date+'T' +
 				TimeToString.numToString(date.hours)+':'+TimeToString.numToString(date.minutes)+':'+TimeToString.numToString(date.seconds)+zone;
 			return stringedDate ;
