@@ -54,7 +54,7 @@ package
 					zone = '-'+zone ;
 				}
             }
-			var stringedDate:String = date.fullYear+'-'+(date.month+1)+'-'+date.date+'T' +
+			var stringedDate:String = date.fullYear+'-'+TimeToString.numToString(date.month+1)+'-'+TimeToString.numToString(date.date)+'T' +
 				TimeToString.numToString(date.hours)+':'+TimeToString.numToString(date.minutes)+':'+TimeToString.numToString(date.seconds)+zone;
 			return stringedDate ;
 		}
