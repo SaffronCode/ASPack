@@ -234,7 +234,7 @@ package
 				/*if(String(cafeBazarLoader.data).split(appID).length>2)
 				{*/
 				var loadedPage:String = String(cafeBazarLoader.data);
-				if((appCorrectedID!='' && loadedPage.indexOf(appCorrectedID)!=-1) || (appID!='' && loadedPage.indexOf(appID)!=-1))
+				if((appCorrectedID!='' && loadedPage.indexOf(appCorrectedID+'0.jpg')!=-1) || (appID!='' && loadedPage.indexOf(appID+'0.jpg')!=-1))
 				{
 					trace("<<<<Yesss, this app is released on caffe bazar");
 					idCode.data[cafeBazarSharedObjectId] = true ;
