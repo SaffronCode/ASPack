@@ -10,6 +10,7 @@ package com.mteamapp.camera
 	import flash.net.SharedObject;
 	import flash.system.Capabilities;
 	import flash.utils.clearTimeout;
+	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
 
 	public class MTeamCamera
@@ -47,11 +48,30 @@ package com.mteamapp.camera
 		
 		private var rotation0:Number ;
 		
+		/**flash.events.PermissionEvent*/
+		private static var PermissionEventClass:Class;
+		/**flash.permissions.PermissionStatus*/
+		private static var PermissionStatusClass:Class;
+		
 		private static function setUpShared():void
 		{
 			if(shared==null)
 			{
 				shared = SharedObject.getLocal("cameraSharedObject",'/');
+			}
+		}
+		
+		private static function setUpPermissionClasses():void
+		{
+			try
+			{
+				PermissionEventClass = getDefinitionByName("flash.events.PermissionEvent") as Class;
+				PermissionStatusClass = getDefinitionByName("flash.permissions.PermissionStatus") as Class;
+			}
+			catch(e)
+			{
+				PermissionEventClass = null ;
+				PermissionStatusClass = null ;
 			}
 		}
 		
@@ -238,14 +258,44 @@ package com.mteamapp.camera
 			rotation0 = vid.rotation ;
 			
 			camera = Camera.getCamera(currentCamera);
-			
+			setUpPermissionClasses();
+			if (PermissionStatusClass!=null && (Camera as Object).permissionStatus != PermissionStatusClass.GRANTED)
+			{
+				camera.addEventListener(PermissionEventClass.PERMISSION_STATUS, function(e:*):void {
+					if (e.status == PermissionStatusClass.GRANTED)
+					{
+						connectCamera();
+					}
+					else
+					{
+						// permission denied
+						trace("Camera permission denied " +e);
+					}
+				});
+				
+				try {
+					camera.requestPermission();
+				} catch(e:Error)
+				{
+					// another request is in progress
+					trace("Camera another request is in progress " +e);
+				}
+			}
+			else
+			{
+				connectCamera();
+			}
+		}
+		
+		private function connectCamera():void
+		{
 			if(camera!=null){
 				camera.setQuality(0,100);
 				var camScale:Number = Math.max((camWidth/camera.width),(camHeight/camera.height));
 				
 				camera.setMode(Math.floor(camera.width*camScale),Math.floor(camera.height*camScale),24,true);
 				vid.attachCamera(camera);
-
+				
 				if(landScape)
 				{
 					vid.width = targWidth ;
