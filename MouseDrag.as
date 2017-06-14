@@ -29,7 +29,7 @@ package
 		private static var mouseFirstX:Number,
 							dragTime:Number;
 							
-		private static var currentFuncId:uint = 0 ;
+		private static var currentFuncId:uint = 1 ;
 		
 		public static function setUp(getStage:Stage,sens:Number=0.7)
 		{
@@ -73,6 +73,8 @@ package
 			funcId.push(currentFuncId);
 			currentFuncId++;
 			
+			trace("Add mouse drag : "+(currentFuncId-1));
+			
 			return currentFuncId-1 ;
 		}
 		
@@ -86,6 +88,11 @@ package
 				nextFunc.splice(funcIndex,1);
 				myRect.splice(funcIndex,1);
 				funcId.splice(funcIndex,1);
+				trace("**** mouse drag removed *** : "+funcIndex);
+			}
+			else
+			{
+				trace("Muse cannot remove : "+addFunctionId);
 			}
 		}
 		
