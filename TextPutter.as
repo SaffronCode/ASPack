@@ -367,7 +367,7 @@ package
 				//Added on version 1.5
 				var capturedObject:Bitmap = CaptueBitmap.captureBigTextFields(textField,captureResolution);
 				capturedObject.addEventListener(Event.REMOVED_FROM_STAGE,disposeThisBitmap);
-				if(VerticalAlign_verticalHeight!=0)
+				if(VerticalAlign_verticalHeight!=0 && VerticalAlign_verticalHeight>lastInfo_realTextHeight)
 				{
 					/*trace("♦ : lastInfo_textHeidth : "+lastInfo_textHeidth);
 					trace("♦ : VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
