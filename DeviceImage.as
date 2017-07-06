@@ -717,5 +717,11 @@
 			lastBitmap = imageLoder.content as Bitmap ;
 			onDone();
 		}
+		
+		public static function isImage(targetFile:File):Boolean
+		{
+			var ext:String = targetFile.extension.toLowerCase();
+			return ext.indexOf('jpg')!=-1 || ext.indexOf('png')!=-1 || ext.indexOf('gif')!=-1;
+		}
 	}
 }
