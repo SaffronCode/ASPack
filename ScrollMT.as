@@ -168,7 +168,8 @@ package
 					
 					
 					
-		private static var ScrollEffect:Boolean = false ;
+		public static var 	ScrollEffect:Boolean = false;
+		public var forseScrollEffect:Boolean = false;
 		
 		private var scrollEffectDelta:Number = 100 ;
 					
@@ -189,8 +190,13 @@ package
 		 * <br>
 		 * You can only lock t_d or r_l scroll when you didn't enter targetAreaRectangle.(Why???)*/
 		public function ScrollMT(target:DisplayObject,maskArea:Rectangle,targetArea:Rectangle=null,FreeScrollOnTarget_TD:Boolean=false,FreeScrollOnTarget_LR:Boolean=false,activeEffect:Boolean=true,
-				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0)
+				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0,forseScrollEffectBoolean:*=null)
 		{
+			if(forseScrollEffectBoolean!=null)
+			{
+				forseScrollEffect = forseScrollEffectBoolean ;
+			}
+			
 			revertY = RevertY ;
 			revertX = RevertX ;
 			stepSizes = stepSize ;
@@ -198,7 +204,7 @@ package
 			//remember target
 			targ = target ;
 			
-			trace("This is the new scroller.");
+			trace("This is the new scroller. activeEffect : "+activeEffect);
 			
 			acceptSetEfectOnMe = activeEffect ;
 			
@@ -417,7 +423,7 @@ package
 			//to listent to delete if new scroller added
 			targ.addEventListener(KILL_OLD_SCROLLER,unLoad);
 			
-			if(ScrollEffect && acceptSetEfectOnMe)
+			if(ScrollEffect && acceptSetEfectOnMe || forseScrollEffect)
 			{
 				Vx += scrollEffectDelta ;
 				Vy += scrollEffectDelta ;
