@@ -153,7 +153,7 @@ package com.mteamapp
 				trace("Find the phone : "+str);
 				str = str.replace(regNumberDetection,'$1'+colorTagStart+'<a href="tel:$2">$2</a>'+colorTagEnd);//
 			}
-			var regURLDetect:RegExp = /(www|http:\/\/)[^ \n\r]*/gi ;///(www\. | http)\S*\s/gi;
+			var regURLDetect:RegExp = /(www|http:\/\/)[^ \n\r]*/gi ;///(www\. | http)\S*\s/gi;//TODO it has problem! if you pass an html with href= tag on it, it will break up the complete html
 			str = str.replace(regURLDetect,colorTagStart+'<a href="http://$&">$&</a>'+colorTagEnd);
 			//var regURLDetect2:RegExp = /http\S*\s/gi;
 			//str = str.replace(regURLDetect2,'<font color="'+linkColors+'"><a href="$&">$&</a></font>');
