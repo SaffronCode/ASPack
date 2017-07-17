@@ -57,8 +57,8 @@ package
 		/**This event dispatches to parent. the container scrollers must listen to this to stop their scroll controlling
 		private static var TRY_TO_SCROLL:String = "TRY_TO_SCROLL" ;*///This event moved to ScrollMTEvent class
 		
-		private const 	cursolCollor:Number = 0x000000,
-						cursolAlpha:Number = 0.1;
+		public static var cursolCollor:Number = 0x000000,
+							cursolAlpha:Number = 0.1;
 		
 		/**This is the range that the IsRange function will return true if the scroller was out side of*/
 		private const acceptableDelta:Number = 1 ;
