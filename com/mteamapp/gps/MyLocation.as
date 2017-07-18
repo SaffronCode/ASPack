@@ -20,13 +20,13 @@ package  com.mteamapp.gps
 		/**This will returns the round number for gps Longitude*/
 		public static function get GPSLongitudeRound():Number
 		{
-			return Math.round(GPSLatitude*roundLevel)/roundLevel;
+			return Math.round(GPSLongitude*roundLevel)/roundLevel;
 		}
 		
 		/**This will returns the round number for gps latitude*/
 		public static function get GPSLatitudeRound():Number
 		{
-			return Math.round(GPSLongitude*roundLevel)/roundLevel;
+			return Math.round(GPSLatitude*roundLevel)/roundLevel;
 		}
 		
 		
@@ -36,7 +36,7 @@ package  com.mteamapp.gps
 		
 		public static function start(distriqtCode:String=null,DebugGPS:Boolean=false):void
 		{
-			if(DebugGPS)
+			if(DebugGPS && DevicePrefrence.isItPC)
 			{
 				GPSLatitude = 35.7137559;
 				GPSLongitude = 51.4149215;
@@ -57,21 +57,18 @@ package  com.mteamapp.gps
 				
 				if(distriqtCode!=null)
 				{
+					trace("\n\n*****************************\n\n\nIf you whant to use distriqt location abilities, you should add below ane files to your project:"+
+						"\t<extensionID>com.distriqt.Core</extensionID>"+
+						"\t<extensionID>com.distriqt.androidsupport.V4</extensionID>"+
+						//"\t<extensionID>com.distriqt.androidsupport.AppCompatV7</extensionID>"+
+						//"\t<extensionID>com.distriqt.androidsupport.CustomTabs</extensionID>"+
+						"\t<extensionID>com.distriqt.playservices.Base</extensionID>"+
+						"\t<extensionID>com.distriqt.playservices.Location</extensionID>"+
+						"\t<extensionID>com.distriqt.Location</extensionID>\n\n\n*****************************\n\n\n");
 					controllPermission();
 					if(distriqtLocationClass!=null)
 					{
 						(distriqtLocationClass as Object).init(distriqtCode)
-					}
-					else
-					{
-						trace("\n\n*****************************\n\n\nIf you whant to use distriqt location abilities, you should add below ane files to your project:"+
-							"\t<extensionID>com.distriqt.Core</extensionID>"+
-							"\t<extensionID>com.distriqt.androidsupport.V4</extensionID>"+
-							"\t<extensionID>com.distriqt.androidsupport.AppCompatV7</extensionID>"+
-							"\t<extensionID>com.distriqt.androidsupport.CustomTabs</extensionID>"+
-							"\t<extensionID>com.distriqt.playservices.Base</extensionID>"+
-							"\t<extensionID>com.distriqt.playservices.Location</extensionID>"+
-							"\t<extensionID>com.distriqt.Location</extensionID>\n\n\n*****************************\n\n\n");
 					}
 				}
 				else
