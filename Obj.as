@@ -165,7 +165,7 @@ package
 		
 		/**this function will return arrray of founded object on displayObject<br>
 		 * This function will returns at least one element that could be the null!*/
-		public static function getAllChilds(name:String,onThe:DisplayObjectContainer):Array
+		public static function getAllChilds(name:String,onThe:DisplayObjectContainer,returnOnlyFirstFounded:Boolean=false):Array
 		{
 			var founded:Array = [] ;
 			var i:int ;
@@ -174,18 +174,38 @@ package
 			{
 				throw "whattt???"
 			}
+			trace("onThe.name : "+onThe.name+' : '+onThe);
 			if( onThe.name  == name)
 			{
-				founded.push(onThe);
+				if(returnOnlyFirstFounded)
+				{
+					return [onThe] ;
+				}
+				else
+				{
+					founded.push(onThe);
+				}
 			}
-			
+			trace("Search for childs : "+onThe.numChildren);
 			if(onThe is DisplayObjectContainer)
 			{
 				for( i = 0 ; i < onThe.numChildren ; i++)
 				{
 					if(onThe.getChildAt(i) is DisplayObjectContainer)
 					{
-						founded = getAllChilds(name,(onThe.getChildAt(i) as DisplayObjectContainer)).concat(founded);
+						trace("Search on "+onThe.getChildAt(i));
+						founded = getAllChilds(name,(onThe.getChildAt(i) as DisplayObjectContainer),returnOnlyFirstFounded).concat(founded);
+					}
+					else if(onThe.getChildAt(i).name == name)
+					{
+						if(returnOnlyFirstFounded)
+						{
+							return [onThe.getChildAt(i)] ;
+						}
+						else
+						{
+							founded.push(onThe.getChildAt(i));
+						}
 					}
 				}
 			
