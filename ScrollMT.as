@@ -101,6 +101,8 @@ package
 		private var fadeOutSpeed:Number = 0.1,
 					fadeInSpeed:Number = 0.25;
 		
+		public static var fadeTheCurs:Boolean = true ;
+		
 		
 		
 		private var mouseDownTime:Number,
@@ -267,7 +269,10 @@ package
 			//cursels manager↓
 			curselLeftRight = new Sprite();
 			curselTopDown = new Sprite();
-			curselTopDown.alpha = curselLeftRight.alpha = 0 ;
+			if(fadeTheCursol)
+			{				
+				curselTopDown.alpha = curselLeftRight.alpha = 0 ;
+			}
 			
 			curselLeftRight.graphics.beginFill(cursolCollor,cursolAlpha);
 			var temp:Number = (maskRect.width/targetRect.width)*maskRect.width ;
@@ -509,11 +514,11 @@ package
 			scrollLock = true ;
 			stopFloat();
 			
-			if(curselLeftRight)
+			if(curselLeftRight && fadeTheCurs)
 			{
 				curselLeftRight.alpha = 0 ;
 			}
-			if(curselTopDown)
+			if(curselTopDown && fadeTheCurs)
 			{
 				curselTopDown.alpha = 0 ;
 			}
@@ -841,7 +846,7 @@ package
 					}
 					else
 					{
-						if(!MouseLockAvailable() && curselLeftRight.alpha<1)
+						if(fadeTheCurs && !MouseLockAvailable() && curselLeftRight.alpha<1)
 						{
 							curselLeftRight.alpha+=fadeInSpeed;
 						}
@@ -867,7 +872,7 @@ package
 					}
 					else
 					{
-						if(!MouseLockAvailable() && curselTopDown.alpha<1)
+						if(fadeTheCurs && !MouseLockAvailable() && curselTopDown.alpha<1)
 						{
 							curselTopDown.alpha+=fadeInSpeed;
 						}
@@ -892,31 +897,37 @@ package
 			{
 				if(unLockLeftRight)
 				{
-					if(Math.abs(Vx)<minAvailableScroll)
+					if(fadeTheCurs)
 					{
-						if(curselLeftRight.alpha>0)
+						if(Math.abs(Vx)<minAvailableScroll)
 						{
-							curselLeftRight.alpha-=fadeOutSpeed;
+							if(curselLeftRight.alpha>0)
+							{
+								curselLeftRight.alpha-=fadeOutSpeed;
+							}
 						}
-					}
-					else if(curselLeftRight.alpha<1)
-					{
-						curselLeftRight.alpha+=fadeInSpeed;
+						else if(curselLeftRight.alpha<1)
+						{
+							curselLeftRight.alpha+=fadeInSpeed;
+						}
 					}
 					Vx*=mu ;
 				}
 				if(unLockTopDown)
 				{
-					if(Math.abs(Vy)<minAvailableScroll)
+					if(fadeTheCurs)
 					{
-						if(curselTopDown.alpha>0)
+						if(Math.abs(Vy)<minAvailableScroll)
 						{
-							curselTopDown.alpha-=fadeOutSpeed;
+							if(curselTopDown.alpha>0)
+							{
+								curselTopDown.alpha-=fadeOutSpeed;
+							}
 						}
-					}
-					else if(curselTopDown.alpha<1)
-					{
-						curselTopDown.alpha+=fadeInSpeed;
+						else if(curselTopDown.alpha<1)
+						{
+							curselTopDown.alpha+=fadeInSpeed;
+						}
 					}
 					Vy*=mu ;
 				}
