@@ -165,30 +165,8 @@ package com.mteamapp
 							trace("Date value is wrong : "+currentParam);
 						}
 					}
-					else if(toObject[i] is String )
-					{
-						//trace("Convert "+JSON.stringify(currentParam)+" to "+i);
-						try
-						{
-							if(currentParam is String)
-							{
-								//trace("** Its string");
-								toObject[i] = currentParam ;
-							}
-							else
-							{
-								//trace("** Its Object");
-								toObject[i] = JSON.stringify(currentParam);
-								//trace("*** i : "+i);
-								//trace("*** It saved as : "+toObject[i]);
-							}
-						}
-						catch(e)
-						{
-							trace("The parameter is readonly : "+getQualifiedClassName(toObject[i]));
-						}
-					}
-					else if(toObject[i] is Number 
+					else if(toObject[i] is String 
+						|| toObject[i] is Number 
 						|| toObject[i] is Date 
 						|| toObject[i] is Boolean 
 						|| toObject[i] == null

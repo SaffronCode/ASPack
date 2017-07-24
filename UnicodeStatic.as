@@ -136,10 +136,6 @@ package
 			{
 				target.text = tx;
 			}
-			else if(detectArabicScript && !StringFunctions.isPersian(tx))
-			{
-				target.text = tx;
-			}
 			else
 			{
 				uni.fastUnicodeOnLines(target,tx);

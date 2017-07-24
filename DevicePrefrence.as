@@ -459,13 +459,6 @@ package
 			return NativeApplication.nativeApplication.applicationID ;
 		}
 		
-		/**Return NabatNorooz from the id com.mteamapps.NabatNorooz*/
-		public static function get appIDName():String
-		{
-			var appIDvar:String = appID ;
-			return appIDvar.substr(appIDvar.lastIndexOf('.')+1);
-		}
-		
 		/**If the id contains numeric index or -(dash), it will cause problem. so this will returns the id without numeric ids index*/
 		public static function get appCorrectedID():String
 		{
