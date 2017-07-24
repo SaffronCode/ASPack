@@ -182,7 +182,8 @@ package
 			catch(e)
 			{
 				spaceWidth = 1 ;
-				throw("!!!!!!!!!!!!!!!!!!!!!!!!!!!Font is not embeded on : " +yourTextField);
+				trace("!!!!!!!!!!!!!!!!!!!!!!!!!!!Font is not embeded on : " +yourTextField);
+				yourTextField.text = tex ;
 				return ;
 			}
 			
