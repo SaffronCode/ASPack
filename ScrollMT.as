@@ -101,7 +101,7 @@ package
 		private var fadeOutSpeed:Number = 0.1,
 					fadeInSpeed:Number = 0.25;
 		
-		public static var fadeTheCurs:Boolean = true ;
+		public static var fadeTheCursel:Boolean = true ;
 		
 		
 		
@@ -269,7 +269,7 @@ package
 			//cursels manager↓
 			curselLeftRight = new Sprite();
 			curselTopDown = new Sprite();
-			if(fadeTheCursol)
+			if(fadeTheCursel)
 			{				
 				curselTopDown.alpha = curselLeftRight.alpha = 0 ;
 			}
@@ -514,11 +514,11 @@ package
 			scrollLock = true ;
 			stopFloat();
 			
-			if(curselLeftRight && fadeTheCurs)
+			if(curselLeftRight && fadeTheCursel)
 			{
 				curselLeftRight.alpha = 0 ;
 			}
-			if(curselTopDown && fadeTheCurs)
+			if(curselTopDown && fadeTheCursel)
 			{
 				curselTopDown.alpha = 0 ;
 			}
@@ -846,7 +846,7 @@ package
 					}
 					else
 					{
-						if(fadeTheCurs && !MouseLockAvailable() && curselLeftRight.alpha<1)
+						if(fadeTheCursel && !MouseLockAvailable() && curselLeftRight.alpha<1)
 						{
 							curselLeftRight.alpha+=fadeInSpeed;
 						}
@@ -872,7 +872,7 @@ package
 					}
 					else
 					{
-						if(fadeTheCurs && !MouseLockAvailable() && curselTopDown.alpha<1)
+						if(fadeTheCursel && !MouseLockAvailable() && curselTopDown.alpha<1)
 						{
 							curselTopDown.alpha+=fadeInSpeed;
 						}
@@ -897,7 +897,7 @@ package
 			{
 				if(unLockLeftRight)
 				{
-					if(fadeTheCurs)
+					if(fadeTheCursel)
 					{
 						if(Math.abs(Vx)<minAvailableScroll)
 						{
@@ -915,7 +915,7 @@ package
 				}
 				if(unLockTopDown)
 				{
-					if(fadeTheCurs)
+					if(fadeTheCursel)
 					{
 						if(Math.abs(Vy)<minAvailableScroll)
 						{
