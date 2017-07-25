@@ -269,10 +269,6 @@ package
 			//cursels manager↓
 			curselLeftRight = new Sprite();
 			curselTopDown = new Sprite();
-			if(fadeTheCursel)
-			{				
-				curselTopDown.alpha = curselLeftRight.alpha = 0 ;
-			}
 			
 			curselLeftRight.graphics.beginFill(cursolCollor,cursolAlpha);
 			var temp:Number = (maskRect.width/targetRect.width)*maskRect.width ;
@@ -428,10 +424,21 @@ package
 			//to listent to delete if new scroller added
 			targ.addEventListener(KILL_OLD_SCROLLER,unLoad);
 			
-			if(ScrollEffect && acceptSetEfectOnMe || forseScrollEffect)
+			if(isScrollableTD())
 			{
-				Vx += scrollEffectDelta ;
-				Vy += scrollEffectDelta ;
+				if((ScrollEffect && acceptSetEfectOnMe || forseScrollEffect))
+				{
+					Vx += scrollEffectDelta ;
+					Vy += scrollEffectDelta ;
+				}
+				if(fadeTheCursel)
+				{
+					curselTopDown.alpha = curselLeftRight.alpha = 0 ;
+				}
+			}
+			else
+			{
+				curselTopDown.alpha = curselLeftRight.alpha = 0 ;
 			}
 			scrollAnim(null);
 		}
@@ -580,12 +587,18 @@ package
 		
 	////////////////////////scrolling funcitons ↓
 		/**check if scroll available*/
-		private function canScroll()
+		private function canScroll():Boolean
 		{
 			//Debug line ↓
 				//trace("Scroll controll : "+targStage.mouseX,targStage.mouseY+' vs '+scrollerMask.getBounds(targStage)+" > "+(scrollerMask.hitTestPoint(targStage.mouseX,targStage.mouseY))+' and '+(scrollerMask.getBounds(targStage).contains(targStage.mouseX,targStage.mouseY)));
 				return !scrollLock && scrollerMask.getBounds(targStage).contains(targStage.mouseX,targStage.mouseY) && ((maskRect.height<targetRect.height && unLockTopDown) || (maskRect.width<targetRect.width && unLockLeftRight)) && Obj.getVisible(targ);
 			//return !scrollLock && scrollerMask.hitTestPoint(targStage.mouseX,targStage.mouseY) ;
+		}
+		
+		/**Returns true if the item is scrollable on this area*/
+		private function isScrollableTD():Boolean
+		{
+			return maskRect.height<targetRect.height ;
 		}
 		
 		
