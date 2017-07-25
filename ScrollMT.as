@@ -283,7 +283,14 @@ package
 			curselTopDown.graphics.drawRoundRect(0,0,currselW,temp,currselRound,currselRound);
 			currselYArea = maskRect.height-temp - currselMargin*2 - currselW*2 ;
 			
-			curselTopDown.x = maskRect.right-currselMargin;//-currselW ;
+			if(maskRect.width<768)
+			{
+				curselTopDown.x = maskRect.right-currselMargin ;
+			}
+			else
+			{
+				curselTopDown.x = maskRect.right-currselMargin-currselW ;
+			}
 			curselTopDown.y = maskRect.y+currselMargin+currselW ;
 			
 			//trace("Cursel generated");
@@ -782,7 +789,7 @@ package
 						curselTopDown.graphics.drawRoundRect(0,0,currselW,temp,currselRound,currselRound);
 						currselYArea = maskRect.height-temp - currselMargin*2 - currselW*2 ;
 						
-						curselTopDown.x = maskRect.right-currselMargin;//-currselW ;
+						curselTopDown.x = maskRect.right-currselMargin-currselW ;
 						curselTopDown.y = maskRect.y+currselMargin+currselW ;
 					}
 					if(unLockTopDown == false)
