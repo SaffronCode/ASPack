@@ -451,5 +451,14 @@ package com.mteamapp
 			//<P ALIGN="LEFT"><FONT FACE="B Yekan Bold Bold" SIZE="38" COLOR="#000000" LETTERSPACING="0" KERNING="1">f<FONT SIZE="96">s</FONT>d</FONT></P>
 			return '<FONT SIZE="'+defaultFontSize+'">'+pureHML+'</FONT>';
 		}
+		
+	////////////////////////////////////////////////////////
+		
+		/**Returns true if entered string was URL*/
+		public static function isURL(str:String):Boolean
+		{
+			var reg:RegExp = /^(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?$/i;
+			return reg.test(str);
+		}
 	}
 }
