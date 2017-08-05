@@ -460,5 +460,11 @@ package com.mteamapp
 			var reg:RegExp = /^(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?$/i;
 			return reg.test(str);
 		}
+		
+		public static function isLocation(str:String):Boolean
+		{
+			var reg:RegExp = /^[\d]+\.[\d]+,[\d]+\.[\d]+$/i;
+			return reg.test(str);
+		}
 	}
 }
