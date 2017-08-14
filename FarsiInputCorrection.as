@@ -571,5 +571,17 @@ package
 				myStageText.viewPort = rect;
 			}
 		}
+		
+		public function showPass():void
+		{
+			newTextField.displayAsPassword = false ;
+			newTextField.embedFonts = true ;
+		}
+		
+		public function hidePass():void
+		{
+			newTextField.displayAsPassword = oldTextField.displayAsPassword ;	
+			newTextField.embedFonts = !newTextField.displayAsPassword ;
+		}
 	}
 }
