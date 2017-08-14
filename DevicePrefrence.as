@@ -22,6 +22,7 @@ package
 	
 	import dataManager.GlobalStorage;
 	
+	import flash.data.EncryptedLocalStore;
 	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -30,6 +31,7 @@ package
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.system.Capabilities;
+	import flash.utils.ByteArray;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
 
@@ -701,7 +703,19 @@ package
 				}
 				else
 				{
-					createdKeyIs = appID+Capabilities.cpuArchitecture+Capabilities.manufacturer+Capabilities.screenResolutionX+','+Capabilities.screenResolutionY;
+					var data:ByteArray = EncryptedLocalStore.getItem('uniqueId');
+					if(data==null)
+					{
+						createdKeyIs = MD5.hash(Math.random().toString());
+						data = new ByteArray();
+						data.writeUTF(createdKeyIs);
+						data.position = 0 ;
+						EncryptedLocalStore.setItem('uniqueId',data);
+					}
+					else
+					{
+						createdKeyIs = data.readUTF() ;
+					}
 					uniqueId = '' ;
 				}	
 			}
