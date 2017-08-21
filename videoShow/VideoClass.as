@@ -347,5 +347,12 @@ package videoShow
 			}
 			return capturedBitmap;
 		}
+
+		public function dispose():void
+		{
+            videoObject.clear();
+            videoObject.attachNetStream(null);
+			videoObject = null ;
+		}
 	}
 }
