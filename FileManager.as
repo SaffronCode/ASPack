@@ -1,10 +1,12 @@
 package
 {
+	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.text.TextField;
 	import flash.utils.ByteArray;
 
 	public class FileManager
@@ -117,6 +119,32 @@ package
 			{
 				folder.deleteFile();
 			}catch(e){};
+		}
+		
+		/**Copy the folder to destination*/
+		public static function copyFolder(folderFile:File,destinationFolder:File,letsStartClean:Boolean=true):void
+		{
+			if(letsStartClean && destinationFolder.isDirectory)
+			{
+				destinationFolder.deleteDirectory(true);
+			}
+			if(folderFile.isDirectory)
+			{
+				destinationFolder = destinationFolder.resolvePath(folderFile.name) ;
+				destinationFolder.createDirectory();
+				trace("Folder created : "+destinationFolder.nativePath);
+				var childFolders:Array = folderFile.getDirectoryListing() ;
+				for(var i:int = 0 ; i<childFolders.length ; i++)
+				{
+					copyFolder(childFolders[i] as File,destinationFolder,false);
+				}
+			}
+			else
+			{
+				var fileTarget:File = destinationFolder.resolvePath(folderFile.name) ;
+				folderFile.copyTo(fileTarget,true);
+				trace("File copied : "+fileTarget.nativePath);
+			}
 		}
 	}
 }
