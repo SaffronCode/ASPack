@@ -104,7 +104,7 @@ package videoShow
 			{
 				if(DevicePrefrence.isItPC || DevicePrefrence.isAndroid())
 				{
-					this.graphics.beginFill(0,1);
+					this.graphics.beginFill(0,0);
 					this.graphics.drawRect(0,0,W,H);
 					this.buttonMode = true ;
 					this.addEventListener(MouseEvent.MOUSE_DOWN,openVideoFile);
