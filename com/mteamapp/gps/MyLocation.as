@@ -180,5 +180,11 @@ package  com.mteamapp.gps
 			GPSLatitude = e.latitude ;
 			GPSLongitude = e.longitude ;
 		}
+		
+		public static function calculateDistance(Latitude:String,Longitude:String):Number
+		{
+			//TODO Complete the distance
+			return Math.sqrt(Math.pow(Number(Latitude)-GPSLatitudeRound,2)+Math.pow(Number(Longitude)-GPSLongitudeRound,2));
+		}
 	}
 }
