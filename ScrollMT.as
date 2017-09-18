@@ -297,8 +297,18 @@ package
 			
 			
 			
-			
 			onAdded();
+		}
+		
+		/**Scroll me*/
+		protected function scrollMeByMyChild(event:ScrollMTEvent):void
+		{
+			event.stopImmediatePropagation();
+			trace("Scroll request from childs");
+			setPose(targetRect.x+event.dx,targetRect.y+event.dy);
+			//x = targ.x+event.dx ;
+			//y = targ.y+event.dy ;
+			//stepSlide(event.dx,event.dy);
 		}
 		
 		/**Set scrolling item y*/
@@ -430,6 +440,7 @@ package
 			//1.3.1
 			//to listent to delete if new scroller added
 			targ.addEventListener(KILL_OLD_SCROLLER,unLoad);
+			targ.addEventListener(ScrollMTEvent.SCROLL_THE_SCROLLER,scrollMeByMyChild);
 			
 			if(isScrollableTD())
 			{
@@ -470,6 +481,7 @@ package
 			clearTimeout(myTimeOutId);
 			
 			targ.removeEventListener(ScrollMTEvent.TRY_TO_SCROLL,stopScroll);
+			targ.removeEventListener(ScrollMTEvent.SCROLL_THE_SCROLLER,scrollMeByMyChild);
 			targStage.removeEventListener(MouseEvent.MOUSE_WHEEL,manageMouseWheel);
 			
 			//remove currsels if can
