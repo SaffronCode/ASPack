@@ -466,5 +466,29 @@ package com.mteamapp
 			var reg:RegExp = /^[\d]+\.[\d]+,[\d]+\.[\d]+$/i;
 			return reg.test(str);
 		}
+		
+		///////////////////////////////////////////////////////**********/////////////////////////
+		/**2500>>>>>>>2,500*/
+		public static function currancyPrint(inputcurencynumber:*):String
+		{
+			inputcurencynumber=String(inputcurencynumber);
+			var s2:String;
+			s2="";
+			
+			while (inputcurencynumber.length > 3) {
+				
+				s2 = ',' + inputcurencynumber.substring(inputcurencynumber.length - 3, inputcurencynumber.length) + s2;
+				inputcurencynumber = inputcurencynumber.substring(0, inputcurencynumber.length - 3);
+			}
+			
+			return inputcurencynumber+s2
+			
+			
+		}
+		
+		
+		
+		
+		
 	}
 }
