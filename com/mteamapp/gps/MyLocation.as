@@ -5,8 +5,6 @@ package  com.mteamapp.gps
 	import flash.events.GeolocationEvent;
 	import flash.sensors.Geolocation;
 	import flash.utils.getDefinitionByName;
-	
-	import tableManager.graphic.Location;
 
 	public class MyLocation
 	{

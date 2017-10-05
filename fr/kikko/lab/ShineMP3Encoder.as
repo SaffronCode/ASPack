@@ -1,10 +1,7 @@
 package fr.kikko.lab {
-	import flash.events.ProgressEvent;
-	import cmodule.shine.CLibInit;
-
-	import flash.events.ErrorEvent;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.ProgressEvent;
 	import flash.events.TimerEvent;
 	import flash.net.FileReference;
 	import flash.utils.ByteArray;
