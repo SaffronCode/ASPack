@@ -482,8 +482,35 @@ package com.mteamapp
 			}
 			
 			return inputcurencynumber+s2
+		}
+		
+		
+	//////////////////////////////////STring to color
+		/**Creats color from a link*/
+		public static function stringToColor(str:String):uint
+		{
+			var col:uint = 0 ;
+			for(var i:int = 0 ; i<str.length ; i++)
+			{
+				col+=str.charCodeAt(i)*17.7589894;
+			}
+			//trace("col : "+col);
+			var lastCol:uint = col%10 ;
+			var maxRedColor:uint = (lastCol<=3)?0xac0:10 ;
+			var maxGreenColor:uint = (lastCol>3 && lastCol<=6)?0xc0:10 ;
+			var maxBlueColor:uint = (lastCol>6)?0xc0:10 ;
+			//trace("maxRedColor : "+maxRedColor)
+			//trace("maxGreenColor : "+maxGreenColor)
+			//trace("maxBlueColor : "+maxBlueColor)
 			
+			var red:uint = (lastCol*87789.15484848)%maxRedColor+0x40;
+			var gre:uint = (lastCol*55.15641498)%maxGreenColor+0x40;
+			var blu:uint = (lastCol*99.3894516)%maxBlueColor+0x40;
+			//trace("red : "+red.toString(16));
+			//trace("gre : "+gre.toString(16));
+			//trace("blu : "+blu.toString(16));
 			
+			return red*0x010000+gre*0x000100+blu ;
 		}
 		
 		
