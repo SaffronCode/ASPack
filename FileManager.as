@@ -122,8 +122,12 @@ package
 		}
 		
 		/**Copy the folder to destination*/
-		public static function copyFolder(folderFile:File,destinationFolder:File,letsStartClean:Boolean=true):void
+		public static function copyFolder(folderFile:File,destinationFolder:File,letsStartClean:Boolean=true,extentionExption:Array=null):void
 		{
+			if(extentionExption==null)
+			{
+				extentionExption = new Array();
+			}
 			if(letsStartClean && destinationFolder.isDirectory)
 			{
 				destinationFolder.deleteDirectory(true);
@@ -136,14 +140,21 @@ package
 				var childFolders:Array = folderFile.getDirectoryListing() ;
 				for(var i:int = 0 ; i<childFolders.length ; i++)
 				{
-					copyFolder(childFolders[i] as File,destinationFolder,false);
+					copyFolder(childFolders[i] as File,destinationFolder,false,extentionExption);
 				}
 			}
 			else
 			{
 				var fileTarget:File = destinationFolder.resolvePath(folderFile.name) ;
-				folderFile.copyTo(fileTarget,true);
-				trace("File copied : "+fileTarget.nativePath);
+				if(extentionExption.indexOf(fileTarget.extension)==-1)
+				{
+					folderFile.copyTo(fileTarget,true);
+					trace("File copied : "+fileTarget.nativePath);
+				}
+				else
+				{
+					trace("!!File didn't copied because of exeption: "+fileTarget.nativePath);
+				}
 			}
 		}
 	}
