@@ -1,4 +1,4 @@
-package fr.kikko.lab {
+﻿package fr.kikko.lab {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.ProgressEvent;
@@ -7,6 +7,9 @@ package fr.kikko.lab {
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
 	import flash.utils.getTimer;
+	import flash.events.ProgressEvent;
+	import cmodule.shine.CLibInit;
+	import flash.events.ErrorEvent;
 
 	/**
 	 * @author kikko.fr - 2010
