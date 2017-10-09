@@ -8,6 +8,8 @@
 
 package
 {
+	import diagrams.calender.MyShamsi;
+
 	public class TimeToString
 	{
 		/**return the time from seconds to string 10:54*/
@@ -79,6 +81,13 @@ package
 				}
 			}
 			return str ;
+		}
+		
+	//////////////////////////////
+		
+		public static function shamsiToTimeLable(shamsi:MyShamsi):String
+		{
+			return shamsi.fullYear+numToString(shamsi.month+1)+numToString(shamsi.date)+numToString(shamsi.hours)+numToString(shamsi.minutes)+numToString(shamsi.seconds);
 		}
 	}
 }
