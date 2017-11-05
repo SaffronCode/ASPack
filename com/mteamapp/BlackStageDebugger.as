@@ -8,6 +8,8 @@ package com.mteamapp
 	import flash.system.Capabilities;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
+	
+	import permissionControlManifestDiscriptor.PermissionControl;
 
 	public class BlackStageDebugger
 	{
@@ -33,6 +35,8 @@ package com.mteamapp
 			trace("Black screen problem didn't see on Android 5+. The device OS is : "+Capabilities.os );
 			if(DevicePrefrence.isAndroid())
 			{
+				PermissionControl.controlVideoProblem();
+				return ;
 				trace("BlackScreen debugger on android...");
 				stage = myStage;
 				root = myRoot ;
