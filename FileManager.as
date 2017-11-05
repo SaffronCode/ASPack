@@ -13,7 +13,7 @@ package
 	{
 		private static var onDone:Function;
 		/**This will load local file instantly*/
-		public static function loadFile(fileTarget:File):ByteArray
+		public static function loadFile(fileTarget:File,openAsync:Boolean=false,onLoaded:Function=null):ByteArray
 		{
 			if(!fileTarget.exists)
 			{
@@ -23,12 +23,35 @@ package
 			var fileBytes:ByteArray = new ByteArray();
 			var fileStream:FileStream = new FileStream();
 			
-			fileStream.open(fileTarget,FileMode.READ);
+			if(!openAsync)
+			{
+				fileStream.open(fileTarget,FileMode.READ);
+				
+				fileStream.readBytes(fileBytes);
+				fileStream.close();
+				fileBytes.position = 0 ;
+			}
+			else
+			{
+				onDone = onLoaded ;
+				fileStream.addEventListener(Event.COMPLETE,fileLoaded);
+				fileStream.openAsync(fileTarget,FileMode.READ);
+			}
+			
+			return fileBytes;
+		}
+		
+		private static function fileLoaded(e:Event):void
+		{
+			var fileStream:FileStream = e.currentTarget as FileStream;
+			
+			var fileBytes:ByteArray = new ByteArray();
 			fileStream.readBytes(fileBytes);
 			fileStream.close();
 			fileBytes.position = 0 ;
 			
-			return fileBytes;
+			if(onDone!=null && onDone.length>0)
+				onDone(fileBytes);
 		}
 		
 		/**Save thesebytes to selected location<br>
