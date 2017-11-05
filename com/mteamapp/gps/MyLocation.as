@@ -42,8 +42,7 @@ package  com.mteamapp.gps
 			if(geo==null)
 			{
 				trace("*************** Geo created**********");
-				geo = new Geolocation();
-				geo.addEventListener(GeolocationEvent.UPDATE,iGotGeo);
+				recreateGeo()
 				
 				try
 				{
@@ -75,6 +74,13 @@ package  com.mteamapp.gps
 					distriqtLocationClass = null ;
 				}
 			}
+		}
+		
+		/**Re create geoLocation class and its listeners*/
+		public static function recreateGeo():void
+		{
+			geo = new Geolocation();
+			geo.addEventListener(GeolocationEvent.UPDATE,iGotGeo);
 		}
 		
 		private static function controllDefaultPermission():void
@@ -183,6 +189,12 @@ package  com.mteamapp.gps
 		{
 			//TODO Complete the distance
 			return Math.sqrt(Math.pow(Number(Latitude)-GPSLatitudeRound,2)+Math.pow(Number(Longitude)-GPSLongitudeRound,2));
+		}
+		
+		/**Returns true if the geo location service is on*/
+		public static function isOn():Boolean
+		{
+			return GPSLatitude!=0 || GPSLongitude!=0 ;
 		}
 	}
 }
