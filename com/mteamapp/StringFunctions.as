@@ -353,11 +353,11 @@ package com.mteamapp
 				return 0 ;
 			}
 			
-			if(str1=='')
+			if(str1=='' || str1 ==null)
 			{
 				return -1 ;
 			}
-			if(str2=='')
+			if(str2=='' || str2==null)
 			{
 				return 1 ;
 			}
