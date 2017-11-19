@@ -72,6 +72,8 @@ package soundPlayer
 							
 							deactivated:Boolean=false;
 							
+		private static var _preventExitHandler:Boolean = false ;
+							
 		public static function setUp(MyStage:Stage,dicativeAllOnBackGround:Boolean = false,handleBackBTNOnAndroid:Boolean=true)
 		{
 			if(myStage!=null)
@@ -84,6 +86,8 @@ package soundPlayer
 			diactiveAllOnBack = dicativeAllOnBackGround ;
 			
 			isActive = true ;
+			
+			handleBackBTNOnAndroid = !_preventExitHandler && handleBackBTNOnAndroid ;
 			
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,activate);
 			NativeApplication.nativeApplication.removeEventListener(Event.DEACTIVATE,deActivate);
@@ -122,6 +126,12 @@ package soundPlayer
 			tim = new Timer(timSpeed);
 			tim.addEventListener(TimerEvent.TIMER,timing);
 			tim.start();
+		}
+		
+		public static function preventExitHandler():void
+		{
+			_preventExitHandler = true ;
+			NativeApplication.nativeApplication.removeEventListener(KeyboardEvent.KEY_DOWN,checkExit);
 		}
 		
 		
@@ -595,6 +605,32 @@ package soundPlayer
 			var callerID:Number = gI(ID);
 			mySound[callerID].extract(extractedBytes,Math.floor((mySound[callerID].length/1000)*44100));
 			extractedBytes.position = 0 ;
+		}
+		
+		/**Step the current sound forward as much as you whant*/
+		public static function stepForward(soundId:uint,howMuchMiliseconds:uint=10000):void
+		{
+			var totalLength:uint = getMusicTime(soundId);
+			var currentPrecent:Number = getPlayedPrecent(soundId) ;
+			var currentTime:uint = uint(totalLength*currentPrecent);
+			trace("currentTime : "+currentTime)
+			trace("totalLength : "+totalLength);
+			var newTime:uint = Math.min(totalLength,currentTime+howMuchMiliseconds);
+			SoundPlayer.pause(soundId,true);
+			play(soundId,true,true,newTime/totalLength);
+		}
+		
+		/**Step the current sound backward as much as you whant*/
+		public static function stepBackward(soundId:uint,howMuchMiliseconds:uint=10000):void
+		{
+			var totalLength:uint = getMusicTime(soundId);
+			var currentPrecent:Number = getPlayedPrecent(soundId) ;
+			var currentTime:uint = uint(totalLength*currentPrecent);
+			trace("currentTime : "+currentTime)
+			trace("totalLength : "+totalLength);
+			var newTime:uint = Math.max(0,currentTime-howMuchMiliseconds);
+			SoundPlayer.pause(soundId,true);
+			play(soundId,true,true,newTime/totalLength);
 		}
 	}
 }
