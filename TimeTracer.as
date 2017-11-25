@@ -1,12 +1,24 @@
 package 
 {
+	import contents.alert.Alert;
+	
 	import flash.utils.getTimer;
 
 	public class TimeTracer
 	{
-		public static function tr(id:*):void
+		private static var lastTime:Number ;
+		public static function tr(id:*,useAlert:Boolean=false):void
 		{
-			trace("• "+String(id)+" : "+getTimer());
+			var str:String = ("• "+String(id)+" : "+getTimer()+" > delay : "+(getTimer()-lastTime));
+			if(useAlert)
+			{
+				Alert.show(str);
+			}
+			else
+			{
+				trace(str);
+			}
+			lastTime = getTimer();
 		}
 	}
 }
