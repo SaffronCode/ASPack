@@ -187,6 +187,15 @@ package com.mteamapp
 		{
 			return str.split('\n').join('').split('\r').join('').split('\t').join('').split(' ').join('');
 		}
+		
+		
+		/**This function will remove all spaces and tabs and enters from a string*/
+		public static function clearSpacesAndTabsAndArrows(str:String):String
+		{
+			return str.split('\n').join('').split('\r').join('').split('\t').join('').split(' ').join('').split('<').join('').split('>').join('');
+		}
+		
+		
 	
 		
 		
