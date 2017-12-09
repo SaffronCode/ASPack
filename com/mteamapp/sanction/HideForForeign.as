@@ -1,4 +1,5 @@
 package com.mteamapp.sanction
+	//com.mteamapp.sanction.HideForForeign
 {
 	import flash.display.MovieClip;
 	
