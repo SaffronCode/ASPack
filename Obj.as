@@ -38,6 +38,10 @@ package
 		
 		public static function get(name:String,on:DisplayObjectContainer,clas:Class=null)
 		{
+			if(on==null)
+			{
+				return null ;
+			}
 			var targ:* = on.getChildByName(name);
 			if(clas!=null)
 			{
