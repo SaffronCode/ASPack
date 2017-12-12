@@ -141,12 +141,12 @@ package
 					
 	//subsidary variables ↓
 					
-		private var currselW:Number=4,
-					currselRound:Number=4,
-					currselMargin:Number = 1,
-					
-					currselXArea:Number,
-					currselYArea:Number;
+		public static var 	currselW:Number=4,
+							currselRound:Number=4,
+							currselMargin:Number = 1,
+							
+							currselXArea:Number,
+							currselYArea:Number;
 		
 	
 		
