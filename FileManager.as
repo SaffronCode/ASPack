@@ -91,7 +91,7 @@ package
 			}
 			catch(e:Error)
 			{
-				return e.message ;
+				return "Error:"+e.message ;
 			}
 			if(!openAsync)
 			{

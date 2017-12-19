@@ -602,7 +602,7 @@ package
 		}
 		
 		/**In binary format : 4:100 is Seda, 0:00 */
-		private function MESfindeType(ch):int
+		private function MESfindeType(ch:*):int
 		{
 			
 			var cash = typeHirostic[ch];
@@ -1009,7 +1009,7 @@ package
 					continue
 				}
 				//if(MESfindeType(matn.charAt(myI)).charAt(0)=='1'&&MESfindeType(matn.charAt(myI+1)).charAt(1)=='1'&&(matn.charAt(myI+1)!='ـ')){
-				if((MESfindeType(matn.charAt(myI)) & 2 == 2) && (MESfindeType(matn.charAt(myI+1)) & 1 == 1 ) && (matn.charAt(myI+1) != 'ـ')){
+				if(((MESfindeType(matn.charAt(myI)) & 2) == 2) && ((MESfindeType(matn.charAt(myI+1)) & 1) == 1 ) && (matn.charAt(myI+1) != 'ـ')){
 					shans.push(myI+1)
 				}
 			}

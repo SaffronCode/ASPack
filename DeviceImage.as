@@ -295,35 +295,40 @@
 		{
 			
 			var fileStream:FileStream = new FileStream();
-			fileStream.open(file,FileMode.READ);
-			
-			if(!onLoadingVideo)
-			{
-				imageBytes = new ByteArray();
-				fileStream.readBytes(imageBytes,0,fileStream.bytesAvailable);
-				imageBytes.position = 0 ;
-			}
-			else
-			{
-				videoBytes = new ByteArray();
-				fileStream.readBytes(videoBytes,0,fileStream.bytesAvailable);
-				videoBytes.position = 0 ;
-			}
-			fileStream.close();
-			
-			if( !onLoadingVideo && (autoResize || !isNaN(tempW)))
-			{
-				resizeLoadedImage(onDone,tempW,tempH,imageBytes);
-			}
-			else if(false && onLoadingVideo)//Capturing video had problem
-			{
-				captureVideoDemo(onDone);
-			}
-			else
-			{
-				onDone();
-			}
+			fileStream.addEventListener(Event.COMPLETE, imageFileLoaded);
+			fileStream.openAsync(file,FileMode.READ);
 		}
+
+        private static function imageFileLoaded(event:Event):void {
+			var fileStream:FileStream = event.currentTarget as FileStream;
+
+            if(!onLoadingVideo)
+            {
+                imageBytes = new ByteArray();
+                fileStream.readBytes(imageBytes,0,fileStream.bytesAvailable);
+                imageBytes.position = 0 ;
+            }
+            else
+            {
+                videoBytes = new ByteArray();
+                fileStream.readBytes(videoBytes,0,fileStream.bytesAvailable);
+                videoBytes.position = 0 ;
+            }
+            fileStream.close();
+
+            if( !onLoadingVideo && (autoResize || !isNaN(tempW)))
+            {
+                resizeLoadedImage(onDone,tempW,tempH,imageBytes);
+            }
+            else if(false && onLoadingVideo)//Capturing video had problem
+            {
+                captureVideoDemo(onDone);
+            }
+            else
+            {
+                onDone();
+            }
+        }
 		
 		
 		
