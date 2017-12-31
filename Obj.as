@@ -69,7 +69,7 @@ package
 					(target as MovieClip).stopAllMovieClips();
 				}catch(e){};
 			}
-			if(target.parent!=null)
+			if(target!= null && target.parent!=null)
 			{
 				DisplayObjectContainer(target.parent).removeChild(target);
 			}
