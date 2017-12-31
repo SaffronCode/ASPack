@@ -1,4 +1,4 @@
-package com.mteamapp.recorder
+﻿package com.mteamapp.recorder
 {
 	import flash.events.ErrorEvent;
 	import flash.events.Event;
@@ -7,6 +7,7 @@ package com.mteamapp.recorder
 	import flash.media.Sound;
 	import flash.utils.ByteArray;
 	import flash.utils.clearTimeout;
+	import flash.utils.getTimer;
 	import flash.utils.setTimeout;
 	
 	import fr.kikko.lab.ShineMP3Encoder;
@@ -14,6 +15,8 @@ package com.mteamapp.recorder
 	import org.bytearray.micrecorder.MicRecorder;
 	import org.bytearray.micrecorder.encoder.WaveEncoder;
 	import org.bytearray.micrecorder.events.RecordingEvent;
+	
+	import wrokersJob.WorkerFunctions;
 
 	/**Recording is completed and mp3 is ready to use*/
 	[Event(name="complete", type="flash.events.Event")]
@@ -41,13 +44,47 @@ package com.mteamapp.recorder
 		
 		private static var MP3Bytes:ByteArray ;
 		
+		private static var WAVEByte:ByteArray ;
+		
 		private static var saveWaveFormat:Boolean = false ;
 		
 		private static var _onSaveProccess:Boolean = false ;
+		private static var recordStartTime:int;
+		private static var Duration:Number;
 		
 		public static function get MP3File():ByteArray
 		{
 			return MP3Bytes ;
+		}
+		
+		public static function get wavFile():ByteArray
+		{
+			return WAVEByte ;
+		}
+		
+		public static function createWaveForm(len:uint=50):Array
+		{
+			if(WAVEByte==null)
+			{
+				return [] ;
+			}
+			
+			const div:uint = 4 ;
+			
+			var waveForm:Array = [] ;
+			var fileL:Number = WAVEByte.length;
+			len = Math.min(fileL,len);
+			var sliceL:uint = Math.max(1,Math.floor((fileL/div)/len)) ;
+			
+			trace("fileL : "+fileL);
+			trace("sliceL : "+sliceL);
+			for(var j:int = 0 ; waveForm.length<len ; j+=sliceL)
+			{
+				trace("Get sound position from : "+j);
+				WAVEByte.position = Math.min(fileL,j*div) ;
+				waveForm.push(WAVEByte.readByte())
+			}
+			return waveForm ;
 		}
 		
 		private static function setUp():void
@@ -69,8 +106,13 @@ package com.mteamapp.recorder
 			
 			dispatcher.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS));
 			length = recorder.length ;
+			
+			WAVEByte = new ByteArray();
+			WAVEByte.writeBytes(recorder.output);
+			
 			if(!saveWaveFormat)
 			{
+				//WorkerFunctions.byteToBase64(fd
 				mp3Encoder = new ShineMP3Encoder(recorder.output);
 				mp3Encoder.addEventListener(Event.COMPLETE, mp3EncodeComplete);
 				mp3Encoder.addEventListener(ProgressEvent.PROGRESS, mp3EncodeProgress);
@@ -129,6 +171,11 @@ package com.mteamapp.recorder
 		{
 			saveWaveFormat = SaveWaveFormat ;
 			setUp();
+			if(WAVEByte!=null)
+			{
+				WAVEByte.clear();
+			}
+			WAVEByte = null ;
 			
 			if(_isRecording)
 			{
@@ -140,10 +187,31 @@ package com.mteamapp.recorder
 			MP3Bytes = new ByteArray();
 			_isRecording = true;
 			recorder.record();
+			recordStartTime = getTimer();
+			Duration = duration ;
 			if(duration!=0)
 			{
 				timeOutId = setTimeout(stopRecording,duration);
 			}
+		}
+		
+		/**Returns in miliseconds*/
+		public static function getRecordingTimeLeft():int
+		{
+			if(Duration == 0)
+			{
+				return 0 ;
+			}
+			else
+			{
+				var deltaTime:int = getTimer()-recordStartTime ;
+				return Math.max(0,Duration-deltaTime);
+			}
+		}
+		
+		public static function getRecordingTimeLeftInSecond():uint
+		{
+			return Math.floor(getRecordingTimeLeft()/1000)
 		}
 		
 		public static function pause():void
