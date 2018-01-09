@@ -61,7 +61,6 @@ $RECYCLE.BIN/
 *.doc
 *.docx
 *.rar
-*.zip
 
 # Ignored folders
 \objects
