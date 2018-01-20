@@ -46,7 +46,7 @@ package
 	public class ScrollMT extends EventDispatcher
 	{
 		
-		public static const LOCK_SCROLL_TILL_MOUSE_UP:String = "LOCK_SCROLL_TILL_MOUSE_UP";
+		public static const LOCK_SCROLL_TILL_MOUSE_UP:String = ScrollMTEvent.LOCK_SCROLL_TILL_MOUSE_UP;
 		
 		public static const UN_LOCK_SCROLL:String = "UN_LOCK_SCROLL";
 		

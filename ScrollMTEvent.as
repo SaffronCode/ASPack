@@ -9,6 +9,7 @@ package
 		
 		/**This event will dispatch on all scrolled items childs to tell them that they are scrolling*/
 		public static const YOU_ARE_SCROLLING_FROM_YOUR_PARENT:String = "YOU_ARE_SCROLLING_FROM_YOUR_PARENT";
+		public static const LOCK_SCROLL_TILL_MOUSE_UP:String = "LOCK_SCROLL_TILL_MOUSE_UP";
 		
 		/**It will force the scroller to scroll up or down from the command from it's childs*/
 		public static const SCROLL_THE_SCROLLER:String = "SCROLL_THE_SCROLLER" ;
