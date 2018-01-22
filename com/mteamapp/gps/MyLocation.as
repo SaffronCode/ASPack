@@ -3,6 +3,8 @@ package  com.mteamapp.gps
 	import com.mteamapp.StringFunctions;
 	
 	import flash.events.GeolocationEvent;
+	import flash.events.PermissionEvent;
+	import flash.permissions.PermissionStatus;
 	import flash.sensors.Geolocation;
 	import flash.utils.getDefinitionByName;
 
@@ -80,7 +82,37 @@ package  com.mteamapp.gps
 		public static function recreateGeo():void
 		{
 			geo = new Geolocation();
-			geo.addEventListener(GeolocationEvent.UPDATE,iGotGeo);
+			
+			if (Geolocation.permissionStatus != PermissionStatus.GRANTED)
+			{
+				geo.addEventListener(PermissionEvent.PERMISSION_STATUS,
+					function(e:PermissionEvent):void {
+						if (e.status == PermissionStatus.GRANTED)
+						{
+							getLoacationCreated();
+						}
+						else
+						{
+							// permission denied
+						}
+					});
+				
+				try {
+					geo.requestPermission();
+				} catch(e:Error)
+				{
+					// another request is in progress
+				}
+			}
+			else
+			{
+				getLoacationCreated();
+			}
+			
+			function getLoacationCreated():void
+			{
+				geo.addEventListener(GeolocationEvent.UPDATE,iGotGeo);
+			}
 		}
 		
 		private static function controllDefaultPermission():void
