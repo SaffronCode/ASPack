@@ -2,9 +2,11 @@ package org.bytearray.micrecorder
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
+	import flash.events.PermissionEvent;
 	import flash.events.SampleDataEvent;
 	import flash.events.StatusEvent;
 	import flash.media.Microphone;
+	import flash.permissions.PermissionStatus;
 	import flash.utils.ByteArray;
 	import flash.utils.getTimer;
 	
@@ -109,18 +111,49 @@ package org.bytearray.micrecorder
 		public function record():void
 		{
 			isPaused = false ;
+			_difference = getTimer();
 			if ( _microphone == null )
 				_microphone = Microphone.getMicrophone();
+			
+			if (Microphone.permissionStatus != PermissionStatus.GRANTED)
+			{
+				_microphone.addEventListener(PermissionEvent.PERMISSION_STATUS,
+					function(e:PermissionEvent):void {
+						if (e.status == PermissionStatus.GRANTED)
+						{
+							micConnected();
+						}
+						else
+						{
+							// permission denied
+						}
+					});
+				
+				try {
+					_microphone.requestPermission();
+				} catch(e:Error)
+				{
+					// another request is in progress
+				}
+			}
+			else
+			{
+				micConnected();
+			}
 			 
-			_difference = getTimer();
 			
-			_microphone.setSilenceLevel(_silenceLevel, _timeOut);
-			_microphone.gain = _gain;
-			_microphone.rate = _rate;
-			_buffer.length = 0;
 			
-			_microphone.addEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
-			_microphone.addEventListener(StatusEvent.STATUS, onStatus);
+			
+			function micConnected():void
+			{
+				_microphone.setSilenceLevel(_silenceLevel, _timeOut);
+				_microphone.gain = _gain;
+				_microphone.rate = _rate;
+				_buffer.length = 0;
+				
+				_microphone.addEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
+				_microphone.addEventListener(StatusEvent.STATUS, onStatus);
+			}
 		}
 		
 		private function onStatus(event:StatusEvent):void
@@ -168,7 +201,7 @@ package org.bytearray.micrecorder
 		{
 			return _gain;
 		}
-
+		
 		/**
 		 * 
 		 * @param value
