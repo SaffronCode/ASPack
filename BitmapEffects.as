@@ -12,6 +12,7 @@ package
 	import flash.display.BitmapData;
 	import flash.display.JPEGEncoderOptions;
 	import flash.display.PNGEncoderOptions;
+	import flash.filters.BlurFilter;
 	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -95,6 +96,12 @@ package
 				newBitmapData.draw(bitmapData,new Matrix(scaleX,0,0,scaleY,0,0),null,null,null,true);
 			}
 			return newBitmapData;
+		}
+		
+		/**This function make chane on the original bitma;*/
+		public static function blur(bitmapData:BitmapData,blurLevel:Number=4.0,quality:uint=1):void
+		{
+			bitmapData.applyFilter(bitmapData,bitmapData.rect,new Point(),new BlurFilter(blurLevel,blurLevel,quality));
 		}
 		
 		
