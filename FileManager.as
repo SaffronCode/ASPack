@@ -3,9 +3,11 @@ package
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
+	import flash.events.PermissionEvent;
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.permissions.PermissionStatus;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
 
@@ -23,20 +25,24 @@ package
 			var fileBytes:ByteArray = new ByteArray();
 			var fileStream:FileStream = new FileStream();
 			
-			if(!openAsync)
-			{
-				fileStream.open(fileTarget,FileMode.READ);
+			
+			controlFilePermission(function(){
 				
-				fileStream.readBytes(fileBytes);
-				fileStream.close();
-				fileBytes.position = 0 ;
-			}
-			else
-			{
-				onDone = onLoaded ;
-				fileStream.addEventListener(Event.COMPLETE,fileLoaded);
-				fileStream.openAsync(fileTarget,FileMode.READ);
-			}
+				if(!openAsync)
+				{
+					fileStream.open(fileTarget,FileMode.READ);
+					
+					fileStream.readBytes(fileBytes);
+					fileStream.close();
+					fileBytes.position = 0 ;
+				}
+				else
+				{
+					onDone = onLoaded ;
+					fileStream.addEventListener(Event.COMPLETE,fileLoaded);
+					fileStream.openAsync(fileTarget,FileMode.READ);
+				}
+			});
 			
 			return fileBytes;
 		}
@@ -54,6 +60,37 @@ package
 				onDone(fileBytes);
 		}
 		
+		/**Control the file permission*/
+		public static function controlFilePermission(onPermissionGranted:Function):void
+		{
+			var _file:File = new File() ;
+			if (File.permissionStatus != PermissionStatus.GRANTED)
+			{
+				_file.addEventListener(PermissionEvent.PERMISSION_STATUS,
+					function(e:PermissionEvent):void {
+						if (e.status == PermissionStatus.GRANTED)
+						{
+							onPermissionGranted();
+						}
+						else
+						{
+							// permission denied
+						}
+					});
+				
+				try {
+					_file.requestPermission();
+				} catch(e:Error)
+				{
+					// another request is in progress
+				}
+			}
+			else
+			{
+				onPermissionGranted();
+			}
+		}
+		
 		/**Save thesebytes to selected location<br>
 		 * This function will return the exeption string to*/
 		public static function seveFile(fileTarget:File,bytes:ByteArray,openAsync:Boolean=false,onSaved:Function=null):String
@@ -65,39 +102,43 @@ package
 			{
 				onDone = new Function();
 			}
-			try
-			{
-				if(fileTarget.exists)
+			
+			controlFilePermission(function(){
+				try
 				{
-					fileTarget.deleteFile();
+					if(fileTarget.exists)
+					{
+						fileTarget.deleteFile();
+					}
+					trace("File length : "+bytes.length+' save to :'+fileTarget.name);
+					var fileStream:FileStream = new FileStream();
+					
+					if(openAsync)
+					{
+						fileStream.addEventListener(Event.CLOSE,savingDone);
+						fileStream.addEventListener(IOErrorEvent.IO_ERROR,cannotSaveThisFile);
+						fileStream.openAsync(fileTarget,FileMode.WRITE);
+					}
+					else
+					{
+						fileStream.open(fileTarget,FileMode.WRITE);
+					}
+					bytes.position = 0 ;
+					fileStream.writeBytes(bytes,0,bytes.bytesAvailable);
+					fileStream.close();
+					//fileStream.position = 0 ;
+					//trace("fileStream : "+fileStream.bytesAvailable);
 				}
-				trace("File length : "+bytes.length+' save to :'+fileTarget.name);
-				var fileStream:FileStream = new FileStream();
-				if(openAsync)
+				catch(e:Error)
 				{
-					fileStream.addEventListener(Event.CLOSE,savingDone);
-					fileStream.addEventListener(IOErrorEvent.IO_ERROR,cannotSaveThisFile);
-					fileStream.openAsync(fileTarget,FileMode.WRITE);
+					return "Error:"+e.message ;
 				}
-				else
+				if(!openAsync)
 				{
-					fileStream.open(fileTarget,FileMode.WRITE);
+					onDone();
 				}
-				bytes.position = 0 ;
-				fileStream.writeBytes(bytes,0,bytes.bytesAvailable);
-				fileStream.close();
-				//fileStream.position = 0 ;
-				//trace("fileStream : "+fileStream.bytesAvailable);
-			}
-			catch(e:Error)
-			{
-				return "Error:"+e.message ;
-			}
-			if(!openAsync)
-			{
-				onDone();
-			}
-			return '' ;
+			});
+				return '' ;
 		}
 		
 		protected static function savingDone(event:Event):void
@@ -121,27 +162,33 @@ package
 				return ;
 			}
 			var files:Array = folder.getDirectoryListing();
-			var file:File ; 
-			for(var i = 0 ; i<files.length ; i++)
+			var _file:File ; 
+			
+			controlFilePermission(startDeleting);
+			
+			function startDeleting():void
 			{
-				file = files[i] as File;
-				if(file.isDirectory)
+				for(var i = 0 ; i<files.length ; i++)
 				{
-					deleteAllFiles(file);
-				}
-				else
-				{
-					try
+					_file = files[i] as File;
+					if(_file.isDirectory)
 					{
-						file.deleteFile();
+						deleteAllFiles(_file);
 					}
-					catch(e){};
+					else
+					{
+						try
+						{
+							_file.deleteFile();
+						}
+						catch(e){};
+					}
 				}
+				try
+				{
+					folder.deleteFile();
+				}catch(e){};
 			}
-			try
-			{
-				folder.deleteFile();
-			}catch(e){};
 		}
 		
 		/**Copy the folder to destination*/
@@ -155,28 +202,33 @@ package
 			{
 				destinationFolder.deleteDirectory(true);
 			}
-			if(folderFile.isDirectory)
+			controlFilePermission(onPermissionGranted);
+			
+			function onPermissionGranted():void
 			{
-				destinationFolder = destinationFolder.resolvePath(folderFile.name) ;
-				destinationFolder.createDirectory();
-				trace("Folder created : "+destinationFolder.nativePath);
-				var childFolders:Array = folderFile.getDirectoryListing() ;
-				for(var i:int = 0 ; i<childFolders.length ; i++)
+				if(folderFile.isDirectory)
 				{
-					copyFolder(childFolders[i] as File,destinationFolder,false,extentionExption);
-				}
-			}
-			else
-			{
-				var fileTarget:File = destinationFolder.resolvePath(folderFile.name) ;
-				if(extentionExption.indexOf(fileTarget.extension)==-1)
-				{
-					folderFile.copyTo(fileTarget,true);
-					trace("File copied : "+fileTarget.nativePath);
+					destinationFolder = destinationFolder.resolvePath(folderFile.name) ;
+					destinationFolder.createDirectory();
+					trace("Folder created : "+destinationFolder.nativePath);
+					var childFolders:Array = folderFile.getDirectoryListing() ;
+					for(var i:int = 0 ; i<childFolders.length ; i++)
+					{
+						copyFolder(childFolders[i] as File,destinationFolder,false,extentionExption);
+					}
 				}
 				else
 				{
-					trace("!!File didn't copied because of exeption: "+fileTarget.nativePath);
+					var fileTarget:File = destinationFolder.resolvePath(folderFile.name) ;
+					if(extentionExption.indexOf(fileTarget.extension)==-1)
+					{
+						folderFile.copyTo(fileTarget,true);
+						trace("File copied : "+fileTarget.nativePath);
+					}
+					else
+					{
+						trace("!!File didn't copied because of exeption: "+fileTarget.nativePath);
+					}
 				}
 			}
 		}
