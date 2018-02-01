@@ -494,6 +494,19 @@ package com.mteamapp
 		}
 		
 		
+		
+		/**http://www.google.com/342 >>> 342.  but it will returns 0 if no number found at the end of line*/
+		public static function returnLasNumberPartInInteger(str:String):uint
+		{
+			var matched:Array = str.match(/[\d]+$/) ;
+			if(matched == null || matched.length == 0)
+			{
+				return 0 ;
+			}
+			return uint(matched[0]) ;
+		}
+		
+		
 	//////////////////////////////////STring to color
 		/**Creats color from a link*/
 		public static function stringToColor(str:String):uint
