@@ -1,6 +1,8 @@
-package
+﻿package
 {
 	import com.mteamapp.StringFunctions;
+	
+	import diagrams.calender.MyShamsi;
 	
 	import flash.utils.getTimer;
 	
@@ -239,6 +241,23 @@ package
 			}
 			var clonedDate:Date = new Date(date.fullYear,date.month,date.date,date.hours,date.minutes,date.seconds,date.milliseconds);
 			return clonedDate;
+		}
+		
+	/////////////////////////////////////////////////////////////Shamsi↓
+		/**Sample is : 1395/09/06*/
+		public static function stringToMyShamsi(stringedDate:String):MyShamsi
+		{
+			if(stringedDate == null)
+			{
+				return null ;
+			}
+			var splited:Array = stringedDate.split('/');
+			if(splited.length!=3)
+			{
+				return null ;
+			}
+			var createdShamsi:MyShamsi = new MyShamsi(uint(splited[0]),uint(splited[1])-1,uint(splited[2]),0,0,0,0);
+			return createdShamsi ;
 		}
 	}
 }
