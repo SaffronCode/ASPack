@@ -22,11 +22,13 @@ package
 		
 		private static const addedImageName:String = "addedImage_havetoremove_";
 		
+		private static const bitmapDebuggBackgroundColor:uint = 0xff0000,
+							bitmapDebugTransparency:Boolean = true ;
 		
 		/**returns lesoluted bitmap Object*/
 		public static function capture(target:DisplayObject,resolution:Number = 1):Bitmap
 		{
-			var bitmapData:BitmapData = new BitmapData(target.width*resolution,target.height*resolution,true,0);
+			var bitmapData:BitmapData = new BitmapData(target.width*resolution,target.height*resolution,bitmapDebugTransparency,bitmapDebuggBackgroundColor);
 			bitmapData.draw(target,new Matrix(resolution,0,0,resolution),null,null,null,true);
 			var bitmap:Bitmap = new Bitmap(bitmapData,'auto',true);
 			bitmap.scaleX = bitmap.scaleY = 1/resolution;
@@ -64,7 +66,7 @@ package
 			var dx:Number = (p1.x-p2.x)/target.scaleX;
 			var dy:Number = (p1.y-p2.y)/target.scaleY;
 			
-			var bitmapData:BitmapData = new BitmapData(target.width*resolution/target.scaleX+moreWidth,target.height*resolution/target.scaleY+moreWidth,true,0);
+			var bitmapData:BitmapData = new BitmapData(target.width*resolution/target.scaleX+moreWidth,target.height*resolution/target.scaleY+moreWidth,bitmapDebugTransparency,bitmapDebuggBackgroundColor);
 			bitmapData.draw(target,new Matrix(resolution,0,0,resolution,dx,dy),null,null,null,true);
 			var bitmap:Bitmap = new Bitmap(bitmapData,'auto',true);
 			bitmap.scaleX = bitmap.scaleY = 1/resolution;
@@ -109,7 +111,7 @@ package
 				
 				//trace("Math.min("+textHeight+"-"+currentY+","+maxHeight+") : "+Math.min(textHeight-currentY,maxHeight))
 				
-				bitData = new BitmapData(textWidth*resolution,currentImageHeight*resolution,true,0);//0x33ff0000
+				bitData = new BitmapData(textWidth*resolution,currentImageHeight*resolution,bitmapDebugTransparency,bitmapDebuggBackgroundColor);//0x33ff0000
 			//	trace("captured image height : "+bitData.height);
 				bitData.draw(textFieldContainer,new Matrix(resolution,0,0,resolution,X0*resolution*-1,currentY*resolution*-1-Y0*resolution));
 				bitMap = new Bitmap(bitData);
