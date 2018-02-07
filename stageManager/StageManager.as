@@ -129,8 +129,6 @@ package stageManager
 		/**Controll the stage each frame*/
 		protected static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
 		{
-			
-			trace("Controll stage : myStage.fullScreenHeight "+myStage.fullScreenHeight);
 			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) )
 			{
 				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
