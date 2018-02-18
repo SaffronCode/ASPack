@@ -462,6 +462,38 @@ package com.mteamapp
 		}
 		
 	////////////////////////////////////////////////////////
+		/**Returns a domain of an url : www.google.com/translage >> google.com*/
+		public static function findMainDomain(url:String):String
+		{
+			var founded:Array = url.match(/^((http(s|):\/\/)|)[^\/^:^\r^\n]+/);
+			if(founded==null || founded.length==0)
+			{
+				return '';
+			}
+			var theDomain:String = String(founded[0]).toLowerCase();
+			theDomain = theDomain.split('https://').join('').split('http://').join('').split('www.').join('')
+			return theDomain ;
+		}
+		
+		/**Return positive number if port founded*/
+		public static function findPortOfURL(url:String):*
+		{
+			var founded:Array = url.match(/:[1234567890]+\//) ;
+			var portPart:String ;
+			if(founded==null || founded.length ==0 || (portPart = founded[0]).length<3)
+			{
+				return -1 ;
+			}
+			var portPartNumber:uint = uint(portPart.substring(1,portPart.length-1));
+			if(portPartNumber==0)
+			{
+				return -1 ;
+			}
+			else
+			{
+				return portPartNumber ;
+			}
+		}
 		
 		/**Returns true if entered string was URL*/
 		public static function isURL(str:String):Boolean
