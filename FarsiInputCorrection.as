@@ -22,6 +22,8 @@ package
 {
 	import com.mteamapp.StringFunctions;
 	
+	import contents.alert.Alert;
+	
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -238,7 +240,7 @@ package
 			myStageText.editable = editableNativeText ;
 			if(DevicePrefrence.isItPC)
 			{
-				myStageText.fontFamily = textFormat.font;
+				myStageText.fontFamily = textFormat.font.split(" Bold").join("").split(" Regular").join("");
 			}
 			myStageText.fontSize = Number(textFormat.size);
 			//trace("myStageText.fontSize : "+myStageText.fontSize);
@@ -389,7 +391,7 @@ package
 		{
 			//var changedString:String = str.split('\n').join('\r').split('\r').join('\n\r');
 			//trace('****************************\n'+visualString(str)+'\n'+visualString(changedString));
-			return RemoveEnters(str).split('\n').join('\r').split('\r').join('\n\r');
+			return RemoveEnters(str).split('\n').join('\r');//.split('\r').join('\n\r');
 		}
 		
 		public function RemoveEnters(str:String):String
