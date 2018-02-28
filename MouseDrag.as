@@ -26,7 +26,8 @@ package
 							prevFunc:Vector.<Function>,
 							funcId:Vector.<uint> ;
 		
-		private static var mouseFirstX:Number,
+		private static var 	mouseFirstX:Number,
+							mouseFirstY:Number,
 							dragTime:Number;
 							
 		private static var currentFuncId:uint = 1 ;
@@ -102,6 +103,7 @@ package
 		private static function mouseDragStarted(e:MouseEvent)
 		{
 			mouseFirstX = myStage.mouseX;
+			mouseFirstY = myStage.mouseY;
 			dragTime = getTimer();
 			//trace("▬ Listen to mouse Dragg");
 		}
@@ -111,8 +113,9 @@ package
 		private static function mouseDragStopd(e:MouseEvent)
 		{
 			var dx = myStage.mouseX - mouseFirstX ;
+			var dy = myStage.mouseY - mouseFirstY ;
 			dragTime = getTimer()-dragTime;
-			if(Math.abs(dx/dragTime)<mouseDragDelta)
+			if(Math.abs(dx/dragTime)<mouseDragDelta || Math.abs(dy)>Math.abs(dx))
 			{
 				//trace("▬ Mouse is not dragging")
 				return 
