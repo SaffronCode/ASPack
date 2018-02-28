@@ -330,6 +330,9 @@ package com.mteamapp
 		}
 		
 		/**Remove all html tags from the text*/
+		public static function clearHTMLTags(ReferText:String):String{return removeHTML(ReferText);}
+		
+		/**Remove all html tags from the text*/
 		public static function removeHTML(ReferText:String):String
 		{
 			
