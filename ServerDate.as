@@ -165,6 +165,39 @@
 			return createdDate ;
 		}
 		
+		/**1396-12-15 10:50:00 
+		 * 1396/12/15 10:50:00" 
+		 * 1396/12/15 10:50:00 AM
+		 * */
+		public static function serverDateToShamsiDate(date:String):MyShamsi
+		{
+			if(date == '' || date==null)
+			{
+				return new MyShamsi();
+			}
+			
+			var splitter:Array;
+			var dateSplitter:Array ;
+			var timeSplitter:Array;
+			var createdDate:MyShamsi;
+			
+			splitter = date.split(' ');
+			var formatDate:String='/';
+			if(date.indexOf(formatDate)==-1)formatDate = '-';
+			dateSplitter = (splitter[0] as String).split(formatDate);
+			timeSplitter = (splitter[1] as String).split(':');
+			
+			if(timeSplitter[0]=='12')
+			{
+				timeSplitter[0] = '0';
+			}
+			createdDate = new MyShamsi(Number(dateSplitter[0]),Number(dateSplitter[1])-1,Number(dateSplitter[2]),Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
+			if(splitter[2] == "PM" && Number(timeSplitter[0])<12)
+			{
+				createdDate.hours+=12 ;
+			}
+			return createdDate ;
+		}
 		
 		
 		
