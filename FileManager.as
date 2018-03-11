@@ -96,6 +96,10 @@ package
 		public static function seveFile(fileTarget:File,bytes:ByteArray,openAsync:Boolean=false,onSaved:Function=null):String
 		{
 			//The async file saver had problem. it cannot save all binary datas by one request.
+			if(bytes==null)
+			{
+				throw "The required byte to save is empty! check it";
+			}
 			openAsync = false ;
 			onDone = onSaved ;
 			if(onDone==null)
