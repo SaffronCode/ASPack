@@ -512,10 +512,29 @@ package com.mteamapp
 		}
 		
 		///////////////////////////////////////////////////////**********/////////////////////////
-		/**2500>>>>>>>2,500*/
+		/**2500>>>>>>>2,500  12.5654*/
 		public static function currancyPrint(inputcurencynumber:*):String
 		{
 			inputcurencynumber=String(inputcurencynumber);
+			
+			var relPart:String = '' ;
+			var floatPart:String = '' ;
+			
+			var splitedNumber:Array = String(inputcurencynumber).split('.') ;
+			
+			relPart = splitedNumber[0] ;
+			
+			if(splitedNumber.length>1)
+			{
+				floatPart = '.'+splitedNumber[1] ;
+			}
+			else
+			{
+				floatPart = '' ;
+			}
+			
+			inputcurencynumber = relPart ;
+			
 			var s2:String;
 			s2="";
 			
@@ -525,7 +544,8 @@ package com.mteamapp
 				inputcurencynumber = inputcurencynumber.substring(0, inputcurencynumber.length - 3);
 			}
 			
-			return inputcurencynumber+s2
+			return inputcurencynumber+s2+floatPart
+		
 		}
 		
 		
