@@ -968,6 +968,13 @@ package
 			}
 			//manage cursel s place to
 			
+			setCursols();
+			
+			
+		}
+		
+		private function setCursols():void
+		{
 			if(unLockLeftRight)
 			{
 				//trace('move left to right');
@@ -1010,19 +1017,16 @@ package
 				//precentYRaw = Math.abs(precentYRaw);
 				/*if(precentYRaw>1)
 				{
-					precentYRaw = 1-(precentYRaw-Math.floor(precentYRaw))
+				precentYRaw = 1-(precentYRaw-Math.floor(precentYRaw))
 				}*/
 				precentY = Math.min(1,Math.max(0,precentYRaw));
 				/*if(revertY)
 				{
-					precentY = 1-precentY;
+				precentY = 1-precentY;
 				}*/
 				curselTopDown.y = currselYArea*precentY+maskRect.y+currselMargin+currselW ;
 			}
-			
-			
-		}
-		
+		}		
 		
 		/**This will returns true if the scroller is in the correct ragne and there is no need to wait till scroller back to the page*/
 		public function isInRange():Boolean
@@ -1228,6 +1232,8 @@ package
 			//Debugged
 				targ.x = targetRect.x ;
 				targ.y = targetRect.y ;
+				
+			setCursols();
 		}
 		
 		
