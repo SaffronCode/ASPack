@@ -143,10 +143,10 @@ package
 					
 		public static var 	currselW:Number=4,
 							currselRound:Number=4,
-							currselMargin:Number = 1,
+							currselMargin:Number = 1;
 							
-							currselXArea:Number,
-							currselYArea:Number;
+		private var currselXArea:Number,
+					currselYArea:Number;
 		
 	
 		
