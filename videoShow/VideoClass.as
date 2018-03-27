@@ -16,6 +16,8 @@ package videoShow
 	import flash.media.Video;
 	import flash.net.NetConnection;
 	import flash.net.NetStream;
+	
+	import nativeClasses.player.DistriqtMediaPlayer;
 
 	[Event(name="VIDEO_LOADED", type="videoShow.VideoEvents")]
 	[Event(name="VIDEO_NOT_FOUND", type="videoShow.VideoEvents")]
@@ -142,7 +144,7 @@ package videoShow
 		/**load this video file*/
 		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN,videoExtention:String=null,useOnHMLTag:Boolean=true)
 		{
-			trace("loadThiwVideo : "+videoURL);
+			//Alert.show("loadThiwVideo : "+videoURL);
 			if(!isNaN(Width))
 			{
 				W = Width ;
@@ -154,7 +156,15 @@ package videoShow
 			
 			var iosDebug:Boolean = false ;
 			
-			if((iosDebug ||DevicePrefrence.isIOS()) && (videoURL.toLocaleLowerCase().lastIndexOf('.mp4')!=-1 || videoExtention.indexOf("mp4")!=-1))
+			//Alert.show("DistriqtMediaPlayer.isSupports "+DistriqtMediaPlayer.isSupports);
+			if(DistriqtMediaPlayer.isSupports)
+			{
+				var distriqtVideo:DistriqtMediaPlayer = new DistriqtMediaPlayer(W,H);
+				this.addChild(distriqtVideo);
+				//Alert.show("videoURL : "+videoURL);
+				distriqtVideo.playVideo(videoURL,true);
+			}
+			else if((iosDebug ||DevicePrefrence.isIOS()) && (videoURL.toLocaleLowerCase().lastIndexOf('.mp4')!=-1 || videoExtention.indexOf("mp4")!=-1))
 			{
 				this.graphics.clear();
 				this.graphics.beginFill(0,0);
