@@ -79,7 +79,7 @@ package
 		
 		
 		/**Split extra text is not working .*/
-		public static function OnButton(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean=false,arabicNumber:Boolean=false,captureResolution:Number=0,splitTheExtraText:Boolean=false,feelItCompletlyWithText:Boolean=false):void
+		public static function OnButton(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean=false,arabicNumber:Boolean=false,captureResolution:Number=0,splitTheExtraText:Boolean=false,dynamicWidth:Boolean=false):void
 		{
 			/**the object that have to remove befor star, it added from last tryes*/
 			if(captureResolution<=0)
@@ -127,7 +127,10 @@ package
 			{
 				textField.
 			}*/
-			
+			if(dynamicWidth)
+			{
+				textField.width = textField.textWidth+5 ;
+			}
 			//manage ing text field size
 			if( textField.textWidth > textField.width-5 )
 			{
