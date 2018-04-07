@@ -62,6 +62,10 @@ package
 		/**remove this object from its parents*/
 		public static function remove(target:DisplayObject)
 		{
+			if(target==null)
+			{
+				return ;
+			}
 			if(target is MovieClip)
 			{
 				try
