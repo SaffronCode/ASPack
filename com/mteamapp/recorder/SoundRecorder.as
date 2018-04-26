@@ -4,6 +4,7 @@
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.ProgressEvent;
+	import flash.filesystem.File;
 	import flash.media.Sound;
 	import flash.utils.ByteArray;
 	import flash.utils.clearTimeout;
@@ -112,12 +113,12 @@
 			
 			if(!saveWaveFormat)
 			{
-				//WorkerFunctions.byteToBase64(fd
-				mp3Encoder = new ShineMP3Encoder(recorder.output);
-				mp3Encoder.addEventListener(Event.COMPLETE, mp3EncodeComplete);
-				mp3Encoder.addEventListener(ProgressEvent.PROGRESS, mp3EncodeProgress);
-				mp3Encoder.addEventListener(ErrorEvent.ERROR, mp3EncodeError);
-				mp3Encoder.start();
+				WorkerFunctions.waveTomp3(recorder.output,mp3EncodeComplete2/*,mp3EncodeProgress,mp3EncodeError*/);
+				/*mp3Encoder = new ShineMP3Encoder();
+				mp3Encoder.addEventListener(Event.COMPLETE, );
+				mp3Encoder.addEventListener(ProgressEvent.PROGRESS, );
+				mp3Encoder.addEventListener(ErrorEvent.ERROR, );
+				mp3Encoder.start();*/
 			}
 			else
 			{
@@ -143,6 +144,23 @@
 			
 			trace("On recording progress : "+event.bytesLoaded,event.bytesTotal);
 			dispatcher.dispatchEvent(new ProgressEvent(ProgressEvent.PROGRESS,false,false,event.bytesLoaded,event.bytesTotal));
+		}
+		
+		protected static function mp3EncodeComplete2(data:Array):void
+		{
+			trace("*** The file is saved on " +data[0]);
+			MP3Bytes = new ByteArray();
+			var targetfile:File = new File(data[0]);
+			trace("MP3 is ready : "+targetfile.nativePath);
+			FileManager.loadFile(targetfile,true,onFileLoaded);
+			function onFileLoaded(loadedMP3:ByteArray):void
+			{
+				MP3Bytes.writeBytes(loadedMP3,0,loadedMP3.length);
+				targetfile.deleteFileAsync();
+				_isRecording = false ;
+				_onSaveProccess = false ;
+				dispatcher.dispatchEvent(new Event(Event.COMPLETE));
+			}
 		}
 		
 		protected static function mp3EncodeComplete(event:Event):void
