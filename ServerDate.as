@@ -181,6 +181,8 @@
 			var timeSplitter:Array;
 			var createdDate:MyShamsi;
 			
+			date = date.split('/').join('-') ;
+			
 			splitter = date.split(' ');
 			var formatDate:String='/';
 			if(date.indexOf(formatDate)==-1)formatDate = '-';
@@ -191,7 +193,7 @@
 			{
 				timeSplitter[0] = '0';
 			}
-			createdDate = new MyShamsi(Number(dateSplitter[0]),Number(dateSplitter[1])-1,Number(dateSplitter[2]),Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
+			createdDate = new MyShamsi(Number(dateSplitter[0]),Number(dateSplitter[1])-1,Number(dateSplitter[2]),Number(timeSplitter[0]),Number(timeSplitter[1]),(timeSplitter.length>=3)?Number(timeSplitter[2]):null);
 			if(splitter[2] == "PM" && Number(timeSplitter[0])<12)
 			{
 				createdDate.hours+=12 ;
