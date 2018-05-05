@@ -184,7 +184,8 @@ package org.bytearray.micrecorder
 		 */		
 		public function stop():void
 		{
-			_microphone.removeEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
+			if(_microphone)
+				_microphone.removeEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
 			
 			_buffer.position = 0;
 			_output = _encoder.encode(_buffer, 1);
