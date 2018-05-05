@@ -38,7 +38,7 @@ package
 		//Not Effected
 		
 		public static var splitters:Array = [',','.',' ','-',')',':',':'];
-		public static var adad = '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹۰۱۲۳۴۵۶۷۸۹����٪٪';
+		public static var adad = '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹۰۱۲۳۴۵۶۷۸۹����٪٪1234567890';
 		public static var estesna:String = '-[]»«)("/\\:';
 		public static var forceToEnglish:String = '' ;
 		
@@ -52,7 +52,7 @@ package
 		
 		/**Numeric characters will not have absolute direction.*/
 		public static var	smartTextAlign:Boolean = false ,
-							floatingChars:String = "-/\\+=.() ",
+							floatingChars:String = "-/\\+=.()",
 							notSureChars:String = "0123456789",
 							lastRtlStatus:Boolean = true ;
 		
@@ -566,6 +566,10 @@ package
 					}
 					return lastRtlStatus ;
 				}
+				else if(forceToEnglish.indexOf(megh)!=-1 || adad.indexOf(megh)!=-1)
+				{
+					return true ;
+				}				
 				else if(lookingForard && notSureChars.indexOf(megh)!=-1)
 				{
 					//trace("Megh is floating char, so the next char for : "+megh+" on looking forward and isEnglish is : "+lastRtlStatus)
