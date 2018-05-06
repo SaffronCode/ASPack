@@ -243,7 +243,6 @@ package
 			
 			var lineHeight:Number = 0 ;
 			lastInfo_realTextHeight = 0 ; 
-			var descent:Number ;
 			var metric:TextLineMetrics;
 			
 			if(VerticalAlign_verticalHeight>0)
@@ -263,7 +262,7 @@ package
 				//trace(" ♦ : lineHeight : "+lineHeight);
 				//trace("VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
 				lineHeight = metric.height ;
-				descent = metric.descent ;
+				//descent = metric.descent ;
 			}
 			
 			if(text==null)
@@ -326,7 +325,7 @@ package
 			//trace("textField.numLines : "+textField.numLines);
 			metric = textField.getLineMetrics(0);
 			lineHeight = metric.height ;
-			descent = metric.descent ;
+			//descent = metric.descent ;
 			
 			var numLines:uint = textField.numLines ;
 			var checkIndex:uint = textField.text.length-1;
@@ -382,7 +381,7 @@ package
 					trace(" ♦ : lineHeight : "+lineHeight);*/
 					trace("• lastInfo_realTextHeight : "+lastInfo_realTextHeight);
 					trace("• VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
-					capturedObject.y = (VerticalAlign_verticalHeight-lastInfo_realTextHeight)/2-descent;
+					capturedObject.y = ((VerticalAlign_verticalHeight-lastInfo_realTextHeight)/2)-metric.descent/2;
 				}
 			}
 			
