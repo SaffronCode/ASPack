@@ -220,6 +220,13 @@
 		public static function startRecording(duration:Number=10*60*1000,SaveWaveFormat:Boolean = false,rate:uint=0):void
 		{
 			saveWaveFormat = SaveWaveFormat ;
+			
+			if(!saveWaveFormat)
+			{
+				trace("*** MP3 files should bee 44 hrtz ***");
+				rate = 0 ;
+			}
+			
 			setUp(rate);
 			if(WAVEByte!=null)
 			{
