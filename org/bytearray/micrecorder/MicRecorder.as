@@ -1,4 +1,4 @@
-package org.bytearray.micrecorder
+﻿package org.bytearray.micrecorder
 {
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -84,7 +84,7 @@ package org.bytearray.micrecorder
 			_encoder = encoder;
 			_microphone = microphone;
 			_gain = gain;
-			_rate = rate;
+			_rate = (rate==0)?44:rate;
 			_silenceLevel = silenceLevel;
 			_timeOut = timeOut;
 		}
@@ -188,7 +188,31 @@ package org.bytearray.micrecorder
 				_microphone.removeEventListener(SampleDataEvent.SAMPLE_DATA, onSampleData);
 			
 			_buffer.position = 0;
-			_output = _encoder.encode(_buffer, 1);
+			
+			var realRate:uint ;
+			
+			switch(_rate)
+			{
+				case 44:
+					realRate = 44100;
+					break;
+				case 22:
+					 realRate = 22050;
+					 break;
+				case 11:
+					 realRate = 11025;
+					 break;
+				case 8:
+					 realRate = 8000;
+					 break;
+				case 5:
+					 realRate = 5512;
+					 break;
+				 default:
+				 	realRate = 44100 ;
+			}
+			
+			_output = _encoder.encode(_buffer, 1,16,realRate);
 			
 			dispatchEvent( _completeEvent );
 		}

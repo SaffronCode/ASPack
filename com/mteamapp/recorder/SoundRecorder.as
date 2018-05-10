@@ -88,13 +88,29 @@
 			return waveForm ;
 		}
 		
-		private static function setUp():void
+		/**	The rate at which the microphone is capturing sound, in kHz. Acceptable values are 5, 8, 11, 22, and 44. The default value is 8 kHz if your sound capture device supports this value. Otherwise, the default value is the next available capture level above 8 kHz that your sound capture device supports, usually 11 kHz.<br> 
+			Note: The actual rate differs slightly from the rate value, as noted in the following table:<br>
+			<br>
+			rate value Actual frequency<br> 
+			44 44,100 Hz <br>
+			22 22,050 Hz <br>
+			11 11,025 Hz <br>
+			8 8,000 Hz <br>
+			5 5,512 Hz <br>
+			<br>
+			See Also:<br>
+			flash.media.Microphone.rate<br>
+			Language Version:<br>
+			3.0<br>
+			Player Version:<br>
+			Flash 9*/
+		private static function setUp(rate:int):void
 		{
 			if(!isSetUp)
 			{
 				var wavEncoder:WaveEncoder  = new WaveEncoder();
 				
-				recorder = new MicRecorder( wavEncoder );
+				recorder = new MicRecorder( wavEncoder,null,100,rate );
 				recorder.addEventListener(RecordingEvent.RECORDING, onRecording);
 				recorder.addEventListener(Event.COMPLETE, onRecordComplete);
 			}
@@ -184,11 +200,34 @@
 			return _isRecording;
 		}
 
-		/**Recrod duration is based on milisecond.*/
-		public static function startRecording(duration:Number=10*60*1000,SaveWaveFormat:Boolean = false):void
+		/**Recrod duration is based on milisecond.<br>
+	 	The rate at which the microphone is capturing sound, in kHz. Acceptable values are 5, 8, 11, 22, and 44. The default value is 8 kHz if your sound capture device supports this value. Otherwise, the default value is the next available capture level above 8 kHz that your sound capture device supports, usually 11 kHz.<br> 
+		 Note: The actual rate differs slightly from the rate value, as noted in the following table:<br>
+		 <br>
+		 rate value Actual frequency<br> 
+		 44 : 44,100 Hz <br>
+		 22 : 22,050 Hz <br>
+		 11 : 11,025 Hz <br>
+		 8 : 8,000 Hz <br>
+		 5 : 5,512 Hz <br>
+		 <br>
+		 See Also:<br>
+		 flash.media.Microphone.rate<br>
+		 Language Version:<br>
+		 3.0<br>
+		 Player Version:<br>
+		 Flash 9*/
+		public static function startRecording(duration:Number=10*60*1000,SaveWaveFormat:Boolean = false,rate:uint=0):void
 		{
 			saveWaveFormat = SaveWaveFormat ;
-			setUp();
+			
+			if(!saveWaveFormat)
+			{
+				trace("*** MP3 files should bee 44 hrtz ***");
+				rate = 0 ;
+			}
+			
+			setUp(rate);
 			if(WAVEByte!=null)
 			{
 				WAVEByte.clear();
