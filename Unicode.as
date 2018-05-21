@@ -393,7 +393,7 @@ package
 			}
 			lastRtlStatus = true ;
 			ch = farsiCorrection(ch);
-			var matn = "";
+			var matn:String = "";
 			var v0:int,v1:int,v2:int;
 			var numString='';
 			var parantez;
@@ -486,6 +486,7 @@ package
 				//trace("matn : "+matn);
 			}
 			matn =MESbekesh(numString)+matn;
+			matn = matn.split('¬').join('');
 			matn = UnicodeLaCorrector.laCorrection(matn);
 			return matn;
 		}
@@ -537,7 +538,7 @@ package
 		
 		public function farsiCorrection(str:String)
 		{
-			return str.split('آ').join('آ').split('ی').join('ي').split('‌').join(' ').split('‏').join(' ').split('¬').join(' ');
+			return str.split('آ').join('آ').split('ی').join('ي').split('‌').join(' ').split('‏').join(' ');
 		}
 		
 		
