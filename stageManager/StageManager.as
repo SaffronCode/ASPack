@@ -49,6 +49,9 @@ package stageManager
 		/**Activate resolution controll*/
 		private static var resolutionControll:Boolean,
 							scaleFactor:Number=1;
+							
+		/**I store the stage size like this : "1024,768"*/
+		private static var lastStageSize:String = '';
 		
 		/**If this was true, it means that the stage.fullScreen sizes are not correct so the application should controll the stage.stageWidth*/
 		private static var haveToCheckStageSize:Boolean = false ;
@@ -187,7 +190,10 @@ package stageManager
 				
 				ManageAllPositions();
 				//trace("All managed");
-				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
+				var isStageChanged:Boolean = lastStageSize!=stageWidth+','+stageHeight;
+				lastStageSize = stageWidth+','+stageHeight;
+				if(isStageChanged)
+					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 			}
 		}		
 		
