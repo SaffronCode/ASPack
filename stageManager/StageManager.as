@@ -13,6 +13,7 @@ package stageManager
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
@@ -189,7 +190,7 @@ package stageManager
 		}		
 		
 		/**Stage status is new*/
-		protected static function controlStageProperties(fullScreenWidth:Number,fullScreenHeight:Number):void
+		protected static function controlStageProperties(fullScreenWidth:Number,fullScreenHeight:Number,resizedForIPhoneXOnce:Boolean=false):void
 		{
 			var scaleX:Number = fullScreenWidth/stageWidth0 ;
 			var scaleY:Number = fullScreenHeight/stageHeight0 ;
@@ -219,7 +220,46 @@ package stageManager
 			stageScaleWidth = stageWidth/stageWidth0;
 			stageScaleHeight = stageHeight/stageHeight0;
 			//trace("stageScaleWidth: "+stageScaleWidth);
+			
+			if(resizedForIPhoneXOnce==false && (DevicePrefrence.isIOS()))
+			{
+				Obj.remove(iPhoneXJingleAreaMask1);
+					iPhoneXJingleAreaMask1 = null ;
+				Obj.remove(iPhoneXJingleAreaMask2);
+					iPhoneXJingleAreaMask2 = null ;
+					
+				const margin:Number = 10 ;
+					
+				if(stageWidth/stageHeight>2)
+				{
+					trace("You have iPhoneX, nice...");
+					trace("It is landscape...not supporting now");
+					
+					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
+				}
+				else(stageHeight/stageWidth>2)
+				{
+					trace("You have iPhoneX, nice...");
+					trace("It is portrate");
+					
+					iPhoneXJingleAreaMask1 = new Sprite();
+					iPhoneXJingleAreaMask1.graphics.beginFill(0,1);
+					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
+					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
+					
+					iPhoneXJingleAreaMask2 = new Sprite();
+					iPhoneXJingleAreaMask2.graphics.beginFill(0,1);
+					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,0,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
+					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSize ;
+					
+					
+					myStage.addChild(iPhoneXJingleAreaMask1);
+					myStage.addChild(iPhoneXJingleAreaMask2);
+					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2,true);
+				}
+			}
 		}
+		
 		
 	//////////////////////////////////////////////Place manager
 		
@@ -234,6 +274,10 @@ package stageManager
 		private static var controlleLocked:Boolean = false ;
 
 		private static var scl:Number=0;
+		private static const iPhoneXJingleBarSize:Number = 67;
+		/**iPhoneX masks*/
+		private static var 	iPhoneXJingleAreaMask1:Sprite,
+							iPhoneXJingleAreaMask2:Sprite;
 		
 		/**This function will lock the stage controller when you are adding items and you need to controll all stage once after all items are added.*/
 		public static function lock():void
@@ -279,6 +323,11 @@ package stageManager
 				//trace("Founded items are2 : "+Items.length);
 				ManageAllPositions();
 			}
+			
+			if(iPhoneXJingleAreaMask1!=null)
+				myStage.addChild(iPhoneXJingleAreaMask1);
+			if(iPhoneXJingleAreaMask2!=null)
+				myStage.addChild(iPhoneXJingleAreaMask2);
 		}
 		
 		/**All options will controll from the stage*/
