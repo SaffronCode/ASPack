@@ -18,6 +18,7 @@ package stageManager
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
 	import flash.geom.Rectangle;
+	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 
 	public class StageManager
@@ -113,6 +114,7 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
+			setInterval(controllStageSizesOnFullScreen,1000);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
@@ -130,7 +132,7 @@ package stageManager
 		/**Controll the stage each frame*/
 		protected static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
 		{
-			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) )
+			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) || testTheStageSizeTo)
 			{
 				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 				lastStageFW = myStage.fullScreenWidth ;
