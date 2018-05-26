@@ -237,7 +237,7 @@ package stageManager
 					
 					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
 				}
-				else(stageHeight/stageWidth>2)
+				else if(stageHeight/stageWidth>2)
 				{
 					trace("You have iPhoneX, nice...");
 					trace("It is portrate");
