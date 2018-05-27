@@ -154,6 +154,15 @@ package stageManager
 					myStage.scaleMode = StageScaleMode.NO_SCALE ;
 					stageWidth = myStage.stageWidth ;
 					stageHeight = myStage.stageHeight ;
+					//trace("♠**  myStage.stageWidth : "+ myStage.stageWidth +' => '+(myStage.stageWidth==0));
+					//trace("♣**  myStage.stageHeight : "+ myStage.stageHeight+' => '+(myStage.stageHeight==0));
+					
+					if((myStage.stageWidth == 0) || (myStage.stageHeight == 0) )
+					{
+						trace("•••••• Air problem on myStage.stageHeight!");
+						return ;
+					}
+					
 					myStage.scaleMode = StageScaleMode.SHOW_ALL ;
 					
 					if(testTheStageSizeTo)
