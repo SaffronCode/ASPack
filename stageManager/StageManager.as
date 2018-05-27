@@ -31,6 +31,9 @@ package stageManager
 							myRoot:DisplayObject;
 							//debugTF:TextField ;
 							
+		private static var 	TopColor:uint,
+							BottomColor:uint;
+							
 		/**Current stage Width and height*/
 		private static var 	stageWidth:Number=0,
 							stageHeight:Number=0;
@@ -85,10 +88,12 @@ package stageManager
 		}
 		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
-		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null)
+		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null,topColor:uint=0,buttomColor:uint=0)
 		{
 			myStage = yourStage ;
 			myRoot = yourRoot ;
+			TopColor = topColor ;
+			BottomColor = buttomColor ;
 			OptionsList = new Vector.<StageOption>();
 			Items = new Vector.<StageItem>();
 			resolutionControll = activateResolutionControll ;
@@ -251,12 +256,12 @@ package stageManager
 					trace("It is portrate");
 					
 					iPhoneXJingleAreaMask1 = new Sprite();
-					iPhoneXJingleAreaMask1.graphics.beginFill(0,1);
+					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor,1);
 					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
 					iPhoneXJingleAreaMask2 = new Sprite();
-					iPhoneXJingleAreaMask2.graphics.beginFill(0,1);
+					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor,1);
 					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,0,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
 					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSize ;
 					
