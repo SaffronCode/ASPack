@@ -160,7 +160,7 @@ package stageManager
 					{
 						if(stageWidth != lastStageFW || stageHeight != lastStageFH)
 						{
-							trace("The stage.fullScreen size is not trustable");
+							//trace("The stage.fullScreen size is not trustable");
 							haveToCheckStageSize = true ;
 						}
 					}
