@@ -26,13 +26,12 @@ package stageManager
 		/**Resize event dispatches on this value*/
 		public static var eventDispatcher:StageEventDispatcher = new StageEventDispatcher();
 		
+		public static var DebugIPhoneX:Boolean = false ;
+		
 		/**Main stage object*/
 		private static var 	myStage:Stage,
 							myRoot:DisplayObject;
 							//debugTF:TextField ;
-							
-		private static var 	TopColor:uint,
-							BottomColor:uint;
 							
 		/**Current stage Width and height*/
 		private static var 	stageWidth:Number=0,
@@ -88,12 +87,10 @@ package stageManager
 		}
 		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
-		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null,topColor:uint=0,buttomColor:uint=0)
+		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null)
 		{
 			myStage = yourStage ;
 			myRoot = yourRoot ;
-			TopColor = topColor ;
-			BottomColor = buttomColor ;
 			OptionsList = new Vector.<StageOption>();
 			Items = new Vector.<StageItem>();
 			resolutionControll = activateResolutionControll ;
@@ -222,7 +219,7 @@ package stageManager
 			//trace("scaleX : "+scaleX);
 			//trace("scaleY : "+scaleY);
 			
-			
+			trace("fullScreenHeight : "+fullScreenHeight);
 			
 			
 			scl = Math.min(scaleX,scaleY);
@@ -243,36 +240,37 @@ package stageManager
 			stageScaleHeight = stageHeight/stageHeight0;
 			//trace("stageScaleWidth: "+stageScaleWidth);
 			
-			if(resizedForIPhoneXOnce==false && (DevicePrefrence.isIOS()))
+			if(DebugIPhoneX || DevicePrefrence.isIOS())
 			{
-				Obj.remove(iPhoneXJingleAreaMask1);
-					iPhoneXJingleAreaMask1 = null ;
-				Obj.remove(iPhoneXJingleAreaMask2);
-					iPhoneXJingleAreaMask2 = null ;
-					
 				const margin:Number = 10 ;
 					
 				if(stageWidth/stageHeight>2)
 				{
-					trace("You have iPhoneX, nice...");
+					trace(Math.random()+" ♣ You have iPhoneX, nice...");
 					trace("It is landscape...not supporting now");
 					
 					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
 				}
-				else if(stageHeight/stageWidth>2)
+				else if(DebugIPhoneX || stageHeight/stageWidth>2)
 				{
-					trace("You have iPhoneX, nice...");
+					trace(Math.random()+" • You have iPhoneX, nice...");
 					trace("It is portrate");
 					
-					iPhoneXJingleAreaMask1 = new Sprite();
-					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor,1);
+					if(iPhoneXJingleAreaMask1==null)
+						iPhoneXJingleAreaMask1 = new Sprite();
+						iPhoneXJingleAreaMask1.graphics.clear();
+					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
 					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
-					iPhoneXJingleAreaMask2 = new Sprite();
-					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor,1);
+					if(iPhoneXJingleAreaMask2==null)
+						iPhoneXJingleAreaMask2 = new Sprite();
+					iPhoneXJingleAreaMask2.graphics.clear();
+					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
 					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,0,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
 					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSize ;
+					
+					trace("stageHeight : "+stageHeight);
 					
 					
 					myStage.addChild(iPhoneXJingleAreaMask1);
@@ -280,6 +278,15 @@ package stageManager
 					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2,true);
 				}
 			}
+		}
+		
+		private static function TopColor():uint
+		{
+			return 0xff0000 ;
+		}
+		private static function BottomColor():uint
+		{
+			return 0 ;
 		}
 		
 		
