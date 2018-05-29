@@ -91,7 +91,7 @@ package stageManager
 		/**returns the difrences between original size stage's size and current stage size*/
 		public static function get stageDelta():Rectangle
 		{
-			return new Rectangle(0,TopPageMargin,deltaStageWidth,deltaStageHeight);
+			return new Rectangle(0,TopPageMargin/2,deltaStageWidth,deltaStageHeight);
 		}
 		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
@@ -228,7 +228,7 @@ package stageManager
 			//trace("scaleX : "+scaleX);
 			//trace("scaleY : "+scaleY);
 			
-			trace("fullScreenHeight : "+fullScreenHeight);
+			//trace("fullScreenHeight : "+fullScreenHeight);
 			
 			
 			scl = Math.min(scaleX,scaleY);
@@ -255,15 +255,15 @@ package stageManager
 					
 				if(stageWidth/stageHeight>2)
 				{
-					trace(" ♣ You have iPhoneX, nice...");
-					trace("It is landscape...not supporting now");
+					//trace(" ♣ You have iPhoneX, nice...");
+					//trace("It is landscape...not supporting now");
 					
 					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
 				}
 				else if(stageHeight/stageWidth>2)
 				{
-					trace(" • You have iPhoneX, nice...");
-					trace("It is portrate");
+					//trace(" • You have iPhoneX, nice...");
+					//trace("It is portrate");
 					
 					if(iPhoneXJingleAreaMask1==null)
 						iPhoneXJingleAreaMask1 = new Sprite();
