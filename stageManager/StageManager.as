@@ -302,7 +302,6 @@ package stageManager
 			var captureScaleW:Number = cappix/w ;
 			var captureScaleH:Number = cappiy/h ;
 			var caputerdBitmap:BitmapData = new BitmapData(cappix,cappiy,false,myStage.color);
-			caputerdBitmap.setPixel(0,0,0xffff99);
 			var matrix:Matrix = new Matrix();
 			matrix.scale(captureScaleW,captureScaleH);
 			matrix.tx = (-x)*captureScaleW;
