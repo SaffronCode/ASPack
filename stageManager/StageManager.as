@@ -41,6 +41,9 @@ package stageManager
 		/**Current stage Width and height*/
 		private static var 	stageWidth:Number=0,
 							stageHeight:Number=0;
+		
+		/**The page margin that should be to show the time on that area*/
+		private static var TopPageMargin:Number;
 							
 		/**The real size for the stage*/
 		private static var	stageWidth0:Number,
@@ -70,13 +73,13 @@ package stageManager
 		/**This will returns stage retangle*/
 		public static function get stageRect():Rectangle
 		{
-			return new Rectangle(0,0,stageWidth,stageHeight);
+			return new Rectangle(0,TopPageMargin,stageWidth,stageHeight);
 		}
 		
 		/**This will returns stage retangle*/
 		public static function get stageVisibleArea():Rectangle
 		{
-			return new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight);
+			return new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2+TopPageMargin,stageWidth,stageHeight);
 		}
 		
 		/**This will returns stage old Rectangle*/
@@ -88,7 +91,7 @@ package stageManager
 		/**returns the difrences between original size stage's size and current stage size*/
 		public static function get stageDelta():Rectangle
 		{
-			return new Rectangle(0,0,deltaStageWidth,deltaStageHeight);
+			return new Rectangle(0,TopPageMargin,deltaStageWidth,deltaStageHeight);
 		}
 		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
@@ -124,7 +127,7 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,1000);
+			setInterval(controllStageSizesOnFullScreen,50);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
@@ -214,8 +217,9 @@ package stageManager
 		}		
 		
 		/**Stage status is new*/
-		protected static function controlStageProperties(fullScreenWidth:Number,fullScreenHeight:Number,resizedForIPhoneXOnce:Boolean=false):void
+		protected static function controlStageProperties(fullScreenWidth:Number,fullScreenHeight:Number,resizedForIPhoneXOnce:Boolean=false,topAreaMargin:Number=0):void
 		{
+			TopPageMargin = topAreaMargin
 			var scaleX:Number = fullScreenWidth/stageWidth0 ;
 			var scaleY:Number = fullScreenHeight/stageHeight0 ;
 			
@@ -256,7 +260,7 @@ package stageManager
 					
 					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
 				}
-				else if(DebugIPhoneX || stageHeight/stageWidth>2)
+				else if(stageHeight/stageWidth>2)
 				{
 					trace(" • You have iPhoneX, nice...");
 					trace("It is portrate");
@@ -265,20 +269,45 @@ package stageManager
 						iPhoneXJingleAreaMask1 = new Sprite();
 						iPhoneXJingleAreaMask1.graphics.clear();
 					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
-					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
+					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin+2);
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
 					if(iPhoneXJingleAreaMask2==null)
 						iPhoneXJingleAreaMask2 = new Sprite();
 					iPhoneXJingleAreaMask2.graphics.clear();
 					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
-					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,0,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
+					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
 					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSize ;
 					
 					
 					myStage.addChild(iPhoneXJingleAreaMask1);
 					myStage.addChild(iPhoneXJingleAreaMask2);
+					
 					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2,true);
+				}
+				else if(DebugIPhoneX || deltaStageHeight>iPhoneXJingleBarSize && DevicePrefrence.isFullScreen())
+				{
+					if(iPhoneXJingleAreaMask1==null)
+						iPhoneXJingleAreaMask1 = new Sprite();
+					iPhoneXJingleAreaMask1.graphics.clear();
+					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
+					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin+2);
+					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
+					
+					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize,true,iPhoneXJingleBarSize);
+				}
+				else
+				{
+					if(iPhoneXJingleAreaMask1)
+					{
+						Obj.remove(iPhoneXJingleAreaMask1) ;
+						iPhoneXJingleAreaMask1 = null ;
+					}
+					if(iPhoneXJingleAreaMask2)
+					{
+						Obj.remove(iPhoneXJingleAreaMask2) ;
+						iPhoneXJingleAreaMask2 = null ;
+					}
 				}
 			}
 		}
@@ -315,7 +344,7 @@ package stageManager
 		
 		private static function manageItemPlace(item:StageItem):void
 		{
-			item.resetPose(deltaStageWidth,deltaStageHeight,stageScaleWidth,stageScaleHeight);
+			item.resetPose(deltaStageWidth,deltaStageHeight,stageScaleWidth,stageScaleHeight,TopPageMargin);
 		}
 		
 		
