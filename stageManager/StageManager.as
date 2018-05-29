@@ -251,14 +251,14 @@ package stageManager
 					
 				if(stageWidth/stageHeight>2)
 				{
-					trace(Math.random()+" ♣ You have iPhoneX, nice...");
+					trace(" ♣ You have iPhoneX, nice...");
 					trace("It is landscape...not supporting now");
 					
 					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
 				}
 				else if(DebugIPhoneX || stageHeight/stageWidth>2)
 				{
-					trace(Math.random()+" • You have iPhoneX, nice...");
+					trace(" • You have iPhoneX, nice...");
 					trace("It is portrate");
 					
 					if(iPhoneXJingleAreaMask1==null)
@@ -283,37 +283,34 @@ package stageManager
 			}
 		}
 		
-		private static var sampleBitmap:Bitmap ;
+		/**Return the color for the top*/
 		private static function TopColor():uint
 		{
-			trace("♠caputed");
-			var cappix:uint = 400 ;
-			var cappiy:uint = iPhoneXJingleBarSize-20 ;
-			var captureScaleW:Number = cappix/stageRect.width ;
-			var captureScaleH:Number = cappiy/iPhoneXJingleBarSize ;
-			if(sampleBitmap==null)
-			{
-				sampleBitmap = new Bitmap();
-				//sampleBitmap.scaleX = 1/captureScaleW ;
-				myStage.addChild(sampleBitmap);
-			}
-			var caputerdBitmap:BitmapData = new BitmapData(cappix,cappiy,false,0x99ff99);
-			var matrix:Matrix = new Matrix();
-			matrix.scale(captureScaleW,captureScaleH);
-			matrix.tx = (deltaStageWidth/2)*captureScaleW;
-			matrix.ty = (deltaStageHeight/2-iPhoneXJingleBarSize)*captureScaleH;
-			sampleBitmap.visible = false ;
-			caputerdBitmap.draw(myStage,matrix);
-			
-			sampleBitmap.visible = true ;
-			sampleBitmap.bitmapData = caputerdBitmap ;
-			return 0 ;
-		}
-		private static function BottomColor():uint
-		{
-			return 0 ;
+			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-iPhoneXJingleBarSize),stageWidth,iPhoneXJingleBarSize) ;
 		}
 		
+		private static function BottomColor():uint
+		{
+			return getColorOfPartOfStage(deltaStageWidth/-2,stageHeight0+(deltaStageHeight/2-iPhoneXJingleBarSize*2),stageWidth,iPhoneXJingleBarSize) ;
+		}
+		
+		/**Get color of this area*/
+		private static function getColorOfPartOfStage(x:Number,y:Number,w:Number,h:Number):uint
+		{
+			var cappix:uint = 1 ;
+			var cappiy:uint = 1 ;
+			var captureScaleW:Number = cappix/w ;
+			var captureScaleH:Number = cappiy/h ;
+			var caputerdBitmap:BitmapData = new BitmapData(cappix,cappiy,false,myStage.color);
+			caputerdBitmap.setPixel(0,0,0xffff99);
+			var matrix:Matrix = new Matrix();
+			matrix.scale(captureScaleW,captureScaleH);
+			matrix.tx = (-x)*captureScaleW;
+			matrix.ty = (-y)*captureScaleH;
+			caputerdBitmap.draw(myStage,matrix);
+			
+			return caputerdBitmap.getPixel(0,0);
+		}
 		
 	//////////////////////////////////////////////Place manager
 		
@@ -328,7 +325,7 @@ package stageManager
 		private static var controlleLocked:Boolean = false ;
 
 		private static var scl:Number=0;
-		private static const iPhoneXJingleBarSize:Number = 67;
+		private static const iPhoneXJingleBarSize:Number = 65;
 		/**iPhoneX masks*/
 		private static var 	iPhoneXJingleAreaMask1:Sprite,
 							iPhoneXJingleAreaMask2:Sprite;
