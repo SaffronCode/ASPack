@@ -9,7 +9,11 @@
 
 package stageManager
 {
+	import contents.Contents;
+	
 	import flash.desktop.NativeApplication;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
@@ -17,6 +21,7 @@ package stageManager
 	import flash.display.Stage;
 	import flash.display.StageScaleMode;
 	import flash.events.Event;
+	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
 	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
@@ -240,7 +245,7 @@ package stageManager
 			stageScaleHeight = stageHeight/stageHeight0;
 			//trace("stageScaleWidth: "+stageScaleWidth);
 			
-			if(DebugIPhoneX || DevicePrefrence.isIOS())
+			if(resizedForIPhoneXOnce == false && (DebugIPhoneX || DevicePrefrence.isIOS()))
 			{
 				const margin:Number = 10 ;
 					
@@ -270,8 +275,6 @@ package stageManager
 					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,0,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
 					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSize ;
 					
-					trace("stageHeight : "+stageHeight);
-					
 					
 					myStage.addChild(iPhoneXJingleAreaMask1);
 					myStage.addChild(iPhoneXJingleAreaMask2);
@@ -280,9 +283,31 @@ package stageManager
 			}
 		}
 		
+		private static var sampleBitmap:Bitmap ;
 		private static function TopColor():uint
 		{
-			return 0xff0000 ;
+			trace("♠caputed");
+			var cappix:uint = 400 ;
+			var cappiy:uint = iPhoneXJingleBarSize-20 ;
+			var captureScaleW:Number = cappix/stageRect.width ;
+			var captureScaleH:Number = cappiy/iPhoneXJingleBarSize ;
+			if(sampleBitmap==null)
+			{
+				sampleBitmap = new Bitmap();
+				//sampleBitmap.scaleX = 1/captureScaleW ;
+				myStage.addChild(sampleBitmap);
+			}
+			var caputerdBitmap:BitmapData = new BitmapData(cappix,cappiy,false,0x99ff99);
+			var matrix:Matrix = new Matrix();
+			matrix.scale(captureScaleW,captureScaleH);
+			matrix.tx = (deltaStageWidth/2)*captureScaleW;
+			matrix.ty = (deltaStageHeight/2-iPhoneXJingleBarSize)*captureScaleH;
+			sampleBitmap.visible = false ;
+			caputerdBitmap.draw(myStage,matrix);
+			
+			sampleBitmap.visible = true ;
+			sampleBitmap.bitmapData = caputerdBitmap ;
+			return 0 ;
 		}
 		private static function BottomColor():uint
 		{
