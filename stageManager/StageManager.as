@@ -69,6 +69,19 @@ package stageManager
 	///
 		private static var OptionsList:Vector.<StageOption>,
 							Items:Vector.<StageItem>;
+							
+							
+							
+		private static var controlleLocked:Boolean = false ;
+		
+		private static var scl:Number=0;
+		/**The iPhoneXJingleBarSize should be bigger tah iPhoneXJingleBarSizeDown!!*/
+		private static const 	iPhoneXJingleBarSize:Number = 65,
+								iPhoneXJingleBarSizeDown:Number = (iPhoneXJingleBarSize*2)/3,
+								iPhoneTopBarSize:Number=40;
+		/**iPhoneX masks*/
+		private static var 	iPhoneXJingleAreaMask1:Sprite,
+							iPhoneXJingleAreaMask2:Sprite;
 				
 		/**This will returns stage retangle*/
 		public static function get stageRect():Rectangle
@@ -276,25 +289,28 @@ package stageManager
 						iPhoneXJingleAreaMask2 = new Sprite();
 					iPhoneXJingleAreaMask2.graphics.clear();
 					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
-					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
-					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSize ;
+					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,stageWidth+margin*2,iPhoneXJingleBarSizeDown+margin);
+					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSizeDown ;
 					
 					
 					myStage.addChild(iPhoneXJingleAreaMask1);
 					myStage.addChild(iPhoneXJingleAreaMask2);
 					
-					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2,true);
+					//The iPhoneXJingleBarSize should be bigger tah iPhoneXJingleBarSizeDown!!
+					var menuDeltaSizes:Number = iPhoneXJingleBarSize-iPhoneXJingleBarSizeDown ;
+					
+					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2+menuDeltaSizes,true,menuDeltaSizes);
 				}
-				else if(DebugIPhoneX || deltaStageHeight>iPhoneXJingleBarSize && DevicePrefrence.isFullScreen())
+				else if(DebugIPhoneX || deltaStageHeight>iPhoneTopBarSize && DevicePrefrence.isFullScreen())
 				{
 					if(iPhoneXJingleAreaMask1==null)
 						iPhoneXJingleAreaMask1 = new Sprite();
 					iPhoneXJingleAreaMask1.graphics.clear();
-					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
-					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin+2);
+					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(iPhoneTopBarSize),1);
+					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneTopBarSize+margin+2);
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
-					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize,true,iPhoneXJingleBarSize);
+					controlStageProperties(stageWidth,stageHeight-iPhoneTopBarSize,true,iPhoneTopBarSize);
 				}
 				else
 				{
@@ -313,14 +329,14 @@ package stageManager
 		}
 		
 		/**Return the color for the top*/
-		private static function TopColor():uint
+		private static function TopColor(areaHeight:Number = iPhoneXJingleBarSize):uint
 		{
-			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-iPhoneXJingleBarSize),stageWidth,iPhoneXJingleBarSize) ;
+			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-areaHeight),stageWidth,areaHeight) ;
 		}
 		
 		private static function BottomColor():uint
 		{
-			return getColorOfPartOfStage(deltaStageWidth/-2,stageHeight0+(deltaStageHeight/2-iPhoneXJingleBarSize*2),stageWidth,iPhoneXJingleBarSize) ;
+			return getColorOfPartOfStage(deltaStageWidth/-2,stageHeight0+(deltaStageHeight/2-iPhoneXJingleBarSizeDown*2),stageWidth,iPhoneXJingleBarSizeDown) ;
 		}
 		
 		/**Get color of this area*/
@@ -349,14 +365,6 @@ package stageManager
 		
 		
 	////////////////////////////////////////////////////
-		
-		private static var controlleLocked:Boolean = false ;
-
-		private static var scl:Number=0;
-		private static const iPhoneXJingleBarSize:Number = 65;
-		/**iPhoneX masks*/
-		private static var 	iPhoneXJingleAreaMask1:Sprite,
-							iPhoneXJingleAreaMask2:Sprite;
 		
 		/**This function will lock the stage controller when you are adding items and you need to controll all stage once after all items are added.*/
 		public static function lock():void
