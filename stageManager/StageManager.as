@@ -140,7 +140,7 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,5000);
+			setInterval(controllStageSizesOnFullScreen,1000);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
@@ -178,6 +178,10 @@ package stageManager
 					if((myStage.stageWidth == 0) || (myStage.stageHeight == 0) )
 					{
 						trace("•••••• Air problem on myStage.stageHeight!");
+						
+						myStage.scaleMode = StageScaleMode.SHOW_ALL ;
+						letStageEventsDispatch();
+						
 						return ;
 					}
 					
