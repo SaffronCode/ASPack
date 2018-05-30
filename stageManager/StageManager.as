@@ -140,7 +140,7 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,50);
+			setInterval(controllStageSizesOnFullScreen,1000);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
