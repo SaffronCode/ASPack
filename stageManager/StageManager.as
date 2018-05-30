@@ -23,6 +23,7 @@ package stageManager
 	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	import flash.utils.getTimer;
 	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 
@@ -55,6 +56,8 @@ package stageManager
 							stageScaleWidth:Number,stageScaleHeight:Number;
 		
 		private static var lastStageFW:Number,lastStageFH:Number;
+		
+		private static var lastStageWidth:Number,lastStageHeight:Number ;
 		
 		/**Activate resolution controll*/
 		private static var resolutionControll:Boolean,
@@ -140,12 +143,12 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,1000);
+			setInterval(controllStageSizesOnFullScreen,100);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
 		{
-			lastStageFW = NaN ;
+			//lastStageFW = NaN ;
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			controllStageSizes(null,true);
 		}
@@ -160,15 +163,17 @@ package stageManager
 		{
 			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) || testTheStageSizeTo)
 			{
-				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
-				lastStageFW = myStage.fullScreenWidth ;
-				lastStageFH = myStage.fullScreenHeight ;
-				
 				var stageWidth:Number;
 				var stageHeight:Number;
+
+				var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC ;
 				
-				if(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize)
+				if(changeTheStageSizeToReCheck&&(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize))
 				{
+					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
+					lastStageFW = myStage.fullScreenWidth ;
+					lastStageFH = myStage.fullScreenHeight ;
+					
 					myStage.scaleMode = StageScaleMode.NO_SCALE ;
 					stageWidth = myStage.stageWidth ;
 					stageHeight = myStage.stageHeight ;
@@ -180,7 +185,6 @@ package stageManager
 						trace("•••••• Air problem on myStage.stageHeight!");
 						
 						myStage.scaleMode = StageScaleMode.SHOW_ALL ;
-						letStageEventsDispatch();
 						
 						return ;
 					}
@@ -198,9 +202,12 @@ package stageManager
 				}
 				else
 				{
-					stageWidth = lastStageFW ;
-					stageHeight = lastStageFH ;
+					stageWidth = lastStageWidth ;
+					stageHeight = lastStageHeight ;
 				}
+				
+				lastStageWidth = stageWidth ;
+				lastStageHeight = stageHeight ;
 				
 				if(debugW!=0 && debugH!=0)
 				{
@@ -224,12 +231,14 @@ package stageManager
 					myRoot.y = (stageHeight-stageHeight*scaleFactor)/2;
 				}
 				
-				ManageAllPositions();
 				//trace("All managed");
 				var isStageChanged:Boolean = lastStageSize!=stageWidth+','+stageHeight;
 				lastStageSize = stageWidth+','+stageHeight;
 				if(isStageChanged)
+				{
+					ManageAllPositions();
 					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
+				}
 			}
 		}		
 		
@@ -357,7 +366,18 @@ package stageManager
 			matrix.ty = (-y)*captureScaleH;
 			caputerdBitmap.draw(myStage,matrix);
 			
-			return caputerdBitmap.getPixel(0,0);
+			var myColor:uint = caputerdBitmap.getPixel(0,0) ;
+			
+			var red:uint = myColor&0xff0000;
+			var green:uint = myColor&0x00ff00;
+			var blue:uint = myColor&0x0000ff;
+			
+			if(red<0x330000 && green<0x003300 && blue<0x000033)
+			{
+				myColor = myColor+0x222222 ;
+			}
+			
+			return myColor;
 		}
 		
 	//////////////////////////////////////////////Place manager
