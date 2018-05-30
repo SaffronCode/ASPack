@@ -77,7 +77,7 @@ package stageManager
 		
 		/**Returns item to its first position.
 		 * This function will prevent duplicate remove and resizing*/
-		public function resetPose(deltaStageWidth:Number,deltaStageHeigth:Number,stageScaleX:Number,stageScaleY:Number):void
+		public function resetPose(deltaStageWidth:Number,deltaStageHeigth:Number,stageScaleX:Number,stageScaleY:Number,TopPageMargin:Number):void
 		{
 			if(lastStageWDelta==deltaStageWidth && lastStageHDelta == deltaStageHeigth)
 			{
@@ -100,10 +100,13 @@ package stageManager
 			switch(options.YPose)
 			{
 				case(-1):
-					finalPose.y -= deltaStageHeigth/2;
+					finalPose.y -= deltaStageHeigth/2
+					finalPose.y +=TopPageMargin/2;
 					break;
 				case(1):
 					finalPose.y += deltaStageHeigth/2;
+					finalPose.y +=TopPageMargin/2;
+					break
 			}
 			
 			finalPose = object.parent.globalToLocal(finalPose);

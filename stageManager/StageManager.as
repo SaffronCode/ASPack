@@ -23,6 +23,7 @@ package stageManager
 	import flash.events.Event;
 	import flash.geom.Matrix;
 	import flash.geom.Rectangle;
+	import flash.utils.getTimer;
 	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 
@@ -41,6 +42,9 @@ package stageManager
 		/**Current stage Width and height*/
 		private static var 	stageWidth:Number=0,
 							stageHeight:Number=0;
+		
+		/**The page margin that should be to show the time on that area*/
+		private static var TopPageMargin:Number;
 							
 		/**The real size for the stage*/
 		private static var	stageWidth0:Number,
@@ -52,6 +56,8 @@ package stageManager
 							stageScaleWidth:Number,stageScaleHeight:Number;
 		
 		private static var lastStageFW:Number,lastStageFH:Number;
+		
+		private static var lastStageWidth:Number,lastStageHeight:Number ;
 		
 		/**Activate resolution controll*/
 		private static var resolutionControll:Boolean,
@@ -66,17 +72,30 @@ package stageManager
 	///
 		private static var OptionsList:Vector.<StageOption>,
 							Items:Vector.<StageItem>;
+							
+							
+							
+		private static var controlleLocked:Boolean = false ;
+		
+		private static var scl:Number=0;
+		/**The iPhoneXJingleBarSize should be bigger tah iPhoneXJingleBarSizeDown!!*/
+		private static const 	iPhoneXJingleBarSize:Number = 65,
+								iPhoneXJingleBarSizeDown:Number = (iPhoneXJingleBarSize*2)/3,
+								iPhoneTopBarSize:Number=40;
+		/**iPhoneX masks*/
+		private static var 	iPhoneXJingleAreaMask1:Sprite,
+							iPhoneXJingleAreaMask2:Sprite;
 				
 		/**This will returns stage retangle*/
 		public static function get stageRect():Rectangle
 		{
-			return new Rectangle(0,0,stageWidth,stageHeight);
+			return new Rectangle(0,TopPageMargin,stageWidth,stageHeight);
 		}
 		
 		/**This will returns stage retangle*/
 		public static function get stageVisibleArea():Rectangle
 		{
-			return new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight);
+			return new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2+TopPageMargin,stageWidth,stageHeight);
 		}
 		
 		/**This will returns stage old Rectangle*/
@@ -88,7 +107,7 @@ package stageManager
 		/**returns the difrences between original size stage's size and current stage size*/
 		public static function get stageDelta():Rectangle
 		{
-			return new Rectangle(0,0,deltaStageWidth,deltaStageHeight);
+			return new Rectangle(0,TopPageMargin/2,deltaStageWidth,deltaStageHeight);
 		}
 		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
@@ -124,12 +143,12 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,1000);
+			setInterval(controllStageSizesOnFullScreen,100);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
 		{
-			lastStageFW = NaN ;
+			//lastStageFW = NaN ;
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			controllStageSizes(null,true);
 		}
@@ -144,15 +163,17 @@ package stageManager
 		{
 			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) || testTheStageSizeTo)
 			{
-				eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
-				lastStageFW = myStage.fullScreenWidth ;
-				lastStageFH = myStage.fullScreenHeight ;
-				
 				var stageWidth:Number;
 				var stageHeight:Number;
+
+				var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC ;
 				
-				if(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize)
+				if(changeTheStageSizeToReCheck&&(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize))
 				{
+					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
+					lastStageFW = myStage.fullScreenWidth ;
+					lastStageFH = myStage.fullScreenHeight ;
+					
 					myStage.scaleMode = StageScaleMode.NO_SCALE ;
 					stageWidth = myStage.stageWidth ;
 					stageHeight = myStage.stageHeight ;
@@ -162,6 +183,9 @@ package stageManager
 					if((myStage.stageWidth == 0) || (myStage.stageHeight == 0) )
 					{
 						trace("•••••• Air problem on myStage.stageHeight!");
+						
+						myStage.scaleMode = StageScaleMode.SHOW_ALL ;
+						
 						return ;
 					}
 					
@@ -178,9 +202,12 @@ package stageManager
 				}
 				else
 				{
-					stageWidth = lastStageFW ;
-					stageHeight = lastStageFH ;
+					stageWidth = lastStageWidth ;
+					stageHeight = lastStageHeight ;
 				}
+				
+				lastStageWidth = stageWidth ;
+				lastStageHeight = stageHeight ;
 				
 				if(debugW!=0 && debugH!=0)
 				{
@@ -204,18 +231,21 @@ package stageManager
 					myRoot.y = (stageHeight-stageHeight*scaleFactor)/2;
 				}
 				
-				ManageAllPositions();
 				//trace("All managed");
 				var isStageChanged:Boolean = lastStageSize!=stageWidth+','+stageHeight;
 				lastStageSize = stageWidth+','+stageHeight;
 				if(isStageChanged)
+				{
+					ManageAllPositions();
 					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
+				}
 			}
 		}		
 		
 		/**Stage status is new*/
-		protected static function controlStageProperties(fullScreenWidth:Number,fullScreenHeight:Number,resizedForIPhoneXOnce:Boolean=false):void
+		protected static function controlStageProperties(fullScreenWidth:Number,fullScreenHeight:Number,resizedForIPhoneXOnce:Boolean=false,topAreaMargin:Number=0):void
 		{
+			TopPageMargin = topAreaMargin
 			var scaleX:Number = fullScreenWidth/stageWidth0 ;
 			var scaleY:Number = fullScreenHeight/stageHeight0 ;
 			
@@ -224,7 +254,7 @@ package stageManager
 			//trace("scaleX : "+scaleX);
 			//trace("scaleY : "+scaleY);
 			
-			trace("fullScreenHeight : "+fullScreenHeight);
+			//trace("fullScreenHeight : "+fullScreenHeight);
 			
 			
 			scl = Math.min(scaleX,scaleY);
@@ -251,47 +281,75 @@ package stageManager
 					
 				if(stageWidth/stageHeight>2)
 				{
-					trace(" ♣ You have iPhoneX, nice...");
-					trace("It is landscape...not supporting now");
+					//trace(" ♣ You have iPhoneX, nice...");
+					//trace("It is landscape...not supporting now");
 					
 					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
 				}
-				else if(DebugIPhoneX || stageHeight/stageWidth>2)
+				else if(stageHeight/stageWidth>2)
 				{
-					trace(" • You have iPhoneX, nice...");
-					trace("It is portrate");
+					//trace(" • You have iPhoneX, nice...");
+					//trace("It is portrate");
 					
 					if(iPhoneXJingleAreaMask1==null)
 						iPhoneXJingleAreaMask1 = new Sprite();
 						iPhoneXJingleAreaMask1.graphics.clear();
 					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
-					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
+					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin+2);
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
 					if(iPhoneXJingleAreaMask2==null)
 						iPhoneXJingleAreaMask2 = new Sprite();
 					iPhoneXJingleAreaMask2.graphics.clear();
 					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
-					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,0,stageWidth+margin*2,iPhoneXJingleBarSize+margin);
-					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSize ;
+					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,stageWidth+margin*2,iPhoneXJingleBarSizeDown+margin);
+					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSizeDown ;
 					
 					
 					myStage.addChild(iPhoneXJingleAreaMask1);
 					myStage.addChild(iPhoneXJingleAreaMask2);
-					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2,true);
+					
+					//The iPhoneXJingleBarSize should be bigger tah iPhoneXJingleBarSizeDown!!
+					var menuDeltaSizes:Number = iPhoneXJingleBarSize-iPhoneXJingleBarSizeDown ;
+					
+					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2+menuDeltaSizes,true,menuDeltaSizes);
+				}
+				else if(DebugIPhoneX || deltaStageHeight>iPhoneTopBarSize && !DevicePrefrence.isFullScreen())
+				{
+					if(iPhoneXJingleAreaMask1==null)
+						iPhoneXJingleAreaMask1 = new Sprite();
+					iPhoneXJingleAreaMask1.graphics.clear();
+					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(iPhoneTopBarSize),1);
+					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneTopBarSize+margin+2);
+					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
+					
+					controlStageProperties(stageWidth,stageHeight-iPhoneTopBarSize,true,iPhoneTopBarSize);
+				}
+				else
+				{
+					if(iPhoneXJingleAreaMask1)
+					{
+						Obj.remove(iPhoneXJingleAreaMask1) ;
+						iPhoneXJingleAreaMask1 = null ;
+					}
+					if(iPhoneXJingleAreaMask2)
+					{
+						Obj.remove(iPhoneXJingleAreaMask2) ;
+						iPhoneXJingleAreaMask2 = null ;
+					}
 				}
 			}
 		}
 		
 		/**Return the color for the top*/
-		private static function TopColor():uint
+		private static function TopColor(areaHeight:Number = iPhoneXJingleBarSize):uint
 		{
-			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-iPhoneXJingleBarSize),stageWidth,iPhoneXJingleBarSize) ;
+			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-areaHeight),stageWidth,areaHeight) ;
 		}
 		
 		private static function BottomColor():uint
 		{
-			return getColorOfPartOfStage(deltaStageWidth/-2,stageHeight0+(deltaStageHeight/2-iPhoneXJingleBarSize*2),stageWidth,iPhoneXJingleBarSize) ;
+			return getColorOfPartOfStage(deltaStageWidth/-2,stageHeight0+(deltaStageHeight/2-iPhoneXJingleBarSizeDown*2),stageWidth,iPhoneXJingleBarSizeDown) ;
 		}
 		
 		/**Get color of this area*/
@@ -308,26 +366,29 @@ package stageManager
 			matrix.ty = (-y)*captureScaleH;
 			caputerdBitmap.draw(myStage,matrix);
 			
-			return caputerdBitmap.getPixel(0,0);
+			var myColor:uint = caputerdBitmap.getPixel(0,0) ;
+			
+			var red:uint = myColor&0xff0000;
+			var green:uint = myColor&0x00ff00;
+			var blue:uint = myColor&0x0000ff;
+			
+			if(red<0x330000 && green<0x003300 && blue<0x000033)
+			{
+				myColor = myColor+0x222222 ;
+			}
+			
+			return myColor;
 		}
 		
 	//////////////////////////////////////////////Place manager
 		
 		private static function manageItemPlace(item:StageItem):void
 		{
-			item.resetPose(deltaStageWidth,deltaStageHeight,stageScaleWidth,stageScaleHeight);
+			item.resetPose(deltaStageWidth,deltaStageHeight,stageScaleWidth,stageScaleHeight,TopPageMargin);
 		}
 		
 		
 	////////////////////////////////////////////////////
-		
-		private static var controlleLocked:Boolean = false ;
-
-		private static var scl:Number=0;
-		private static const iPhoneXJingleBarSize:Number = 65;
-		/**iPhoneX masks*/
-		private static var 	iPhoneXJingleAreaMask1:Sprite,
-							iPhoneXJingleAreaMask2:Sprite;
 		
 		/**This function will lock the stage controller when you are adding items and you need to controll all stage once after all items are added.*/
 		public static function lock():void
