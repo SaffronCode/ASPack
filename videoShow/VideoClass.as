@@ -352,8 +352,14 @@ package videoShow
 			else
 			{
 				capturedBitmap = new BitmapData(W,H,false,0x000000);
-				capturedBitmap.draw(this
-				);
+				
+				try{
+					capturedBitmap.draw(this);
+					
+				}catch(e:Error)
+				{
+					trace(e.message);
+				}
 			}
 			return capturedBitmap;
 		}
