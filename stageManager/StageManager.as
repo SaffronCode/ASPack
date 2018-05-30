@@ -140,7 +140,7 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,1000);
+			setInterval(controllStageSizesOnFullScreen,5000);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
@@ -301,7 +301,7 @@ package stageManager
 					
 					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2+menuDeltaSizes,true,menuDeltaSizes);
 				}
-				else if(DebugIPhoneX || deltaStageHeight>iPhoneTopBarSize && DevicePrefrence.isFullScreen())
+				else if(DebugIPhoneX || deltaStageHeight>iPhoneTopBarSize && !DevicePrefrence.isFullScreen())
 				{
 					if(iPhoneXJingleAreaMask1==null)
 						iPhoneXJingleAreaMask1 = new Sprite();
