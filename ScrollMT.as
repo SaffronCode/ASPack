@@ -139,6 +139,9 @@ package
 					imageFirstPose:Point,
 					maskRect:Rectangle;
 					
+		/**Is id dynamic or not*/
+		private var dynamicTargetRect:Boolean ;
+					
 	//subsidary variables ↓
 					
 		public static var 	currselW:Number=4,
@@ -224,6 +227,11 @@ package
 			{
 				userDidntEnterRect = true ;
 				targetArea = new Rectangle(0,0,targ.width,targ.height);
+				dynamicTargetRect = true ;
+			}
+			else
+			{
+				dynamicTargetRect = false ;
 			}
 			
 			//save target and mask rectangles
@@ -781,7 +789,8 @@ package
 			var temp:Number ;
 			if(!calledByMouseDrag && freeScrollOnTarget_TD)
 			{
-				targetRect.height = targ.height;
+				if(dynamicTargetRect)
+					targetRect.height = targ.height;
 				if(maskRect.height>=targetRect.height)
 				{
 					//unLockTopDown = false ;
@@ -814,7 +823,8 @@ package
 			
 			if(!calledByMouseDrag && freeScrollOnTarget_LR)
 			{
-				targetRect.width = targ.width;
+				if(dynamicTargetRect)
+					targetRect.width = targ.width;
 				if(maskRect.width>=targetRect.width)
 				{
 					//unLockLeftRight = false ;
