@@ -7,6 +7,7 @@ package
 	import flash.filesystem.File;
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
+	import flash.net.FileFilter;
 	import flash.permissions.PermissionStatus;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
@@ -233,6 +234,31 @@ package
 					{
 						trace("!!File didn't copied because of exeption: "+fileTarget.nativePath);
 					}
+				}
+			}
+		}
+		
+		
+		
+	////////////////////////////////////////////////////
+		
+		/**Pass the file types to make it open the file browser for you*/
+		public static function browse(getSelectedFilePath:Function,fileTypes:Array=null,title:String = "Select your file"):void
+		{
+			var fil:File = new File();
+			fil.addEventListener(Event.SELECT,folderSelected);
+			var fileFilters:Array = (fileTypes==null)?null:[] ;
+			for(var i:int = 0 ;fileTypes!=null && i<fileTypes.length ; i++)
+			{
+				fileFilters.push(new FileFilter(fileTypes[i]+' fromat',fileTypes[i]));
+			}
+			fil.browseForOpen(title,fileFilters);
+			function folderSelected(e:Event):void
+			{
+				trace("A file selected : "+fil.nativePath);
+				if(fil.exists)
+				{
+					getSelectedFilePath(fil);
 				}
 			}
 		}
