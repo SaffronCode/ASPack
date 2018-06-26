@@ -242,7 +242,8 @@ package
 		
 	////////////////////////////////////////////////////
 		
-		/**Pass the file types to make it open the file browser for you*/
+		/**Pass the file types to make it open the file browser for you.<br/>
+		 * You should set your extension like this ["*.xml", "*.jpg"]*/
 		public static function browse(getSelectedFilePath:Function,fileTypes:Array=null,title:String = "Select your file"):void
 		{
 			var fil:File = new File();
@@ -260,6 +261,29 @@ package
 				{
 					getSelectedFilePath(fil);
 				}
+			}
+		}
+		
+		public static function browseToSave(getSelectedFilePath:Function,title:String = "Where do you whant to save your file?",extension:String=null):void
+		{
+			var fil:File = new File();
+			fil.addEventListener(Event.SELECT,aFileSelected);
+			fil.browseForSave(title);
+			
+			function aFileSelected(e:Event):void
+			{
+				if(extension!=null)
+				{
+					var dotIndex:int ;
+					var fileName:String = fil.name ;
+					if( (dotIndex = fileName.lastIndexOf('.')) != -1)
+					{
+						fileName = fileName.substring(0,dotIndex) ;
+					}
+					fileName += (extension.indexOf('.')==0)?extension:'.'+extension ;
+				}
+				fil = fil.parent.resolvePath(fileName);
+				getSelectedFilePath(fil);
 			}
 		}
 	}
