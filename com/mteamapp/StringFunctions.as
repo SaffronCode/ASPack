@@ -597,6 +597,37 @@ package com.mteamapp
 		
 		
 		
+		/**Remove spaces from two side of the inputed string : "   hello world  " > "hello world" */
+		public static function removeSpacesFromTwoSides(str:String):String
+		{
+			str = str.replace(/[\s]+$/g,'');
+			str = str.replace(/^[\s]+/g,'');
+			return str ;
+		}
 		
+		/**Returning file size in String with lable*/
+		public static function fileSizeInString(fileSizeInByte:Number):String
+		{
+			if(isNaN(fileSizeInByte))
+			{
+				return '' ;
+			}
+			if(fileSizeInByte<1000)
+			{
+				return Math.round(fileSizeInByte)+' B';
+			}
+			else if(fileSizeInByte<1000*1000)
+			{
+				return Math.round(fileSizeInByte/1000)+" K";
+			}
+			else if(fileSizeInByte<1000*1000*1000)
+			{
+				return Math.round(fileSizeInByte/(1000*1000))+" M";
+			}
+			else
+			{
+				return Math.round(fileSizeInByte/(1000*1000*1000))+' G';
+			}
+		}
 	}
 }
