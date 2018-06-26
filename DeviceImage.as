@@ -30,6 +30,8 @@
 	import jp.shichiseki.exif.ExifInfo;
 	import jp.shichiseki.exif.IFD;
 	
+	import nativeClasses.cameraUI.DistriqtCameraUI;
+	
 	import videoShow.VideoClass;
 	import videoShow.VideoEvents;
 	
@@ -141,6 +143,22 @@
 			imageBitmapData = null ;
 			
 			onDone = onVideoReady ;
+			
+			if(DistriqtCameraUI.isSupport())
+			{
+				trace("Distriqt Camera is Supporting");
+				DistriqtCameraUI.captureVideo(function(){
+					trace("** Camera file loaded on DeviceImage **");
+					videoBytes = DistriqtCameraUI.fileByte ;
+					trace("*** The video size is : "+videoBytes.length);
+					onDone();
+				});
+				return ;
+			}
+			else
+			{
+				trace("*** Distriqt is not supporting***");
+			}
 			
 			if(!CameraUI.isSupported)
 			{
@@ -727,6 +745,14 @@
 		{
 			var ext:String = targetFile.extension.toLowerCase();
 			return ext.indexOf('jpg')!=-1 || ext.indexOf('png')!=-1 || ext.indexOf('gif')!=-1;
+		}
+		
+	/////////////////////////////////////////////////
+		
+		/**You can activate the distriqt cameraUI by calling this function*/
+		public static function setUp(DISTRIQT_APPLICATION_KEY:String):void
+		{
+			DistriqtCameraUI.setUp(DISTRIQT_APPLICATION_KEY);
 		}
 	}
 }
