@@ -85,6 +85,12 @@ package stageManager
 		/**iPhoneX masks*/
 		private static var 	iPhoneXJingleAreaMask1:Sprite,
 							iPhoneXJingleAreaMask2:Sprite;
+							
+							
+		public static function isIphoneX():Boolean
+		{
+			return iPhoneXJingleAreaMask1!=null ;
+		}
 				
 		/**This will returns stage retangle*/
 		public static function get stageRect():Rectangle
