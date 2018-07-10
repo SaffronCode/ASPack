@@ -470,7 +470,7 @@ package com.mteamapp
 		
 	////////////////////////////////////////////////////////
 		/**Returns a domain of an url : www.google.com/translage >> google.com*/
-		public static function findMainDomain(url:String):String
+		public static function findMainDomain(url:String,removeHTTPPart:Boolean=true):String
 		{
 			var founded:Array = url.match(/^((http(s|):\/\/)|)[^\/^:^\r^\n]+/);
 			if(founded==null || founded.length==0)
@@ -478,7 +478,10 @@ package com.mteamapp
 				return '';
 			}
 			var theDomain:String = String(founded[0]).toLowerCase();
-			theDomain = theDomain.split('https://').join('').split('http://').join('').split('www.').join('')
+			if(removeHTTPPart)
+			{
+				theDomain = theDomain.split('https://').join('').split('http://').join('').split('www.').join('')
+			}
 			return theDomain ;
 		}
 		
