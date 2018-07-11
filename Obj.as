@@ -15,6 +15,7 @@ package
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
@@ -593,6 +594,19 @@ package
 			
 			
 			return info;
+		}
+		
+		/**This will dispatches event to all children*/
+		public static function dispatchReverse(target:Sprite,event:Event):void
+		{
+			for(var i = 0 ; i<target.numChildren ; i++)
+			{
+				if(target.getChildAt(i) is Sprite)
+				{
+					(target.getChildAt(i) as Sprite).dispatchEvent(event);
+					dispatchReverse((target.getChildAt(i) as Sprite),event);
+				}
+			}
 		}
 	}
 }

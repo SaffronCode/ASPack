@@ -730,7 +730,8 @@ package
 			//trace('mouse s are locked');
 			if(!mouseLocker.visible)
 			{
-				dispatchChildScrollLockerOn(targ as Sprite);
+				//dispatchChildScrollLockerOn(targ as Sprite);
+				Obj.dispatchReverse(targ as Sprite,new ScrollMTEvent(ScrollMTEvent.YOU_ARE_SCROLLING_FROM_YOUR_PARENT,false,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR))
 			}
 			mouseLocker.visible = true ;
 			
@@ -738,7 +739,7 @@ package
 			targ.parent.dispatchEvent(new Event(LOCK_SCROLL_TILL_MOUSE_UP,true,false));
 		}
 		
-		/**This will dispatches YOU_ARE_SCROLLING_FROM_YOUR_PARENT event to all children*/
+		/**This will dispatches YOU_ARE_SCROLLING_FROM_YOUR_PARENT event to all children
 		private function dispatchChildScrollLockerOn(target:Sprite):void
 		{
 			//trace("Dispatch events on : "+target)
@@ -750,7 +751,7 @@ package
 					dispatchChildScrollLockerOn((target.getChildAt(i) as Sprite));
 				}
 			}
-		}
+		}*/
 		
 		/**disable mouseEvent*/
 		private function MouseUnLock()
