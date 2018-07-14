@@ -62,6 +62,7 @@ package
 							
 		private static var androidOtherId:String ;
 		
+		private static const id_firstApp:String = "id_firstApp" ;
 		
 		
 		/**retuens true if this is big screened tablet*/
@@ -678,6 +679,8 @@ package
 	//////////////////////////////////////////////////////
 		private static var createdKeyIs:String ;
 		private static var uniqueId:String ;
+
+		private static var lastStatus:int = -1 ;
 		
 		
 		/**This function will creates securityKey*/
@@ -760,6 +763,19 @@ package
 				trace("Version parsing error : "+e)
 			}
 			return Infinity ;
+		}
+		
+		/**
+		 * The funciton will return true if this is the first run of the application on current version. 
+		 * */
+		public static function isFirstRun():Boolean
+		{
+			if(lastStatus==-1)
+			{
+				lastStatus = int(GlobalStorage.load(id_firstApp+appVersion)) ;
+				GlobalStorage.save(id_firstApp+appVersion,1) ;
+			}
+			return lastStatus!=1 ;
 		}
 	}
 }
