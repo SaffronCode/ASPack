@@ -35,6 +35,7 @@ package com.mteamapp
 						delete mainXMLList[i+1];
 						delete mainXMLList[i];
 						l = mainXMLList.length();
+						i--;
 					}
 				}
 			}
