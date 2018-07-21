@@ -85,11 +85,24 @@ package stageManager
 		/**iPhoneX masks*/
 		private static var 	iPhoneXJingleAreaMask1:Sprite,
 							iPhoneXJingleAreaMask2:Sprite;
-							
+				
 							
 		public static function isIphoneX():Boolean
 		{
 			return iPhoneXJingleAreaMask1!=null ;
+		}
+		
+		/**Height*/
+		public static function iPhoneXExtra():Number
+		{
+			if(isIphoneX())
+			{
+				return iPhoneXJingleBarSize ;
+			}
+			else
+			{
+				return 0 ;
+			}
 		}
 				
 		/**This will returns stage retangle*/
@@ -114,6 +127,12 @@ package stageManager
 		public static function get stageDelta():Rectangle
 		{
 			return new Rectangle(0,TopPageMargin/2,deltaStageWidth,deltaStageHeight);
+		}
+		
+		/**Returns true if the StageManager was seted up*/
+		public static function isSatUp():Boolean
+		{
+			return myStage!=null ;
 		}
 		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
