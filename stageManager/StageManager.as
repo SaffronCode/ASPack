@@ -85,11 +85,24 @@ package stageManager
 		/**iPhoneX masks*/
 		private static var 	iPhoneXJingleAreaMask1:Sprite,
 							iPhoneXJingleAreaMask2:Sprite;
-							
+				
 							
 		public static function isIphoneX():Boolean
 		{
 			return iPhoneXJingleAreaMask1!=null ;
+		}
+		
+		/**Height*/
+		public static function iPhoneXExtra():Number
+		{
+			if(isIphoneX())
+			{
+				return iPhoneXJingleBarSize ;
+			}
+			else
+			{
+				return 0 ;
+			}
 		}
 				
 		/**This will returns stage retangle*/
