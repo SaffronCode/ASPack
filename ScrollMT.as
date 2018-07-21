@@ -233,7 +233,6 @@ package
 			{
 				dynamicTargetRect = false ;
 			}
-			dynamicTargetRect = true ;
 			
 			//save target and mask rectangles
 			maskRect = maskArea.clone() ;
