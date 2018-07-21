@@ -116,6 +116,12 @@ package stageManager
 			return new Rectangle(0,TopPageMargin/2,deltaStageWidth,deltaStageHeight);
 		}
 		
+		/**Returns true if the StageManager was seted up*/
+		public static function isSatUp():Boolean
+		{
+			return myStage!=null ;
+		}
+		
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
 		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null)
 		{
