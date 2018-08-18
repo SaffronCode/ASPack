@@ -1,4 +1,4 @@
-package  com.mteamapp.gps
+﻿package  com.mteamapp.gps
 {
 	import com.mteamapp.StringFunctions;
 	
@@ -64,7 +64,7 @@ package  com.mteamapp.gps
 						"\t<extensionID>com.distriqt.playservices.Base</extensionID>"+
 						"\t<extensionID>com.distriqt.playservices.Location</extensionID>"+
 						"\t<extensionID>com.distriqt.Location</extensionID>\n\n\n*****************************\n\n\n");
-					controllPermission();
+					//controllPermission();
 					if(distriqtLocationClass!=null)
 					{
 						(distriqtLocationClass as Object).init(distriqtCode)
