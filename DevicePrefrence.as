@@ -64,6 +64,7 @@ package
 		
 		private static const id_firstApp:String = "id_firstApp" ;
 		
+		private static var _isApplicationActive:Boolean = true ;
 		
 		/**retuens true if this is big screened tablet*/
 		public static function get isTablet():Boolean
@@ -88,6 +89,28 @@ package
 			}
 			
 			return Boolean(bigScreen);
+		}
+		
+		
+		public static function setUp():void
+		{
+			if(lastStatus==-1)
+			{
+				lastStatus = int(GlobalStorage.load(id_firstApp+appVersion)) ;
+				GlobalStorage.save(id_firstApp+appVersion,1) ;
+				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e){
+					_isApplicationActive = true ;
+				});
+				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE,function(e){
+					_isApplicationActive = false ;
+				});
+			}
+		}
+		
+		/**Returns true if the application was currently active*/
+		public static function get isApplicationActive():Boolean
+		{
+			return _isApplicationActive ;
 		}
 
         /**Returns true if the application was landscape*/
@@ -770,11 +793,7 @@ package
 		 * */
 		public static function isFirstRun():Boolean
 		{
-			if(lastStatus==-1)
-			{
-				lastStatus = int(GlobalStorage.load(id_firstApp+appVersion)) ;
-				GlobalStorage.save(id_firstApp+appVersion,1) ;
-			}
+			setUp();
 			return lastStatus!=1 ;
 		}
 	}

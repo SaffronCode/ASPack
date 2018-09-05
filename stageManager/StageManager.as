@@ -73,6 +73,8 @@ package stageManager
 		private static var OptionsList:Vector.<StageOption>,
 							Items:Vector.<StageItem>;
 							
+		private static var listenToStageRotation:Boolean ;
+							
 							
 							
 		private static var controlleLocked:Boolean = false ;
@@ -158,22 +160,26 @@ package stageManager
 			//debugTF = debuggerTF ;
 			
 			//myStage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGING,controlStageProperties);
-			if(listenToStageRotation)
-			{
-				myStage.addEventListener(Event.ENTER_FRAME,controllStageSizes);
-			}
+			StageManager.listenToStageRotation = listenToStageRotation ;
 			controllStageSizes(null,true);
 			
 			myStage.addEventListener(Event.ADDED,controllFromMe,false,1);
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,100);
+			setInterval(controllStageSizesOnFullScreen,800);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
 		{
 			//lastStageFW = NaN ;
+			if(!DevicePrefrence.isApplicationActive)
+			{
+				return ;
+			}
+			if(listenToStageRotation)
+				controllStageSizes()
+				
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			controllStageSizes(null,true);
 		}
