@@ -47,7 +47,12 @@ package
 
 	public class FarsiInputCorrection
 	{
+		
+		
 		private static const REMOVE_OLD_TEXT:String = "REMOVE_OLD_TEXT" ;
+		
+		/**uneable EnterFrame*/
+		public static var betterPerformanc:Boolean = false;
 		
 		/**Dispatch it on a textField that you whant to fucus on*/
 		public static const FOCUS_IN:String = "FOCUS_ON" ;
@@ -305,8 +310,11 @@ package
 				oldTextField.addEventListener(Event.CHANGE,changeTheStageText);
 			}
 			
+			if(!betterPerformanc)
+			{
+				oldTextField.addEventListener(Event.ENTER_FRAME,manageInputPose);
+			}
 			
-			oldTextField.addEventListener(Event.ENTER_FRAME,manageInputPose);
 			oldTextField.addEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 			oldTextField.addEventListener(REMOVE_OLD_TEXT,unLoad);
 		}
@@ -464,7 +472,11 @@ package
 		/**Clear the native text */
 		public function unLoad(e:Event=null)
 		{
-			oldTextField.removeEventListener(Event.ENTER_FRAME,manageInputPose);
+			if(!betterPerformanc)
+			{
+				oldTextField.removeEventListener(Event.ENTER_FRAME,manageInputPose);
+			}
+			
 			oldTextField.removeEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 			oldTextField.removeEventListener(REMOVE_OLD_TEXT,unLoad);
 			oldTextField.removeEventListener(Event.CHANGE,changeTheDisplayedText);
