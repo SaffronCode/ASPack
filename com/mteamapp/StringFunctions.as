@@ -632,5 +632,10 @@ package com.mteamapp
 				return Math.round(fileSizeInByte/(1000*1000*1000))+' G';
 			}
 		}
+		
+		public static function isNullOrEmpty(str:String):Boolean
+		{
+			return str==null || str=='';
+		}
 	}
 }
