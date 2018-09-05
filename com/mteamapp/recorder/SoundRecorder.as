@@ -192,7 +192,7 @@
 		
 		private static function onRecording(e:RecordingEvent):void
 		{
-			trace("... on recording proccess");
+			//trace("... on recording proccess");
 		}
 		
 		public static function get isRecording():Boolean
