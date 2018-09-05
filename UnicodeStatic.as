@@ -60,6 +60,7 @@ package
 		/**convert numbers to arabic*/
 		public static function arabicNumber(myText:String):String
 		{
+			firstSetUp();
 			return uni.NumberChange(myText);
 		}
 		
