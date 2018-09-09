@@ -464,6 +464,10 @@ package
 		/**unload the scroller functions*/
 		public function unLoad(e:Event=null)
 		{
+			if(targ==null || targParent==null)
+			{
+				return;
+			}
 			if(targ)
 			{
 				targ.mask = null;
