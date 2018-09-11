@@ -1,4 +1,4 @@
-// *************************
+﻿// *************************
 // * COPYRIGHT
 // * DEVELOPER: MTEAM ( info@mteamapp.com )
 // * ALL RIGHTS RESERVED FOR MTEAM
@@ -368,14 +368,13 @@ package
 		
 		private function onAdded(e:Event=null)
 		{
+			targ.removeEventListener(Event.ADDED_TO_STAGE,onAdded);
 			if(targ.stage!=null)
 			{
-				targ.removeEventListener(Event.ADDED_TO_STAGE,onAdded);
 				setUpTheScroller();
 			}
 			else
 			{
-				//trace("♠ im not added yet");
 				targ.addEventListener(Event.ADDED_TO_STAGE,onAdded);
 			}
 		}
@@ -401,7 +400,8 @@ package
 			//1.3.1 to ask to delete old scrolleers
 			targ.dispatchEvent(new Event(KILL_OLD_SCROLLER,false,false));
 			
-			myTimeOutId = setTimeout(setMask,0);
+			//myTimeOutId = setTimeout(setMask,0);
+			setMask();
 			
 			//trace("♠ now im added");
 			
@@ -464,13 +464,10 @@ package
 		/**unload the scroller functions*/
 		public function unLoad(e:Event=null)
 		{
-			if(targ==null || targParent==null)
-			{
-				return;
-			}
 			if(targ)
 			{
 				targ.mask = null;
+				targ.removeEventListener(Event.ADDED_TO_STAGE,onAdded);
 			}
 			try
 			{
@@ -483,6 +480,12 @@ package
 			}catch(e){};
 			
 			clearTimeout(myTimeOutId);
+			
+			
+			if(targParent==null)
+			{
+				return ;
+			}
 			
 			targ.removeEventListener(ScrollMTEvent.TRY_TO_SCROLL,stopScroll);
 			targ.removeEventListener(ScrollMTEvent.SCROLL_THE_SCROLLER,scrollMeByMyChild);
