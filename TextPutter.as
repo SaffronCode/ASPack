@@ -355,7 +355,7 @@ package
 			
 			
 			//capture the textfield
-			if(replaceWithBitmap && VerticalAlign_verticalHeight!=0)
+			if(replaceWithBitmap || VerticalAlign_verticalHeight!=0)
 			{
 				/*var bitmapData:BitmapData = new BitmapData((textField.x+textField.width)*captureResolution
 					,(textField.y+textField.height)*captureResolution,true,0);
