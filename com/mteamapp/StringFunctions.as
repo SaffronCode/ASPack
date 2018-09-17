@@ -643,7 +643,7 @@ package com.mteamapp
 		
 		public static function clearExtraSpaces(str:String):String
 		{
-			return str.replace(/[\s\t]{2,}/g,' ');
+			return str.replace(/[\s\t]{2,}/g,' ').replace(/([\t\s]$)|(^[\s\t])/g,'');
 		}
 	}
 }
