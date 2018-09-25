@@ -8,12 +8,12 @@ package com.mteamapp
 
 	public class VersionController
 	{
-		private static var onDone:Function,
-							onFaild:Function;
+		/*private static var onDone:Function,
+							onFaild:Function;*/
 							
-		private static var currentVersion:String;
+		/*private static var currentVersion:String;
 
-		private static var versionControll:URLLoader;
+		private static var versionControll:URLLoader;*/
 		
 		private static var lastData:SharedObject = SharedObject.getLocal('versionControll','/');
 		
@@ -22,114 +22,129 @@ package com.mteamapp
 		/**App store url*/
 		public static var appStoreURL:String ;
 		
-		public static function controllVersion(currectVersion:Function,thisIsOldVersion:Function,versionURL:URLRequest,appVersion:String)
+		/**You can receive the hint text as the first parameter for thisIsOldVersion function and application download URL based on your OD on the second input parameter.*/
+		public static function controllVersion(currectVersion:Function,thisIsOldVersion:Function,versionURL:URLRequest,appVersion:String=null)
 		{
-			onDone = currectVersion ;
-			onFaild = thisIsOldVersion ;
+			var onDone:Function = currectVersion ;
+			var onFaild:Function = thisIsOldVersion ;
 			
-			currentVersion = appVersion ;
+			if(appVersion==null)
+				appVersion = DevicePrefrence.appVersion;
 			
-			versionControll = new URLLoader();
+			var currentVersion:String = appVersion ;
+			
+			var versionControll:URLLoader = new URLLoader();
 			versionControll.addEventListener(Event.COMPLETE,onVersinoStringReceved);
 			versionControll.addEventListener(IOErrorEvent.IO_ERROR,noConnection);
 			versionControll.load(versionURL);
 			trace("Load this : "+versionURL.url);
-		}
-		
-		/**xml sample :<br>
-		 * <version>
-				<id>1.7.2</id>
-				<text>نسخه ی 2 همکنون آماده ی دانلود می باشد</text>
-				<url_ios>http://www.apple.com</url_ios>
-				<url_android>http://www.google.com</url_android>
-			</version>*/
-		protected static function onVersinoStringReceved(event:Event):void
-		{
 			
-			trace("XML is receved");
-			var xmlController:XML = new XML();
-			try
+			/**xml sample :<br>
+			 * <version>
+			 <id>1.7.2</id>
+			 <text>نسخه ی 2 همکنون آماده ی دانلود می باشد</text>
+			 <url_ios>http://www.apple.com</url_ios>
+			 <url_android>http://www.google.com</url_android>
+			 </version>*/
+			function onVersinoStringReceved(event:Event):void
 			{
-				xmlController = XML(versionControll.data);
-			}
-			catch(e)
-			{
-				onDone();
-				trace("xml version controller is crash");
-				return ;
-			}
-			lastData.data.version = versionControll.data ;
-			lastData.flush();
-			
-			controllCashedDatas();
-		}
-		
-		private static function controllCashedDatas():void
-		{
-			
-			var xmlController:XML ;
-			
-			if(lastData.data.version == undefined)
-			{
-				onDone();
-				return ;
-			}
-			
-			try
-			{
-				xmlController = XML(lastData.data.version);
-			}
-			catch(e)
-			{
-				onDone();
-				return ;
-			}
-			var serverVersion:String = xmlController.id ;
-			var currentVersion2:String = currentVersion ;
-			
-			var serVerArr:Array = serverVersion.split('.');
-			var appVerArr:Array = currentVersion.split('.');
-			
-			if(serVerArr.length>2)
-			{
-				serverVersion = serVerArr[0]+'.'+TimeToString.numToString(serVerArr[1],5); 
-			}
-			if(appVerArr.length>2)
-			{
-				currentVersion2 = appVerArr[0]+'.'+TimeToString.numToString(appVerArr[1],5); 
-			}
-			
-			trace("Controll version : "+serverVersion+" vs "+currentVersion2);
-			
-			var myNumbericVersion:Number = Number(currentVersion2);
-			var serverNumericVersion:Number = Number(serverVersion);
-			
-			if(((isNaN(serverNumericVersion) || isNaN(myNumbericVersion)) &&  serverVersion == currentVersion2) || myNumbericVersion>=serverNumericVersion )
-			{
-				onDone();
-			}
-			else
-			{
-				var storeURL:String ;
-				if(DevicePrefrence.isIOS())
+				
+				trace("XML is receved");
+				var xmlController:XML = new XML();
+				try
 				{
-					storeURL = xmlController.url_ios ;
+					xmlController = XML(versionControll.data);
+				}
+				catch(e)
+				{
+					onDone();
+					trace("xml version controller is crash");
+					return ;
+				}
+				lastData.data["version"+versionURL] = versionControll.data ;
+				lastData.flush();
+				
+				controllCashedDatas();
+			}
+			
+			function controllCashedDatas():void
+			{
+				
+				var xmlController:XML ;
+				
+				if(lastData.data["version"+versionURL] == undefined)
+				{
+					onDone();
+					return ;
+				}
+				
+				try
+				{
+					xmlController = XML(lastData.data["version"+versionURL] );
+				}
+				catch(e)
+				{
+					onDone();
+					return ;
+				}
+				var serverVersion:String = xmlController.id ;
+				var currentVersion2:String = currentVersion ;
+				
+				var serVerArr:Array = serverVersion.split('.');
+				var appVerArr:Array = currentVersion.split('.');
+				
+				if(serVerArr.length>2)
+				{
+					serverVersion = serVerArr[0]+'.'+TimeToString.numToString(serVerArr[1],5); 
+				}
+				if(appVerArr.length>2)
+				{
+					currentVersion2 = appVerArr[0]+'.'+TimeToString.numToString(appVerArr[1],5); 
+				}
+				
+				trace("Controll version : "+serverVersion+" vs "+currentVersion2);
+				
+				var myNumbericVersion:Number = Number(currentVersion2);
+				var serverNumericVersion:Number = Number(serverVersion);
+				
+				if(((isNaN(serverNumericVersion) || isNaN(myNumbericVersion)) &&  serverVersion == currentVersion2) || myNumbericVersion>=serverNumericVersion )
+				{
+					onDone();
 				}
 				else
 				{
-					storeURL = xmlController.url_android ;
+					var storeURL:String ;
+					if(DevicePrefrence.isIOS())
+					{
+						storeURL = xmlController.url_ios ;
+					}
+					else
+					{
+						storeURL = xmlController.url_android ;
+					}
+					hintText = xmlController.text ;
+					appStoreURL = storeURL ;
+					if(onFaild.length==1)
+					{
+						onFaild(hintText);
+					}
+					else if(hintText.length>1)
+					{
+						onFaild(hintText,appStoreURL);
+					}
+					else
+					{
+						onFaild();
+					}
 				}
-				hintText = xmlController.text ;
-				appStoreURL = storeURL ;
-				onFaild(/*hintText,appStoreURL*/);
 			}
-		}
-		
-		protected static function noConnection(event:IOErrorEvent):void
-		{
-			trace("No connection stablished");
 			
-			controllCashedDatas();
+			function noConnection(event:IOErrorEvent):void
+			{
+				trace("No connection stablished");
+				
+				controllCashedDatas();
+			}
 		}
 		
 	}
