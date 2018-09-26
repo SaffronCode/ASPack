@@ -7,6 +7,9 @@ package
 		/**This event dispatches to parent. the container scrollers must listen to this to stop their scroll controlling*/
 		internal static const TRY_TO_SCROLL:String = "TRY_TO_SCROLL" ;
 		
+		/**The scrollable object taouced to start scroll but the scroll didn't start yet.*/
+		public static const TOUCHED_TO_SCROLL:String = "TOUCHED_TO_SCROLL" ;
+		
 		/**This event will dispatch on all scrolled items childs to tell them that they are scrolling*/
 		public static const YOU_ARE_SCROLLING_FROM_YOUR_PARENT:String = "YOU_ARE_SCROLLING_FROM_YOUR_PARENT";
 		public static const LOCK_SCROLL_TILL_MOUSE_UP:String = "LOCK_SCROLL_TILL_MOUSE_UP";

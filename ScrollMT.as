@@ -653,6 +653,7 @@ package
 				//scrolling starts
 				targStage.addEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
 				targ.addEventListener(ScrollMTEvent.TRY_TO_SCROLL,stopScroll);
+				targ.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TOUCHED_TO_SCROLL,true));
 			}
 		}
 		
