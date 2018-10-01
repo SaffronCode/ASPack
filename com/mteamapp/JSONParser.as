@@ -1,8 +1,10 @@
-package com.mteamapp
+﻿package com.mteamapp
 {
 	
+	import flash.display.MovieClip;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
+	import flash.utils.getQualifiedSuperclassName;
 	
 
 	/**All vectors, Arrays and Objects had to be initialized on the main class and all values had to be in public type.*/
@@ -35,11 +37,18 @@ package com.mteamapp
 		/**You can make a copy from simple objecs*/
 		public static function makeCopy(fromObject:*):*
 		{
-			trace("Clone created by JSONParser");
+			var objectType:String = getQualifiedClassName(fromObject) ;
+			var objectClass:Class = getDefinitionByName(objectType) as Class;
+			var cloneObject:Object = new objectClass();
+			parsParams({item:fromObject},{item:cloneObject});
+			
+			return cloneObject ;
+			
+			/*trace("Clone created by JSONParser");
 			var itemType:Class = getDefinitionByName(getQualifiedClassName(fromObject)) as Class;
 			var cloneObject:Object = new itemType();
 			JSONParser.parse(JSONParser.stringify(fromObject),cloneObject) ;
-			return cloneObject ;
+			return cloneObject ;*/
 		}
 		
 		private static function dateController(k,v):*
@@ -93,7 +102,7 @@ package com.mteamapp
 		 * Warning2 : set a default variable for date instanses to make them works correctly. (dat:Date = <strong>new Date()</strong>)*/
 		private static function parsParams(fromObject:Object,toObject:*):void
 		{
-			var arr:Array ;
+			var arr:Object ;//Is vector or array
 			var j:int,l:uint ;
 			
 			//trace("From : "+JSON.stringify(fromObject));
@@ -115,13 +124,13 @@ package com.mteamapp
 						
 						
 						//trace("This is vector parameter");
-						if(currentParam is Array)
+						if(currentParam is Array || currentParam is Vector.<*>)
 						{
 							var vecClassName:String = getQualifiedClassName(toObject[i]).split("__AS3__.vec::Vector.<").join('').split('>').join('');
 							//trace("Vector element type is : "+vecClassName);
 							var vecItemClass:Class = (getDefinitionByName(vecClassName) as Class)
 							var vec:Vector.<*> = (toObject[i]) ;
-							arr = currentParam as Array;
+							arr = currentParam ;
 							l = arr.length ;
 							//trace("pars "+l+" items");
 							for(j = 0 ; j<l ; j++)
