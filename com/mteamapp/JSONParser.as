@@ -1,4 +1,4 @@
-package com.mteamapp
+﻿package com.mteamapp
 {
 	
 	import flash.utils.getDefinitionByName;
@@ -91,9 +91,9 @@ package com.mteamapp
 		 * Warning!! Vector.<int> will not catch by this class. you should change it with Array object.
 		 * <br><br>
 		 * Warning2 : set a default variable for date instanses to make them works correctly. (dat:Date = <strong>new Date()</strong>)*/
-		private static function parsParams(fromObject:Object,toObject:*):void
+		public static function parsParams(fromObject:Object,toObject:*):void
 		{
-			var arr:Array ;
+			var arr:* ; // is Array or Vector
 			var j:int,l:uint ;
 			
 			//trace("From : "+JSON.stringify(fromObject));
@@ -115,13 +115,13 @@ package com.mteamapp
 						
 						
 						//trace("This is vector parameter");
-						if(currentParam is Array)
+						if(currentParam is Array || currentParam is Vector.<*> )
 						{
 							var vecClassName:String = getQualifiedClassName(toObject[i]).split("__AS3__.vec::Vector.<").join('').split('>').join('');
 							//trace("Vector element type is : "+vecClassName);
 							var vecItemClass:Class = (getDefinitionByName(vecClassName) as Class)
 							var vec:Vector.<*> = (toObject[i]) ;
-							arr = currentParam as Array;
+							arr = currentParam;
 							l = arr.length ;
 							//trace("pars "+l+" items");
 							for(j = 0 ; j<l ; j++)
