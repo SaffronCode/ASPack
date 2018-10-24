@@ -661,6 +661,7 @@ package
 				//scrolling starts
 				targStage.addEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
 				targ.addEventListener(ScrollMTEvent.TRY_TO_SCROLL,stopScroll);
+				targ.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TOUCHED_TO_SCROLL,true));
 			}
 		}
 		
@@ -1179,7 +1180,15 @@ package
 						//trace(" targetRect.x : "+targetRect.x);
 						//trace(" stepSizes : "+stepSizes);
 						//trace(" Math.round(targetRect.x/stepSizes) : "+Math.round(targetRect.x/stepSizes));
-						var bestPlace:Number = Math.min(0,Math.round(Math.max(maskRect.width-targetRect.width,targetRect.x)/stepSizes)*stepSizes) ;
+						var bestPlace:Number ;
+						if(revertX)
+						{
+							bestPlace = Math.max(maskRect.width,Math.round(Math.min(maskRect.width+targetRect.width-maskRect.width,targetRect.x)/stepSizes)*stepSizes);
+						}
+						else
+						{
+							bestPlace = Math.min(0,Math.round(Math.max(maskRect.width-targetRect.width,targetRect.x)/stepSizes)*stepSizes);
+						}
 						//trace("NOW : "+bestPlace);
 						stepV += (bestPlace-targetRect.x)/stepVF; 
 						stepV*=stepVMu ;
