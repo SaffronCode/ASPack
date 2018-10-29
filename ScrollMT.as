@@ -392,6 +392,14 @@ package
 				targ.mask = scrollerMask;
 			}
 		}
+		public function unMask():void
+		{
+			if(targ!=null && targ.parent!=null && scrollerMask!=null)
+			{
+				targ.parent.removeChild(scrollerMask);
+				targ.mask = null;
+			}
+		}
 		
 		/**set up the scroller variables and event listeners from now*/
 		private function setUpTheScroller()
