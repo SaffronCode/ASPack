@@ -638,12 +638,37 @@ package com.mteamapp
 			return str==null || str=='';
 		}
 		
-		
-		
-		
 		public static function clearExtraSpaces(str:String):String
 		{
 			return str.replace(/[\s\t]{2,}/g,' ').replace(/([\t\s]$)|(^[\s\t])/g,'');
+		}
+		
+		public static function IsValidNationalCode(nationalCode:String):Boolean
+		{
+			if(nationalCode==null)return false;
+			if(nationalCode=='')return false;
+			if(nationalCode.length !=10) return false;
+			if(isNaN(Number(nationalCode))) return false;
+			
+			var allDigitEqual:Array = new Array("0000000000","1111111111","2222222222","3333333333","4444444444","5555555555","6666666666","7777777777","8888888888","9999999999");
+			if (allDigitEqual.indexOf(nationalCode)!=-1) return false;
+			
+			var chArray = nationalCode.split('');
+			var num0 = int(chArray[0].toString())*10;
+			var num2 = int(chArray[1].toString())*9;
+			var num3 = int(chArray[2].toString())*8;
+			var num4 = int(chArray[3].toString())*7;
+			var num5 = int(chArray[4].toString())*6;
+			var num6 = int(chArray[5].toString())*5;
+			var num7 = int(chArray[6].toString())*4;
+			var num8 = int(chArray[7].toString())*3;
+			var num9 = int(chArray[8].toString())*2;
+			var a = int(chArray[9].toString());
+			
+			var b = (((((((num0 + num2) + num3) + num4) + num5) + num6) + num7) + num8) + num9;
+			var c = b%11;
+			
+			return (((c < 2) && (a == c)) || ((c >= 2) && ((11 - c) == a)));
 		}
 	}
 }
