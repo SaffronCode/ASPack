@@ -455,8 +455,12 @@ package com.mteamapp
 	////////////////////////////String controll
 		
 		/**Returns true if this was an email*/
-		public static function isEmail(email:String):Boolean
+		public static function isEmail(email:String,canBeEmpty_p:Boolean=false):Boolean
 		{
+			if(canBeEmpty_p)
+			{
+				if(email==''|| email==null) return true
+			}
 			var reg:RegExp = /^[\w.-]+@\w[\w.-]+\.[\w.-]*[a-z][a-z]$/i;
 			return reg.test(email);
 		}
@@ -669,6 +673,10 @@ package com.mteamapp
 			var c = b%11;
 			
 			return (((c < 2) && (a == c)) || ((c >= 2) && ((11 - c) == a)));
+		}
+		public static function isNotEmptyString(txt:String):Boolean
+		{
+			return txt!= null && StringFunctions.clearSpacesAndTabs(txt)!='';
 		}
 	}
 }
