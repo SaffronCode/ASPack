@@ -608,5 +608,12 @@ package
 				}
 			}
 		}
+		
+		public static function setMouseClickDebugger(stage:Stage):void
+		{
+			stage.addEventListener(MouseEvent.MOUSE_DOWN,function(e:MouseEvent){
+				trace(Obj.displayObjectInfo(e.target as DisplayObject));
+			});
+		}
 	}
 }
