@@ -32,7 +32,7 @@ package stageManager
 		/**Resize event dispatches on this value*/
 		public static var eventDispatcher:StageEventDispatcher = new StageEventDispatcher();
 		
-		public static var DebugIPhoneX:Boolean = false ;
+		public static var DebugIPhoneX:Boolean = true ;
 		
 		/**Main stage object*/
 		private static var 	myStage:Stage,
@@ -87,6 +87,8 @@ package stageManager
 		/**iPhoneX masks*/
 		private static var 	iPhoneXJingleAreaMask1:Sprite,
 							iPhoneXJingleAreaMask2:Sprite;
+
+		private static var stageUpdateInterval:Number = 2000;
 				
 							
 		public static function isIphoneX():Boolean
@@ -167,7 +169,8 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,2000);
+			
+			setInterval(controllStageSizesOnFullScreen,stageUpdateInterval);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
