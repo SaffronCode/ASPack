@@ -88,7 +88,7 @@ package stageManager
 		private static var 	iPhoneXJingleAreaMask1:Sprite,
 							iPhoneXJingleAreaMask2:Sprite;
 
-		private static var stageUpdateInterval:Number = 100;
+		private static var stageUpdateInterval:Number = 300;
 		
 		private static var needToControllStagePosition:Boolean = true ;
 				
