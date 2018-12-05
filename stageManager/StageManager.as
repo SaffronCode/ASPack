@@ -87,11 +87,22 @@ package stageManager
 		/**iPhoneX masks*/
 		private static var 	iPhoneXJingleAreaMask1:Sprite,
 							iPhoneXJingleAreaMask2:Sprite;
+
+		private static var stageUpdateInterval:Number = 300;
+		
+		private static var needToControllStagePosition:Boolean = true ;
 				
 							
 		public static function isIphoneX():Boolean
 		{
 			return iPhoneXJingleAreaMask1!=null ;
+		}
+		
+		/**Stop controlling stage size*/
+		public static function StopControllStageSize(status:Boolean=true):void
+		{
+			trace("Stop controlling stage size");
+			needToControllStagePosition = !status ;
 		}
 		
 		/**Height*/
@@ -167,7 +178,8 @@ package stageManager
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
-			setInterval(controllStageSizesOnFullScreen,2000);
+			
+			setInterval(controllStageSizesOnFullScreen,stageUpdateInterval);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
@@ -181,7 +193,7 @@ package stageManager
 				controllStageSizes()
 				
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
-			controllStageSizes(null,true);
+			controllStageSizes(null,needToControllStagePosition);
 		}
 		
 		public static function deactiveRotationListening():void
@@ -192,6 +204,9 @@ package stageManager
 		/**Controll the stage each frame*/
 		protected static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
 		{
+			if(!DevicePrefrence.isApplicationActive)
+				return ;
+			//trace("testTheStageSizeTo : "+testTheStageSizeTo);
 			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) || testTheStageSizeTo)
 			{
 				var stageWidth:Number;
@@ -271,41 +286,45 @@ package stageManager
 					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 				}
 			}
+			else
+			{
+				controlStageProperties();
+			}
 		}		
 		
 		/**Stage status is new*/
-		protected static function controlStageProperties(fullScreenWidth:Number,fullScreenHeight:Number,resizedForIPhoneXOnce:Boolean=false,topAreaMargin:Number=0):void
+		protected static function controlStageProperties(fullScreenWidth:Number=NaN,fullScreenHeight:Number=NaN,resizedForIPhoneXOnce:Boolean=false,topAreaMargin:Number=0):void
 		{
-			TopPageMargin = topAreaMargin
-			var scaleX:Number = fullScreenWidth/stageWidth0 ;
-			var scaleY:Number = fullScreenHeight/stageHeight0 ;
-			
-			//trace("fullScreenWidth/stageWidth0 : "+fullScreenWidth+'/'+stageWidth0)
-			//trace("fullScreenHeight/stageHeight0 : "+fullScreenHeight+'/'+stageHeight0)
-			//trace("scaleX : "+scaleX);
-			//trace("scaleY : "+scaleY);
-			
-			//trace("fullScreenHeight : "+fullScreenHeight);
-			
-			
-			scl = Math.min(scaleX,scaleY);
-			//trace("scl : "+scl);
-			
-			stageWidth = Math.round(fullScreenWidth/scl);
-			stageHeight = Math.round(fullScreenHeight/scl);
-			
-			//trace("stageWidth : "+stageWidth);
-			//trace("stageHeight: "+stageHeight);
-			
-			var str:String = stageWidth+'/'+stageHeight;
-			//debugTF.text = str ;
-			
-			deltaStageWidth = stageWidth-stageWidth0 ;
-			deltaStageHeight = stageHeight-stageHeight0 ;
-			stageScaleWidth = stageWidth/stageWidth0;
-			stageScaleHeight = stageHeight/stageHeight0;
-			//trace("stageScaleWidth: "+stageScaleWidth);
-			
+			TopPageMargin = topAreaMargin;
+			if(!isNaN(fullScreenWidth))
+			{
+				var scaleX:Number = fullScreenWidth/stageWidth0 ;
+				var scaleY:Number = fullScreenHeight/stageHeight0 ;
+				
+				//trace("fullScreenWidth/stageWidth0 : "+fullScreenWidth+'/'+stageWidth0)
+				//trace("fullScreenHeight/stageHeight0 : "+fullScreenHeight+'/'+stageHeight0)
+				//trace("scaleX : "+scaleX);
+				//trace("scaleY : "+scaleY);
+				
+				
+				scl = Math.min(scaleX,scaleY);
+				//trace("scl : "+scl);
+				
+				stageWidth = Math.round(fullScreenWidth/scl);
+				stageHeight = Math.round(fullScreenHeight/scl);
+				
+				//trace("stageWidth : "+stageWidth);
+				//trace("stageHeight: "+stageHeight);
+				
+				var str:String = stageWidth+'/'+stageHeight;
+				//debugTF.text = str ;
+				
+				deltaStageWidth = stageWidth-stageWidth0 ;
+				deltaStageHeight = stageHeight-stageHeight0 ;
+				stageScaleWidth = stageWidth/stageWidth0;
+				stageScaleHeight = stageHeight/stageHeight0;
+				//trace("stageScaleWidth: "+stageScaleWidth);
+			}
 			if(resizedForIPhoneXOnce == false && (DebugIPhoneX || DevicePrefrence.isIOS()))
 			{
 				const margin:Number = 10 ;
@@ -343,7 +362,13 @@ package stageManager
 					//The iPhoneXJingleBarSize should be bigger tah iPhoneXJingleBarSizeDown!!
 					var menuDeltaSizes:Number = iPhoneXJingleBarSize-iPhoneXJingleBarSizeDown ;
 					
+					var cashedStageHeight:Number = stageHeight ;
+					var cashedDeltaStageWidth:Number = deltaStageWidth ;
+					var cashedStageScaleWidth:Number = stageScaleWidth ;
 					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2+menuDeltaSizes,true,menuDeltaSizes);
+					stageHeight = cashedStageHeight ;
+					deltaStageWidth = cashedDeltaStageWidth ;
+					stageScaleWidth = cashedStageScaleWidth ;
 				}
 				else if(DebugIPhoneX || deltaStageHeight>iPhoneTopBarSize && !DevicePrefrence.isFullScreen())
 				{
@@ -354,7 +379,13 @@ package stageManager
 					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneTopBarSize+margin+2);
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
+					var cashedStageHeight = stageHeight ;
+					var cashedDeltaStageHeight:Number = deltaStageHeight ;
+					var cashedStageScaleHeight:Number = stageScaleHeight ;
 					controlStageProperties(stageWidth,stageHeight-iPhoneTopBarSize,true,iPhoneTopBarSize);
+					stageHeight = cashedStageHeight ;
+					deltaStageHeight = cashedDeltaStageHeight ;
+					stageScaleHeight = cashedStageScaleHeight ;
 				}
 				else
 				{
