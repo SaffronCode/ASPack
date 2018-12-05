@@ -338,6 +338,7 @@ package stageManager
 			{
 				const margin:Number = 10 ;
 					
+				var cashedStageHeight:Number ;
 				if(stageWidth/stageHeight>2)
 				{
 					//trace(" ♣ You have iPhoneX, nice...");
@@ -370,8 +371,7 @@ package stageManager
 					
 					//The iPhoneXJingleBarSize should be bigger tah iPhoneXJingleBarSizeDown!!
 					var menuDeltaSizes:Number = iPhoneXJingleBarSize-iPhoneXJingleBarSizeDown ;
-					
-					var cashedStageHeight:Number = stageHeight ;
+					cashedStageHeight = stageHeight ;
 					var cashedDeltaStageWidth:Number = deltaStageWidth ;
 					var cashedStageScaleWidth:Number = stageScaleWidth ;
 					controlStageProperties(stageWidth,stageHeight-iPhoneXJingleBarSize*2+menuDeltaSizes,true,menuDeltaSizes);
@@ -388,7 +388,7 @@ package stageManager
 					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneTopBarSize+margin+2);
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
-					var cashedStageHeight = stageHeight ;
+					cashedStageHeight = stageHeight ;
 					var cashedDeltaStageHeight:Number = deltaStageHeight ;
 					var cashedStageScaleHeight:Number = stageScaleHeight ;
 					controlStageProperties(stageWidth,stageHeight-iPhoneTopBarSize,true,iPhoneTopBarSize);
