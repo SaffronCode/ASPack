@@ -88,7 +88,8 @@ package stageManager
 		private static var 	iPhoneXJingleAreaMask1:Sprite,
 							iPhoneXJingleAreaMask2:Sprite;
 
-		private static var stageUpdateInterval:Number = 300;
+		/**It will set automativaly*/
+		private static var stageUpdateInterval:Number = 0;
 		
 		private static var needToControllStagePosition:Boolean = true ;
 				
@@ -151,6 +152,14 @@ package stageManager
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
 		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null)
 		{
+			if(DevicePrefrence.isIOS())
+			{
+				stageUpdateInterval = 300 ;
+			}
+			else
+			{
+				stageUpdateInterval = 1000 ;
+			}
 			myStage = yourStage ;
 			myRoot = yourRoot ;
 			OptionsList = new Vector.<StageOption>();
