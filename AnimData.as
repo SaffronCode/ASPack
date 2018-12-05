@@ -12,6 +12,7 @@
 package
 {
 	import flash.display.MovieClip;
+	import flash.display.Sprite;
 	import flash.events.Event;
 	
 	/**کلاس انیمیشن ها\r
@@ -22,7 +23,7 @@ package
 		public static var alphaV=0.05;
 		
 		private static var functions:Vector.<Function>,
-							targets:Vector.<MovieClip>,
+							targets:Vector.<Sprite>,
 							fadeSpeed:Vector.<Number>;
 							
 							
@@ -33,17 +34,17 @@ package
 			if(functions == null)
 			{
 				functions = new Vector.<Function>();
-				targets = new Vector.<MovieClip>();
+				targets = new Vector.<Sprite>();
 				fadeSpeed = new Vector.<Number>();
 			}
 		}
 		
-		public static function cansel(target:MovieClip)
+		public static function cansel(target:Sprite)
 		{
 			deleteDataAbout(target);
 		}
 		
-		public static function deleteDataAbout(target:MovieClip)
+		public static function deleteDataAbout(target:Sprite)
 		{
 			initialize();
 			var I:int = targets.indexOf(target);
@@ -58,7 +59,7 @@ package
 		}
 		
 		/**ظاهر کردن موی کلیپ با انیمیشن*/
-		public static function fadeIn(Target:MovieClip,afterFunc:Function=null,fadeTime:Number=0)
+		public static function fadeIn(Target:Sprite,afterFunc:Function=null,fadeTime:Number=0)
 		{
 			if(fadeTime == 0)
 			{
@@ -69,7 +70,7 @@ package
 		}
 		
 		/**مجو کردن موی کلیپ*/
-		public static function fadeOut(Target:MovieClip,afterFunc:Function=null,fadeTime:Number=0)
+		public static function fadeOut(Target:Sprite,afterFunc:Function=null,fadeTime:Number=0)
 		{
 			if(fadeTime == 0)
 			{
@@ -80,7 +81,7 @@ package
 		}
 		
 		
-		private static function act(Target:MovieClip,afterFunc:Function,fadeTime:Number)
+		private static function act(Target:Sprite,afterFunc:Function,fadeTime:Number)
 		{
 			initialize();
 			deleteDataAbout(Target);
@@ -96,7 +97,7 @@ package
 		protected static function anim(ev:Event):void
 		{
 			
-			var targ:MovieClip = ev.target as MovieClip ;
+			var targ:Sprite = ev.target as Sprite ;
 			var I:int = targets.indexOf(targ);
 			
 			var mySpeed:Number = fadeSpeed[I] ;
@@ -113,7 +114,7 @@ package
 		}
 		
 		/**finish it*/
-		private static function done(targ:MovieClip,func:Function,alpha:Number)
+		private static function done(targ:Sprite,func:Function,alpha:Number)
 		{
 			targ.alpha = alpha ;
 			deleteDataAbout(targ);
@@ -133,7 +134,7 @@ package
 		protected static function unLoad(ev:Event):void
 		{
 			
-			deleteDataAbout(ev.target as MovieClip);
+			deleteDataAbout(ev.target as Sprite);
 		}		
 		
 		
