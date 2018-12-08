@@ -32,7 +32,7 @@ package stageManager
 		/**Resize event dispatches on this value*/
 		public static var eventDispatcher:StageEventDispatcher = new StageEventDispatcher();
 		
-		public static var DebugIPhoneX:Boolean = true ;
+		public static var DebugIPhoneX:Boolean = false ;
 		
 		/**Main stage object*/
 		private static var 	myStage:Stage,
@@ -300,19 +300,22 @@ package stageManager
 			}
 			else
 			{
+				var h:Number ;
 				//controlStageProperties();
-				if (false && iPhoneXJingleAreaMask1 != null)
+				if (iPhoneXJingleAreaMask1 != null)
 				{
+					h = iPhoneXJingleAreaMask1.height ;
 					iPhoneXJingleAreaMask1.graphics.clear();
 					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
-					iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, iPhoneXJingleBarSize+margin + 2);
+					iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, h);
 				}
 				
 				if (iPhoneXJingleAreaMask2 != null)
 				{
+					h = iPhoneXJingleAreaMask2.height ;
 					iPhoneXJingleAreaMask2.graphics.clear();
 					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
-					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,StageManager.stageWidth+margin*2,iPhoneXJingleBarSizeDown+margin);
+					iPhoneXJingleAreaMask2.graphics.drawRect( -margin, -2, StageManager.stageWidth + margin * 2, iPhoneXJingleBarSizeDown + margin);
 				}
 			}
 		}		
