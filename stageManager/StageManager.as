@@ -298,10 +298,10 @@ package stageManager
 					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 				}
 			}
-			else if(false)
+			else
 			{
 				//controlStageProperties();
-				if (iPhoneXJingleAreaMask1 != null)
+				if (false && iPhoneXJingleAreaMask1 != null)
 				{
 					iPhoneXJingleAreaMask1.graphics.clear();
 					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
@@ -313,7 +313,6 @@ package stageManager
 					iPhoneXJingleAreaMask2.graphics.clear();
 					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
 					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,StageManager.stageWidth+margin*2,iPhoneXJingleBarSizeDown+margin);
-					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom - iPhoneXJingleBarSizeDown ;
 				}
 			}
 		}		
