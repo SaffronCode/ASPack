@@ -10,7 +10,6 @@
 package stageManager
 {
 	import contents.Contents;
-	import contents.alert.Alert;
 	
 	import flash.desktop.NativeApplication;
 	import flash.display.Bitmap;
@@ -33,7 +32,7 @@ package stageManager
 		/**Resize event dispatches on this value*/
 		public static var eventDispatcher:StageEventDispatcher = new StageEventDispatcher();
 		
-		public static var DebugIPhoneX:Boolean = false ;
+		public static var DebugIPhoneX:Boolean = true ;
 		
 		/**Main stage object*/
 		private static var 	myStage:Stage,
@@ -67,6 +66,9 @@ package stageManager
 		/**I store the stage size like this : "1024,768"*/
 		private static var lastStageSize:String = '';
 		
+		/**IPhone jingle margins*/
+		private static const margin:Number = 10 ;
+		
 		/**If this was true, it means that the stage.fullScreen sizes are not correct so the application should controll the stage.stageWidth*/
 		private static var haveToCheckStageSize:Boolean = false ;
 		
@@ -75,9 +77,7 @@ package stageManager
 							Items:Vector.<StageItem>;
 							
 		private static var listenToStageRotation:Boolean ;
-		
-		/**Iphone areas margins*/
-		private static const margin:Number = 10 ;
+							
 							
 							
 		private static var controlleLocked:Boolean = false ;
@@ -105,7 +105,7 @@ package stageManager
 		/**Stop controlling stage size*/
 		public static function StopControllStageSize(status:Boolean=true):void
 		{
-			trace("Stop controlling stage size : "+status);
+			trace("Stop controlling stage size");
 			needToControllStagePosition = !status ;
 		}
 		
@@ -155,69 +155,57 @@ package stageManager
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
 		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null)
 		{
-			try
+			if(DevicePrefrence.isIOS())
 			{
-				if(DevicePrefrence.isIOS())
-				{
-					stageUpdateInterval = 200 ;
-				}
-				else
-				{
-					stageUpdateInterval = 1000 ;
-				}
-				myStage = yourStage ;
-				myRoot = yourRoot ;
-				OptionsList = new Vector.<StageOption>();
-				Items = new Vector.<StageItem>();
-				resolutionControll = activateResolutionControll ;
-				
-				if(activateResolutionControll)
-				{
-					throw "activateResolutionControll is not working yet.";
-				}
-				
-				debugW = debugWidth ;
-				debugH = debugHeight ;
-				
-				stageWidth0 = myStage.stageWidth;
-				stageHeight0 = myStage.stageHeight;
-				
-				//debugTF = debuggerTF ;
-				
-				//myStage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGING,controlStageProperties);
-				StageManager.listenToStageRotation = listenToStageRotation ;
-				controllStageSizes(null,true);
-				
-				myStage.addEventListener(Event.ADDED,controllFromMe,false,1);
-				//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
-				//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
-				setTimeout(controllStageSizesOnFullScreen,0);
-				
-				setInterval(controllStageSizesOnFullScreen, stageUpdateInterval);
-			}catch (e:Error)
-			{
-				Alert.show(e);
+				stageUpdateInterval = 300 ;
 			}
+			else
+			{
+				stageUpdateInterval = 1000 ;
+			}
+			myStage = yourStage ;
+			myRoot = yourRoot ;
+			OptionsList = new Vector.<StageOption>();
+			Items = new Vector.<StageItem>();
+			resolutionControll = activateResolutionControll ;
+			
+			if(activateResolutionControll)
+			{
+				throw "activateResolutionControll is not working yet.";
+			}
+			
+			debugW = debugWidth ;
+			debugH = debugHeight ;
+			
+			stageWidth0 = myStage.stageWidth;
+			stageHeight0 = myStage.stageHeight;
+			
+			//debugTF = debuggerTF ;
+			
+			//myStage.addEventListener(StageOrientationEvent.ORIENTATION_CHANGING,controlStageProperties);
+			StageManager.listenToStageRotation = listenToStageRotation ;
+			controllStageSizes(null,true);
+			
+			myStage.addEventListener(Event.ADDED,controllFromMe,false,1);
+			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
+			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
+			setTimeout(controllStageSizesOnFullScreen,0);
+			
+			setInterval(controllStageSizesOnFullScreen,stageUpdateInterval);
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
 		{
-			try
+			//lastStageFW = NaN ;
+			if(!DevicePrefrence.isApplicationActive)
 			{
-				//lastStageFW = NaN ;
-				if(!DevicePrefrence.isApplicationActive)
-				{
-					return ;
-				}
-				if(listenToStageRotation)
-					controllStageSizes()
-					
-				NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
-				controllStageSizes(null, needToControllStagePosition);
-			}catch (e:Error)
-			{
-				Alert.show(e);
+				return ;
 			}
+			if(listenToStageRotation)
+				controllStageSizes()
+				
+			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
+			controllStageSizes(null,needToControllStagePosition);
 		}
 		
 		public static function deactiveRotationListening():void
@@ -228,111 +216,105 @@ package stageManager
 		/**Controll the stage each frame*/
 		protected static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
 		{
-			try
+			if(!DevicePrefrence.isApplicationActive)
+				return ;
+			//trace("testTheStageSizeTo : "+testTheStageSizeTo);
+			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) || testTheStageSizeTo)
 			{
-				if(!DevicePrefrence.isApplicationActive)
-					return ;
-				//trace("testTheStageSizeTo : "+testTheStageSizeTo);
-				//new Alert("lastStageFW:" + lastStageFW + " myStage.fullScreenWidth:" + myStage.fullScreenWidth + " lastStageFH:" + myStage.fullScreenHeight+" myStage.fullScreenHeight:"+myStage.fullScreenHeight + " testTheStageSizeTo:" + testTheStageSizeTo);
-				if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) || testTheStageSizeTo)
-				{
-					var stageWidth:Number;
-					var stageHeight:Number;
+				var stageWidth:Number;
+				var stageHeight:Number;
 
-					var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC ;
+				var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC ;
+				
+				if(changeTheStageSizeToReCheck&&(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize))
+				{
+					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
+					lastStageFW = myStage.fullScreenWidth ;
+					lastStageFH = myStage.fullScreenHeight ;
 					
-					if(changeTheStageSizeToReCheck&&(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize))
+					myStage.scaleMode = StageScaleMode.NO_SCALE ;
+					stageWidth = myStage.stageWidth ;
+					stageHeight = myStage.stageHeight ;
+					//trace("♠**  myStage.stageWidth : "+ myStage.stageWidth +' => '+(myStage.stageWidth==0));
+					//trace("♣**  myStage.stageHeight : "+ myStage.stageHeight+' => '+(myStage.stageHeight==0));
+					
+					if((myStage.stageWidth == 0) || (myStage.stageHeight == 0) )
 					{
-						eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
-						lastStageFW = myStage.fullScreenWidth ;
-						lastStageFH = myStage.fullScreenHeight ;
-						
-						myStage.scaleMode = StageScaleMode.NO_SCALE ;
-						stageWidth = myStage.stageWidth ;
-						stageHeight = myStage.stageHeight ;
-						//trace("♠**  myStage.stageWidth : "+ myStage.stageWidth +' => '+(myStage.stageWidth==0));
-						//trace("♣**  myStage.stageHeight : "+ myStage.stageHeight+' => '+(myStage.stageHeight==0));
-						
-						if((myStage.stageWidth == 0) || (myStage.stageHeight == 0) )
-						{
-							trace("•••••• Air problem on myStage.stageHeight!");
-							
-							myStage.scaleMode = StageScaleMode.SHOW_ALL ;
-							
-							return ;
-						}
+						trace("•••••• Air problem on myStage.stageHeight!");
 						
 						myStage.scaleMode = StageScaleMode.SHOW_ALL ;
 						
-						if(testTheStageSizeTo)
+						return ;
+					}
+					
+					myStage.scaleMode = StageScaleMode.SHOW_ALL ;
+					
+					if(testTheStageSizeTo)
+					{
+						if(stageWidth != lastStageFW || stageHeight != lastStageFH)
 						{
-							if(stageWidth != lastStageFW || stageHeight != lastStageFH)
-							{
-								//trace("The stage.fullScreen size is not trustable");
-								haveToCheckStageSize = true ;
-							}
+							//trace("The stage.fullScreen size is not trustable");
+							haveToCheckStageSize = true ;
 						}
-					}
-					else
-					{
-						stageWidth = lastStageWidth ;
-						stageHeight = lastStageHeight ;
-					}
-					
-					lastStageWidth = stageWidth ;
-					lastStageHeight = stageHeight ;
-					//Alert.show("lastStageHeight:" + lastStageHeight);
-					
-					if(debugW!=0 && debugH!=0)
-					{
-						controlStageProperties(debugW,debugH);
-					}
-					else
-					{
-						controlStageProperties(stageWidth,stageHeight);
-					}
-					
-					
-					if(resolutionControll)
-					{
-						if(myRoot==null)
-						{
-							throw "You have to pass the root to the stageManagager to"
-						}
-						scaleFactor = 0.5 ;
-						myRoot.scaleX = myRoot.scaleY = scaleFactor ;
-						myRoot.x = (stageWidth-stageWidth*scaleFactor)/2;
-						myRoot.y = (stageHeight-stageHeight*scaleFactor)/2;
-					}
-					
-					//trace("All managed");
-					var isStageChanged:Boolean = lastStageSize!=stageWidth+','+stageHeight;
-					lastStageSize = stageWidth+','+stageHeight;
-					if(isStageChanged)
-					{
-						ManageAllPositions();
-						eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 					}
 				}
 				else
 				{
-					if (iPhoneXJingleAreaMask1 != null)
-					{
-						iPhoneXJingleAreaMask1.graphics.clear();
-						iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
-						iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, stageWidth + margin * 2, iPhoneXJingleBarSize+margin + 2);
-					}
-					
-					if (iPhoneXJingleAreaMask2 != null)
-					{
-						iPhoneXJingleAreaMask2.graphics.clear();
-						iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
-						iPhoneXJingleAreaMask2.graphics.drawRect( -margin, -2, stageWidth + margin * 2, iPhoneXJingleBarSizeDown + margin);
-					}
+					stageWidth = lastStageWidth ;
+					stageHeight = lastStageHeight ;
 				}
-			}catch (e:Error)
+				
+				lastStageWidth = stageWidth ;
+				lastStageHeight = stageHeight ;
+				
+				if(debugW!=0 && debugH!=0)
+				{
+					controlStageProperties(debugW,debugH);
+				}
+				else
+				{
+					controlStageProperties(stageWidth,stageHeight);
+				}
+				
+				
+				if(resolutionControll)
+				{
+					if(myRoot==null)
+					{
+						throw "You have to pass the root to the stageManagager to"
+					}
+					scaleFactor = 0.5 ;
+					myRoot.scaleX = myRoot.scaleY = scaleFactor ;
+					myRoot.x = (stageWidth-stageWidth*scaleFactor)/2;
+					myRoot.y = (stageHeight-stageHeight*scaleFactor)/2;
+				}
+				
+				//trace("All managed");
+				var isStageChanged:Boolean = lastStageSize!=stageWidth+','+stageHeight;
+				lastStageSize = stageWidth+','+stageHeight;
+				if(isStageChanged)
+				{
+					ManageAllPositions();
+					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
+				}
+			}
+			else if(false)
 			{
-				Alert.show(e);
+				//controlStageProperties();
+				if (iPhoneXJingleAreaMask1 != null)
+				{
+					iPhoneXJingleAreaMask1.graphics.clear();
+					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
+					iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, iPhoneXJingleBarSize+margin + 2);
+				}
+				
+				if (iPhoneXJingleAreaMask2 != null)
+				{
+					iPhoneXJingleAreaMask2.graphics.clear();
+					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
+					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,StageManager.stageWidth+margin*2,iPhoneXJingleBarSizeDown+margin);
+					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom - iPhoneXJingleBarSizeDown ;
+				}
 			}
 		}		
 		
@@ -366,10 +348,11 @@ package stageManager
 			stageScaleWidth = stageWidth/stageWidth0;
 			stageScaleHeight = stageHeight/stageHeight0;
 			//trace("stageScaleWidth: "+stageScaleWidth);
+			
 			if(resizedForIPhoneXOnce == false && (DebugIPhoneX || DevicePrefrence.isIOS()))
 			{
 					
-				var cashedStageHeight:Number ;
+				//var cashedStageHeight:Number ;
 				if(stageWidth/stageHeight>2)
 				{
 					//trace(" ♣ You have iPhoneX, nice...");
