@@ -442,7 +442,7 @@ package stageManager
 		}
 		
 		/**Return the color for the top*/
-		private static function TopColor(areaHeight:Number = iPhoneXJingleBarSize):uint
+		private static function TopColor(areaHeight:Number = iPhoneXJingleBarSize/3):uint
 		{
 			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-areaHeight),stageWidth,areaHeight) ;
 		}
