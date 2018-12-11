@@ -436,16 +436,16 @@ package
 				/*minV = 0.4 ;*/
 				
 				mu = Math.pow(mu,1/frameRatePrecent);//0.94
-				/*mu2 = 0.4;//0.4*/
+				mu2 = Math.pow(mu2,frameRatePrecent);//Math.pow(mu2,1/frameRatePrecent);//0.4
 				minAvailableScroll = minAvailableScroll/frameRatePrecent;///Math.pow(frameRatePrecent,2) ;//20
-				/*minScrollToLock = 20/frameRatePrecent;//20
+				minScrollToLock = 20/frameRatePrecent;//20
 				mouseWheelSpeed = 8/frameRatePrecent;//8
 				
 				floatBackSpeed_on_touch= 20*frameRatePrecent;//20
 				floatBackSpeed_free = 10*frameRatePrecent;//10
 				
 				fadeOutSpeed = 0.1/frameRatePrecent;//0.1
-				fadeInSpeed = 0.25/frameRatePrecent;//0.25*/
+				fadeInSpeed = 0.25/frameRatePrecent;//0.25
 			}
 				
 			
