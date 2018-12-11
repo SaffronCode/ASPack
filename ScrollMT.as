@@ -425,7 +425,7 @@ package
 				frameRateControlledOnce = true ;
 				var frameRatePrecent:Number = targStage.frameRate/30 ;
 				
-				stepMinSpeed = 0.5 ;//5
+				stepMinSpeed = 5 ;
 				stepVMu = 0.7 ;
 				stepVF = 10 ;
 				stepVF2 = 10 ;
@@ -437,7 +437,7 @@ package
 				
 				mu = Math.pow(mu,1/frameRatePrecent);//0.94
 				/*mu2 = 0.4;//0.4*/
-				minAvailableScroll = minAvailableScroll/Math.pow(frameRatePrecent,2) ;//20
+				minAvailableScroll = minAvailableScroll/frameRatePrecent;///Math.pow(frameRatePrecent,2) ;//20
 				/*minScrollToLock = 20/frameRatePrecent;//20
 				mouseWheelSpeed = 8/frameRatePrecent;//8
 				
