@@ -650,7 +650,11 @@ package com.mteamapp
 		{
 			return str.replace(/[\s\t]{2,}/g,' ').replace(/([\t\s]$)|(^[\s\t])/g,'');
 		}
-		
+		public static function isMobileNumber(str:String):Boolean
+		{
+			trace('str.substr(0,1) :',str.substr(0,2));
+			return !isNullOrEmpty(str) && !isNaN(Number(str)) && str.length == 11 && str.substr(0,2) == '09';
+		}
 		public static function IsValidNationalCode(nationalCode:String):Boolean
 		{
 			if(nationalCode==null)return false;
