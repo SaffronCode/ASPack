@@ -95,6 +95,8 @@ package stageManager
 		private static var stageUpdateInterval:Number = 0;
 		
 		private static var needToControllStagePosition:Boolean = true ;
+		private static var lastTopColor:uint;
+		private static var lastBottomColor:uint;
 				
 							
 		public static function isIphoneX():Boolean
@@ -302,20 +304,31 @@ package stageManager
 			{
 				var h:Number ;
 				//controlStageProperties();
+				var currentColor:uint ;
 				if (iPhoneXJingleAreaMask1 != null)
 				{
-					h = iPhoneXJingleAreaMask1.height ;
-					iPhoneXJingleAreaMask1.graphics.clear();
-					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
-					iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, h);
+					currentColor = TopColor() ;
+					if(lastTopColor!=currentColor)
+					{
+						h = iPhoneXJingleAreaMask1.height ;
+						iPhoneXJingleAreaMask1.graphics.clear();
+						iPhoneXJingleAreaMask1.graphics.beginFill(currentColor,1);
+						iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, h);
+					}
+					lastTopColor = currentColor ;
 				}
 				
 				if (iPhoneXJingleAreaMask2 != null)
 				{
-					h = iPhoneXJingleAreaMask2.height ;
-					iPhoneXJingleAreaMask2.graphics.clear();
-					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
-					iPhoneXJingleAreaMask2.graphics.drawRect( -margin, -2, StageManager.stageWidth + margin * 2, iPhoneXJingleBarSizeDown + margin);
+					currentColor = BottomColor() ;
+					if(lastBottomColor!=currentColor)
+					{
+						h = iPhoneXJingleAreaMask2.height ;
+						iPhoneXJingleAreaMask2.graphics.clear();
+						iPhoneXJingleAreaMask2.graphics.beginFill(currentColor,1);
+						iPhoneXJingleAreaMask2.graphics.drawRect( -margin, -2, StageManager.stageWidth + margin * 2, iPhoneXJingleBarSizeDown + margin);
+					}
+					lastBottomColor = currentColor ;
 				}
 			}
 		}		
