@@ -157,7 +157,7 @@ package stageManager
 		{
 			if(DevicePrefrence.isIOS())
 			{
-				stageUpdateInterval = 300 ;
+				stageUpdateInterval = 30 ;
 			}
 			else
 			{
