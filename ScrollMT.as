@@ -185,6 +185,7 @@ package
 					autoScrollSpeedY:Number=0;
 		
 		private var minAreaToAutoScroll:Number = 100 ;
+		private var frameRateControlledOnce:Boolean;
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -416,6 +417,40 @@ package
 			reset() ;
 			
 			targStage = targ.stage;
+			
+			////Set the framerate value ↓
+			
+			if(frameRateControlledOnce==false)
+			{
+				frameRateControlledOnce = true ;
+				var frameRatePrecent:Number = targStage.frameRate/30 ;
+				
+				stepMinSpeed = 0.5 ;//5
+				stepVMu = 0.7 ;
+				stepVF = 10 ;
+				stepVF2 = 10 ;
+				stepVMu2 = 0.9;
+					
+				slowDownToStopMu = Math.pow(slowDownToStopMu,1/frameRatePrecent)	;//0.8	
+				
+				/*minV = 0.4 ;*/
+				
+				mu = Math.pow(mu,1/frameRatePrecent);//0.94
+				/*mu2 = 0.4;//0.4*/
+				minAvailableScroll = minAvailableScroll/Math.pow(frameRatePrecent,2) ;//20
+				/*minScrollToLock = 20/frameRatePrecent;//20
+				mouseWheelSpeed = 8/frameRatePrecent;//8
+				
+				floatBackSpeed_on_touch= 20*frameRatePrecent;//20
+				floatBackSpeed_free = 10*frameRatePrecent;//10
+				
+				fadeOutSpeed = 0.1/frameRatePrecent;//0.1
+				fadeInSpeed = 0.25/frameRatePrecent;//0.25*/
+			}
+				
+			
+			////////////////////////// ↑
+			
 			
 			targParent = targ.parent ;
 			
