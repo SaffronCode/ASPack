@@ -1,5 +1,6 @@
 package com.mteamapp
 {
+	import flash.desktop.NativeApplication;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.SharedObject;
@@ -23,7 +24,7 @@ package com.mteamapp
 		public static var appStoreURL:String ;
 		
 		/**You can receive the hint text as the first parameter for thisIsOldVersion function and application download URL based on your OD on the second input parameter.*/
-		public static function controllVersion(currectVersion:Function,thisIsOldVersion:Function,versionURL:URLRequest,appVersion:String=null)
+		public static function controllVersion(currectVersion:Function,thisIsOldVersion:Function,versionURL:URLRequest,appVersion:String=null,controllEveryApplicationOpenning:Boolean=false)
 		{
 			var onDone:Function = currectVersion ;
 			var onFaild:Function = thisIsOldVersion ;
@@ -38,6 +39,15 @@ package com.mteamapp
 			versionControll.addEventListener(IOErrorEvent.IO_ERROR,noConnection);
 			versionControll.load(versionURL);
 			trace("Load this : "+versionURL.url);
+			
+			if(controllEveryApplicationOpenning)
+			{
+				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e)
+					{
+						versionControll.load(versionURL);
+					}
+				);
+			}
 			
 			/**xml sample :<br>
 			 * <version>
