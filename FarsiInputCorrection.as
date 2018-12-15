@@ -247,7 +247,7 @@ package
 			{
 				myStageText.fontFamily = textFormat.font.split(" Bold").join("").split(" Regular").join("");
 			}
-			myStageText.fontSize = Number(textFormat.size);
+			myStageText.fontSize = Math.round(Number(textFormat.size)*DevicePrefrence.StageScaleFactor());
 			//trace("myStageText.fontSize : "+myStageText.fontSize);
 			//trace('the key oard is : '+keyFormat);
 			if(editableNativeText)
