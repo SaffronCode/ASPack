@@ -35,7 +35,6 @@ package
 	import flash.system.Capabilities;
 	import flash.utils.ByteArray;
 	import flash.utils.getDefinitionByName;
-	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
 
 	public class DevicePrefrence
@@ -112,33 +111,35 @@ package
 				GlobalStorage.save(id_firstApp+appVersion,1) ;
 				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e){
 					_isApplicationActive = true ;
-				},false);
+				});
 				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE,function(e){
 					_isApplicationActive = false ;
 				});
 			}
-			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,repositionApplicationToCenter,false,100000);	
+			
+			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,DetectApplicationSizes,false,100000);	
 		}
 		
-		protected static function repositionApplicationToCenter(event:Event):void
+		/**Detect application screen on the system (only for desctop applications)*/
+		protected static function DetectApplicationSizes(event:Event):void
 		{
-			myStage = NativeApplication.nativeApplication.activeWindow.stage ;
-			stageWidth0 = NativeApplication.nativeApplication.activeWindow.stage.stageWidth;
-			stageHeight0 = NativeApplication.nativeApplication.activeWindow.stage.stageHeight;
-			myNativewindow = NativeApplication.nativeApplication.activeWindow ;
-			windowHieght0 = myNativewindow.height;
-			windowWidth0 = myNativewindow.width;
+			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,DetectApplicationSizes);
 			
-			//Alert.show("stageWidth0 : "+stageWidth0);
-			
-			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,repositionApplicationToCenter);	
-			var sw:Number = myStage.stageWidth ;
-			var sh:Number = myStage.stageHeight ;
-			var screenW:Number = myStage.fullScreenWidth ;
-			var screenH:Number = myStage.fullScreenHeight ;
 			
 			if(DevicePrefrence.isItPC && DevicePrefrence.isDebuggingMode())
 			{
+				myNativewindow = NativeApplication.nativeApplication.activeWindow ;
+				myStage = myNativewindow.stage ;
+				stageWidth0 = myStage.stageWidth;
+				stageHeight0 = myStage.stageHeight;
+				windowHieght0 = myNativewindow.height;
+				windowWidth0 = myNativewindow.width;
+				
+				var sw:Number = myStage.stageWidth ;
+				var sh:Number = myStage.stageHeight ;
+				var screenW:Number = myStage.fullScreenWidth ;
+				var screenH:Number = myStage.fullScreenHeight ;
+			
 				//Make the application to move center
 				var windowMargin:Number = 200 ;
 				
@@ -167,7 +168,7 @@ package
 			}
 		}
 		
-		/**Return the stage scale factor*/
+		/**Return the stage scale factor. (Only for desctop applicatin)*/
 		public static function StageScaleFactor():Number
 		{
 			if(myStage==null)
