@@ -24,6 +24,8 @@ package
 	
 	import flash.data.EncryptedLocalStore;
 	import flash.desktop.NativeApplication;
+	import flash.display.NativeWindow;
+	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.SharedObject;
@@ -66,6 +68,15 @@ package
 		
 		private static var _isApplicationActive:Boolean = true ;
 		
+		private static var 	stageWidth0:Number,
+							stageHeight0:Number,
+							
+							windowWidth0:Number,
+							windowHieght0:Number;
+							
+		private static var myStage:Stage,
+							myNativewindow:NativeWindow;
+		
 		/**retuens true if this is big screened tablet*/
 		public static function get isTablet():Boolean
 		{
@@ -105,6 +116,72 @@ package
 					_isApplicationActive = false ;
 				});
 			}
+			
+			NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,DetectApplicationSizes,false,100000);	
+		}
+		
+		/**Detect application screen on the system (only for desctop applications)*/
+		protected static function DetectApplicationSizes(event:Event):void
+		{
+			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,DetectApplicationSizes);
+			
+			
+			if(DevicePrefrence.isItPC && DevicePrefrence.isDebuggingMode())
+			{
+				myNativewindow = NativeApplication.nativeApplication.activeWindow ;
+				myStage = myNativewindow.stage ;
+				stageWidth0 = myStage.stageWidth;
+				stageHeight0 = myStage.stageHeight;
+				windowHieght0 = myNativewindow.height;
+				windowWidth0 = myNativewindow.width;
+				
+				var sw:Number = myStage.stageWidth ;
+				var sh:Number = myStage.stageHeight ;
+				var screenW:Number = myStage.fullScreenWidth ;
+				var screenH:Number = myStage.fullScreenHeight ;
+			
+				//Make the application to move center
+				var windowMargin:Number = 200 ;
+				
+				var targetWidth:Number = Math.min(sw,screenW-windowMargin);
+				var targetHeight:Number = Math.min(sh,screenH-windowMargin);
+				
+				var screenScale:Number = Math.min(targetWidth/sw,targetHeight/sh);
+				
+				sw = screenScale*sw ;
+				sh = screenScale*sh ;
+				
+				NativeApplication.nativeApplication.activeWindow.width = sw ;
+				//NativeApplication.nativeApplication.activeWindow.height = sh ;
+				//stage.stageWidth = sw ;
+				myStage.stageHeight = sh ;
+				
+				/*setInterval(function(){
+					myStage.stageHeight-=10;
+					trace("myStage.stageWidth : "+myStage.stageHeight+" vs "+stageHeight0);
+				},1000);*/
+				
+				NativeApplication.nativeApplication.activeWindow.x = (screenW-sw)/2 ;
+				NativeApplication.nativeApplication.activeWindow.y = (screenH-sh)/2 ;
+				//Alert.show("getScaleFactor : "+StageScaleFactor());
+				//Alert.show(stage.fullScreenWidth+" vs "+StageManager.stageScaleFactor());
+			}
+		}
+		
+		/**Return the stage scale factor. (Only for desctop applicatin)*/
+		public static function StageScaleFactor():Number
+		{
+			if(myStage==null)
+			{
+				return 1 ;
+			}
+			if(isPC())
+			{
+				//Alert.show("myStage.stageWidth : "+myStage.stageWidth+" vs "+stageWidth0);
+				//Alert.show("Scale factor is : "+Math.min(myStage.stageWidth/stageWidth0,myStage.stageHeight/stageHeight0));
+				return Math.min(myNativewindow.width/windowWidth0,myNativewindow.height/windowHieght0);
+			}
+			return 1 ;
 		}
 		
 		/**Returns true if the application was currently active*/
@@ -425,6 +502,17 @@ package
 			{
 				return false;
 			}
+		}
+		
+		public static function isPC():Boolean
+		{
+			return isItPC;
+		}
+		
+		/**Retrun true if you where at debug mode*/
+		public static function isDebuggingMode():Boolean
+		{
+			return Capabilities.isDebugger ;
 		}
 		
 		
