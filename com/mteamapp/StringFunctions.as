@@ -616,6 +616,11 @@ package com.mteamapp
 			return str ;
 		}
 		
+		public static function trim(str:String):String
+		{
+			return removeSpacesFromTwoSides(str);
+		}
+		
 		/**Returning file size in String with lable*/
 		public static function fileSizeInString(fileSizeInByte:Number):String
 		{
