@@ -511,6 +511,7 @@ package
 			{
 				return;
 			}
+			trace("Text changed");
 			if(correctNums)
 			{
 				oldTextField.text = RemoveEnters(UnicodeStatic.numberCorrection(myStageText.text));
@@ -518,6 +519,10 @@ package
 			else
 			{
 				oldTextField.text = RemoveEnters(myStageText.text);
+			}
+			if(DevicePrefrence.isPC())
+			{
+				myStageText.text = UnicodeStatic.KaafYe(myStageText.text);
 			}
 			oldTextField.text = UnicodeStatic.KaafYe(oldTextField.text);
 			
@@ -579,7 +584,7 @@ package
 				{
 					//f sdf fsd 
 					//trace("Obj.isAccesibleByMouse(oldTextField) : "+Obj.isAccesibleByMouse(oldTextField));
-					myStageText.visible = Obj.isAccesibleByMouse(oldTextField) ;
+					myStageText.visible = Obj.getVisible(oldTextField) && Obj.isAccesibleByMouse(oldTextField) ;
 				}
 				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
 				myStageText.viewPort = rect;
