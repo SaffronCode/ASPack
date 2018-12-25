@@ -1,4 +1,4 @@
-package com.mteamapp
+﻿package com.mteamapp
 {
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
@@ -24,11 +24,11 @@ package com.mteamapp
 		{
 			if(DevicePrefrence.isIOS())
 			{
-				navigateToURL("http://maps.apple.com/?saddr="+latitude+","+longitude+"&daddr="+toLatitude+","+toLongitude);
+				navigateToURL(new URLRequest("http://maps.apple.com/?saddr="+latitude+","+longitude+"&daddr="+toLatitude+","+toLongitude));
 			}
 			else
 			{
-				navigateToURL("http://maps.google.com/maps?saddr="latitude+","+longitude"&daddr="+toLatitude+","+toLongitude);
+				navigateToURL(new URLRequest("http://maps.google.com/maps?saddr="+latitude+","+longitude+"&daddr="+toLatitude+","+toLongitude));
 			}
 		}
 	}
