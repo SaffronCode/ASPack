@@ -18,5 +18,18 @@ package com.mteamapp
 				navigateToURL(new URLRequest("geo://"+locationString+"?z=1&q="+locationString+" ("+locationTitle+")"));
 			}
 		}
+		
+		
+		public static function showDirection(latitude:String,longitude:String,toLatitude:String,toLongitude:String,title:String):void
+		{
+			if(DevicePrefrence.isIOS())
+			{
+				navigateToURL("http://maps.apple.com/?saddr="+latitude+","+longitude+"&daddr="+toLatitude+","+toLongitude);
+			}
+			else
+			{
+				navigateToURL("http://maps.google.com/maps?saddr="latitude+","+longitude"&daddr="+toLatitude+","+toLongitude);
+			}
+		}
 	}
 }
