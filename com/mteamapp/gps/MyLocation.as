@@ -133,11 +133,11 @@
 				
 				if (myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest2)) == -1 || myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest3)) == -1)
 				{
-					throw "You have to add below permisions on the Android manifest:\n\n\t" + manifest2 + '\n\t' + manifest3 + '\n\n';
+					trace( "You have to add below permisions on the Android manifest:\n\n\t" + manifest2 + '\n\t' + manifest3 + '\n\n');
 				}
 				if (myManifest.indexOf(StringFunctions.clearSpacesAndTabs(iosManifest)) == -1)
 				{
-					throw "Add below permition to <InfoAdditions> tag for iOS versions\n\n\n" + iosManifest + '\n\n\n';
+					trace( "Add below permition to <InfoAdditions> tag for iOS versions\n\n\n" + iosManifest + '\n\n\n');
 				}
 			}
 		}
@@ -159,11 +159,11 @@
 			trace('myManifest :', XML(myManifest))
 			if (myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest1)) == -1 || myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest2)) == -1 || myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest3)) == -1)
 			{
-				throw "You have to add below permisions on the Android manifest:\n\n\t" + manifest1 + '\n\t' + manifest2 + '\n\t' + manifest3 + '\n\n';
+				trace( "You have to add below permisions on the Android manifest:\n\n\t" + manifest1 + '\n\t' + manifest2 + '\n\t' + manifest3 + '\n\n');
 			}
 			else if (myManifest.indexOf(AndroidLocationManifestWithoutSpace) == -1)
 			{
-				throw "You have to add below permision on the Android manifest on tag <application>:\n\n" + AndroidlocationManifest;
+				trace( "You have to add below permision on the Android manifest on tag <application>:\n\n" + AndroidlocationManifest);
 			}
 			
 			var iosManifest:String = '	<key>UIRequiredDeviceCapabilities</key>' + '<array>' + '	<string>location-services</string>' + '</array>';
@@ -171,7 +171,7 @@
 			var iosClearManifest:String = StringFunctions.clearSpacesAndTabs(iosManifest);
 			if (myManifest.indexOf(iosClearManifest) == -1)
 			{
-				throw "You have to add below manifest for iOS to make it able to use distriqt functions:\n\n" + iosManifest;
+				trace( "You have to add below manifest for iOS to make it able to use distriqt functions:\n\n" + iosManifest);
 			}
 		}
 		
