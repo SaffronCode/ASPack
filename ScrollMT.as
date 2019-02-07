@@ -30,13 +30,19 @@
 
 package
 {
+	import contents.alert.Alert;
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.GradientType;
+	import flash.display.InterpolationMethod;
+	import flash.display.SpreadMethod;
 	import flash.display.Sprite;
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
+	import flash.geom.Matrix;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.clearTimeout;
@@ -186,6 +192,8 @@ package
 		
 		private var minAreaToAutoScroll:Number = 100 ;
 		private var frameRateControlledOnce:Boolean;
+		
+		private var fadeEdges:Boolean = false ;
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -193,12 +201,14 @@ package
 		 * <br>
 		 * You can only lock t_d or r_l scroll when you didn't enter targetAreaRectangle.(Why???)*/
 		public function ScrollMT(target:DisplayObject,maskArea:Rectangle,targetArea:Rectangle=null,FreeScrollOnTarget_TD:Boolean=false,FreeScrollOnTarget_LR:Boolean=false,activeEffect:Boolean=true,
-				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0,forseScrollEffectBoolean:*=null)
+				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0,forseScrollEffectBoolean:*=null,fadeEdges:Boolean=false)
 		{
 			if(forseScrollEffectBoolean!=null)
 			{
 				forseScrollEffect = forseScrollEffectBoolean ;
 			}
+			
+			this.fadeEdges = fadeEdges ;
 			
 			revertY = RevertY ;
 			revertX = RevertX ;
@@ -387,9 +397,89 @@ package
 		{
 			if(targ!=null && targ.parent!=null && scrollerMask!=null)
 			{
+				var edgeY:Number = 0 ;
+				var edgeX:Number = 0 ;
+				if(fadeEdges)
+				{
+					if(freeScrollOnTarget_TD)
+					{
+						edgeY = 20 ;
+					}
+					else if(freeScrollOnTarget_LR)
+					{
+						edgeX = 20 ;
+					}
+					
+					scrollerMask.cacheAsBitmap = targ.cacheAsBitmap = true ;
+				}
 				targ.parent.addChild(scrollerMask);
-				scrollerMask.graphics.beginFill(0x00ff00,0.0) ;
-				scrollerMask.graphics.drawRect(0,0,maskRect.width,maskRect.height) ;
+				scrollerMask.graphics.beginFill(0x00ff00,1.0) ;
+				scrollerMask.graphics.drawRect(edgeX,edgeY,maskRect.width-edgeX*2,maskRect.height-edgeY*2) ;
+				
+				var matrix:Matrix;
+				var boxWidth:Number;
+				var boxHeight:Number;
+				var boxRotation:Number;
+				var tx:Number;
+				var ty:Number;
+				
+				
+				if(edgeY>0)
+				{
+					matrix = new Matrix(); 
+					boxWidth = edgeY; 
+					boxHeight = edgeY; 
+					boxRotation = Math.PI/-2;
+					tx = 0; 
+					ty = 0; 
+					
+					matrix.createGradientBox(boxWidth, boxHeight, boxRotation, tx, ty); 
+					scrollerMask.graphics.beginGradientFill(GradientType.LINEAR,[0x00ff00,0x00ff00],[1,0],[0, 255],
+						matrix,SpreadMethod.PAD,InterpolationMethod.LINEAR_RGB,0);
+					scrollerMask.graphics.drawRect(0,0,maskRect.width,edgeY) ;
+					
+					
+					
+					matrix = new Matrix(); 
+					boxWidth = edgeY; 
+					boxHeight = edgeY; 
+					boxRotation = Math.PI/2;
+					tx = 0; 
+					ty = maskRect.height-edgeY; 
+					
+					matrix.createGradientBox(boxWidth, boxHeight, boxRotation, tx, ty); 
+					scrollerMask.graphics.beginGradientFill(GradientType.LINEAR,[0x00ff00,0x00ff00],[1,0],[0, 255],
+						matrix,SpreadMethod.PAD,InterpolationMethod.LINEAR_RGB,0);
+					scrollerMask.graphics.drawRect(0,maskRect.height-edgeY,maskRect.width,edgeY) ;
+				}
+				if(edgeX>0)
+				{
+					matrix = new Matrix(); 
+					boxWidth = edgeX; 
+					boxHeight = edgeX; 
+					boxRotation = -Math.PI;
+					tx = 0; 
+					ty = 0; 
+					
+					matrix.createGradientBox(boxWidth, boxHeight, boxRotation, tx, ty); 
+					scrollerMask.graphics.beginGradientFill(GradientType.LINEAR,[0x00ff00,0x00ff00],[1,0],[0, 255],
+						matrix,SpreadMethod.PAD,InterpolationMethod.LINEAR_RGB,0);
+					scrollerMask.graphics.drawRect(0,0,edgeX,maskRect.height) ;
+					
+					
+					
+					matrix = new Matrix(); 
+					boxWidth = edgeX; 
+					boxHeight = edgeX; 
+					boxRotation = 0;
+					tx = maskRect.width-edgeX; 
+					ty = 0; 
+					
+					matrix.createGradientBox(boxWidth, boxHeight, boxRotation, tx, ty); 
+					scrollerMask.graphics.beginGradientFill(GradientType.LINEAR,[0x00ff00,0x00ff00],[1,0],[0, 255],
+						matrix,SpreadMethod.PAD,InterpolationMethod.LINEAR_RGB,0);
+					scrollerMask.graphics.drawRect(maskRect.width-edgeX,0,edgeX,maskRect.height) ;
+				}
 				targ.mask = scrollerMask;
 			}
 		}
