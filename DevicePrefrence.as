@@ -125,10 +125,14 @@ package
 		{
 			NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE,DetectApplicationSizes);
 			
-			
 			if(DevicePrefrence.isItPC && DevicePrefrence.isDebuggingMode())
 			{
 				myNativewindow = NativeApplication.nativeApplication.activeWindow ;
+				if(myNativewindow==null || myNativewindow.stage==null)
+				{
+					NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,DetectApplicationSizes,false,100000);
+					return ;
+				}
 				myStage = myNativewindow.stage ;
 				stageWidth0 = myStage.stageWidth;
 				stageHeight0 = myStage.stageHeight;
