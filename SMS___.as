@@ -8,29 +8,50 @@
 
 package 
 {
-	import com.ssd.ane.AndroidExtensions;
+	//import com.ssd.ane.AndroidExtensions;
+	import flash.utils.getDefinitionByName;
 	
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.system.Capabilities;
 
+
 	public class SMS___
 	{
+		
+		private static var AndroidExtensionsClass:Class ;
+		private static var urlReq:URLRequest;
+		private static var str;
+		
 		public static function Send(receverNumber:*,content:*)
 		{
 			receverNumber = String(receverNumber);
 			content = String(content);
 			
-			var OS:String = Capabilities.os ;
-			if(OS.toLocaleLowerCase().indexOf('linu')==-1)
+			try
 			{
-				var str = "sms:"+receverNumber+"?body="+content; 
-				var urlReq:URLRequest = new URLRequest(str); 
+				AndroidExtensionsClass = getDefinitionByName("com.ssd.ane.AndroidExtensions") as Class ;
+			}
+			catch (e){
+				AndroidExtensionsClass = null ;
+			}
+			
+			var OS:String = Capabilities.os ;
+			if (AndroidExtensionsClass)
+			{
+				(AndroidExtensionsClass as Object).sendSMS(content,receverNumber);
+			}
+			if(DevicePrefrence.isAndroid())
+			{
+				str = "sms:"+receverNumber+"?body="+content; 
+				urlReq = new URLRequest(str); 
 				navigateToURL(urlReq);
 			}
 			else
 			{
-				AndroidExtensions.sendSMS(content,receverNumber);
+				str = "sms:"+receverNumber+"&body="+content; 
+				urlReq = new URLRequest(str); 
+				navigateToURL(urlReq);
 			}
 		}
 	}
