@@ -19,6 +19,7 @@
 package
 {
 	import com.adobe.crypto.MD5;
+	import flash.desktop.SystemIdleMode;
 	
 	import dataManager.GlobalStorage;
 	
@@ -102,6 +103,18 @@ package
 			return Boolean(bigScreen);
 		}
 		
+		/**Prevent screen from going to sleep*/
+		public static function systemIdleMode(KeepAwake:Boolean):void
+		{
+			if (KeepAwake == true)
+			{
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.KEEP_AWAKE;
+			}
+			else
+			{
+				NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
+			}
+		}
 		
 		public static function setUp():void
 		{
