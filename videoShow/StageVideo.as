@@ -1,4 +1,4 @@
-package videoShow
+﻿package videoShow
 {
 	import flash.display.NativeWindow;
 	import flash.display.Sprite;
@@ -99,6 +99,7 @@ package videoShow
 			
 			stageVideo = new StageWebView(userNativeStageWiew);
 			//stageVideo.loadString(videoHTML.split(stageVideo).join(videoURL));
+			videoURL = videoURL.split('|')[0] ;
 			correctedURL = videoURL ;
 			if(correctedURL.indexOf('http')==-1)
 			{

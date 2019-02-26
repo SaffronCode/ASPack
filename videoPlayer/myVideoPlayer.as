@@ -153,7 +153,7 @@ package videoPlayer
 			
 			trace('play this video : '+target);
 			
-			vid_target = target;
+			vid_target = target.split('|')[0];
 			var file:File = File.applicationDirectory.resolvePath(target);
 			if(file.exists)
 			{
