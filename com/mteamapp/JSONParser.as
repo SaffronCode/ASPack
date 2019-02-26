@@ -244,7 +244,22 @@
 					var V:String = String(v) ;
 				//	trace("Get date :"+V);
 					//trace("It is : "+ new Date(Number(V.substring(6,V.length-2))));
-					return new Date(Number(V.substring(6,V.length-2))) ;
+					var dateNumberPart:String = V.substring(6, V.length - 2) ;
+					var splitedDate:Array = dateNumberPart.split('+') ;
+					var dateNumber:Number = Number(splitedDate[0]);
+					var zonePart:uint = 0 ;
+					var calculatedDate:Date = new Date(dateNumber);
+					if (splitedDate.length > 1)
+					{
+						zonePart = uint(dateNumberPart.split('+')[1]) ;
+						//0:
+							//Dont change
+						//1:
+						calculatedDate.minutes = calculatedDate.minutes - uint(zonePart) ;
+						//2:
+						calculatedDate.minutes = calculatedDate.minutes + uint(zonePart) ;
+					}
+					return calculatedDate ;
 				}
 				//Other date format is : 2015-10-27T10:46:56.9335483+03:30
 				if(String(v).indexOf('-')!=-1 && String(v).indexOf('T')!=-1 && String(v).indexOf(':')!=-1 && String(v).length>18 && String(v).length<35)
