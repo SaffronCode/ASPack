@@ -794,7 +794,8 @@ package
 		private function updateAnimation(e:MouseEvent):void
 		{
 			scrollAnim(null);
-			e.updateAfterEvent();
+			if(targStage==null || targStage.frameRate<31)
+				e.updateAfterEvent();
 		}
 		
 		private function stopScroll(e:*=null)
