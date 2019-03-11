@@ -94,6 +94,13 @@ package
 		
 		/**Save thesebytes to selected location<br>
 		 * This function will return the exeption string to*/
+		public static function saveFile(fileTarget:File,bytes:ByteArray,openAsync:Boolean=false,onSaved:Function=null):String
+		{
+			return seveFile(fileTarget,bytes,openAsync,onSaved);
+		}
+		
+		/**Save thesebytes to selected location<br>
+		 * This function will return the exeption string to*/
 		public static function seveFile(fileTarget:File,bytes:ByteArray,openAsync:Boolean=false,onSaved:Function=null):String
 		{
 			//The async file saver had problem. it cannot save all binary datas by one request.
