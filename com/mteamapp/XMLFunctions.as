@@ -49,5 +49,35 @@ package com.mteamapp
 				delete children[i] ;
 			}
 		}
+		
+		/**Return true if the ContainerXML contains ChildXML.<br/>
+		 * */
+		public static function isContain(ContainerXML:XML,ChildXML:XML):Boolean
+		{
+			if(ContainerXML.hasComplexContent())
+			{
+				for(var i:int = 0 ; i<ChildXML.*.length() ; i++)
+				{
+					var founded:Boolean = false ;
+					for(var j:int = 0 ; j<ContainerXML.*.length() ; j++)
+					{
+						if(isContain(ContainerXML.*[j],ChildXML.*[i]))
+						{
+							founded = true ;
+							break;
+						}
+					}
+					if(!founded)
+					{
+						return false ;
+					}
+				}
+			}
+			else
+			{
+				return ContainerXML == ChildXML ;
+			}
+			return true ;
+		}
 	}
 }
