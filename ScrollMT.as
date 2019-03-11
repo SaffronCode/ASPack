@@ -1016,7 +1016,7 @@ package
 					else if(mousePose0!=null)
 					{
 						vxHist = Vx = 0 ;
-						//trace("Canseling");
+						//trace("Canceling");
 						targParent.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TRY_TO_SCROLL,true,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR));
 					}
 					else
@@ -1041,7 +1041,7 @@ package
 					}
 					else if(mousePose0!=null)
 					{
-						//trace("Canseling");
+						//trace("Canceling");
 						vyHist = Vy = 0 ;
 						targParent.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TRY_TO_SCROLL,true,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR));
 					}

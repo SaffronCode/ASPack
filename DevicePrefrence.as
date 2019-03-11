@@ -684,10 +684,10 @@ package
 							urlLoader2:URLLoader;
 		
 		/**Open the ranking page for any os*/
-		public static function rankThisApp(onCanseled:Function=null,onRedirected:Function=null):void
+		public static function rankThisApp(onCanceled:Function=null,onRedirected:Function=null):void
 		{
 				onDone = onRedirected ; 
-				onFaild = onCanseled ;
+				onFaild = onCanceled ;
 			
 			
 			

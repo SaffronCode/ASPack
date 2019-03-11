@@ -281,10 +281,15 @@
 			recorder.unPuase();
 		}
 		
-		/**cansel the recording and do not dispatch any events*/
+		public static function cancel():void
+		{
+			cansel()
+		}
+		
+		/**cancel the recording and do not dispatch any events*/
 		public static function cansel():void
 		{
-			trace("Recording canseled");
+			trace("Recording canceled");
 			recorder.removeEventListener(Event.COMPLETE, onRecordComplete);
 			clearTimeout(timeOutId);
 			_isRecording = false ;

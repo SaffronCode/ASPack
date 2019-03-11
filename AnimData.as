@@ -39,6 +39,11 @@ package
 			}
 		}
 		
+		public static function cancel(target:Sprite)
+		{
+			cansel(target);
+		}
+		
 		public static function cansel(target:Sprite)
 		{
 			deleteDataAbout(target);

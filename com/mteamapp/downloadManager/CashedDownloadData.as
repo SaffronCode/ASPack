@@ -93,7 +93,7 @@ package com.mteamapp.downloadManager
 			{
 				url = URL ;
 			}
-			trace('cansel loading');
+			trace('cancel loading');
 			stop();
 			removeMyCashedFile();
 		}
@@ -134,7 +134,7 @@ package com.mteamapp.downloadManager
 		/**Thid function is not test*/
 		private function reLoadDownload(e:*=null):void
 		{
-			//cansel downloader because downloader is still alive
+			//cancel downloader because downloader is still alive
 			downloader.close();
 			//delete downloader to dosent prevent resume() for start over
 			downloader = null ;
