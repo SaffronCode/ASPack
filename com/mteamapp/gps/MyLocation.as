@@ -1,6 +1,7 @@
 ﻿package com.mteamapp.gps
 {
 	import com.mteamapp.StringFunctions;
+	import contents.alert.Alert;
 	import flash.events.GeolocationEvent;
 	import flash.events.PermissionEvent;
 	import flash.permissions.PermissionStatus;
@@ -85,33 +86,7 @@
 			}
 			else
 			{
-				if (Geolocation.permissionStatus != PermissionStatus.GRANTED)
-				{
-					geo.addEventListener(PermissionEvent.PERMISSION_STATUS, function(e:PermissionEvent):void
-					{
-						if (e.status == PermissionStatus.GRANTED)
-						{
-							getLoacationCreated();
-						}
-						else
-						{
-							// permission denied
-						}
-					});
-					
-					try
-					{
-						geo.requestPermission();
-					}
-					catch (e:Error)
-					{
-						// another request is in progress
-					}
-				}
-				else
-				{
-					getLoacationCreated();
-				}
+				getGPSPermission(getLoacationCreated);
 			}
 			function getLoacationCreated():void
 			{
@@ -119,6 +94,48 @@
 				geo.addEventListener(GeolocationEvent.UPDATE, iGotGeo);
 			}
 		}
+		
+		
+		/**Get GPS permission*/
+		public static function getGPSPermission(onPermissionGranted:Function=null,onPermissionDenied:Function=null):void
+		{
+			if (onPermissionGranted == null)
+				onPermissionGranted = new Function();
+			if (onPermissionDenied == null)
+				onPermissionDenied = new Function();
+			if(geo == null)
+				geo = new Geolocation();
+			if (Geolocation.permissionStatus != PermissionStatus.GRANTED)
+			{
+				geo.addEventListener(PermissionEvent.PERMISSION_STATUS, function(e:PermissionEvent):void
+				{
+					if (e.status == PermissionStatus.GRANTED)
+					{
+						onPermissionGranted();
+					}
+					else
+					{
+						// permission denied
+						onPermissionDenied();
+					}
+				});
+				
+				try
+				{
+					geo.requestPermission();
+				}
+				catch (e:Error)
+				{
+					// another request is in progress
+				}
+			}
+			else
+			{
+				onPermissionGranted();
+			}
+		}
+		
+		
 		
 		private static function controllDefaultPermission():void
 		{
