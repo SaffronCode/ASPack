@@ -611,6 +611,10 @@ package com.mteamapp
 		/**Remove spaces from two side of the inputed string : "   hello world  " > "hello world" */
 		public static function removeSpacesFromTwoSides(str:String):String
 		{
+			if(str==null)
+			{
+				return null ;
+			}
 			str = str.replace(/[\s]+$/g,'');
 			str = str.replace(/^[\s]+/g,'');
 			return str ;
