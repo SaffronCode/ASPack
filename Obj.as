@@ -1,4 +1,4 @@
-// *************************
+﻿// *************************
 // * COPYRIGHT
 // * DEVELOPER: MTEAM ( info@mteamapp.com )
 // * ALL RIGHTS RESERVED FOR MTEAM
@@ -614,17 +614,6 @@ package
 			stage.addEventListener(MouseEvent.MOUSE_DOWN,function(e:MouseEvent){
 				trace(Obj.displayObjectInfo(e.target as DisplayObject));
 			});
-		}
-		
-			
-		/**Move the item to the front of others*/
-		public static function moveFront(item:DisplayObject):void
-		{
-			// TODO Auto Generated method stub
-			if(item.parent!=null)
-			{
-				item.parent.addChild(item);
-			}
 		}
 	}
 }

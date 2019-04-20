@@ -19,9 +19,14 @@ package mteam.animation
 		/**pause all animations*/
 		public static var pause:Boolean = false;
 		
-		private var steps:Number=15,
-					stepHeight:Number=-15,
-					maxRot:Number=40;
+		
+		private static const stepsD:Number=15,
+							stepHeightD:Number=-15,
+							maxRotD:Number=40;
+		
+		private var steps:Number=stepsD,
+			stepHeight:Number=stepHeightD,
+			maxRot:Number=maxRotD;
 		
 		private var myTarget:MovieClip;
 		
@@ -35,13 +40,18 @@ package mteam.animation
 		private var currentI:uint = 0 ;
 		private var L:uint ;
 		
-		public static function setUp(target:MovieClip,newX:Number,newY:Number,OnJumped:Function)
+		public static function setUp(target:MovieClip,newX:Number,newY:Number,OnJumped:Function,stepsParam:Number=stepsD,stepHeightParam:Number=stepHeightD,maxRotParam:Number=maxRotD)
 		{
-			new Anim_jump(target,newX,newY,OnJumped);
+			new Anim_jump(target,newX,newY,OnJumped,stepsParam,stepHeightParam,maxRotParam);
 		}
 		
-		public function Anim_jump(target:MovieClip,newX:Number,newY:Number,OnJumped:Function)
+		public function Anim_jump(target:MovieClip,newX:Number,newY:Number,OnJumped:Function,stepsParam:Number=stepsD,stepHeightParam:Number=stepHeightD,maxRotParam:Number=maxRotD)
 		{
+			steps=stepsParam;
+			stepHeight=stepHeightParam;
+			maxRot=maxRotParam;
+			
+			
 			target.dispatchEvent(new Event(reset_event,false));
 
 			myTarget = target;
