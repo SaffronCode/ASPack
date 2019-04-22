@@ -695,5 +695,23 @@ package com.mteamapp
 		{
 			return txt!= null && StringFunctions.clearSpacesAndTabs(txt)!='';
 		}
+		
+		
+		
+		/**Creates a random String like WebKitFormBoundaryWYIDHkbUgs0p7KUx*/
+		public static function randomString(len:uint):String
+		{
+			var key:String = '' ;
+			var keyvalues:String = '';
+			keyvalues += "abcdefghijklmnopqrstuvwxyz";
+			keyvalues += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+			keyvalues += "1234567890";
+			var keyvaluesLenght:uint = keyvalues.length ;
+			for(var i:int = 0 ; i<len ; i++)
+			{
+				key += keyvalues.charAt(Math.floor(Math.random()*keyvaluesLenght));
+			}
+			return key;
+		}
 	}
 }
