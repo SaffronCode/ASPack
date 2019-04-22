@@ -42,6 +42,8 @@ package
 		public static var estesna:String = '-[]»«)("/\\:';
 		public static var forceToEnglish:String = '' ;
 		
+		public static var convertToArabicNumber:Boolean = false ;
+		
 		private var MESlistChr:Object = {};
 		
 		
@@ -488,6 +490,12 @@ package
 			matn =MESbekesh(numString)+matn;
 			matn = matn.split('¬').join('');
 			matn = UnicodeLaCorrector.laCorrection(matn);
+		
+			if(convertToArabicNumber)
+			{
+				matn = NumberChange(matn);
+			}
+			
 			return matn;
 		}
 		
