@@ -149,7 +149,8 @@ package
 					
 		public static var 	currselW:Number=4,
 							currselRound:Number=4,
-							currselMargin:Number = 1;
+							currselMargin:Number = 1,
+							fadeDimension:Number = 20;
 							
 		private var currselXArea:Number,
 					currselYArea:Number;
@@ -194,6 +195,8 @@ package
 		private var frameRateControlledOnce:Boolean;
 		
 		private var fadeEdges:Boolean = false ;
+
+
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -403,11 +406,11 @@ package
 				{
 					if(freeScrollOnTarget_TD)
 					{
-						edgeY = 20 ;
+						edgeY = fadeDimension ;
 					}
 					else if(freeScrollOnTarget_LR)
 					{
-						edgeX = 20 ;
+						edgeX = fadeDimension ;
 					}
 					
 					scrollerMask.cacheAsBitmap = targ.cacheAsBitmap = true ;
