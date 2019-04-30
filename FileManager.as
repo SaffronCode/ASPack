@@ -11,6 +11,8 @@ package
 	import flash.permissions.PermissionStatus;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
+	
+	import contents.alert.Alert;
 
 	public class FileManager
 	{
@@ -268,6 +270,18 @@ package
 				{
 					getSelectedFilePath(fil);
 				}
+			}
+		}
+		
+		public static function browseForDirectory(getSelectedDirectory:Function,title:String="Select a directory"):void
+		{
+			var fil:File = new File();
+			fil.addEventListener(Event.SELECT,aDirectorySelected);
+			fil.browseForDirectory(title);
+			
+			function aDirectorySelected(e:Event):void
+			{
+				getSelectedDirectory(fil);
 			}
 		}
 		
