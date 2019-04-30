@@ -520,6 +520,30 @@ package
 				return false;
 			}
 		}
+
+		public static function isWindows():Boolean
+		{
+			if((Capabilities.os.indexOf("Windows") >= 0))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public static function isMac():Boolean
+		{
+			if((Capabilities.os.indexOf("Mac") >= 0))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 		
 		public static function isPC():Boolean
 		{
