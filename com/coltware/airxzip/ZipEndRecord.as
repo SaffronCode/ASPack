@@ -19,7 +19,7 @@ package com.coltware.airxzip {
 	 */
 	public class ZipEndRecord {
 		
-		private static var log:ILogger = Log.getLogger("com.coltware.airxzip.ZipEndRecord");
+		//private static var log:ILogger = Log.getLogger("com.coltware.airxzip.ZipEndRecord");
 		public static var LENGTH:int = 22;
 		public static var SIGNATURE:uint 	= 0x06054b50; 
 		
@@ -109,14 +109,14 @@ package com.coltware.airxzip {
 		}
 		
 		public function dumpLogInfo():void{
-			log.debug("*************** END OF RECORD DIRECTORY RECORD **************** " + _signature.toString(16));
+			/*log.debug("*************** END OF RECORD DIRECTORY RECORD **************** " + _signature.toString(16));
 			log.debug("number of this disk : " + _numberDisk);
 			log.debug("Number of the disk with the start of the central directory : " + _numberDiskStartCentralDir);
 			log.debug("Total number of entries in the central dir on this disk : " + _totalEntriesDisk);
 			log.debug("Total number of entries in the central dir : " + _totalEntries);
 			log.debug("Size of the central directory : " + _sizeCentralDir);
 			log.debug("Offset of start of central directory with respect to the starting disk numbe : " + _offsetCentralDir);
-			log.debug("zipfile comment length : " + _commentLength);
+			log.debug("zipfile comment length : " + _commentLength);*/
 			
 			
 		}

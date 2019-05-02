@@ -16,7 +16,7 @@ package com.coltware.airxzip {
 	import flash.system.*;
 	import flash.utils.*;
 	
-	import mx.logging.*;
+	//import mx.logging.*;
 	
 	use namespace zip_internal;
 	
@@ -24,13 +24,13 @@ package com.coltware.airxzip {
 	[Event(name="zipFileCreated", type="com.coltware.airxzip.ZipEvent")]
 	
 	/**
-	*
-	*  ZIPファイルを作成するクラス
-	*
-	*/
+	 *
+	 *  ZIPファイルを作成するクラス
+	 *
+	 */
 	public class ZipFileWriter extends EventDispatcher{
 		
-		private static var log:ILogger = Log.getLogger("com.coltware.airxzip.ZipFileReader");
+		//private static var log:ILogger = Log.getLogger("com.coltware.airxzip.ZipFileReader");
 		
 		private var _headers:Array;
 		private var _endRecord:ZipEndRecord;
@@ -52,17 +52,24 @@ package com.coltware.airxzip {
 		private var _zipWorking:Boolean = false;
 		
 		/* 暗号化されているときのパスワード */
-    private var _password:ByteArray;
-    private var _isCrypt:Boolean = false;
-    private var _crypt:ICrypto;
+		private var _password:ByteArray;
+		private var _isCrypt:Boolean = false;
+		private var _crypt:ICrypto;
 		
 		public function ZipFileWriter(hostType:String = "WIN") {
 			_headers = new Array();
 			
 			if(hostType == HOST_WIN){
+				trace("Capabilities.language:",Capabilities.language);
 				if(Capabilities.language == "ja"){
 					if(Capabilities.version.indexOf("WIN") !== -1){
-						_filenameEncoding = "shift_jis";
+						_filenameEncoding = "cn-gb";
+					}
+				}
+				else if(Capabilities.language=="zh-CN")
+				{
+					if(Capabilities.version.indexOf("WIN") !== -1){
+						_filenameEncoding = "cn-gb";
 					}
 				}
 				_host = 0;
@@ -80,59 +87,59 @@ package com.coltware.airxzip {
 		
 		public function setPasswordBytes(bytes:ByteArray):void{
 			if(bytes){
-                this._password = bytes;
-                this._password.position = 0;
-                this._isCrypt = true;
+				this._password = bytes;
+				this._password.position = 0;
+				this._isCrypt = true;
 			}
 			else{
 				this._isCrypt = false;
 			}
-        }
-        
-        /**
-        *  パスワードを文字列で指定する
-        */
-        public function setPassword(password:String,charset:String = null):void{
-            var ba:ByteArray = new ByteArray();
-            if(charset == null){
-                ba.writeUTFBytes(password);
-            }
-            else{
-                ba.writeMultiByte(password,charset);
-            }
-            this._password = ba;
-            this._password.position = 0;
-            
-            this._isCrypt = true;
-        }
+		}
 		
 		/**
-		*  UNIXタイプの時に登録する際のディレクトリのファイルモードを指定する
-		*
-		*  "0775"のように8進数の文字列で指定する
-		*
-		*/
+		 *  パスワードを文字列で指定する
+		 */
+		public function setPassword(password:String,charset:String = null):void{
+			var ba:ByteArray = new ByteArray();
+			if(charset == null){
+				ba.writeUTFBytes(password);
+			}
+			else{
+				ba.writeMultiByte(password,charset);
+			}
+			this._password = ba;
+			this._password.position = 0;
+			
+			this._isCrypt = true;
+		}
+		
+		/**
+		 *  UNIXタイプの時に登録する際のディレクトリのファイルモードを指定する
+		 *
+		 *  "0775"のように8進数の文字列で指定する
+		 *
+		 */
 		public function setDirMode(mode:String):void{
 			_dirMode = parseInt(mode,8);
 		}
 		/**
-		*
-		*  UNIXタイプの時に登録する際のファイルのモードを指定する
-		*
-		*  "0665" のように8進数の文字列で指定する
-		*
-		*/
+		 *
+		 *  UNIXタイプの時に登録する際のファイルのモードを指定する
+		 *
+		 *  "0665" のように8進数の文字列で指定する
+		 *
+		 */
 		public function setFileMode(mode:String):void{
 			_fileMode = parseInt(mode,8);
 		}
 		/**
-		*  ZIPファイルをオープンします。
-		*
-		*  すでにファイルがある場合には上書きします
-		*
-		*/
+		 *  ZIPファイルをオープンします。
+		 *
+		 *  すでにファイルがある場合には上書きします
+		 *
+		 */
 		public function open(file:File):void{
-			log.debug("open file :" + file.nativePath);
+			/*log.debug("open file :" + file.nativePath);*/
 			_stream = new FileStream();
 			_stream.open(file,FileMode.WRITE);
 			_stream.endian = Endian.LITTLE_ENDIAN;
@@ -140,12 +147,12 @@ package com.coltware.airxzip {
 		}
 		
 		/**
-		* ZIPファイルの書き込みを非同期処理モードでオープンします。
-		*
-		* メモ：非同期処理は書き込みのみで発生します。
-		* open処理では同期処理です。
-		*
-		*/
+		 * ZIPファイルの書き込みを非同期処理モードでオープンします。
+		 *
+		 * メモ：非同期処理は書き込みのみで発生します。
+		 * open処理では同期処理です。
+		 *
+		 */
 		public function openAsync(file:File):void{
 			_async = true;
 			_zipStack = new Array();
@@ -153,11 +160,11 @@ package com.coltware.airxzip {
 		}
 		
 		/**
-		*  Fileをzipファイルに追加します
-		*
-		*  メモ：変更日付が自動的に付加されます。
-		*
-		*/
+		 *  Fileをzipファイルに追加します
+		 *
+		 *  メモ：変更日付が自動的に付加されます。
+		 *
+		 */
 		public function addFile(file:File,filename:String):void{
 			if(_async){
 				var task:Object = new Object();
@@ -177,10 +184,10 @@ package com.coltware.airxzip {
 			}
 		}
 		/**
-		*
-		*  ByteArrayデータをzipファイルに追加します
-		*
-		*/
+		 *
+		 *  ByteArrayデータをzipファイルに追加します
+		 *
+		 */
 		public function addBytes(bytes:ByteArray,filename:String,date:Date = null):void{
 			if(_async){
 				var task:Object = new Object();
@@ -197,9 +204,9 @@ package com.coltware.airxzip {
 		}
 		
 		/**
-		*  ディレクトリ情報を追加する
-		*
-		*/
+		 *  ディレクトリ情報を追加する
+		 *
+		 */
 		public function addDirectory(filename:String):void{
 			if(filename.charAt(filename.length - 1 ) != "/"){
 				filename += "/";
@@ -217,12 +224,12 @@ package com.coltware.airxzip {
 		}
 		
 		
-				
+		
 		/**
-		*  ZipFileWriterをcloseする.
-		*
-		*  ここで、必要な情報を書き出しますので、この処理が必ず必要です。
-		*/
+		 *  ZipFileWriterをcloseする.
+		 *
+		 *  ここで、必要な情報を書き出しますので、この処理が必ず必要です。
+		 */
 		public function close():void{
 			if(_async){
 				var task:Object = new Object();
@@ -234,12 +241,12 @@ package com.coltware.airxzip {
 			else{
 				execClose();
 			}
-			log.debug("close()");
+			//log.debug("close()");
 		}
 		/**
-		*  @private
-		*
-		*/
+		 *  @private
+		 *
+		 */
 		private function execClose():void{
 			var len:int = _headers.length;
 			var pos1:int = _stream.position;
@@ -255,9 +262,9 @@ package com.coltware.airxzip {
 		}
 		
 		/**
-		*  @private
-		*
-		*/
+		 *  @private
+		 *
+		 */
 		private function execZip(delay:int = 10):void{
 			if(_zipStack.length > 0 && _zipWorking == false){
 				_zipWorking = true;
@@ -310,9 +317,9 @@ package com.coltware.airxzip {
 			execZip();
 		}
 		/**
-		*
-		* @private
-		*/
+		 *
+		 * @private
+		 */
 		private function internalAddBytes(isDir:Boolean,filename:String,data:ByteArray = null,date:Date = null):ZipHeader{
 			
 			if(date == null){
@@ -342,7 +349,7 @@ package com.coltware.airxzip {
 			
 			/****  ここから CENTRAL ********/
 			
-
+			
 			//  コメント
 			header._commentLength = 0;
 			
@@ -351,7 +358,7 @@ package com.coltware.airxzip {
 			header._internalFileAttrs = 0;
 			header._externalFileAttrs = 0;
 			header._offsetLocalHeader = _stream.position;
-						
+			
 			if(isDir){
 				header._compressMethod = 0;
 				header._version = 10;
@@ -407,8 +414,8 @@ package com.coltware.airxzip {
 					_stream.writeBytes(_crypt.encrypt(data));
 				}
 				else{
-						header.writeLocalHeader(_stream);
-				    _stream.writeBytes(data);
+					header.writeLocalHeader(_stream);
+					_stream.writeBytes(data);
 				}
 			}
 			else{
@@ -420,5 +427,5 @@ package com.coltware.airxzip {
 			return header;
 		}
 	}
-
+	
 }
