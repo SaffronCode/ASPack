@@ -172,6 +172,12 @@ package
 				//NativeApplication.nativeApplication.activeWindow.height = sh ;
 				//stage.stageWidth = sw ;
 				myStage.stageHeight = sh ;
+				if(isMac())
+				{
+					setTimeout(function(){
+						myStage.stageWidth = sw ;
+					},0);
+				}
 				
 				/*setInterval(function(){
 					myStage.stageHeight-=10;
