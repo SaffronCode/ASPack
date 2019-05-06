@@ -20,7 +20,7 @@ package com.coltware.airxzip {
 	 */
 	public class ZipEvent extends Event{
 		
-		private static var log:ILogger = Log.getLogger("com.coltware.airxzip.ZipEvent");
+		//private static var log:ILogger = Log.getLogger("com.coltware.airxzip.ZipEvent");
 		
 		public static var ZIP_LOAD_DATA:String = "zipLoadData";
 		public static var ZIP_DATA_UNCOMPRESS:String = "zipDataUncompress";

@@ -21,7 +21,7 @@ package com.coltware.airxzip {
 	*/
 	public class ZipHeader {
 		
-		private static var log:ILogger = Log.getLogger("com.coltware.airxzip.ZipHeader");
+		//private static var log:ILogger = Log.getLogger("com.coltware.airxzip.ZipHeader");
 		
 		public static var HEADER_LOCAL_FILE:uint  		= 0x04034b50;
 		public static var HEADER_CENTRAL_DIR:uint 		= 0x02014b50;
@@ -155,7 +155,7 @@ package com.coltware.airxzip {
 					charset = "utf-8";
 				}
 				else{
-					charset = "shift_jis";
+					charset = "cn-gb";
 				}
 			}
 			
@@ -449,7 +449,7 @@ package com.coltware.airxzip {
 		}
 		
 		public function dumpLogInfo():void{
-			log.debug("[" + _signature.toString(16) + "]*************** " + getFilename() + " ****************");
+			/*log.debug("[" + _signature.toString(16) + "]*************** " + getFilename() + " ****************");
 			log.debug("signature(4) : " + _signature);
 			log.debug("version(2)   : " + _version); 
 			log.debug("bit flag(2)  : " + _bitFlag.toString(2));
@@ -461,27 +461,27 @@ package com.coltware.airxzip {
 			log.debug("compress size(4)        : " + _compressSize);
 			log.debug("un-compress size(4)     : " + _uncompressSize);  
 			log.debug("filename length(2)      : " + _filenameLength);
-			log.debug("extra length(2)         : " + _extraFieldLength);
+			log.debug("extra length(2)         : " + _extraFieldLength);*/
 			
 			if(_extraFieldLength > 0){
 				_extraField.position = 0;
-				log.debug("extra field : " + _extraField.toString());
+				/*log.debug("extra field : " + _extraField.toString());*/
 			} 
 			
 			if(_signature ==  HEADER_CENTRAL_DIR){
-				log.debug("version by1 " + ( _versionBy >> 8 ));
+				/*log.debug("version by1 " + ( _versionBy >> 8 ));
 				log.debug("version by2 " + ( _versionBy & 0xff ));
 				log.debug("comment size " + _commentLength);
 				log.debug("disk number  " + _diskNumber);
 				log.debug("internal file attrs " + _internalFileAttrs);
 				log.debug("external file attrs " + _externalFileAttrs);
-				log.debug("offset local header " + _offsetLocalHeader);
+				log.debug("offset local header " + _offsetLocalHeader);*/
 				
 				if(isDirectory()){
-					log.debug("is dir");
+					/*log.debug("is dir");*/
 				}
 				else{
-					log.debug("is file");
+					/*log.debug("is file");*/
 				}
 			}
 			

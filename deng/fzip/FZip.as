@@ -484,7 +484,7 @@ package deng.fzip
 					// No data descriptor: We're done.
 					// Register file and dispatch FILE_LOADED event
 					onFileLoaded();
-					
+					// TODO [CW] why do we check for parseIdle here?
 					if (parseFunc != parseIdle) {
 						parseFunc = parseSignature;
 						return true;
@@ -517,7 +517,7 @@ package deng.fzip
 		 * @private
 		 */		
 		protected function validateDataDescriptor(stream:IDataInput):Boolean {
-			
+			// TODO [CW]
 			// In case validation fails, we should reexamine the 
 			// alleged sig/crc32/size bytes (minus the first byte)
 			if (stream.bytesAvailable >= 12) {
@@ -540,7 +540,7 @@ package deng.fzip
 					// Continue with next file
 					parseFunc = parseSignature;
 				} else {
-					
+					// TODO [CW] check endianness (i think it's big endian, gotta set that on buffer)
 					ddBuffer.writeUnsignedInt(ddCRC32);
 					ddBuffer.writeUnsignedInt(ddSizeCompressed);
 					ddBuffer.writeUnsignedInt(ddSizeUncompressed);

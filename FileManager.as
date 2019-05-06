@@ -1,5 +1,9 @@
 package
 {
+	import com.coltware.airxzip.ZipEntry;
+	import com.coltware.airxzip.ZipFileReader;
+	import com.coltware.airxzip.ZipFileWriter;
+	
 	import flash.display.DisplayObject;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -11,6 +15,8 @@ package
 	import flash.permissions.PermissionStatus;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
+	
+	import contents.alert.Alert;
 
 	public class FileManager
 	{
@@ -271,6 +277,18 @@ package
 			}
 		}
 		
+		public static function browseForDirectory(getSelectedDirectory:Function,title:String="Select a directory"):void
+		{
+			var fil:File = new File();
+			fil.addEventListener(Event.SELECT,aDirectorySelected);
+			fil.browseForDirectory(title);
+			
+			function aDirectorySelected(e:Event):void
+			{
+				getSelectedDirectory(fil);
+			}
+		}
+		
 		public static function browseToSave(getSelectedFilePath:Function,title:String = "Where do you whant to save your file?",extension:String=null):void
 		{
 			var fil:File = new File();
@@ -292,6 +310,63 @@ package
 				fil = fil.parent.resolvePath(fileName);
 				getSelectedFilePath(fil);
 			}
+		}
+		
+		/////////////////////////Zip utilities
+		
+		public static function Zip(folder:File,zipTarget:File):void
+		{
+			var zipW:ZipFileWriter = new ZipFileWriter(ZipFileWriter.HOST_UNIX);
+			zipW.open(zipTarget);
+			writeZipForFolder(folder);
+			
+			function writeZipForFolder(currentFolder:File):void
+			{
+				var FileList:Array = currentFolder.getDirectoryListing() ;
+				for(var i:int = 0 ; i<FileList.length ; i++)
+				{
+					var aFile:File = FileList[i] as File ;
+					if(aFile.isDirectory)
+					{
+						writeZipForFolder(aFile);
+					}
+					else
+					{
+						zipW.addFile(aFile,aFile.nativePath.substr(folder.nativePath.length+1));
+					}
+				}
+			}
+			
+			zipW.close();
+		}
+		
+		/**UnZip file*/
+		public static function unZip(zipFile:File,target:File):void
+		{
+			var zipR:ZipFileReader = new ZipFileReader();
+			zipR.open(zipFile);
+			
+			if(target.exists && target.isDirectory)
+				target.deleteDirectory(true);
+			target.createDirectory();
+			
+			var list:Array = zipR.getEntries();
+			
+			for each(var entry:ZipEntry in list){
+				//unZipFile(entry,target,zipR);
+				var toWhere:File ;
+				toWhere = target.resolvePath(entry.getFilename());
+				if(entry.isDirectory()){
+					toWhere.createDirectory();
+				}
+				else{
+					var bytes:ByteArray = zipR.unzip(entry);
+					//trace("Save to : "+toWhere.nativePath);
+					FileManager.saveFile(toWhere,bytes);
+				}
+			}
+			
+			zipR.close();
 		}
 	}
 }

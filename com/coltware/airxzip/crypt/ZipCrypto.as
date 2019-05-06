@@ -22,7 +22,7 @@ package com.coltware.airxzip.crypt {
 	
 	public class ZipCrypto implements ICrypto{
 		
-		private static var log:ILogger = Log.getLogger("com.coltware.airxzip.crypt.ZipCrypto");
+		//private static var log:ILogger = Log.getLogger("com.coltware.airxzip.crypt.ZipCrypto");
 		
 		private static var CRYPTHEADLEN:int = 12;
         

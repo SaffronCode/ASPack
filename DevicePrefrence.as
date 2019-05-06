@@ -172,6 +172,12 @@ package
 				//NativeApplication.nativeApplication.activeWindow.height = sh ;
 				//stage.stageWidth = sw ;
 				myStage.stageHeight = sh ;
+				if(isMac())
+				{
+					setTimeout(function(){
+						myStage.stageWidth = sw ;
+					},0);
+				}
 				
 				/*setInterval(function(){
 					myStage.stageHeight-=10;
@@ -514,6 +520,30 @@ package
 			if( os.indexOf('win')!=-1 || os.indexOf('mac')!=-1 )
 			{
 				return true ;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public static function isWindows():Boolean
+		{
+			if((Capabilities.os.indexOf("Windows") >= 0))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public static function isMac():Boolean
+		{
+			if((Capabilities.os.indexOf("Mac") >= 0))
+			{
+				return true;
 			}
 			else
 			{
