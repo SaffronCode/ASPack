@@ -204,11 +204,11 @@ package
 		 * <br>
 		 * You can only lock t_d or r_l scroll when you didn't enter targetAreaRectangle.(Why???)*/
 		public function ScrollMT(target:DisplayObject,maskArea:Rectangle,targetArea:Rectangle=null,FreeScrollOnTarget_TD:Boolean=false,FreeScrollOnTarget_LR:Boolean=false,activeEffect:Boolean=true,
-				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0,forseScrollEffectBoolean:*=null,fadeEdges:Boolean=false)
+				RevertY:Boolean=false,RevertX:Boolean=false,stepSize:Number=0,forceScrollEffectBoolean:*=null,fadeEdges:Boolean=false)
 		{
-			if(forseScrollEffectBoolean!=null)
+			if(forceScrollEffectBoolean!=null)
 			{
-				forseScrollEffect = forseScrollEffectBoolean ;
+				forseScrollEffect = forceScrollEffectBoolean ;
 			}
 			
 			this.fadeEdges = fadeEdges ;
