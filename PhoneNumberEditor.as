@@ -133,5 +133,16 @@ package
 			
 			return num ;
 		}
+		
+		
+		/**+989125589669 → 09125589669*/
+		public static function IranMobile(mobile:String):String
+		{
+			if(mobile == null || mobile.length<9)
+			{
+				return '' ;
+			}
+			return '09'+mobile.substr(mobile.length-9);
+		}
 	}
 }
