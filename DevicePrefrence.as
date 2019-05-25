@@ -19,12 +19,12 @@
 package
 {
 	import com.adobe.crypto.MD5;
-	import flash.desktop.SystemIdleMode;
 	
 	import dataManager.GlobalStorage;
 	
 	import flash.data.EncryptedLocalStore;
 	import flash.desktop.NativeApplication;
+	import flash.desktop.SystemIdleMode;
 	import flash.display.NativeWindow;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -840,10 +840,13 @@ package
 
 		private static var lastStatus:int = -1 ;
 		
+		public static var changeAppIdByVersionChange:Boolean = false ;
+		
 		
 		/**This function will creates securityKey*/
 		private static function createDeviceKeyForMoreSecurity():void
 		{
+			var uniqueIdLable:String = 'uniqueId'+changeAppIdByVersionChange?appVersion:'' ;//uniqueId1.3.4
 			if(createdKeyIs==null && uniqueId==null)
 			{
 				var isNativeAdded:Boolean = false ;
@@ -864,14 +867,14 @@ package
 				}
 				else
 				{
-					var data:ByteArray = EncryptedLocalStore.getItem('uniqueId');
+					var data:ByteArray = EncryptedLocalStore.getItem(uniqueIdLable);
 					if(data==null)
 					{
-						createdKeyIs = MD5.hash(Math.random().toString());
+						createdKeyIs = MD5.hash(Math.random().toString()+Math.random().toString());
 						data = new ByteArray();
 						data.writeUTF(createdKeyIs);
 						data.position = 0 ;
-						EncryptedLocalStore.setItem('uniqueId',data);
+						EncryptedLocalStore.setItem(uniqueIdLable,data);
 					}
 					else
 					{
