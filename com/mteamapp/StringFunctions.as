@@ -713,5 +713,10 @@ package com.mteamapp
 			}
 			return key;
 		}
+		public static function removeReservedChar(str:String,joinChar:String='_'):String
+		{
+			return str.split('?').join(joinChar).split('"').join(joinChar).split('|').join(joinChar).split(':').join(joinChar).split('*').join(joinChar).split('<').join(joinChar).split('>').join(joinChar).split('/').join(joinChar).split('\/').join(joinChar);
+				
+		}
 	}
 }
