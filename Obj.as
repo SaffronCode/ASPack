@@ -576,7 +576,10 @@ package
 		
 		public static function displayObjectInfo(target:DisplayObject):String
 		{
-			
+			if(!DevicePrefrence.isDebuggingMode())
+			{
+				return '';
+			}
 			var info:String = "" ;
 			var locationString:String ='';
 			info += "\tName: "+target.name+'\n' ;
