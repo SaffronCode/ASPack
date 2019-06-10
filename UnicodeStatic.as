@@ -123,6 +123,13 @@ package
 			}
 		}
 		
+
+		public static function revertConvert(unicodeText:String):String
+		{
+			firstSetUp();
+			return uni.revertConvert(unicodeText);
+		}
+
 		public static function fastUnicodeOnLines(target:TextField,tx:String,autoSize:Boolean=false):void
 		{
 			firstSetUp();
