@@ -42,7 +42,7 @@ package
 		public static var estesna:String = '-[]»«)("/\\:';
 		public static var forceToEnglish:String = '' ;
 		
-		public static var convertToArabicNumber:Boolean = true ;
+		public static var convertToArabicNumber:Boolean = false ;
 		
 		private var MESlistChr:Object = {};
 		
