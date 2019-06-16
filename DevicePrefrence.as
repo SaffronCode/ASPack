@@ -19,12 +19,12 @@
 package
 {
 	import com.adobe.crypto.MD5;
-	import flash.desktop.SystemIdleMode;
-	
+
 	import dataManager.GlobalStorage;
-	
+
 	import flash.data.EncryptedLocalStore;
 	import flash.desktop.NativeApplication;
+	import flash.desktop.SystemIdleMode;
 	import flash.display.NativeWindow;
 	import flash.display.Stage;
 	import flash.events.Event;
@@ -122,10 +122,10 @@ package
 			{
 				lastStatus = int(GlobalStorage.load(id_firstApp+appVersion)) ;
 				GlobalStorage.save(id_firstApp+appVersion,1) ;
-				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e){
+				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e):*{
 					_isApplicationActive = true ;
 				});
-				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE,function(e){
+				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE,function(e):*{
 					_isApplicationActive = false ;
 				});
 			}
@@ -174,7 +174,7 @@ package
 				myStage.stageHeight = sh ;
 				if(isMac())
 				{
-					setTimeout(function(){
+					setTimeout(function():*{
 						myStage.stageWidth = sw ;
 					},0);
 				}
@@ -298,7 +298,7 @@ package
 				}
 			}
 			
-			private static function connectionErrorOnLoadingmyket(e:*)
+			private static function connectionErrorOnLoadingmyket(e:*):void
 			{
 				trace("+++++This app is not released on myket");
 			}
@@ -326,7 +326,7 @@ package
 				idCode.data[playStoreId] = secondCheck_play ;
 			}
 			
-			private static function connectionErrorOnLoadingPlayStore(e:*)
+			private static function connectionErrorOnLoadingPlayStore(e:*):void
 			{
 				if(appCorrectedID!='' && secondCheck_play==false)
 				{
@@ -591,7 +591,7 @@ package
 		}
 		
 		/**this will cause to isIOS function tells that this is not an IOS anyway*/
-		public static function itIsNotIOS()
+		public static function itIsNotIOS():void
 		{
 			fake_not_ios = true ;
 		}
@@ -644,7 +644,7 @@ package
 				}
 				var wrongIdParts:Array = wrongId.split('.');
 				var itIsWrong:Boolean = false ;
-				for(var i = 0 ; i<wrongIdParts.length ; i++)
+				for(var i:int = 0 ; i<wrongIdParts.length ; i++)
 				{
 					if(String('0123456789').indexOf((wrongIdParts[i] as String).charAt(0))!=-1)
 					{
@@ -794,7 +794,7 @@ package
 		}
 		
 		/**Opening the rank page for this application*/
-		private static function openItuneStoreFor(appCodeID:String)
+		private static function openItuneStoreFor(appCodeID:String):void
 		{
 			if(onDone!=null)
 			{
@@ -849,17 +849,17 @@ package
 				var isNativeAdded:Boolean = false ;
 				try
 				{
-					var fPUniqueId:Class = getDefinitionByName("ru.flashpress.uid.FPUniqueId") as Class;
+					var DeviceUtils:Class = getDefinitionByName("com.digitalstrawberry.ane.deviceutils.DeviceUtils") as Class;
 					isNativeAdded = true ;
 				}
 				catch(e)
 				{
-					trace("*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project");
+					//trace("*** To get better security,You can add  com.digitalstrawberry.ane.deviceutils.DeviceUtils  native to your project");
 					isNativeAdded = false ;
 				}
 				if(isNativeAdded)
 				{
-					uniqueId = (fPUniqueId as Object).id;
+					uniqueId = (DeviceUtils as Object).idfv;
 					createdKeyIs= '';
 				}
 				else
@@ -881,6 +881,50 @@ package
 				}	
 			}
 		}
+
+		public static function getDeviceModel():String
+		{
+			var modelName:String;
+				try
+				{
+					var DeviceUtils:Class = getDefinitionByName("com.digitalstrawberry.ane.deviceutils.DeviceUtils") as Class;
+					modelName = (DeviceUtils as Object).model;
+				}
+				catch(e)
+				{
+					modelName = "PC";
+				}
+			return modelName;
+		}
+
+		public static function getDeviceName():String
+		{
+			var deviceName:String;
+				try
+				{
+					var DeviceUtils:Class = getDefinitionByName("com.digitalstrawberry.ane.deviceutils.DeviceUtils") as Class;
+					deviceName = (DeviceUtils as Object).systemName;
+				}
+				catch(e)
+				{
+					deviceName = Capabilities.os;
+				}
+			return deviceName;
+		}
+		public static function getDeviceVersion():String
+		{
+			var deviceVersion:String;
+				try
+				{
+					var DeviceUtils:Class = getDefinitionByName("com.digitalstrawberry.ane.deviceutils.DeviceUtils") as Class;
+					deviceVersion = (DeviceUtils as Object).systemVersion;
+				}
+				catch(e)
+				{
+					deviceVersion = Capabilities.version;
+				}
+			return deviceVersion;
+		}
 		
 		/**Pass 478239472389 to make it work. (this password created to prevent injection)*/
 		public static function DeviceEncryptedKey(passWord:String):String
@@ -893,6 +937,8 @@ package
 			}
 			return MD5.hash('notmatched'+'بپ');
 		}
+
+		
 		
 		/**You should have a native code to have this*/
 		public static function DeviceUniqueId():String
