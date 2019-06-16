@@ -892,7 +892,7 @@ package
 				}
 				catch(e)
 				{
-					modelName = "PC";
+					modelName = "undefined _ maybe you don't add DeviceUtils ANE";
 				}
 			return modelName;
 		}
