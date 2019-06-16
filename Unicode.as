@@ -42,7 +42,7 @@ package
 		public static var estesna:String = '-[]»«)("/\\:';
 		public static var forceToEnglish:String = '' ;
 		
-		public static var convertToArabicNumber:Boolean = true ;
+		public static var convertToArabicNumber:Boolean = false ;
 		
 		private var MESlistChr:Object = {};
 		
@@ -150,6 +150,41 @@ package
 		}
 		
 		
+
+		/**Convert Unicode to a cadual string */
+		public function revertConvert(str:String):String
+		{
+			var strList:Array = str.split('\r');
+			strList = strList.reverse();
+			str = strList.join('\r');
+			var textLength:uint = str.length ;
+			var newSTR:String = '' ;
+			for(var i:int = textLength ; i>=0 ; i--)
+			{
+				var curChar:String = str.charAt(i);
+				var curCharCode:uint = str.charCodeAt(i);
+				if(curCharCode<150)
+				{
+					newSTR+=curChar ;
+					continue;
+				}
+				var founded:Boolean = false ;
+				for(var j:String in MESlistChr)
+				{
+					if(MESlistChr[j].indexOf(curChar)!=-1)
+					{
+						newSTR+=j;
+						founded = true ;
+						break;
+					}
+				}
+				if(founded==false)
+				{
+					newSTR+=curChar ;
+				}
+			}
+			return newSTR ;
+		}
 		
 		
 		
@@ -220,6 +255,11 @@ package
 				/**parag become an xml string*/
 				//parag[j] = yourTextField.getXMLText();
 				lastIndex = l = yourTextField.text.length ;
+				if(l==0)
+				{
+					linesTest.push(yourTextField.getXMLText(0,lastIndex));
+					continue;
+				}
 				lineW = 0 ;
 				lastSpace = -1 ;
 				var step:uint = 1 ;
@@ -326,7 +366,7 @@ package
 				}//else V
 			}
 			//yourTextField.wordWrap = lastWorldWrapMode ;
-			var enterXML:String = '<flashrichtext version="1"><textformat>(\n)</textformat></flashrichtext>' ;//yourTextField.getXMLText();
+			const enterXML:String = '<flashrichtext version="1"><textformat>(\n)</textformat></flashrichtext>' ;//yourTextField.getXMLText();
 			yourTextField.text = '';
 			l = linesTest.length ;
 			for(i=0;i<linesTest.length;i++){
