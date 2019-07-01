@@ -105,12 +105,14 @@
 				onPermissionDenied = new Function();
 			if(geo == null)
 				geo = new Geolocation();
+			Alert.show(Geolocation.permissionStatus);
 			if (Geolocation.permissionStatus != PermissionStatus.GRANTED)
 			{
 				geo.addEventListener(PermissionEvent.PERMISSION_STATUS, function(e:PermissionEvent):void
 				{
 					if (e.status == PermissionStatus.GRANTED)
 					{
+						Alert.show("granted2")
 						onPermissionGranted();
 					}
 					else
@@ -126,6 +128,7 @@
 				}
 				catch (e:Error)
 				{
+					Alert.show("error:"+e.message)
 					// another request is in progress
 				}
 			}
