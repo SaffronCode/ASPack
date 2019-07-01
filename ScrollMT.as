@@ -753,7 +753,27 @@ package
 		{
 			//Debug line ↓
 				//trace("Scroll controll : "+targStage.mouseX,targStage.mouseY+' vs '+scrollerMask.getBounds(targStage)+" > "+(scrollerMask.hitTestPoint(targStage.mouseX,targStage.mouseY))+' and '+(scrollerMask.getBounds(targStage).contains(targStage.mouseX,targStage.mouseY)));
-				return !scrollLock && scrollerMask.getBounds(targStage).contains(targStage.mouseX,targStage.mouseY) && ((maskRect.height<targetRect.height && unLockTopDown) || (maskRect.width<targetRect.width && unLockLeftRight)) && Obj.getVisible(targ);
+				return (
+							!scrollLock 
+							&& 
+							scrollerMask.getBounds(targStage).contains(targStage.mouseX,targStage.mouseY) 
+							&& 
+							(
+								(
+									maskRect.height<targetRect.height
+									&& 
+									unLockTopDown
+								)
+								|| 
+								(
+									maskRect.width<targetRect.width 
+									&& 
+									unLockLeftRight
+								)
+							)
+							&&
+							Obj.getVisible(targ)
+						);
 			//return !scrollLock && scrollerMask.hitTestPoint(targStage.mouseX,targStage.mouseY) ;
 		}
 		

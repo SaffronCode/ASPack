@@ -6,7 +6,7 @@
 // * YOU CAN'T SHARE THIS CODE
 // *************************
 
-package ASPack{
+package {
 	import flash.display.MovieClip;
 
 	public class MEClip extends MovieClip
@@ -21,7 +21,7 @@ package ASPack{
 			Func.push(yourFunction)
 			this.addEventListener(yourEvent,yourFunction)
 		}
-		public MERemoveThis(){
+		public function MERemoveThis(){
 			for(var i=0;i<Listeners.length;i++){
 				if(this.hasEventListener(Listeners[i])){
 					this.removeEventListener(Listeners[i],Func[i])
@@ -29,7 +29,7 @@ package ASPack{
 				this.parent.removeChild(this)
 			}
 		}
-		public MERemoveListener(yourListener){
+		public function MERemoveListener(yourListener){
 			for(var i=0;i<Listeners.length;i++){
 				if(Listeners[i]==yourListener&&this.hasEventListener(Listeners[i])){
 					this.removeEventListener(Listeners[i],Func[i])
