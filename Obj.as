@@ -248,14 +248,14 @@ package
 		}
 		
 		/**Returns the global scale of this display object from the stage in its all parents*/
-		public static function getScale(targ:DisplayObject):Number
+		public static function getScale(targ:DisplayObject,returnScaleX:Boolean=true):Number
 		{
 			//return targ.scaleX;
-			var currentScale:Number = targ.scaleX ;
+			var currentScale:Number = returnScaleX?targ.scaleX:targ.scaleY ;
 			while(targ.parent != null)
 			{
 				targ = targ.parent ;
-				currentScale *= targ.scaleX ;
+				currentScale *= returnScaleX?targ.scaleX:targ.scaleY ;
 			}
 			return currentScale ;
 		}
