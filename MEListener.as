@@ -6,7 +6,7 @@
 // * YOU CAN'T SHARE THIS CODE
 // *************************
 
-package ASPack{
+package {
 	import flash.display.MovieClip;
 
 	public class MEListener extends MovieClip

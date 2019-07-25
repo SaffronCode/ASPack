@@ -200,7 +200,7 @@ package myMultiTouch
 		/**returns index of touched object from list*/
 		private static function getI(targ:DisplayObject):int
 		{
-			return targs.indexOf(targ);
+			return targs.indexOf(targ as MovieClip);
 		}
 	}
 }
