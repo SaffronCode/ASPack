@@ -1,4 +1,4 @@
-// *************************
+﻿// *************************
 // * COPYRIGHT
 // * DEVELOPER: MTEAM ( info@mteamapp.com )
 // * ALL RIGHTS RESERVED FOR MTEAM
@@ -18,9 +18,9 @@ package
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
-	
-	import mx.utils.Base64Decoder;
-	import mx.utils.Base64Encoder;
+	import animation.Anim_Frame_Controller;
+	import flash.display.MovieClip;
+	import com.Base64;
 	
 	
 
@@ -157,12 +157,9 @@ package
 		}
 		public static function createBase64(bitmapData:BitmapData,quality:int=100):String
 		{
-
 			var jpg:JPEGEncoderOptions = new JPEGEncoderOptions(quality);	
 			bitmapData.encode(bitmapData.rect,jpg)
-			var toBase46Encoder:Base64Encoder = new Base64Encoder()
-			toBase46Encoder.encodeBytes(bitmapData.encode(bitmapData.rect,jpg));				
-			return toBase46Encoder.toString().split('\n').join('')				
+			return Base64.EncodeByte(bitmapData.encode(bitmapData.rect,jpg)).split('\n').join('');
 		}
 		
 	}
