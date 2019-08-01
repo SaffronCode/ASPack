@@ -1,4 +1,4 @@
-/**
+﻿/**
  *  Copyright (c)  2009 coltware@gmail.com
  *  http://www.coltware.com 
  *
@@ -16,7 +16,6 @@ package com.coltware.airxzip.crypt {
 	
 	import flash.utils.*;
 	
-	import mx.logging.*;
 	
 	use namespace zip_internal;
 	
