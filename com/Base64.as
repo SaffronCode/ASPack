@@ -236,7 +236,7 @@
 
 		
 
-		private function EncodeBase64( str:String ):String
+		private function encodeBase64( str:String ):String
 
 		{
 
@@ -406,7 +406,7 @@
 
 		
 
-		private function DecodeBase64( str:String ) : String
+		private function decodeBase64( str:String ) : String
 
 		{
 
@@ -587,7 +587,7 @@
 		private static const _encodeChars:Vector.<int> = InitEncoreChar();  
         private static const _decodeChars:Vector.<int> = InitDecodeChar();  
           
-        public static function encodeByte(data:ByteArray):String  
+        public static function EncodeByte(data:ByteArray):String  
         {  
             var out:ByteArray = new ByteArray();  
             //Presetting the length keep the memory smaller and optimize speed since there is no "grow" needed  
@@ -631,7 +631,7 @@
             return out.readUTFBytes(out.length);  
         }  
           
-        public static function decodeToByte(str:String):ByteArray  
+        public static function DecodeToByte(str:String):ByteArray  
         {  
             var c1:int;  
             var c2:int;  
