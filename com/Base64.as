@@ -1,4 +1,4 @@
-﻿package 
+﻿package com
 
 {
 
@@ -236,7 +236,7 @@
 
 		
 
-		private function encodeBase64( str:String ):String
+		private function EncodeBase64( str:String ):String
 
 		{
 
@@ -406,7 +406,7 @@
 
 		
 
-		private function decodeBase64( str:String ) : String
+		private function DecodeBase64( str:String ) : String
 
 		{
 
