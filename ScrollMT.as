@@ -196,7 +196,8 @@ package
 		
 		private var fadeEdges:Boolean = false ;
 
-
+		private var lastH:Number,
+					lastW:Number;
 	
 		
 		/**this class will automaticly sets target position to targetArea .x and .y position<br>
@@ -958,7 +959,7 @@ package
 				}
 				else
 				{
-					if(false)
+					if(targetRect.height!=lastH)
 					{
 						trace("These lines was increase performance");
 						curselTopDown.graphics.clear();
@@ -969,6 +970,8 @@ package
 						
 						curselTopDown.x = maskRect.right-currselMargin-currselW ;
 						curselTopDown.y = maskRect.y+currselMargin+currselW ;
+
+						lastH = targetRect.height ;
 					}
 					if(unLockTopDown == false)
 					{
@@ -991,7 +994,7 @@ package
 				}
 				else
 				{
-					if(false)
+					if(targetRect.width!=lastW)
 					{
 						trace("These lines was increase performance");
 						curselLeftRight.graphics.clear();
@@ -1002,6 +1005,8 @@ package
 						
 						curselLeftRight.x = maskRect.x+currselMargin+currselW;
 						curselLeftRight.y = maskRect.y+currselMargin;
+
+						lastW = targetRect.width ;
 					}
 					
 					if(unLockLeftRight == false)
