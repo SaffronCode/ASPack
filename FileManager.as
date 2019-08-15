@@ -17,6 +17,7 @@ package
 	import flash.utils.ByteArray;
 	
 	import contents.alert.Alert;
+	import flash.events.FileListEvent;
 
 	public class FileManager
 	{
@@ -251,7 +252,83 @@ package
 			}
 		}
 		
-		
+
+	///////////////////////////////////////////////////
+
+		private static var searchPattern:String ;
+
+		/** function(file:File):void*/
+		private static var callForEachFileFounded:Function ;
+
+		/**function(files:Vector.<File>):void */
+		private static var onSearchDone:Function ; 
+
+		private static var 	searchQue:Vector.<File>,
+							foundedQue:Vector.<File> ;
+
+		private static var lastFileToSearch:File ;
+
+		public static function searchFor(target:File,pattern:String,searchDone:Function,onFoundedItem:Function=null):void
+		{
+			cancelSearch();
+
+			lastFileToSearch = target;
+			searchPattern = pattern.replace('.','\.').replace('*','.') ;
+			callForEachFileFounded = onFoundedItem ;
+			onSearchDone = searchDone;
+			searchQue = new Vector.<File>();
+			foundedQue = new Vector.<File>();
+
+			if(!target.isDirectory)
+			{
+				onSearchDone(foundedQue);
+				return ;
+			}
+
+			startSearch();
+		}
+
+		public static function cancelSearch():void
+		{
+			if(lastFileToSearch!=null)
+			lastFileToSearch.addEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
+		}
+
+			private static function startSearch():void
+			{
+				lastFileToSearch.addEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
+				lastFileToSearch.getDirectoryListingAsync();
+			}
+
+			private static function directoriesLoadedForSearch(e:FileListEvent):void
+			{
+				lastFileToSearch.removeEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
+				var list:Array = e.files ;
+				for(var i:int = 0 ; i<list.length ; i++)
+				{
+					var aFile:File = list[i] as File ;
+					if(aFile.isDirectory)
+					{
+						searchQue.push(aFile);
+					}
+					else if(aFile.name.match(searchPattern)!=null)
+					{
+						foundedQue.push(aFile);
+						if(callForEachFileFounded!=null)
+							callForEachFileFounded(aFile);
+					}
+				}
+				if(searchQue.length>0)
+				{
+					lastFileToSearch = searchQue.shift() ;
+					lastFileToSearch.addEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
+					lastFileToSearch.getDirectoryListingAsync();
+				}
+				else
+				{
+					onSearchDone(foundedQue);
+				}
+			}
 		
 	////////////////////////////////////////////////////
 		
@@ -262,10 +339,22 @@ package
 			var fil:File = new File();
 			fil.addEventListener(Event.SELECT,folderSelected);
 			var fileFilters:Array = (fileTypes==null)?null:[] ;
+			var allFileModels:String = '' ;
 			for(var i:int = 0 ;fileTypes!=null && i<fileTypes.length ; i++)
 			{
-				fileFilters.push(new FileFilter(fileTypes[i]+' fromat',fileTypes[i]));
+				var fileModel:String = fileTypes[i] ;
+				if(fileModel.indexOf('*.')!=0)
+				{
+					fileModel = '*.'+fileModel ;
+				}
+				allFileModels += fileModel+";";
+				fileFilters.push(new FileFilter(fileTypes[i]+' fromat',fileModel));
 			}
+			if(fileTypes.length>0)
+			{
+				fileFilters.push(new FileFilter('All fromat',allFileModels));
+			}
+			fileFilters.reverse();
 			fil.browseForOpen(title,fileFilters);
 			function folderSelected(e:Event):void
 			{
