@@ -18,6 +18,8 @@ package
 	
 	import contents.alert.Alert;
 	import flash.events.FileListEvent;
+	import flash.utils.setTimeout;
+	import flash.utils.clearTimeout;
 
 	public class FileManager
 	{
@@ -255,7 +257,7 @@ package
 
 	///////////////////////////////////////////////////
 
-		private static var searchPattern:String ;
+		public static var searchPattern:String ;
 
 		/** function(file:File):void*/
 		private static var callForEachFileFounded:Function ;
@@ -263,16 +265,18 @@ package
 		/**function(files:Vector.<File>):void */
 		private static var onSearchDone:Function ; 
 
-		private static var 	searchQue:Vector.<File>,
-							foundedQue:Vector.<File> ;
+		private static var 	searchQue:Vector.<File>;
+		public static  var foundedQue:Vector.<File> ;
 
 		private static var lastFileToSearch:File ;
+
+		private static var searchFunctionTimerId:Number ; 
 
 		public static function searchFor(target:File,pattern:String,searchDone:Function,onFoundedItem:Function=null):void
 		{
 			cancelSearch();
 
-			lastFileToSearch = target;
+			lastFileToSearch = new File(target.nativePath);
 			searchPattern = pattern.replace('.','\.').replace('*','.') ;
 			callForEachFileFounded = onFoundedItem ;
 			onSearchDone = searchDone;
@@ -281,6 +285,7 @@ package
 
 			if(!target.isDirectory)
 			{
+				trace("Target wasnt directory : "+target.nativePath);
 				onSearchDone(foundedQue);
 				return ;
 			}
@@ -290,34 +295,48 @@ package
 
 		public static function cancelSearch():void
 		{
+			clearTimeout(searchFunctionTimerId);
 			if(lastFileToSearch!=null)
-			lastFileToSearch.addEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
+			{
+				lastFileToSearch.removeEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
+				lastFileToSearch.cancel();
+				lastFileToSearch = null ;
+			}
 		}
 
 			private static function startSearch():void
 			{
 				lastFileToSearch.addEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
+				trace("lastFileToSearch > "+lastFileToSearch.nativePath);
 				lastFileToSearch.getDirectoryListingAsync();
 			}
 
 			private static function directoriesLoadedForSearch(e:FileListEvent):void
 			{
+				trace("!!!!!");
+				var currentFileSearch:File = lastFileToSearch ;
 				lastFileToSearch.removeEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
+				trace("Search on "+lastFileToSearch.nativePath);
 				var list:Array = e.files ;
+				var foundedFiles:Vector.<File> = new Vector.<File>();
 				for(var i:int = 0 ; i<list.length ; i++)
 				{
 					var aFile:File = list[i] as File ;
+					trace("aFile.name ? "+aFile.name+" << "+searchPattern);
 					if(aFile.isDirectory)
 					{
-						searchQue.push(aFile);
+						if(aFile.name!='.git')
+							searchQue.push(aFile);
 					}
 					else if(aFile.name.match(searchPattern)!=null)
 					{
+						trace(searchPattern+" founded on "+aFile.name);
 						foundedQue.push(aFile);
-						if(callForEachFileFounded!=null)
-							callForEachFileFounded(aFile);
+						foundedFiles.push(aFile);
 					}
 				}
+				if(callForEachFileFounded!=null && foundedFiles.length>0)
+					callForEachFileFounded(foundedFiles);
 				if(searchQue.length>0)
 				{
 					lastFileToSearch = searchQue.shift() ;
@@ -326,9 +345,28 @@ package
 				}
 				else
 				{
-					onSearchDone(foundedQue);
+					trace("Seach done for "+(e.currentTarget as File).nativePath+" vs "+lastFileToSearch.nativePath);
+					if(lastFileToSearch!=null && currentFileSearch == lastFileToSearch)
+						onSearchDone(foundedQue);
 				}
 			}
+
+	////////////////////////////////////////////////////
+	public static function getRelatedTarget(ContainerFolder:File,ChildFolder:File):String
+	{
+		var adress1:String = ContainerFolder.nativePath ;
+		var adress2:String = ChildFolder.nativePath ;
+		var finalAdress:String = '';
+		for(var i:int= 0 ; i<adress2.length ; i++)
+		{
+			if(adress1.charAt(i)!=adress2.charAt(i))
+			{
+				finalAdress = adress2.substring(i);
+				break;
+			}
+		}
+		return "."+finalAdress ;
+	}
 		
 	////////////////////////////////////////////////////
 		
