@@ -1,4 +1,4 @@
-package
+﻿package
 {
 	import com.coltware.airxzip.ZipEntry;
 	import com.coltware.airxzip.ZipFileReader;
@@ -20,9 +20,15 @@ package
 	import flash.events.FileListEvent;
 	import flash.utils.setTimeout;
 	import flash.utils.clearTimeout;
+	import flash.utils.getTimer;
+	import dataManager.GlobalStorage;
 
 	public class FileManager
 	{
+		private static var tempFiles:Array ;
+
+		private static const id_tempFiles:String = "id_tempFiles_list";
+
 		private static var onDone:Function;
 		/**This will load local file instantly*/
 		public static function loadFile(fileTarget:File,openAsync:Boolean=false,onLoaded:Function=null):ByteArray
@@ -56,6 +62,58 @@ package
 			
 			return fileBytes;
 		}
+
+		/**
+		 * Delete file
+		 * @param file 
+		 * @return 
+		 */
+		public static function deleteFile(file:File):Boolean
+		{
+			if(file.exists)
+			{
+				try
+				{
+					file.deleteFile();
+					return true;
+				}
+				catch(e){
+					return false ;
+				}
+			}
+			return false ;
+		}
+
+		/** Create temporary file every where you wanted
+		 * @param containerDirectory 
+		 * @return 
+		 */
+		public static function createNewFile(containerDirectory:File):File
+		{
+			if(tempFiles==null)
+			{
+				tempFiles = GlobalStorage.load(id_tempFiles);
+				if(tempFiles!=null)
+				{
+					for(var i:int = 0 ; i<tempFiles.length ; i++)
+					{
+						deleteFile(new File(tempFiles[i]));
+					}
+				}
+				tempFiles = [] ;
+			}
+			var file:File ;
+			do
+			{
+				file = containerDirectory.resolvePath((Math.floor(Math.random()*10000000000000)+getTimer()).toString());
+			}
+			while(file.exists);
+
+			tempFiles.push(file.nativePath);
+			GlobalStorage.save(id_tempFiles,tempFiles);
+
+			return file ;
+		}
 		
 		private static function fileLoaded(e:Event):void
 		{
@@ -71,7 +129,7 @@ package
 		}
 		
 		/**Control the file permission*/
-		public static function controlFilePermission(onPermissionGranted:Function):void
+		public static function controlFilePermission(onPermissionGranted:Function,askUserTogrant:Boolean=true):void
 		{
 			var _file:File = new File() ;
 			if (File.permissionStatus != PermissionStatus.GRANTED)
@@ -88,11 +146,14 @@ package
 						}
 					});
 				
-				try {
-					_file.requestPermission();
-				} catch(e:Error)
+				if(askUserTogrant)
 				{
-					// another request is in progress
+					try {
+						_file.requestPermission();
+					} catch(e:Error)
+					{
+						// another request is in progress
+					}
 				}
 			}
 			else
