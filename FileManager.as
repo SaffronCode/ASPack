@@ -66,11 +66,14 @@ package
 			if(onDone!=null && onDone.length>0)
 				onDone(fileBytes);
 		}
+
+		private static var _file:File ;
 		
 		/**Control the file permission*/
-		public static function controlFilePermission(onPermissionGranted:Function):void
+		public static function controlFilePermission(onPermissionGranted:Function,askUserTogrant:Boolean=true):void
 		{
-			var _file:File = new File() ;
+			if(_file==null)
+				_file = new File() ;
 			if (File.permissionStatus != PermissionStatus.GRANTED)
 			{
 				_file.addEventListener(PermissionEvent.PERMISSION_STATUS,
@@ -85,11 +88,14 @@ package
 						}
 					});
 				
-				try {
-					_file.requestPermission();
-				} catch(e:Error)
+				if(askUserTogrant)
 				{
-					// another request is in progress
+					try {
+						_file.requestPermission();
+					} catch(e:Error)
+					{
+						// another request is in progress
+					}
 				}
 			}
 			else
