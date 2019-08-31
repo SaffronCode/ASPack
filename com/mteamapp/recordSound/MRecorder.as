@@ -13,6 +13,8 @@ package com.mteamapp.recordSound
 	import flash.media.Sound;
 	import flash.media.SoundChannel;
 	import flash.utils.ByteArray;
+	import flash.permissions.PermissionStatus;
+	import flash.events.PermissionEvent;
 
 	/**recorder class , contains */
 	public class MRecorder
@@ -98,11 +100,41 @@ package com.mteamapp.recordSound
 			recordedSound = new ByteArray();
 			
 			//start mic works
+			
 			mic = Microphone.getMicrophone();
-			mic.rate = RATE ;
-			SilentsSence = silenceLinimt ;
-			mic.setSilenceLevel(SilentsSence);
-			mic.addEventListener(SampleDataEvent.SAMPLE_DATA,recordAudio);
+			if (Microphone.permissionStatus != PermissionStatus.GRANTED)
+			{
+				mic.addEventListener(PermissionEvent.PERMISSION_STATUS,
+					function(e:PermissionEvent):void {
+						if (e.status == PermissionStatus.GRANTED)
+						{
+							onPermissionGranted();
+						}
+						else
+						{
+							// permission denied
+						}
+					});
+				
+				try {
+					mic.requestPermission();
+				} catch(e:Error)
+				{
+					// another request is in progress
+				}
+			}
+			else
+			{
+				onPermissionGranted();
+			}
+
+			function onPermissionGranted():void
+			{
+				mic.rate = RATE ;
+				SilentsSence = silenceLinimt ;
+				mic.setSilenceLevel(SilentsSence);
+				mic.addEventListener(SampleDataEvent.SAMPLE_DATA,recordAudio);
+			}
 		}
 		
 		
