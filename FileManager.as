@@ -128,6 +128,13 @@
 				onDone(fileBytes);
 		}
 		
+		/**Return true if file permission have already granted.*/
+		public static function havePermission():Boolean
+		{
+			var _file:File = new File() ;
+			return (File.permissionStatus == PermissionStatus.GRANTED);
+		}
+		
 		/**Control the file permission*/
 		public static function controlFilePermission(onPermissionGranted:Function,askUserTogrant:Boolean=true):void
 		{
