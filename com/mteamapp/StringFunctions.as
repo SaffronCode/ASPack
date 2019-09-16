@@ -659,6 +659,11 @@ package com.mteamapp
 		{
 			return str.replace(/[\s\t]{2,}/g,' ').replace(/([\t\s]$)|(^[\s\t])/g,'');
 		}
+		
+		public static function isPhoneNumber(str:String):Boolean
+		{
+			return str.match(/((\+98|[0]{1,2}98)|0)[\d]{8,12}/)!= null;
+		}
 		public static function isMobileNumber(str:String):Boolean
 		{
 			trace('str.substr(0,1) :',str.substr(0,2));
