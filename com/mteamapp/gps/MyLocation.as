@@ -103,11 +103,12 @@
 				onPermissionGranted = new Function();
 			if (onPermissionDenied == null)
 				onPermissionDenied = new Function();
-			if(geo == null)
-				geo = new Geolocation();
+
+			var myGeo:Geolocation = new Geolocation();
+			
 			if (Geolocation.permissionStatus != PermissionStatus.GRANTED)
 			{
-				geo.addEventListener(PermissionEvent.PERMISSION_STATUS, function(e:PermissionEvent):void
+				myGeo.addEventListener(PermissionEvent.PERMISSION_STATUS, function(e:PermissionEvent):void
 				{
 					if (e.status == PermissionStatus.GRANTED)
 					{
@@ -122,7 +123,7 @@
 				
 				try
 				{
-					geo.requestPermission();
+					myGeo.requestPermission();
 				}
 				catch (e:Error)
 				{
