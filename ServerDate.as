@@ -108,9 +108,9 @@
 				
 			//	trace("splitedZoneAndSecond : "+splitedZoneAndSecond);
 				
-				myDate.dateUTC = uint(splitedDatePart[2]);
-				myDate.monthUTC = uint(splitedDatePart[1])-1;
 				myDate.fullYearUTC = uint(splitedDatePart[0]);
+				myDate.monthUTC = uint(splitedDatePart[1])-1;
+				myDate.dateUTC = uint(splitedDatePart[2]);
 				if(noZoneAvailable)
 				{
 					myDate.hours = uint(splitedTimePart[0]);
@@ -125,7 +125,7 @@
 					myDate.minutes+=zoneMinutes;
 				}
 			}
-			catch(e)
+			catch(e:Error)
 			{
 				trace("Date format is not parsable : "+date);
 				return null ;
