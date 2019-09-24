@@ -38,7 +38,7 @@ package
 		//Not Effected
 		
 		public static var splitters:Array = [',','.',' ','-',')',':',':'];
-		public static var adad = '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹۰۱۲۳۴۵۶۷۸۹����٪٪1234567890';
+		public static var adad:String = '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹۰۱۲۳۴۵۶۷۸۹����٪٪1234567890';
 		public static var estesna:String = '-[]»«)("/\\:';
 		public static var forceToEnglish:String = '' ;
 		
@@ -428,7 +428,7 @@ package
 		
 		
 		/**style 0 mamooli , 1 aval chasban , 2 dovom chasban , 3 do var chasban*/
-		public function toUnicode(ch,style=0){
+		public function toUnicode(ch:String,style=0):String{
 			if(ch=='')
 			{
 				return '' ;
@@ -437,9 +437,9 @@ package
 			ch = farsiCorrection(ch);
 			var matn:String = "";
 			var v0:int,v1:int,v2:int;
-			var numString='';
-			var parantez;
-			var chC1,chC2;
+			var numString:String='';
+			var parantez:String;
+			var chC1:*,chC2:*;
 			var stringLenght:uint = ch.length ;
 			
 			if(ch=='')
@@ -448,8 +448,7 @@ package
 			}
 			
 			
-			
-			for(var i=0;i<ch.length;i++)
+			for(var i:int=0;i<ch.length;i++)
 			{
 				if(MESisEnglish(ch.charAt(i),ch,i,stringLenght))
 				{
@@ -490,7 +489,7 @@ package
 				
 				v1 = MESfindeType(ch.charAt(i));
 				//trace("*v1 ; "+v1+' for '+ch.charAt(i));
-				var j=1;
+				var j:int=1;
 				do
 				{
 					v0 = MESfindeType(ch.charAt(i-j));
@@ -542,8 +541,8 @@ package
 		//////////////////////////////////////////////////tools
 		public function numCorrection(str:String):String
 		{
-			var I = String('۰').charCodeAt(0);
-			for(var i=I ; i<I+10 ; i++){
+			var I:Number = String('۰').charCodeAt(0);
+			for(var i:int=I ; i<I+10 ; i++){
 				str = str.split(String.fromCharCode(i)).join(String(i-I));
 			}
 			I = String('٠').charCodeAt(0);
@@ -554,10 +553,10 @@ package
 		}
 		
 		
-		public function NumberChange(str:String,zero:String='۰')
+		public function NumberChange(str:String,zero:String='۰'):String
 		{
-			var I = String('۰').charCodeAt(0);
-			for(var i=0 ; i<10 ; i++){
+			var I:Number = String('۰').charCodeAt(0);
+			for(var i:int=0 ; i<10 ; i++){
 				str = str.split(String(i)).join(String.fromCharCode(i+I));
 			}
 			return str;
