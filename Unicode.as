@@ -41,6 +41,9 @@ package
 		public static var adad:String = '٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹۰۱۲۳۴۵۶۷۸۹����٪٪1234567890';
 		public static var estesna:String = '-[]»«)("/\\:';
 		public static var forceToEnglish:String = '' ;
+
+		public static const halfSpace1:String = String.fromCharCode(8204),
+							halfSpace2:String = "¬";
 		
 		public static var convertToArabicNumber:Boolean = false ;
 		
@@ -447,12 +450,14 @@ package
 				return ch;
 			}
 			
+			var charAt1:String;
 			
 			for(var i:int=0;i<ch.length;i++)
 			{
-				if(MESisEnglish(ch.charAt(i),ch,i,stringLenght))
+				charAt1 = ch.charAt(i);
+				if(MESisEnglish(charAt1,ch,i,stringLenght))
 				{
-					parantez = ch.charAt(i)
+					parantez = charAt1
 					if(parantez==')' || parantez=='(')
 					{
 						chC1 = ch.charAt(i-1);
@@ -487,8 +492,8 @@ package
 					numString=''
 				}
 				
-				v1 = MESfindeType(ch.charAt(i));
-				//trace("*v1 ; "+v1+' for '+ch.charAt(i));
+				v1 = MESfindeType(charAt1);
+				//trace("*v1 ; "+v1+' for '+charAt1);
 				var j:int=1;
 				do
 				{
@@ -522,12 +527,12 @@ package
 					v1 = (((v2&1)<<1)&(v1&2))+((v1&1)&((v0&2)>>1));//String(Math.min(Number(v2.charAt(1)),Number(v1.charAt(0))))+''+String(Math.min(Number(v1.charAt(1)),Number(v0.charAt(0))))
 				}
 				//trace("* Final char v1 is : "+v1);
-				//trace("Add "+ch.charAt(i)+" to the matn?? will be : "+MESbekesh(ch.charAt(i),v1));
-				matn = MESbekesh(ch.charAt(i),v1)+matn;
+				//trace("Add "+charAt1+" to the matn?? will be : "+MESbekesh(charAt1,v1));
+				matn = MESbekesh(charAt1==halfSpace1||charAt1==halfSpace2?'':charAt1,v1)+matn;
 				//trace("matn : "+matn);
 			}
-			matn =MESbekesh(numString)+matn;
-			matn = matn.split('¬').join('');
+			matn = MESbekesh(numString)+matn;
+			//matn = matn.split('¬').join('');
 			matn = UnicodeLaCorrector.laCorrection(matn);
 		
 			if(convertToArabicNumber)
@@ -585,7 +590,7 @@ package
 		
 		public function farsiCorrection(str:String)
 		{
-			return str.split('آ').join('آ').split('ی').join('ي').split('‌').join(' ').split('‏').join(' ');
+			return str.split('آ').join('آ').split('ی').join('ي');//.split('‌').join(' ').split('‏').join(' ');
 		}
 		
 		
