@@ -1,7 +1,9 @@
 ﻿package com.mteamapp.gps
 {
 	import com.mteamapp.StringFunctions;
+	
 	import contents.alert.Alert;
+	
 	import flash.events.GeolocationEvent;
 	import flash.events.PermissionEvent;
 	import flash.permissions.PermissionStatus;
@@ -41,7 +43,6 @@
 			if (geo == null)
 			{
 				trace("*************** Geo created**********");
-				recreateGeo()
 				
 				try
 				{
@@ -51,10 +52,11 @@
 				{
 					distriqtLocationClass = null;
 				}
-				;
+				
 				
 				if (distriqtCode != null)
 				{
+					trace("Distriqt GPS started");
 					trace("\n\n*****************************\n\n\nIf you whant to use distriqt location abilities, you should add below ane files to your project:" + "\t<extensionID>com.distriqt.Core</extensionID>" + "\t<extensionID>com.distriqt.androidsupport.V4</extensionID>" + 
 					//"\t<extensionID>com.distriqt.androidsupport.AppCompatV7</extensionID>"+
 					//"\t<extensionID>com.distriqt.androidsupport.CustomTabs</extensionID>"+
@@ -69,11 +71,21 @@
 				{
 					controllDefaultPermission();
 					distriqtLocationClass = null;
+					//recreateGeo();
+					trace("Default GPS started");
+					getGPSPermission(getLoacationCreated);
 				}
 			}
 		}
 		
-		/**Re create geoLocation class and its listeners*/
+		private static function getLoacationCreated():void
+		{
+			trace("**** Start gps ****");
+			geo = new Geolocation();
+			geo.addEventListener(GeolocationEvent.UPDATE, iGotGeo);
+		}
+		
+		/**Re create geoLocation class and its listeners
 		public static function recreateGeo():void
 		{
 			geo = new Geolocation();
@@ -93,7 +105,7 @@
 				
 				geo.addEventListener(GeolocationEvent.UPDATE, iGotGeo);
 			}
-		}
+		}*/
 		
 		
 		/**Get GPS permission*/
