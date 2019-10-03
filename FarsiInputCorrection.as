@@ -148,7 +148,7 @@ package
 					case SoftKeyboardType.PHONE:
 					case SoftKeyboardType.NUMBER:
 					{
-						restrictCharacterRange = "0-9.+\\-"
+						restrictCharacterRange = "0-9.+\\-٠-٩۰-۹"
 						break;
 					}
 				}
