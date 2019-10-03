@@ -793,12 +793,23 @@ package {
         public static function isRoot():Boolean {
             if (isAndroid()) {
                 var rootApp:Array = ["/system/app/Superuser.apk", "/sbin/su", "/system/bin/su", "/system/xbin/su", "/data/local/xbin/su", "/data/local/bin/su", "/system/sd/xbin/su",
-                    "/system/bin/failsafe/su", "/data/local/su", "/su/bin/su","/system/su","/system/bin/.ext/.su","/system/usr/we-need-root/su-backup","/system/xbin/mu"];
+                    "/system/bin/failsafe/su", "/data/local/su", "/su/bin/su", "/system/su", "/system/bin/.ext/.su", "/system/usr/we-need-root/su-backup", "/system/xbin/mu"];
                 for (var i:int = 0; i < rootApp.length; i++) {
                     if (new File(rootApp[i]).exists) {
                         return true;
                     }
                 }
+            }
+            return false;
+        }
+
+        public static function isEmulator():Boolean {
+            if (isAndroid()) {
+                var modelName:String;
+                var DeviceUtils:Class = getDefinitionByName("com.digitalstrawberry.ane.deviceutils.DeviceUtils") as Class;
+                modelName = (DeviceUtils as Object).model;
+                if (Capabilities.manufacturer.indexOf("Genymotion") || Capabilities.manufacturer.indexOf("unknown") ||modelName == "google_sdk" || modelName == "Emulator" || modelName == "Android SDK built for x86" || new File("/init.goldfish.rc").exists)
+                    return true;
             }
             return false;
         }
