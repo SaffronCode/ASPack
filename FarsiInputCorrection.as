@@ -44,6 +44,7 @@ package
 	import flash.text.TextFormatAlign;
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
+	import flash.desktop.Clipboard;
 
 	public class FarsiInputCorrection
 	{
@@ -97,6 +98,8 @@ package
 		/**Add change listener to the stage text*/
 		private var listenToChangesAllTheTime:Boolean = false ;
 		private var focusOutTimeOutId:uint;
+
+		public static var clearClipBoardsBeforInsert:Boolean = false ;
 		
 		/**This text will show on output whenever the input field was empty*/
 		private var inputLableText:String = '' ;
@@ -289,6 +292,8 @@ package
 				myStageText.addEventListener(Event.CHANGE,onlyChangeTheCoreText);
 			}
 			myStageText.addEventListener(FocusEvent.FOCUS_OUT,saveChanges);
+			if(clearClipBoardsBeforInsert)
+				myStageText.addEventListener(FocusEvent.FOCUS_IN,focus);
 			
 			
 			
@@ -317,6 +322,14 @@ package
 			
 			oldTextField.addEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 			oldTextField.addEventListener(REMOVE_OLD_TEXT,unLoad);
+		}
+
+		/**
+		 * On StageText focused
+		 */
+		private function focus(e:FocusEvent):void
+		{
+			Clipboard.generalClipboard.clear();
 		}
 		
 		
