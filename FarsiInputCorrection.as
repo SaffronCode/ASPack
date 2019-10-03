@@ -109,7 +109,7 @@ package
 		 * CLOSE event dispatches when the keyboard leaved the text area<br>
 		 * OnDoneFunction can get the selectedTextField
 		 */
-		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null):FarsiInputCorrection
+		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null,restrictCharacterRange:String=null):FarsiInputCorrection
 		{
 			if(softKeyFormat == null)
 			{
@@ -119,7 +119,7 @@ package
 			{
 				ReturnLable=ReturnKeyLabel.DEFAULT ;
 			}
-			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo,ReturnLable,onDoneFunction);
+			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo,ReturnLable,onDoneFunction,restrictCharacterRange);
 		}
 		
 		/**reset all added effects on this text field*/
@@ -129,7 +129,7 @@ package
 		}
 
 		
-		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true,controllStageTextsToo:Boolean=false,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null)
+		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true,controllStageTextsToo:Boolean=false,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null,restrictCharacterRange:String=null)
 		{
 			listenToChangesAllTheTime = controllStageTextsToo ;
 			clearInputText = clearAfterClicked ;
@@ -140,6 +140,20 @@ package
 			onlyNativeText = justShowNativeText ;
 			editableNativeText = editableNative ;
 			onDone = onDoneFunction ;
+			if(restrictCharacterRange==null && softKeyFormat!=null)
+			{
+				switch(softKeyFormat)
+				{
+					case SoftKeyboardType.DECIMAL:
+					case SoftKeyboardType.PHONE:
+					case SoftKeyboardType.NUMBER:
+					{
+						restrictCharacterRange = "0-9.+\\-"
+						break;
+					}
+				}
+			}
+			oldTextField.restrict = restrictCharacterRange ;
 			if(preventConvertor)
 			{
 				itsArabic = false ;
@@ -237,6 +251,7 @@ package
 			myStageText = new StageText(stageTextOption);
 			myStageText.stage = oldTextField.stage;
 			myStageText.color = oldTextField.textColor ;
+			myStageText.restrict = oldTextField.restrict ;
 			myStageText.autoCorrect = false ;
 			myStageText.autoCapitalize = AutoCapitalize.NONE ;
 			
