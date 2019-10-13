@@ -37,6 +37,9 @@ package {
     import flash.utils.getDefinitionByName;
     import flash.utils.setTimeout;
     import flash.filesystem.File;
+    import restDoaService.RestDoaService;
+    import restDoaService.RestDoaServiceCaller;
+    import flash.events.ProgressEvent;
 
     public class DevicePrefrence {
         private static var fake_not_ios:Boolean = false, fake_its_not_tablet:Boolean = false;
@@ -812,6 +815,19 @@ package {
                     return true;
             }
             return false;
+        }
+
+
+        /**
+         * *This method will call your function based on the current internect connection status
+         * @param yes 
+         * @param no 
+         */
+        public static function isApplicationOnline(yes:Function,no:Function):void
+        {
+            var urlLoader:URLLoader = new URLLoader(new URLRequest("https://www.google.com/"));
+            urlLoader.addEventListener(ProgressEvent.PROGRESS,function(e){urlLoader.close();yes()});
+            urlLoader.addEventListener(IOErrorEvent.IO_ERROR,function(e){no()})
         }
     }
 }
