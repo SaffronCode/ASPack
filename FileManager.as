@@ -364,8 +364,10 @@
 		public static function cancelSearch():void
 		{
 			clearTimeout(searchFunctionTimerId);
+			searchQue = null;
 			if(lastFileToSearch!=null)
 			{
+				trace("Cancel search");
 				lastFileToSearch.removeEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
 				lastFileToSearch.cancel();
 				lastFileToSearch = null ;
@@ -405,13 +407,13 @@
 				}
 				if(callForEachFileFounded!=null && foundedFiles.length>0)
 					callForEachFileFounded(foundedFiles);
-				if(searchQue.length>0)
+				if(searchQue!=null && searchQue.length>0)
 				{
 					lastFileToSearch = searchQue.shift() ;
 					lastFileToSearch.addEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
 					lastFileToSearch.getDirectoryListingAsync();
 				}
-				else
+				else if(searchQue!=null)
 				{
 					trace("Seach done for "+(e.currentTarget as File).nativePath+" vs "+lastFileToSearch.nativePath);
 					if(lastFileToSearch!=null && currentFileSearch == lastFileToSearch)
