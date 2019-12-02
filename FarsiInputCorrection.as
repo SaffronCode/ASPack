@@ -336,6 +336,7 @@ package
 			}
 			
 			oldTextField.addEventListener(Event.REMOVED_FROM_STAGE,unLoad);
+			oldTextField.addEventListener(Event.ADDED_TO_STAGE,reloadAgain);
 			oldTextField.addEventListener(REMOVE_OLD_TEXT,unLoad);
 		}
 
@@ -495,6 +496,15 @@ package
 			}
 			newTextField.textColor = targetColor ;
 			newTextField.embedFonts = !newTextField.displayAsPassword  ;
+		}
+
+		public function reloadAgain(e:Event):void
+		{
+			if(!oldTextField.hasEventListener(Event.REMOVED_FROM_STAGE))
+			{
+				new FarsiInputCorrection(oldTextField,keyFormat,itsArabic,correctNums,clearInputText,onlyNativeText,editableNativeText,
+					listenToChangesAllTheTime,returnLable,onDone,oldTextField.restrict);
+			}
 		}
 		
 		/**Clear the native text */
