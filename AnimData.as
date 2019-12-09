@@ -20,7 +20,7 @@ package
 	 * fadeOut : محو کردن موی کلیپ*/
 	public class AnimData
 	{
-		public static var alphaV=0.05;
+		public static var alphaV:Number=0.05;
 		
 		private static var functions:Vector.<Function>,
 							targets:Vector.<Sprite>,
@@ -29,7 +29,7 @@ package
 							
 							
 							
-		private static function initialize()
+		private static function initialize():void
 		{
 			if(functions == null)
 			{
@@ -39,17 +39,17 @@ package
 			}
 		}
 		
-		public static function cancel(target:Sprite)
+		public static function cancel(target:Sprite):void
 		{
 			cansel(target);
 		}
 		
-		public static function cansel(target:Sprite)
+		public static function cansel(target:Sprite):void
 		{
 			deleteDataAbout(target);
 		}
 		
-		public static function deleteDataAbout(target:Sprite)
+		public static function deleteDataAbout(target:Sprite):void
 		{
 			initialize();
 			var I:int = targets.indexOf(target);
