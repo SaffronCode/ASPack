@@ -1,4 +1,4 @@
-/**bug reported : 
+﻿/**bug reported : 
  * 		when a field is selected in ios , you can not select other field, i did not understand why but
  * 		it will close the field just after the field is visibled
  * 	>	SoftKeyboard Event Listener is not added To the myStageText if de os is IOS
@@ -419,7 +419,7 @@ package
 		
 		protected function changeTheStageText(event:Event):void
 		{
-			
+			if(myStageText!=null)
 			myStageText.text = oldTextField.text ;
 		}
 		
