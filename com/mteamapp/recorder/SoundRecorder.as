@@ -130,7 +130,7 @@
 			if(!saveWaveFormat)
 			{
 				//WorkerFunctions.waveTomp3(recorder.output,mp3EncodeComplete2/*,mp3EncodeProgress,mp3EncodeError*/);
-				mp3Encoder = new ShineMP3Encoder();
+				mp3Encoder = new ShineMP3Encoder(null);
 				mp3Encoder.addEventListener(Event.COMPLETE, mp3EncodeComplete);
 				mp3Encoder.addEventListener(ProgressEvent.PROGRESS,mp3EncodeProgress);
 				mp3Encoder.addEventListener(ErrorEvent.ERROR,mp3EncodeError);
