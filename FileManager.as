@@ -281,7 +281,8 @@
 		}
 		
 		/**Copy the folder to destination*/
-		public static function copyFolder(folderFile:File,destinationFolder:File,letsStartClean:Boolean=true,extentionExption:Array=null):void
+		public static function copyFolder(folderFile:File,destinationFolder:File,letsStartClean:Boolean=true,
+			extentionExption:Array=null,dontCopyTheRootDirectory:Boolean=false):void
 		{
 			if(extentionExption==null)
 			{
@@ -297,9 +298,12 @@
 			{
 				if(folderFile.isDirectory)
 				{
-					destinationFolder = destinationFolder.resolvePath(folderFile.name) ;
-					destinationFolder.createDirectory();
-					trace("Folder created : "+destinationFolder.nativePath);
+					if(dontCopyTheRootDirectory==false)
+					{
+						destinationFolder = destinationFolder.resolvePath(folderFile.name) ;
+						destinationFolder.createDirectory();
+						trace("Folder created : "+destinationFolder.nativePath);
+					}
 					var childFolders:Array = folderFile.getDirectoryListing() ;
 					for(var i:int = 0 ; i<childFolders.length ; i++)
 					{
