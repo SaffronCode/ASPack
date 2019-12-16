@@ -96,9 +96,9 @@ package
 					mu2:Number = 0.4;
 		
 		/**this number is the minimom scrolling speed that start to protect mouse events to the scrollable object*/
-		private var minAvailableScroll:Number = 20,
-					minScrollToLock:Number=20,
-					mouseWheelSpeed:Number = 8;
+		private var minAvailableScroll:Number = 20;
+		public static var minScrollToLock:Number=200;
+		private var mouseWheelSpeed:Number = 8;
 		
 		/**speed of floating back for the scrollers*/
 		private var floatBackSpeed_on_touch:Number = 20,
