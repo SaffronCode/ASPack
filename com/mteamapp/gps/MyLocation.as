@@ -2,13 +2,16 @@
 {
 	import com.mteamapp.StringFunctions;
 	
-	import contents.alert.Alert;
+
 	
 	import flash.events.GeolocationEvent;
 	import flash.events.PermissionEvent;
+	import flash.events.StatusEvent;
 	import flash.permissions.PermissionStatus;
 	import flash.sensors.Geolocation;
+	import flash.utils.clearInterval;
 	import flash.utils.getDefinitionByName;
+	import flash.utils.setInterval;
 	
 	public class MyLocation
 	{
@@ -111,6 +114,9 @@
 		/**Get GPS permission*/
 		public static function getGPSPermission(onPermissionGranted:Function=null,onPermissionDenied:Function=null):void
 		{
+			var intervalId:uint = 0 ;
+			var currentStatus:String ;
+			
 			if (onPermissionGranted == null)
 				onPermissionGranted = new Function();
 			if (onPermissionDenied == null)
@@ -120,32 +126,57 @@
 			
 			if (Geolocation.permissionStatus != PermissionStatus.GRANTED)
 			{
-				myGeo.addEventListener(PermissionEvent.PERMISSION_STATUS, function(e:PermissionEvent):void
-				{
-					if (e.status == PermissionStatus.GRANTED)
-					{
-						onPermissionGranted();
-					}
-					else
-					{
-						// permission denied
-						onPermissionDenied();
-					}
-				});
+				myGeo.addEventListener(PermissionEvent.PERMISSION_STATUS,permissionUpdated );
+				//myGeo.addEventListener(StatusEvent.STATUS,permissionUpdated );
 				
 				try
 				{
+				
+					currentStatus = Geolocation.permissionStatus ;
+					intervalId = setInterval(repeatPermissionControll,500);
 					myGeo.requestPermission();
 				}
 				catch (e:Error)
 				{
-					// another request is in progress
+					
+					onPermissionDenied();
 				}
 			}
 			else
 			{
 				onPermissionGranted();
 			}
+			
+			function repeatPermissionControll():void
+			{
+				if(currentStatus != Geolocation.permissionStatus)
+				{
+					permissionUpdated(null);
+				}
+			}
+			
+			function permissionUpdated(e:PermissionEvent):void
+			{
+				clearInterval(intervalId);
+				var permission:String ;
+				if(e==null)
+				{
+					permission = Geolocation.permissionStatus ;			
+				}
+				else
+				{
+					permission = e.status ;
+				}
+				switch(permission)
+				{
+					case PermissionStatus.GRANTED:
+						onPermissionGranted();
+						break;
+					default:
+						onPermissionDenied();
+						break;
+				}
+			};
 		}
 		
 		
