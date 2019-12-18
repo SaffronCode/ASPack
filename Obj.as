@@ -614,6 +614,8 @@ package
 		
 		public static function setMouseClickDebugger(stage:Stage):void
 		{
+			if(!DevicePrefrence.isDebuggingMode())
+				return;
 			stage.addEventListener(MouseEvent.MOUSE_DOWN,function(e:MouseEvent){
 				trace(Obj.displayObjectInfo(e.target as DisplayObject));
 			});
