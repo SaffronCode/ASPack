@@ -1,7 +1,12 @@
 package mteam
 {
+	import flash.utils.setTimeout;
+
 	public class FuncManager
 	{
+		private static var asyncFunctionsId:Array = [],
+							asyncDelay:uint = 30 ;
+
 		/**function caller*/
 		public static function callFunction(myFunc:Function)
 		{
@@ -15,6 +20,24 @@ package mteam
 			{
 				handler.apply(this,[args]);
 			}
+		}
+
+
+		public static function callAsync(...functionSlist):uint
+		{
+			var asyncIndex:uint = asyncFunctionsId.length ;
+			var calledFunctionIndex:uint = 0 ;
+			functionCaller();
+			function functionCaller():void
+			{
+				functionSlist[calledFunctionIndex]();
+				calledFunctionIndex++;
+				if(functionSlist.length>calledFunctionIndex)
+				{
+					asyncFunctionsId[asyncIndex] = setTimeout(functionCaller,asyncDelay);
+				}
+			}
+			return asyncIndex ;
 		}
 	}
 }
