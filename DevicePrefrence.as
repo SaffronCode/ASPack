@@ -66,6 +66,8 @@ package {
             windowWidth0:Number, windowHieght0:Number;
 
         private static var myStage:Stage, myNativewindow:NativeWindow;
+        private static var  _isIOS:* = null,
+                            _isAndroid:* = null ;
 
         /**retuens true if this is big screened tablet*/
         public static function get isTablet():Boolean {
@@ -461,23 +463,32 @@ package {
 
         /**detecte is it android or not*/
         public static function isAndroid():Boolean {
+            if(_isAndroid!=null)
+                return _isAndroid ;
             var os:String = String(Capabilities.os).toLowerCase();
             if (os.indexOf('lin') != -1) {
+                _isAndroid = true ;
                 return true;
             }
+            _isAndroid = false ;
             return false;
         }
 
 
         /**detects if it is an ios device*/
         public static function isIOS():Boolean {
+            if(_isIOS!=null)
+                return _isIOS ;
             if (fake_not_ios) {
+                _isIOS = false ;
                 return false;
             }
             var os:String = String(Capabilities.os).toLowerCase();
             if (os.indexOf('iph') != -1) {
+                _isIOS = true ;
                 return true;
             }
+            _isIOS = false ;
             return false;
         }
 

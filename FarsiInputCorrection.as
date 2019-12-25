@@ -45,6 +45,7 @@ package
 	import flash.utils.clearTimeout;
 	import flash.utils.setTimeout;
 	import flash.desktop.Clipboard;
+	import flash.display.DisplayObject;
 
 	public class FarsiInputCorrection
 	{
@@ -103,6 +104,10 @@ package
 		
 		/**This text will show on output whenever the input field was empty*/
 		private var inputLableText:String = '' ;
+
+		private var focused:Boolean = false ;
+		private var moveStageUp:Number = 50,
+					stageMovementSpeed:int = 4 ;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
@@ -452,6 +457,7 @@ package
 		{
 			if(!editing)
 			{
+				focused = true ;
 				hideAllTexts.dispatchEvent(new Event(HIDE_OTEHER_TEXTS));
 				oldTextField.stage.focus = null ;
 				myStageText.visible = true ;
@@ -604,6 +610,8 @@ package
 				
 				oldTextField.dispatchEvent(new Event(Event.CHANGE));
 				oldTextField.dispatchEvent(new Event(Event.CLOSE));
+				
+				focused = false ;
 			}
 		}
 									   
@@ -611,6 +619,7 @@ package
 		/***/
 		private function manageInputPose(e:Event=null)
 		{
+			var root:DisplayObject = oldTextField.root ;
 			if(myStageText.visible || onlyNativeText)
 			{
 				if(!onlyNativeText)
@@ -626,6 +635,26 @@ package
 				}
 				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
 				myStageText.viewPort = rect;
+
+				if(!DevicePrefrence.isAndroid() && root!=null)
+				{
+					if(focused)
+						root.y -= (root.y+moveStageUp)/stageMovementSpeed ;
+					else
+					{
+						if(root.y>-0.1)
+							root.y = 0 ;
+						else
+							root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
+					}
+				}
+			}
+			else if(!DevicePrefrence.isAndroid() && root!=null)
+			{
+				if(root.y>-0.1)
+					root.y = 0 ;
+				else
+					root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
 			}
 		}
 		
