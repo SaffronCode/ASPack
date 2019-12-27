@@ -9,10 +9,7 @@
 
 package stageManager
 {
-	import contents.Contents;
-	
 	import flash.desktop.NativeApplication;
-	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
@@ -77,6 +74,8 @@ package stageManager
 							Items:Vector.<StageItem>;
 							
 		private static var listenToStageRotation:Boolean ;
+
+		
 							
 							
 							
@@ -97,12 +96,17 @@ package stageManager
 		private static var needToControllStagePosition:Boolean = true ;
 		private static var lastTopColor:uint;
 		private static var lastBottomColor:uint;
+
+		public static var showJingleBarOnApp:Boolean = false;
+
+		public static var isIphoneX:Boolean = false;
+
 				
 							
-		public static function isIphoneX():Boolean
+		/* public static function isIphoneX():Boolean
 		{
 			return iPhoneXJingleAreaMask1!=null ;
-		}
+		} */
 		
 		/**Stop controlling stage size*/
 		public static function StopControllStageSize(status:Boolean=true):void
@@ -114,7 +118,11 @@ package stageManager
 		/**Height*/
 		public static function iPhoneXExtra():Number
 		{
-			if(isIphoneX())
+			if(showJingleBarOnApp)
+			{
+				return 0;
+			}
+			if(isIphoneX)
 			{
 				return iPhoneXJingleBarSize ;
 			}
@@ -123,6 +131,9 @@ package stageManager
 				return 0 ;
 			}
 		}
+
+		
+
 				
 		/**This will returns stage retangle*/
 		public static function get stageRect():Rectangle
@@ -302,6 +313,7 @@ package stageManager
 			}
 			else
 			{
+
 				var h:Number ;
 				//controlStageProperties();
 				var currentColor:uint ;
@@ -363,7 +375,7 @@ package stageManager
 			stageScaleWidth = stageWidth/stageWidth0;
 			stageScaleHeight = stageHeight/stageHeight0;
 			//trace("stageScaleWidth: "+stageScaleWidth);
-			
+
 			if(resizedForIPhoneXOnce == false && (DebugIPhoneX || DevicePrefrence.isIOS()))
 			{
 					
@@ -374,11 +386,18 @@ package stageManager
 					//trace("It is landscape...not supporting now");
 					
 					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
+					isIphoneX = true;
+
+					
 				}
 				else if(stageHeight/stageWidth>2)
 				{
 					//trace(" • You have iPhoneX, nice...");
 					//trace("It is portrate");
+					isIphoneX = true;
+
+					if(showJingleBarOnApp==true)
+						return;
 					
 					if(iPhoneXJingleAreaMask1==null)
 						iPhoneXJingleAreaMask1 = new Sprite();
@@ -410,6 +429,8 @@ package stageManager
 				}
 				else if(DebugIPhoneX || deltaStageHeight>iPhoneTopBarSize && !DevicePrefrence.isFullScreen())
 				{
+					if(showJingleBarOnApp==true)
+						return;
 					if(iPhoneXJingleAreaMask1==null)
 						iPhoneXJingleAreaMask1 = new Sprite();
 					iPhoneXJingleAreaMask1.graphics.clear();
@@ -542,7 +563,7 @@ package stageManager
 		}
 		
 		/**All options will controll from the stage*/
-		private static function controllAllOptions()
+		private static function controllAllOptions():void
 		{
 			detectItemsIn(myStage as DisplayObjectContainer);
 			//trace("Founded items are1 : "+Items.length);
@@ -564,7 +585,7 @@ package stageManager
 		}
 		
 		/**Controll this item if it is on the stage*/
-		private static function controllOptionForThis(target:DisplayObject)
+		private static function controllOptionForThis(target:DisplayObject):void
 		{
 			var i:int ;
 			if(target.name == null || target.name.indexOf('insta')==0)
@@ -600,7 +621,7 @@ package stageManager
 	////////////////////////Position manager
 		private static function ManageAllPositions():void
 		{
-			for(var i = 0 ; i<Items.length ; i++)
+			for(var i:Number = 0 ; i<Items.length ; i++)
 			{
 				manageItemPlace(Items[i]);
 			}
