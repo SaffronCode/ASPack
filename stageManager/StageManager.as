@@ -99,14 +99,14 @@ package stageManager
 
 		public static var showJingleBarOnApp:Boolean = false;
 
-		public static var isIphoneX:Boolean = false;
+		public static var _isIphoneX:Boolean = false;
 
 				
 							
-		/* public static function isIphoneX():Boolean
+		 public static function isIphoneX():Boolean
 		{
-			return iPhoneXJingleAreaMask1!=null ;
-		} */
+			return _isIphoneX ;
+		} 
 		
 		/**Stop controlling stage size*/
 		public static function StopControllStageSize(status:Boolean=true):void
@@ -122,7 +122,7 @@ package stageManager
 			{
 				return 0;
 			}
-			if(isIphoneX)
+			if(_isIphoneX)
 			{
 				return iPhoneXJingleBarSize ;
 			}
@@ -386,7 +386,7 @@ package stageManager
 					//trace("It is landscape...not supporting now");
 					
 					//controlStageProperties(stageWidth-iPhoneXJingleBarSize*2,stageHeight,true);
-					isIphoneX = true;
+					_isIphoneX = true;
 
 					
 				}
@@ -394,7 +394,7 @@ package stageManager
 				{
 					//trace(" • You have iPhoneX, nice...");
 					//trace("It is portrate");
-					isIphoneX = true;
+					_isIphoneX = true;
 
 					if(showJingleBarOnApp==true)
 						return;
