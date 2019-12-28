@@ -105,7 +105,8 @@ package
 		/**This text will show on output whenever the input field was empty*/
 		private var inputLableText:String = '' ;
 
-		private var focused:Boolean = false ;
+		private var focused:Boolean = false ,
+					stageMovedByMe:Boolean = false;
 		private var moveStageUp:Number = 200,
 					stageMovementSpeed:int = 4 ;
 
@@ -460,6 +461,7 @@ package
 			if(!editing)
 			{
 				focusedTexts++;
+				stageMovedByMe = true ;
 				focused = true ;
 				hideAllTexts.dispatchEvent(new Event(HIDE_OTEHER_TEXTS));
 				oldTextField.stage.focus = null ;
@@ -653,11 +655,14 @@ package
 					}
 				}
 			}
-			else if(!DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0)
+			else if(!DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0 && stageMovedByMe)
 			{
 				focusedTexts = 0 ;
 				if(root.y>-0.1)
+				{
+					stageMovedByMe = false ;
 					root.y = 0 ;
+				}
 				else
 					root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
 			}
