@@ -642,7 +642,7 @@ package
 				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
 				myStageText.viewPort = rect;
 
-				if(!DevicePrefrence.isAndroid() && root!=null)
+				if(DevicePrefrence.isAndroid() && root!=null)
 				{
 					if(focused)
 						root.y -= (root.y+moveStageUp)/stageMovementSpeed ;
@@ -655,7 +655,7 @@ package
 					}
 				}
 			}
-			else if(!DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0 && stageMovedByMe)
+			else if(DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0 && stageMovedByMe)
 			{
 				focusedTexts = 0 ;
 				if(root.y>-0.1)
