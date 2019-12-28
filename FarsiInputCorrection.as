@@ -106,8 +106,10 @@ package
 		private var inputLableText:String = '' ;
 
 		private var focused:Boolean = false ;
-		private var moveStageUp:Number = 50,
+		private var moveStageUp:Number = 200,
 					stageMovementSpeed:int = 4 ;
+
+		private static var focusedTexts:int = 0 ;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
@@ -128,7 +130,7 @@ package
 		}
 		
 		/**reset all added effects on this text field*/
-		public static function clear(textField:TextField)
+		public static function clear(textField:TextField):void
 		{
 			textField.dispatchEvent(new Event(Event.REMOVED_FROM_STAGE));
 		}
@@ -457,6 +459,7 @@ package
 		{
 			if(!editing)
 			{
+				focusedTexts++;
 				focused = true ;
 				hideAllTexts.dispatchEvent(new Event(HIDE_OTEHER_TEXTS));
 				oldTextField.stage.focus = null ;
@@ -591,6 +594,7 @@ package
 			//trace(e.currentTarget+' > '+(e.currentTarget == myStageText)+' vs '+(e.target == myStageText));
 			if(editing || onlyNativeText)
 			{
+				focusedTexts--;
 				editing = false;
 				if(correctNums)
 				{
@@ -649,8 +653,9 @@ package
 					}
 				}
 			}
-			else if(!DevicePrefrence.isAndroid() && root!=null)
+			else if(!DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0)
 			{
+				focusedTexts = 0 ;
 				if(root.y>-0.1)
 					root.y = 0 ;
 				else
