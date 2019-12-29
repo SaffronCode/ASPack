@@ -26,6 +26,7 @@ package
 	import flash.utils.ByteArray;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
+	import flash.text.TextFormat;
 
 	/**detect objects on display object with names*/
 	public class Obj
@@ -619,6 +620,29 @@ package
 			stage.addEventListener(MouseEvent.MOUSE_DOWN,function(e:MouseEvent){
 				trace(Obj.displayObjectInfo(e.target as DisplayObject));
 			});
+		}
+
+		public static function copyTextField(textField:TextField,copyContent:Boolean=false):TextField
+		{
+			var text:TextField = new TextField();
+			var format:TextFormat = textField.defaultTextFormat ;
+			var textFormat:TextFormat = new TextFormat(format.font,format.size,format.color,format.bold,
+				format.italic,format.underline,format.url,format.target,format.align,format.leftMargin,
+				format.rightMargin,format.indent,format.leading);
+						//text.defaultTextFormat = textField.defaultTextFormat.
+			text.defaultTextFormat = textFormat ;
+			text.maxChars = textField.maxChars ;
+			text.multiline = textField.multiline;
+			text.selectable = textField.selectable;
+			text.sharpness = textField.sharpness;
+			text.textColor = textField.textColor;
+			text.thickness = textField.thickness;
+			text.type = textField.type;
+			text.wordWrap = textField.wordWrap;
+			text.embedFonts = textField.embedFonts;
+			text.width = textField.width;
+			text.height = textField.height;
+			return text ;
 		}
 	}
 }
