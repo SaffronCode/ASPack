@@ -57,7 +57,7 @@ package
 		
 		/**Numeric characters will not have absolute direction.*/
 		public static var	smartTextAlign:Boolean = false ,
-							floatingChars:String = "-/\\+=.()",
+							floatingChars:String = "-/\\+=.():",
 							notSureChars:String = "0123456789",
 							lastRtlStatus:Boolean = true ;
 		
@@ -604,7 +604,7 @@ package
 			if(smartTextAlign && copleteString!=null)
 			{
 				//trace("Controll on floating chars..."+megh);
-				if(floatingChars.indexOf(megh)!=-1)
+				if(floatingChars.indexOf(megh)!=-1 || (lookingForard && megh==' '))
 				{
 					//trace("Megh is floating char, so the next char for : "+megh)
 					for(var i = charIndex+1 ; i<stringLength ; i++)
