@@ -107,7 +107,7 @@ package
 
 		private var focused:Boolean = false ,
 					stageMovedByMe:Boolean = false;
-		private var moveStageUp:Number = 200,
+		private var moveStageUp:Number = 50,
 					stageMovementSpeed:int = 4 ;
 
 		private static var focusedTexts:int = 0 ;
