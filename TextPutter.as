@@ -370,6 +370,7 @@ package
 				
 				//Added on version 1.5
 				textField.antiAliasType = AntiAliasType.NORMAL ;
+				textField.alpha = 1 ;
 				var capturedObject:Bitmap = CaptueBitmap.captureBigTextFields(textField,captureResolution);
 				capturedObject.addEventListener(Event.REMOVED_FROM_STAGE,disposeThisBitmap);
 				if(convertSerevHTML || generateLinksForURLs)
