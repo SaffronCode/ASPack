@@ -1,6 +1,8 @@
-package mteam
+﻿package mteam
 {
 	import flash.utils.setTimeout;
+	import flash.display.MovieClip;
+	import flash.events.Event;
 
 	public class FuncManager
 	{
@@ -39,5 +41,32 @@ package mteam
 			}
 			return asyncIndex ;
 		}
+
+		private static var funcQue:Array,asyncCallerMC:MovieClip;
+		
+		private static function setUpAsyncFunctions():void
+		{
+			if(funcQue==null)
+			{
+				funcQue = [] ;
+				asyncCallerMC = new MovieClip();
+				asyncCallerMC.addEventListener(Event.ENTER_FRAME,callNextFunction);
+			}
+		}
+
+			private static function callNextFunction(e:Event):void
+			{
+				if(funcQue.length>0)
+				{
+					funcQue.shift()();
+				}
+			}
+
+		public static function callAsyncOnFrame(...functionSlist):void
+		{
+			setUpAsyncFunctions();
+			funcQue = funcQue.concat(functionSlist);
+		}
+		
 	}
 }
