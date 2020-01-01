@@ -31,6 +31,7 @@ package
 	import flash.geom.Matrix;
 	import flash.text.TextField;
 	import flash.text.TextLineMetrics;
+	import flash.text.AntiAliasType;
 
 	/**for the menus and objects that has'nt enaugh space for larg strings , you can use this class
 	 * to add your thex in to a TextField. it will check if the string is larger than TextField area
@@ -368,6 +369,7 @@ package
 				textField.parent.addChild(bitmap);*/
 				
 				//Added on version 1.5
+				textField.antiAliasType = AntiAliasType.NORMAL ;
 				var capturedObject:Bitmap = CaptueBitmap.captureBigTextFields(textField,captureResolution);
 				capturedObject.addEventListener(Event.REMOVED_FROM_STAGE,disposeThisBitmap);
 				if(convertSerevHTML || generateLinksForURLs)
@@ -375,6 +377,8 @@ package
 					textField.parent.addChild(textField);
 					textField.visible = true ;
 					textField.alpha = 0 ;
+					textField.antiAliasType = AntiAliasType.ADVANCED ;
+					//textField.sharpness = 400 ;
 				}
 				if(VerticalAlign_verticalHeight!=0 && VerticalAlign_verticalHeight>lastInfo_realTextHeight)
 				{
