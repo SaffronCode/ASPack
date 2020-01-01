@@ -43,7 +43,8 @@ package
 		public static var forceToEnglish:String = '' ;
 
 		public static const halfSpace1:String = String.fromCharCode(8204),
-							halfSpace2:String = "¬";
+							halfSpace2:String = "¬",
+							halfSpace3:String = String.fromCharCode(8207);
 		
 		public static var convertToArabicNumber:Boolean = false ;
 		
@@ -528,7 +529,7 @@ package
 				}
 				//trace("* Final char v1 is : "+v1);
 				//trace("Add "+charAt1+" to the matn?? will be : "+MESbekesh(charAt1,v1));
-				matn = MESbekesh(charAt1==halfSpace1||charAt1==halfSpace2?'':charAt1,v1)+matn;
+				matn = MESbekesh(charAt1==halfSpace1||charAt1==halfSpace2||charAt1==halfSpace3?'':charAt1,v1)+matn;
 				//trace("matn : "+matn);
 			}
 			matn = MESbekesh(numString)+matn;
