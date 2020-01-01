@@ -224,7 +224,8 @@ package
 					,(textField.y+textField.height)*captureResolution,true,0);
 				bitmapData.draw(textField.parent,new Matrix(captureResolution,0,0,captureResolution),null,null,null,true);
 				var bitmap:Bitmap = new Bitmap(bitmapData,"auto",true);
-				textField.visible = false;
+				//textField.visible = false;
+				//textField.alpha = 0;
 				bitmap.scaleX = bitmap.scaleY = 1/captureResolution;
 				bitmap.name = mustRemove;
 				textField.parent.addChild(bitmap);
@@ -369,6 +370,12 @@ package
 				//Added on version 1.5
 				var capturedObject:Bitmap = CaptueBitmap.captureBigTextFields(textField,captureResolution);
 				capturedObject.addEventListener(Event.REMOVED_FROM_STAGE,disposeThisBitmap);
+				if(convertSerevHTML || generateLinksForURLs)
+				{
+					textField.parent.addChild(textField);
+					textField.visible = true ;
+					textField.alpha = 0 ;
+				}
 				if(VerticalAlign_verticalHeight!=0 && VerticalAlign_verticalHeight>lastInfo_realTextHeight)
 				{
 					/*trace("♦ : lastInfo_textHeidth : "+lastInfo_textHeidth);
