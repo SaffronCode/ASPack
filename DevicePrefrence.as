@@ -21,7 +21,6 @@ package {
 
     import dataManager.GlobalStorage;
 
-    import flash.data.EncryptedLocalStore;
     import flash.desktop.NativeApplication;
     import flash.desktop.SystemIdleMode;
     import flash.display.NativeWindow;
@@ -42,6 +41,8 @@ package {
     import flash.events.ProgressEvent;
 
     public class DevicePrefrence {
+		private static var storage:SharedObject ; 
+
         private static var fake_not_ios:Boolean = false, fake_its_not_tablet:Boolean = false;
 
         /**number are in inches*/
@@ -713,15 +714,14 @@ package {
                     uniqueId = (DeviceUtils as Object).idfv;
                     createdKeyIs = '';
                 } else {
-                    var data:ByteArray = EncryptedLocalStore.getItem('uniqueId');
+                    storage = SharedObject.getLocal("DevicePrefrence",'/');
+                    var data:String = storage.data.key as String ;
                     if (data == null) {
                         createdKeyIs = MD5.hash(Math.random().toString());
-                        data = new ByteArray();
-                        data.writeUTF(createdKeyIs);
-                        data.position = 0;
-                        EncryptedLocalStore.setItem('uniqueId', data);
+                        storage.data.key = createdKeyIs;
+                        storage.flush();
                     } else {
-                        createdKeyIs = data.readUTF();
+                        createdKeyIs = data;
                     }
                     uniqueId = '';
                 }
