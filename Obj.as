@@ -27,6 +27,7 @@ package
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	import flash.text.TextFormat;
+	import appManager.mains.App;
 
 	/**detect objects on display object with names*/
 	public class Obj
@@ -91,8 +92,18 @@ package
 					target.mouseChildren = false ;
 					target.buttonMode = true ;
 				}
-				target.removeEventListener(MouseEvent.CLICK,onClick);
-				target.addEventListener(MouseEvent.CLICK,onClick);
+				target.removeEventListener(MouseEvent.CLICK,onClick2);
+				target.addEventListener(MouseEvent.CLICK,onClick2);
+
+				function onClick2(e:MouseEvent):void
+				{
+					if(onClick.length>0)
+						onClick(e);
+					else
+						onClick();
+
+					App.showShineEffect(target as Sprite);
+				}
 			}
 		}
 		
