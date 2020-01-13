@@ -1,12 +1,8 @@
 ﻿package com.mteamapp.gps
 {
 	import com.mteamapp.StringFunctions;
-	
-
-	
 	import flash.events.GeolocationEvent;
 	import flash.events.PermissionEvent;
-	import flash.events.StatusEvent;
 	import flash.permissions.PermissionStatus;
 	import flash.sensors.Geolocation;
 	import flash.utils.clearInterval;
@@ -123,32 +119,37 @@
 				onPermissionDenied = new Function();
 
 			var myGeo:Geolocation = new Geolocation();
-			
-			if (Geolocation.permissionStatus != PermissionStatus.GRANTED)
+			if (Geolocation.permissionStatus != PermissionStatus.GRANTED && Geolocation.permissionStatus != PermissionStatus.ONLY_WHEN_IN_USE)
 			{
+
 				myGeo.addEventListener(PermissionEvent.PERMISSION_STATUS,permissionUpdated );
 				//myGeo.addEventListener(StatusEvent.STATUS,permissionUpdated );
-				
-				try
+				if(DevicePrefrence.isIOS() && Geolocation.permissionStatus == PermissionStatus.DENIED)
 				{
-				
-					currentStatus = Geolocation.permissionStatus ;
-					intervalId = setInterval(repeatPermissionControll,500);
-					myGeo.requestPermission();
-				}
-				catch (e:Error)
-				{
-					
 					onPermissionDenied();
 				}
+				else
+				{
+					try
+					{
+						currentStatus = Geolocation.permissionStatus ;
+						intervalId = setInterval(repeatPermissionControll,500);
+						myGeo.requestPermission();
+					}
+					catch (e:Error)
+					{
+						onPermissionDenied();
+					}
+				}
 			}
-			else
+			else if(Geolocation.permissionStatus == PermissionStatus.GRANTED || Geolocation.permissionStatus == PermissionStatus.ONLY_WHEN_IN_USE)
 			{
 				onPermissionGranted();
 			}
 			
 			function repeatPermissionControll():void
 			{
+				
 				if(currentStatus != Geolocation.permissionStatus)
 				{
 					permissionUpdated(null);
@@ -170,6 +171,9 @@
 				switch(permission)
 				{
 					case PermissionStatus.GRANTED:
+						onPermissionGranted();
+						break;
+					case PermissionStatus.ONLY_WHEN_IN_USE:
 						onPermissionGranted();
 						break;
 					default:

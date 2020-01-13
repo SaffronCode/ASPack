@@ -639,8 +639,6 @@ package
 					//trace("Obj.isAccesibleByMouse(oldTextField) : "+Obj.isAccesibleByMouse(oldTextField));
 					myStageText.visible = Obj.getVisible(oldTextField) && Obj.isAccesibleByMouse(oldTextField) ;
 				}
-				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
-				myStageText.viewPort = rect;
 
 				if(DevicePrefrence.isAndroid() && root!=null)
 				{
@@ -654,6 +652,8 @@ package
 							root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
 					}
 				}
+				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
+				myStageText.viewPort = rect;
 			}
 			else if(DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0 && stageMovedByMe)
 			{
