@@ -39,6 +39,9 @@ package {
     import restDoaService.RestDoaService;
     import restDoaService.RestDoaServiceCaller;
     import flash.events.ProgressEvent;
+    import flash.utils.setInterval;
+    import starlingPack.core.ScreenManager;
+    import stageManager.StageManager;
 
     public class DevicePrefrence {
 		private static var storage:SharedObject ; 
@@ -145,26 +148,26 @@ package {
                 sw = screenScale * sw;
                 sh = screenScale * sh;
 
-                NativeApplication.nativeApplication.activeWindow.width = sw;
-                //NativeApplication.nativeApplication.activeWindow.height = sh ;
-                //stage.stageWidth = sw ;
-                myStage.stageHeight = sh;
-                if (isMac()) {
-                    setTimeout(function():* {
-                        myStage.stageWidth = sw;
-                    }, 0);
-                }
-
-                /*setInterval(function(){
-                   myStage.stageHeight-=10;
-                   trace("myStage.stageWidth : "+myStage.stageHeight+" vs "+stageHeight0);
-                   },1000);*/
-
-                NativeApplication.nativeApplication.activeWindow.x = (screenW - sw) / 2;
-                NativeApplication.nativeApplication.activeWindow.y = (screenH - sh) / 2;
-                    //Alert.show("getScaleFactor : "+StageScaleFactor());
-                    //Alert.show(stage.fullScreenWidth+" vs "+StageManager.stageScaleFactor());
+                setNativeWindowSizeAndPositino((screenW - sw) / 2,(screenH - sh) / 2,sw,sh)
             }
+        }
+
+        /**
+         * Pnly works on desctop
+         */
+        public static function setNativeWindowSizeAndPositino(x:int=-1,y:int=-1,width:int=-1,height:int=-1):void
+        {
+            if(width!=-1)
+                NativeApplication.nativeApplication.activeWindow.width = width;
+            if(height!=-1)
+                NativeApplication.nativeApplication.activeWindow.height = height+(isWindows()?20:0);
+            if(x!=-1)
+                NativeApplication.nativeApplication.activeWindow.x = x;
+            if(y!=-1)
+                NativeApplication.nativeApplication.activeWindow.y = y;
+
+            if(StageManager.isSatUp())
+                StageManager.controllStageSizes(null,true);
         }
 
         /**Return the stage scale factor. (Only for desctop applicatin)*/

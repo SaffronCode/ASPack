@@ -227,7 +227,7 @@ package stageManager
 		}
 		
 		/**Controll the stage each frame*/
-		protected static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
+		public static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
 		{
 			if(!DevicePrefrence.isApplicationActive)
 				return ;
@@ -303,7 +303,7 @@ package stageManager
 				}
 				
 				//trace("All managed");
-				var isStageChanged:Boolean = lastStageSize!=stageWidth+','+stageHeight;
+				var isStageChanged:Boolean = lastStageSize!=(stageWidth+','+stageHeight);
 				lastStageSize = stageWidth+','+stageHeight;
 				if(isStageChanged)
 				{
