@@ -117,7 +117,7 @@ package {
         }
 
         /**Detect application screen on the system (only for desctop applications)*/
-        protected static function DetectApplicationSizes(event:Event):void {
+        public static function DetectApplicationSizes(event:Event=null):void {
             NativeApplication.nativeApplication.removeEventListener(Event.ACTIVATE, DetectApplicationSizes);
 
             if (DevicePrefrence.isItPC && DevicePrefrence.isDebuggingMode()) {
