@@ -188,14 +188,22 @@ package {
             return _isApplicationActive;
         }
 
+
+        private static var isLandscape_v:* ;
         /**Returns true if the application was landscape*/
         public static function isLandScape():Boolean {
-            return appDescriptor.toString().indexOf("<aspectRatio>landscape</aspectRatio>") != -1
+            if(isLandscape_v!=null)
+                return isLandscape_v ;
+            return isLandscape_v = appDescriptor.toString().indexOf("<aspectRatio>landscape</aspectRatio>") != -1
         }
+
+        private static var isPortrate_v:* ;
 
         /**Returns true if the application was landscape*/
         public static function isPortrait():Boolean {
-            return appDescriptor.toString().indexOf("<aspectRatio>portrait</aspectRatio>") != -1
+            if(isPortrate_v!=null)
+                return isPortrate_v;
+            return isPortrate_v = appDescriptor.toString().indexOf("<aspectRatio>portrait</aspectRatio>") != -1
         }
 
         /**This function calls apple webservice to generate application id to make a download link for*/
