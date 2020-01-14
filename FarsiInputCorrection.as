@@ -107,8 +107,14 @@ package
 
 		private var focused:Boolean = false ,
 					stageMovedByMe:Boolean = false;
-		private var moveStageUp:Number = 50,
-					stageMovementSpeed:int = 4 ;
+					//Dynamic height
+		private var moveStageUp:Number = -1,
+					stageMovementSpeed:int = 2,
+					keyboardSpeedMiliSecond:uint=80 ;
+					
+		private static var canMoveUpperNow:Boolean = false ;
+
+		private static var moveUpperIntervalId:uint ;
 
 		private static var focusedTexts:int = 0 ;
 					
@@ -148,6 +154,11 @@ package
 			onlyNativeText = justShowNativeText ;
 			editableNativeText = editableNative ;
 			onDone = onDoneFunction ;
+
+			var cash:String = textField.text ;
+			textField.text = '1';
+			moveStageUp = textField.textHeight/2 ;
+			textField.text = cash ;
 			if(restrictCharacterRange==null && softKeyFormat!=null)
 			{
 				switch(softKeyFormat)
@@ -460,6 +471,8 @@ package
 		{
 			if(!editing)
 			{
+				myStageText.removeEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE,canMoveTextUpperNow);
+				myStageText.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE,canMoveTextUpperNow);
 				focusedTexts++;
 				stageMovedByMe = true ;
 				focused = true ;
@@ -475,8 +488,22 @@ package
 				myStageText.selectRange(myStageText.text.length,myStageText.text.length);
 			}
 		}
+
+
+		private function canMoveTextUpperNow(e:*=null):void
+		{
+			cannotTextUpper();
+			moveUpperIntervalId = setTimeout(function():void{
+				canMoveUpperNow = true ;
+			},keyboardSpeedMiliSecond);
+		}
+
+		private function cannotTextUpper():void
+		{
+			clearTimeout(moveUpperIntervalId);
+		}
 		
-		private function changeTheDisplayedText(e:Event=null)
+		private function changeTheDisplayedText(e:Event=null):void
 		{
 			if(onlyNativeText)
 			{
@@ -596,6 +623,9 @@ package
 			//trace(e.currentTarget+' > '+(e.currentTarget == myStageText)+' vs '+(e.target == myStageText));
 			if(editing || onlyNativeText)
 			{
+				canMoveUpperNow = false ;
+				cannotTextUpper();
+				myStageText.removeEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE,canMoveTextUpperNow);
 				focusedTexts--;
 				editing = false;
 				if(correctNums)
@@ -640,7 +670,8 @@ package
 					myStageText.visible = Obj.getVisible(oldTextField) && Obj.isAccesibleByMouse(oldTextField) ;
 				}
 
-				if(DevicePrefrence.isAndroid() && root!=null)
+				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
+				if(canMoveUpperNow && DevicePrefrence.isAndroid() && root!=null && rect.y>oldTextField.stage.stageHeight/3)
 				{
 					if(focused)
 						root.y -= (root.y+moveStageUp)/stageMovementSpeed ;
@@ -652,7 +683,6 @@ package
 							root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
 					}
 				}
-				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
 				myStageText.viewPort = rect;
 			}
 			else if(DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0 && stageMovedByMe)
