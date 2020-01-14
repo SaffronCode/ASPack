@@ -160,7 +160,7 @@ package {
             if(width!=-1)
                 NativeApplication.nativeApplication.activeWindow.width = width;
             if(height!=-1)
-                NativeApplication.nativeApplication.activeWindow.height = height+(isWindows()?20:0);
+                NativeApplication.nativeApplication.activeWindow.height = height+(isWindows()?20:20);
             if(x!=-1)
                 NativeApplication.nativeApplication.activeWindow.x = x;
             if(y!=-1)
