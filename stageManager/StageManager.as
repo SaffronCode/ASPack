@@ -32,7 +32,7 @@ package stageManager
 		public static var DebugIPhoneX:Boolean = false ;
 		
 		/**Main stage object*/
-		private static var 	myStage:Stage,
+		public static var 	myStage:Stage,
 							myRoot:DisplayObject;
 							//debugTF:TextField ;
 							
