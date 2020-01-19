@@ -5,8 +5,8 @@ package
 	
 	public class FarsiInputCorrectionEvent extends Event
 	{
-		/**User is logged in*/
 		public static const TEXT_FIELD_SELECTED:String = "TEXT_FIELD_SELECTED" ;
+		public static const TEXT_FIELD_CLOSED:String = "TEXT_FIELD_CLOSED" ;
 		
 		
 		public var textField:TextField ;

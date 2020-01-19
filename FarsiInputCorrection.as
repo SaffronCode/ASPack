@@ -105,21 +105,6 @@ package
 		/**This text will show on output whenever the input field was empty*/
 		private var inputLableText:String = '' ;
 
-		private var focused:Boolean = false ,
-					stageMovedByMe:Boolean = false;
-					//Dynamic height
-		private var moveStageUp:Number = -1,
-					stageMovementSpeed:int = 4,
-					keyboardSpeedMiliSecond:uint=80 ;
-					
-		private static var canMoveUpperNow:Boolean = false ;
-
-		private static var moveUpperIntervalId:uint ;
-
-		private static var focusedTexts:int = 0 ;
-
-		private var stageScale:Number,
-					isPortrate:Boolean;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
@@ -158,10 +143,6 @@ package
 			editableNativeText = editableNative ;
 			onDone = onDoneFunction ;
 
-			var cash:String = textField.text ;
-			textField.text = '1';
-			moveStageUp = textField.textHeight/2 ;
-			textField.text = cash ;
 			if(restrictCharacterRange==null && softKeyFormat!=null)
 			{
 				switch(softKeyFormat)
@@ -206,9 +187,6 @@ package
 		private function manageText(e:*=null):void
 		{
 			//trace('item is added to stage');
-
-			stageScale = oldTextField.stage.fullScreenWidth/oldTextField.stage.stageWidth;
-			isPortrate = DevicePrefrence.isPortrait();
 
 			oldTextField.dispatchEvent(new Event(REMOVE_OLD_TEXT));
 			oldTextField.addEventListener(FOCUS_IN,focuseOnStageText);
@@ -477,15 +455,6 @@ package
 		{
 			if(!editing)
 			{
-				myStageText.removeEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE,canMoveTextUpperNow);
-				myStageText.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE,canMoveTextUpperNow);
-				if(DevicePrefrence.isPC())
-				{
-					setTimeout(canMoveTextUpperNow,100);
-				}
-				focusedTexts++;
-				stageMovedByMe = true ;
-				focused = true ;
 				hideAllTexts.dispatchEvent(new Event(HIDE_OTEHER_TEXTS));
 				oldTextField.stage.focus = null ;
 				myStageText.visible = true ;
@@ -503,18 +472,6 @@ package
 		}
 
 
-		private function canMoveTextUpperNow(e:*=null):void
-		{
-			cannotTextUpper();
-			moveUpperIntervalId = setTimeout(function():void{
-				canMoveUpperNow = true ;
-			},keyboardSpeedMiliSecond);
-		}
-
-		private function cannotTextUpper():void
-		{
-			clearTimeout(moveUpperIntervalId);
-		}
 		
 		private function changeTheDisplayedText(e:Event=null):void
 		{
@@ -636,10 +593,6 @@ package
 			//trace(e.currentTarget+' > '+(e.currentTarget == myStageText)+' vs '+(e.target == myStageText));
 			if(editing || onlyNativeText)
 			{
-				canMoveUpperNow = false ;
-				cannotTextUpper();
-				myStageText.removeEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE,canMoveTextUpperNow);
-				focusedTexts--;
 				editing = false;
 				if(correctNums)
 				{
@@ -659,8 +612,7 @@ package
 				
 				oldTextField.dispatchEvent(new Event(Event.CHANGE));
 				oldTextField.dispatchEvent(new Event(Event.CLOSE));
-				
-				focused = false ;
+				oldTextField.dispatchEvent(new FarsiInputCorrectionEvent(FarsiInputCorrectionEvent.TEXT_FIELD_CLOSED,oldTextField));
 			}
 		}
 									   
@@ -686,41 +638,8 @@ package
 				var rect:Rectangle = oldTextField.getBounds(root);
 				
 				
-				
-				if(isPortrate && canMoveUpperNow && DevicePrefrence.isAndroid() && root!=null/* && rect.y>oldTextField.stage.stageHeight/3*/)
-				{
-					if(focused)
-					{
-						var keyboardH:Number = oldTextField.stage.softKeyboardRect.height+200 ;
-						var stageFullscreenH:Number = oldTextField.stage.fullScreenHeight/stageScale ;
-						var textFeildBottom:Number = rect.bottom ;
-						//debug
-							//stageScale = 1 ;
-							//keyboardH = 400;
-
-						//root.y = -1*Math.max(0,keyboardH - ( stageFullscreenH - textFeildBottom ));
-					}
-					else
-					{
-						//if(root.y>-0.1)
-						root.y = 0 ;
-						//else
-						//	root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
-					}
-				}
 				rect = oldTextField.getBounds(oldTextField.stage);
 				myStageText.viewPort = rect;
-			}
-			else if(isPortrate && DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0 && stageMovedByMe)
-			{
-				focusedTexts = 0 ;
-				//if(root.y>-0.1)
-				//{
-				stageMovedByMe = false ;
-				root.y = 0 ;
-				//}
-				//else
-				//	root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
 			}
 		}
 		
