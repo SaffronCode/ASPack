@@ -474,7 +474,7 @@ package stageManager
 		}
 		
 		/**Get color of this area*/
-		private static function getColorOfPartOfStage(x:Number,y:Number,w:Number,h:Number):uint
+		public static function getColorOfPartOfStage(x:Number,y:Number,w:Number,h:Number):uint
 		{
 			var cappix:uint = 1 ;
 			var cappiy:uint = 1 ;
