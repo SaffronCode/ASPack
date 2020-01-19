@@ -109,7 +109,7 @@ package
 					stageMovedByMe:Boolean = false;
 					//Dynamic height
 		private var moveStageUp:Number = -1,
-					stageMovementSpeed:int = 2,
+					stageMovementSpeed:int = 4,
 					keyboardSpeedMiliSecond:uint=80 ;
 					
 		private static var canMoveUpperNow:Boolean = false ;
@@ -117,6 +117,9 @@ package
 		private static var moveUpperIntervalId:uint ;
 
 		private static var focusedTexts:int = 0 ;
+
+		private var stageScale:Number,
+					isPortrate:Boolean;
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
@@ -200,10 +203,13 @@ package
 		}
 		
 		/**manage text after its added to stage*/
-		private function manageText(e=null)
+		private function manageText(e:*=null):void
 		{
 			//trace('item is added to stage');
-			
+
+			stageScale = oldTextField.stage.fullScreenWidth/oldTextField.stage.stageWidth;
+			isPortrate = DevicePrefrence.isPortrait();
+
 			oldTextField.dispatchEvent(new Event(REMOVE_OLD_TEXT));
 			oldTextField.addEventListener(FOCUS_IN,focuseOnStageText);
 			
@@ -473,6 +479,10 @@ package
 			{
 				myStageText.removeEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE,canMoveTextUpperNow);
 				myStageText.addEventListener(SoftKeyboardEvent.SOFT_KEYBOARD_ACTIVATE,canMoveTextUpperNow);
+				if(DevicePrefrence.isPC())
+				{
+					setTimeout(canMoveTextUpperNow,100);
+				}
 				focusedTexts++;
 				stageMovedByMe = true ;
 				focused = true ;
@@ -486,6 +496,9 @@ package
 				manageInputPose();
 				myStageText.assignFocus();
 				myStageText.selectRange(myStageText.text.length,myStageText.text.length);
+				
+				oldTextField.dispatchEvent(new FarsiInputCorrectionEvent(FarsiInputCorrectionEvent.TEXT_FIELD_SELECTED,oldTextField));
+				
 			}
 		}
 
@@ -670,31 +683,44 @@ package
 					myStageText.visible = Obj.getVisible(oldTextField) && Obj.isAccesibleByMouse(oldTextField) ;
 				}
 
-				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
-				if(canMoveUpperNow && DevicePrefrence.isAndroid() && root!=null && rect.y>oldTextField.stage.stageHeight/3)
+				var rect:Rectangle = oldTextField.getBounds(root);
+				
+				
+				
+				if(isPortrate && canMoveUpperNow && DevicePrefrence.isAndroid() && root!=null/* && rect.y>oldTextField.stage.stageHeight/3*/)
 				{
 					if(focused)
-						root.y -= (root.y+moveStageUp)/stageMovementSpeed ;
+					{
+						var keyboardH:Number = oldTextField.stage.softKeyboardRect.height+200 ;
+						var stageFullscreenH:Number = oldTextField.stage.fullScreenHeight/stageScale ;
+						var textFeildBottom:Number = rect.bottom ;
+						//debug
+							//stageScale = 1 ;
+							//keyboardH = 400;
+
+						//root.y = -1*Math.max(0,keyboardH - ( stageFullscreenH - textFeildBottom ));
+					}
 					else
 					{
-						if(root.y>-0.1)
-							root.y = 0 ;
-						else
-							root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
+						//if(root.y>-0.1)
+						root.y = 0 ;
+						//else
+						//	root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
 					}
 				}
+				rect = oldTextField.getBounds(oldTextField.stage);
 				myStageText.viewPort = rect;
 			}
-			else if(DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0 && stageMovedByMe)
+			else if(isPortrate && DevicePrefrence.isAndroid() && root!=null && focusedTexts<=0 && stageMovedByMe)
 			{
 				focusedTexts = 0 ;
-				if(root.y>-0.1)
-				{
-					stageMovedByMe = false ;
-					root.y = 0 ;
-				}
-				else
-					root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
+				//if(root.y>-0.1)
+				//{
+				stageMovedByMe = false ;
+				root.y = 0 ;
+				//}
+				//else
+				//	root.y -= (root.y+0)/(stageMovementSpeed/2) ;				
 			}
 		}
 		
