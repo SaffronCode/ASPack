@@ -554,7 +554,7 @@ package
 		private function onlyChangeTheCoreText(e:*):void
 		{
 			try{
-				if(myStageText.visible)
+				if(!myStageText.visible)
 			{
 				return;
 			}
