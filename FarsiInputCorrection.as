@@ -553,8 +553,9 @@ package
 		/***/
 		private function onlyChangeTheCoreText(e:*):void
 		{
-			try{
-				if(!myStageText.visible)
+			if(myStageText==null)
+				return ;
+			if(!myStageText.visible)
 			{
 				return;
 			}
@@ -585,12 +586,6 @@ package
 			{
 				oldTextField.addEventListener(Event.CHANGE,changeTheStageText);
 			}
-			}
-			catch(e:Error)
-			{
-				trace(e.message)
-			}
-			
 		}
 		
 		/**finish typing*/
