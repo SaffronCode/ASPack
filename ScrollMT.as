@@ -97,7 +97,7 @@ package
 		
 		/**this number is the minimom scrolling speed that start to protect mouse events to the scrollable object*/
 		private var minAvailableScroll:Number = 20;
-		public static var minScrollToLock:Number=200;
+		public static var minScrollToLock:Number=20;
 		private var mouseWheelSpeed:Number = 8;
 		
 		/**speed of floating back for the scrollers*/
