@@ -111,12 +111,13 @@ package mteam.animation
 			if(currentI>L)
 			{
 				unLoad(e);
-				onJumped();
 			}
 		}
 		
 		private function unLoad(e)
 		{
+			onJumped();
+			onJumped = new Function();
 			e.target.removeEventListener(Event.ENTER_FRAME,anim);
 			e.target.removeEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 			e.target.removeEventListener(reset_event,unLoad);
