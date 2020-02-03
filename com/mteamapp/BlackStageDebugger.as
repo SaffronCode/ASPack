@@ -10,15 +10,20 @@ package com.mteamapp
 	import flash.utils.setTimeout;
 	
 	import permissionControlManifestDiscriptor.PermissionControl;
+	import flash.media.Video;
+	import flash.display.MovieClip;
+	import animation.Anim_alpha_shine;
+	import flash.utils.getTimer;
+	import contents.alert.Alert;
 
 	public class BlackStageDebugger
 	{
 		private static var stage:Stage,
 							root:DisplayObject;
 							
-		private static const orientedStarted:uint=200,
-							orientedRestored:uint = 400,
-							visibleActivated:uint = 900 ;
+		private static const orientedStarted:uint=100,
+							orientedRestored:uint = 200,
+							visibleActivated:uint = 500 ;
 
 		private static var defaultOriented:String;
 
@@ -35,14 +40,59 @@ package com.mteamapp
 			trace("Black screen problem didn't see on Android 5+. The device OS is : "+Capabilities.os );
 			if(DevicePrefrence.isAndroid())
 			{
-				PermissionControl.controlVideoProblem();
-				return ;
-				trace("BlackScreen debugger on android...");
 				stage = myStage;
 				root = myRoot ;
 				
 				defaultOriented = stage.orientation ;
 				stageColor = stage.color ;
+
+				var containVideoIsFalse:Boolean = PermissionControl.controlVideoProblemReverted();
+				var vid:Video ;
+				var screenBackEffect:MovieClip = new MovieClip();
+				screenBackEffect.graphics.beginFill(0x000000);
+				screenBackEffect.mouseChildren = screenBackEffect.mouseEnabled = false ;
+				var maxW:Number = Math.max(stage.stageHeight,stage.stageWidth)*3;
+				screenBackEffect.graphics.drawRect(-(maxW-stage.stageWidth)/2,-(maxW-stage.stageHeight)/2,maxW,maxW);
+				if(containVideoIsFalse)
+				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE,function(e:*):void
+				{
+					if(vid==null)
+					{
+						vid = new Video(200,200);
+						myStage.addChild(vid);
+					}
+					hideElements();
+					//setTimeout(hideElements,100);
+				});
+				if(containVideoIsFalse)
+				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e:*):void
+				{
+					if(getTimer()<10000 && root.visible!=false)
+						return;
+					hideElements();
+					setTimeout(reactiveStageAgain,200);
+				});
+
+				function hideElements():void
+				{
+					root.visible = false ;
+					stage.color = 0x000000 ;
+				}
+				function reactiveStageAgain():void
+				{
+					root.visible = true ;
+					stage.color = stageColor ;
+					screenBackEffect.alpha = 1 ;
+					stage.addChild(screenBackEffect);
+					AnimData.fadeOut(screenBackEffect,removeScreenMaskAgain)
+				}
+				function removeScreenMaskAgain():void
+				{
+					Obj.remove(screenBackEffect);
+				}
+				return ;
+				PermissionControl.controlVideoProblem();
+				trace("BlackScreen debugger on android...");
 				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,restoreBlackScreen);
 				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE,resetScreend);
 			}
