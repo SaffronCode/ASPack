@@ -23,6 +23,7 @@ package stageManager
 	import flash.utils.getTimer;
 	import flash.utils.setInterval;
 	import flash.utils.setTimeout;
+	import nativeClasses.distriqtApplication.DistriqtApplication;
 
 	public class StageManager
 	{
@@ -92,6 +93,8 @@ package stageManager
 
 		/**It will set automativaly*/
 		private static var stageUpdateInterval:Number = 0;
+
+		private static var enterFramer:MovieClip = new MovieClip();
 		
 		private static var needToControllStagePosition:Boolean = true ;
 		private static var lastTopColor:uint;
@@ -174,7 +177,7 @@ package stageManager
 			}
 			else
 			{
-				stageUpdateInterval = 1000 ;
+				stageUpdateInterval = 100 ;//1000
 			}
 			myStage = yourStage ;
 			myRoot = yourRoot ;
@@ -204,7 +207,20 @@ package stageManager
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controllStageSizesOnFullScreen,0);
 			
-			setInterval(controllStageSizesOnFullScreen,stageUpdateInterval);
+			//setInterval(controllStageSizesOnFullScreen,stageUpdateInterval);
+			enterFramer.addEventListener(Event.ENTER_FRAME,controlStageIntervalOnFrames);
+		}
+
+		private static var lastTimeThatChecked:int = 0 ;
+
+		private static function controlStageIntervalOnFrames(e:Event):void
+		{
+			var currentTime:int = getTimer();
+			if(currentTime-lastTimeThatChecked>stageUpdateInterval || currentTime-stageUpdateInterval<0)
+			{
+				controllStageSizesOnFullScreen();
+				lastTimeThatChecked = currentTime;
+			}
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
@@ -311,22 +327,27 @@ package stageManager
 					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 				}
 			}
-			else
+			if(true)
 			{
 
 				var h:Number ;
 				//controlStageProperties();
 				var currentColor:uint ;
-				if (iPhoneXJingleAreaMask1 != null)
+				currentColor = TopColor() ;
+				if(lastTopColor!=currentColor)
 				{
-					currentColor = TopColor() ;
-					if(lastTopColor!=currentColor)
+					if (iPhoneXJingleAreaMask1 != null)
 					{
 						h = iPhoneXJingleAreaMask1.height ;
 						iPhoneXJingleAreaMask1.graphics.clear();
 						iPhoneXJingleAreaMask1.graphics.beginFill(currentColor,1);
 						iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, h);
 					}
+					if(DevicePrefrence.isAndroid() && DistriqtApplication.isSupported())
+					{
+						DistriqtApplication.setStatusBarColor(currentColor);
+					}
+					//trace(currentColor.toString(16))
 					lastTopColor = currentColor ;
 				}
 				
@@ -401,16 +422,16 @@ package stageManager
 					
 					if(iPhoneXJingleAreaMask1==null)
 						iPhoneXJingleAreaMask1 = new Sprite();
-						iPhoneXJingleAreaMask1.graphics.clear();
-					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
-					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin+2);
+					//iPhoneXJingleAreaMask1.graphics.clear();
+					//iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
+					//iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin+2);
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
 					if(iPhoneXJingleAreaMask2==null)
 						iPhoneXJingleAreaMask2 = new Sprite();
-					iPhoneXJingleAreaMask2.graphics.clear();
-					iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
-					iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,stageWidth+margin*2,iPhoneXJingleBarSizeDown+margin);
+					//iPhoneXJingleAreaMask2.graphics.clear();
+					//iPhoneXJingleAreaMask2.graphics.beginFill(BottomColor(),1);
+					//iPhoneXJingleAreaMask2.graphics.drawRect(-margin,-2,stageWidth+margin*2,iPhoneXJingleBarSizeDown+margin);
 					iPhoneXJingleAreaMask2.y = stageVisibleArea.bottom-iPhoneXJingleBarSizeDown ;
 					
 					
