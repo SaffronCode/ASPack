@@ -15,6 +15,7 @@ package com.mteamapp
 	import animation.Anim_alpha_shine;
 	import flash.utils.getTimer;
 	import contents.alert.Alert;
+	import nativeClasses.distriqtApplication.DistriqtApplication;
 
 	public class BlackStageDebugger
 	{
@@ -40,6 +41,16 @@ package com.mteamapp
 			trace("Black screen problem didn't see on Android 5+. The device OS is : "+Capabilities.os );
 			if(DevicePrefrence.isAndroid())
 			{
+				if(DistriqtApplication.isSupported())
+				{
+					var _letBlackScreenSolverCome:Boolean = false ;
+					NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE,function(e:*):void{_letBlackScreenSolverCome=true;})
+					NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e:*):void{
+						if(_letBlackScreenSolverCome)
+							DistriqtApplication.solveBlackScreenProblem();
+					})
+				}
+				return ;
 				stage = myStage;
 				root = myRoot ;
 				
