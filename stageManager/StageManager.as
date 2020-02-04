@@ -105,6 +105,8 @@ package stageManager
 
 		public static var _isIphoneX:Boolean = false;
 
+		private static var targetColor:uint,currentColor:int=-1,lastChangedColor:uint;
+
 				
 							
 		 public static function isIphoneX():Boolean
@@ -172,7 +174,7 @@ package stageManager
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
 		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null):void
 		{
-			colorUpdateInterval = 30 ;
+			colorUpdateInterval = 5000 ;
 			if(DevicePrefrence.isItPC)
 			{
 				stageUpdateInterval = 30 ;
@@ -207,8 +209,7 @@ package stageManager
 			myStage.addEventListener(Event.ADDED,controllFromMe,false,1);
 			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
 			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
-			setTimeout(controllStageSizesOnFullScreen,0);
-			
+			setTimeout(controlStageIntervalOnFrames,0);
 			//setInterval(controllStageSizesOnFullScreen,stageUpdateInterval);
 			enterFramer.addEventListener(Event.ENTER_FRAME,controlStageIntervalOnFrames);
 		}
@@ -216,7 +217,7 @@ package stageManager
 		private static var 	lastTimeThatChecked:int = 0,
 							lastTimeThatColorChecked:int = 0 ;
 
-		private static function controlStageIntervalOnFrames(e:Event):void
+		private static function controlStageIntervalOnFrames(e:Event=null):void
 		{
 			var currentTime:int = getTimer();
 			if(currentTime-lastTimeThatChecked>stageUpdateInterval || currentTime-lastTimeThatChecked<0)
@@ -229,6 +230,81 @@ package stageManager
 				setTimeout(colorUpdate,0);
 				lastTimeThatColorChecked = currentTime;
 			}
+
+			if(currentColor!=targetColor
+				&& 
+				(
+					(
+						DevicePrefrence.isAndroid() 
+						&& 
+						DistriqtApplication.isSupported()
+					)
+					||
+					(
+						iPhoneXJingleAreaMask1 != null
+					)
+				)
+			)
+			{
+				var redc:uint = (currentColor&0xff0000)/0x010000;
+				var greenc:uint = (currentColor&0xff00)/0x0100;
+				var bluec:uint = (currentColor&0xff);
+
+				var redt:uint = (targetColor&0xff0000)/0x010000;
+				var greent:uint = (targetColor&0xff00)/0x0100;
+				var bluet:uint = (targetColor&0xff);
+
+				redc = makeTwoColorCloseTogather(redc,redt);
+				greenc = makeTwoColorCloseTogather(greenc,greent);
+				bluec = makeTwoColorCloseTogather(bluec,bluet);
+
+
+				currentColor =redc*0x010000+greenc*0x0100+bluec;
+				
+				if(lastChangedColor!=currentColor)
+				{
+					lastChangedColor = currentColor ;
+					if (iPhoneXJingleAreaMask1 != null)
+					{
+						//var h:uint = iPhoneTopBarSize ;
+						iPhoneXJingleAreaMask1.graphics.clear();
+						iPhoneXJingleAreaMask1.graphics.beginFill(currentColor,1);
+						iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, iPhoneTopBarSize);
+					}
+					if(DevicePrefrence.isAndroid() && DistriqtApplication.isSupported())
+					{
+						DistriqtApplication.setStatusBarColor(currentColor);
+					}
+				}
+			}
+		}
+
+		private static function makeTwoColorCloseTogather(c1:uint,c2:uint):uint
+		{
+			if(Math.abs(c2-c1)<=colorChangeSpeed)
+			{
+				c1 = c2 ;
+			}
+			else
+			{
+				c1+=(c2-c1)/10 ;
+			}
+			return c1;
+			//mode 2
+			const colorChangeSpeed:uint = 5;
+			if(Math.abs(c2-c1)<=colorChangeSpeed)
+			{
+				c1 = c2 ;
+			}
+			else if(c1<c2)
+			{
+				c1=Math.min(0xff,c1+colorChangeSpeed) ;
+			}
+			else
+			{
+				c1=Math.max(0,c1-colorChangeSpeed) ;
+			}
+			return c1 ;
 		}
 		
 		private static function controllStageSizesOnFullScreen(e:*=null):void
@@ -335,42 +411,37 @@ package stageManager
 					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 				}
 			}
-		}		
+		}	
+
+		private static function updateTopColor(newColor:uint):void
+		{
+			targetColor = newColor ;
+		}	
 
 		private static function colorUpdate():void
 		{
 			var h:Number ;
 			//controlStageProperties();
-			var currentColor:uint ;
-			currentColor = TopColor() ;
-			if(lastTopColor!=currentColor)
+			var cColor:uint ;
+			cColor = TopColor() ;
+			if(lastTopColor!=cColor)
 			{
-				if (iPhoneXJingleAreaMask1 != null)
-				{
-					h = iPhoneXJingleAreaMask1.height ;
-					iPhoneXJingleAreaMask1.graphics.clear();
-					iPhoneXJingleAreaMask1.graphics.beginFill(currentColor,1);
-					iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, h);
-				}
-				if(DevicePrefrence.isAndroid() && DistriqtApplication.isSupported())
-				{
-					DistriqtApplication.setStatusBarColor(currentColor);
-				}
-				//trace(currentColor.toString(16))
-				lastTopColor = currentColor ;
+				updateTopColor(cColor);
+				//trace(cColor.toString(16))
+				lastTopColor = cColor ;
 			}
 			
 			if (iPhoneXJingleAreaMask2 != null)
 			{
-				currentColor = BottomColor() ;
-				if(lastBottomColor!=currentColor)
+				cColor = BottomColor() ;
+				if(lastBottomColor!=cColor)
 				{
 					h = iPhoneXJingleAreaMask2.height ;
 					iPhoneXJingleAreaMask2.graphics.clear();
-					iPhoneXJingleAreaMask2.graphics.beginFill(currentColor,1);
+					iPhoneXJingleAreaMask2.graphics.beginFill(cColor,1);
 					iPhoneXJingleAreaMask2.graphics.drawRect( -margin, -2, StageManager.stageWidth + margin * 2, iPhoneXJingleBarSizeDown + margin);
 				}
-				lastBottomColor = currentColor ;
+				lastBottomColor = cColor ;
 			}
 		}
 		
@@ -462,9 +533,9 @@ package stageManager
 						return;
 					if(iPhoneXJingleAreaMask1==null)
 						iPhoneXJingleAreaMask1 = new Sprite();
-					iPhoneXJingleAreaMask1.graphics.clear();
+					/*iPhoneXJingleAreaMask1.graphics.clear();
 					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(iPhoneTopBarSize),1);
-					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneTopBarSize+margin+2);
+					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneTopBarSize+margin+2);*/
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
 					//cashedStageHeight = stageHeight ;
@@ -494,7 +565,7 @@ package stageManager
 		/**Return the color for the top*/
 		private static function TopColor(areaHeight:Number = iPhoneXJingleBarSize/3):uint
 		{
-			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-areaHeight),stageWidth,areaHeight) ;
+			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-areaHeight)+(iPhoneXJingleAreaMask1!=null?iPhoneXJingleBarSize:0),stageWidth,areaHeight) ;
 		}
 		
 		private static function BottomColor():uint
@@ -514,7 +585,7 @@ package stageManager
 			matrix.scale(captureScaleW,captureScaleH);
 			matrix.tx = (-x)*captureScaleW;
 			matrix.ty = (-y)*captureScaleH;
-			caputerdBitmap.draw(myStage,matrix);
+			caputerdBitmap.draw(myStage,matrix,null,null,new Rectangle(0,0,w,h));
 			
 			var myColor:uint = caputerdBitmap.getPixel(0,0) ;
 			
