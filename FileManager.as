@@ -349,7 +349,7 @@
 			cancelSearch();
 
 			lastFileToSearch = new File(target.nativePath);
-			searchPattern = pattern.replace('.','\.').replace('*','.') ;
+			searchPattern = '^'+pattern.replace('.','\\.').replace('*','[^\\^]*')+'$' ;
 			callForEachFileFounded = onFoundedItem ;
 			onSearchDone = searchDone;
 			searchQue = new Vector.<File>();
