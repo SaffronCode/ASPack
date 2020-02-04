@@ -439,12 +439,7 @@ package {
         /**returns true if it is a pc with ability of quite and etc.<br>
          * IT HAVE TO COMPLETE ON IOS DEVICES AND MACINTOSH PCS*/
         public static function get isItPC():Boolean {
-            var os:String = String(Capabilities.os).toLowerCase();
-            if (os.indexOf('win') != -1 || os.indexOf('mac') != -1) {
-                return true;
-            } else {
-                return false;
-            }
+            return isWindows() || isMac();
         }
 
         public static function isWindows():Boolean {
