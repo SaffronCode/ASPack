@@ -218,7 +218,7 @@ package stageManager
 			var currentTime:int = getTimer();
 			if(currentTime-lastTimeThatChecked>stageUpdateInterval || currentTime-stageUpdateInterval<0)
 			{
-				controllStageSizesOnFullScreen();
+				setTimeout(controllStageSizesOnFullScreen,0);
 				lastTimeThatChecked = currentTime;
 			}
 		}
