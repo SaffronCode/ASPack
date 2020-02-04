@@ -92,7 +92,8 @@ package stageManager
 							iPhoneXJingleAreaMask2:Sprite;
 
 		/**It will set automativaly*/
-		private static var stageUpdateInterval:Number = 0;
+		private static var stageUpdateInterval:Number = 0,
+							colorUpdateInterval:Number = 0 ;
 
 		private static var enterFramer:MovieClip = new MovieClip();
 		
@@ -171,13 +172,14 @@ package stageManager
 		/**The debug values cannot be smaller than the actual size of the screen. it will never happend.*/
 		public static function setUp(yourStage:Stage,debugWidth:Number = 0 ,debugHeight:Number=0,listenToStageRotation:Boolean=false,activateResolutionControll:Boolean = false ,yourRoot:DisplayObject=null):void
 		{
-			if(DevicePrefrence.isIOS()||DevicePrefrence.isItPC)
+			colorUpdateInterval = 30 ;
+			if(DevicePrefrence.isItPC)
 			{
 				stageUpdateInterval = 30 ;
 			}
 			else
 			{
-				stageUpdateInterval = 100 ;//1000
+				stageUpdateInterval = 4000 ;//1000
 			}
 			myStage = yourStage ;
 			myRoot = yourRoot ;
@@ -211,15 +213,21 @@ package stageManager
 			enterFramer.addEventListener(Event.ENTER_FRAME,controlStageIntervalOnFrames);
 		}
 
-		private static var lastTimeThatChecked:int = 0 ;
+		private static var 	lastTimeThatChecked:int = 0,
+							lastTimeThatColorChecked:int = 0 ;
 
 		private static function controlStageIntervalOnFrames(e:Event):void
 		{
 			var currentTime:int = getTimer();
-			if(currentTime-lastTimeThatChecked>stageUpdateInterval || currentTime-stageUpdateInterval<0)
+			if(currentTime-lastTimeThatChecked>stageUpdateInterval || currentTime-lastTimeThatChecked<0)
 			{
 				setTimeout(controllStageSizesOnFullScreen,0);
 				lastTimeThatChecked = currentTime;
+			}
+			if(currentTime-lastTimeThatColorChecked>colorUpdateInterval || currentTime-lastTimeThatColorChecked<0)
+			{
+				setTimeout(colorUpdate,0);
+				lastTimeThatColorChecked = currentTime;
 			}
 		}
 		
@@ -269,7 +277,7 @@ package stageManager
 					
 					if((myStage.stageWidth == 0) || (myStage.stageHeight == 0) )
 					{
-						trace("•••••• Air problem on myStage.stageHeight!");
+						//trace("•••••• Air problem on myStage.stageHeight!");
 						
 						myStage.scaleMode = StageScaleMode.SHOW_ALL ;
 						
@@ -327,44 +335,44 @@ package stageManager
 					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZED,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 				}
 			}
-			if(true)
-			{
-
-				var h:Number ;
-				//controlStageProperties();
-				var currentColor:uint ;
-				currentColor = TopColor() ;
-				if(lastTopColor!=currentColor)
-				{
-					if (iPhoneXJingleAreaMask1 != null)
-					{
-						h = iPhoneXJingleAreaMask1.height ;
-						iPhoneXJingleAreaMask1.graphics.clear();
-						iPhoneXJingleAreaMask1.graphics.beginFill(currentColor,1);
-						iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, h);
-					}
-					if(DevicePrefrence.isAndroid() && DistriqtApplication.isSupported())
-					{
-						DistriqtApplication.setStatusBarColor(currentColor);
-					}
-					//trace(currentColor.toString(16))
-					lastTopColor = currentColor ;
-				}
-				
-				if (iPhoneXJingleAreaMask2 != null)
-				{
-					currentColor = BottomColor() ;
-					if(lastBottomColor!=currentColor)
-					{
-						h = iPhoneXJingleAreaMask2.height ;
-						iPhoneXJingleAreaMask2.graphics.clear();
-						iPhoneXJingleAreaMask2.graphics.beginFill(currentColor,1);
-						iPhoneXJingleAreaMask2.graphics.drawRect( -margin, -2, StageManager.stageWidth + margin * 2, iPhoneXJingleBarSizeDown + margin);
-					}
-					lastBottomColor = currentColor ;
-				}
-			}
 		}		
+
+		private static function colorUpdate():void
+		{
+			var h:Number ;
+			//controlStageProperties();
+			var currentColor:uint ;
+			currentColor = TopColor() ;
+			if(lastTopColor!=currentColor)
+			{
+				if (iPhoneXJingleAreaMask1 != null)
+				{
+					h = iPhoneXJingleAreaMask1.height ;
+					iPhoneXJingleAreaMask1.graphics.clear();
+					iPhoneXJingleAreaMask1.graphics.beginFill(currentColor,1);
+					iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, h);
+				}
+				if(DevicePrefrence.isAndroid() && DistriqtApplication.isSupported())
+				{
+					DistriqtApplication.setStatusBarColor(currentColor);
+				}
+				//trace(currentColor.toString(16))
+				lastTopColor = currentColor ;
+			}
+			
+			if (iPhoneXJingleAreaMask2 != null)
+			{
+				currentColor = BottomColor() ;
+				if(lastBottomColor!=currentColor)
+				{
+					h = iPhoneXJingleAreaMask2.height ;
+					iPhoneXJingleAreaMask2.graphics.clear();
+					iPhoneXJingleAreaMask2.graphics.beginFill(currentColor,1);
+					iPhoneXJingleAreaMask2.graphics.drawRect( -margin, -2, StageManager.stageWidth + margin * 2, iPhoneXJingleBarSizeDown + margin);
+				}
+				lastBottomColor = currentColor ;
+			}
+		}
 		
 		/**Stage status is new*/
 		protected static function controlStageProperties(fullScreenWidth:Number=NaN,fullScreenHeight:Number=NaN,resizedForIPhoneXOnce:Boolean=false,topAreaMargin:Number=0):void
