@@ -106,7 +106,7 @@ package stageManager
 		public static var _isIphoneX:Boolean = false;
 
 		/**It will create base on the iPhone type */
-		private static var _iphoneTopSize:Number ;
+		private static var _iphoneTopSize:Number = 0 ;
 
 		private static var targetColor:uint,currentColor:int=-1,lastChangedColor:uint;
 
@@ -570,7 +570,7 @@ package stageManager
 		/**Return the color for the top*/
 		private static function TopColor(areaHeight:Number = iPhoneXJingleBarSize/3):uint
 		{
-			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-areaHeight)+(iPhoneXJingleAreaMask1!=null?iPhoneXJingleBarSize:0),stageWidth,areaHeight) ;
+			return getColorOfPartOfStage(deltaStageWidth/-2,-(deltaStageHeight/2-areaHeight)+(iPhoneXJingleAreaMask1!=null?iPhoneXJingleAreaMask1.height:0),stageWidth,areaHeight) ;
 		}
 		
 		private static function BottomColor():uint
