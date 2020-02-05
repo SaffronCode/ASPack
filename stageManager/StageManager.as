@@ -105,6 +105,9 @@ package stageManager
 
 		public static var _isIphoneX:Boolean = false;
 
+		/**It will create base on the iPhone type */
+		private static var _iphoneTopSize:Number ;
+
 		private static var targetColor:uint,currentColor:int=-1,lastChangedColor:uint;
 
 				
@@ -269,7 +272,7 @@ package stageManager
 						//var h:uint = iPhoneTopBarSize ;
 						iPhoneXJingleAreaMask1.graphics.clear();
 						iPhoneXJingleAreaMask1.graphics.beginFill(currentColor,1);
-						iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, iPhoneTopBarSize);
+						iPhoneXJingleAreaMask1.graphics.drawRect( -margin, -margin, StageManager.stageWidth + margin * 2, _iphoneTopSize);
 					}
 					if(DevicePrefrence.isAndroid() && DistriqtApplication.isSupported())
 					{
@@ -490,7 +493,7 @@ package stageManager
 
 					
 				}
-				else if(stageHeight/stageWidth>2)
+				else if(stageHeight/stageWidth>2)//Its IphoneX I guess...
 				{
 					//trace(" • You have iPhoneX, nice...");
 					//trace("It is portrate");
@@ -504,6 +507,7 @@ package stageManager
 					//iPhoneXJingleAreaMask1.graphics.clear();
 					//iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(),1);
 					//iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneXJingleBarSize+margin+2);
+					_iphoneTopSize = iPhoneXJingleBarSize+margin+2;
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
 					if(iPhoneXJingleAreaMask2==null)
@@ -536,6 +540,7 @@ package stageManager
 					/*iPhoneXJingleAreaMask1.graphics.clear();
 					iPhoneXJingleAreaMask1.graphics.beginFill(TopColor(iPhoneTopBarSize),1);
 					iPhoneXJingleAreaMask1.graphics.drawRect(-margin,-margin,stageWidth+margin*2,iPhoneTopBarSize+margin+2);*/
+					_iphoneTopSize = iPhoneTopBarSize+margin+2;
 					iPhoneXJingleAreaMask1.y = stageVisibleArea.y;
 					
 					//cashedStageHeight = stageHeight ;
