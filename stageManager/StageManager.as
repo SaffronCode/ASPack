@@ -214,8 +214,8 @@ package stageManager
 			enterFramer.addEventListener(Event.ENTER_FRAME,controlStageIntervalOnFrames);
 		}
 
-		private static var 	lastTimeThatChecked:int = 0,
-							lastTimeThatColorChecked:int = 0 ;
+		private static var 	lastTimeThatChecked:int = -10000,
+							lastTimeThatColorChecked:int = -10000 ;
 
 		private static function controlStageIntervalOnFrames(e:Event=null):void
 		{
