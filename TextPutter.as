@@ -117,7 +117,7 @@ package
 			}
 			else
 			{
-				if(arabicNumber)
+				if(arabicNumber || Unicode.convertToArabicNumber)
 				{
 					text = UnicodeStatic.arabicNumber(text);
 				}
