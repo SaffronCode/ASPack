@@ -27,6 +27,7 @@ package
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
+	import contents.alert.Alert;
 	
 	public class Unicode
 	{
@@ -47,6 +48,8 @@ package
 							halfSpace3:String = String.fromCharCode(8207);
 		
 		public static var convertToArabicNumber:Boolean = false ;
+
+		public static var newFontMode:Boolean = false ;
 		
 		private var MESlistChr:Object = {};
 		
@@ -726,6 +729,11 @@ package
 				}
 			}
 			if(STR!=null){
+				if(newFontMode && at==0)
+				{
+					return character;
+				}
+
 				//trace("Str is not null and at is : "+at);
 				//Below line had to stay here, because of the 2 char Seda characters.
 					at = Math.min(String(STR).length-1,at);
