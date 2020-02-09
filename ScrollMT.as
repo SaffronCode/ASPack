@@ -817,6 +817,7 @@ package
 		/**Update the animation instantly after mouseMove Event*/
 		private function updateAnimation(e:MouseEvent):void
 		{
+			targ.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.LISTEN_TO_SCROLL,true,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR))
 			scrollAnim(null);
 			if(targStage==null || targStage.frameRate<31)
 				e.updateAfterEvent();

@@ -16,6 +16,9 @@ package
 		
 		/**It will force the scroller to scroll up or down from the command from it's childs*/
 		public static const SCROLL_THE_SCROLLER:String = "SCROLL_THE_SCROLLER" ;
+
+		/**User is dragging but the scroll prosess may not started yet */
+		public static const LISTEN_TO_SCROLL:String = "LISTEN_TO_SCROLL" ;
 		
 		public var freeScrollOnTarget_TD:Boolean ;
 		public var freeScrollOnTarget_LR:Boolean ;
