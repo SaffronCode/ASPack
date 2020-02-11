@@ -130,6 +130,13 @@ package
 			textField.dispatchEvent(new Event(Event.REMOVED_FROM_STAGE));
 		}
 
+
+		public function onEnterPressed(func:Function):FarsiInputCorrection
+		{
+			onDone = func ;
+			return this ;
+		}
+
 		
 		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true,controllStageTextsToo:Boolean=false,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null,restrictCharacterRange:String=null)
 		{
