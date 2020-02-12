@@ -178,7 +178,7 @@ package
 		}
 		
 		/**check if item is added to stage or not*/
-		private function checkTheItemStage()
+		private function checkTheItemStage():void
 		{
 			if(oldTextField.stage == null)
 			{
@@ -359,7 +359,7 @@ package
 		}
 		
 		
-		private function traceTheKeyCode(e:KeyboardEvent)
+		private function traceTheKeyCode(e:KeyboardEvent):void
 		{
 			//Only next and Default button type can dispatch this event
 			trace("e.keyCode : "+e.keyCode);
@@ -451,14 +451,14 @@ package
 			return str.split(' ').join('[SPACE]').split('\t').join('[TAB]').split('\r').join('[NEWLINE R]').split('\n').join('[NEWLINE N]');
 		}
 		
-		public function focuseOnStageText(e:*=null)
+		public function focuseOnStageText(e:*=null):void
 		{
 			//timerFocus.reset();
 			//timerFocus.start();
 			switchFocuse()
 		}
 		
-		private function switchFocuse(e:TimerEvent=null)
+		private function switchFocuse(e:TimerEvent=null):void
 		{
 			if(!editing)
 			{
@@ -523,7 +523,7 @@ package
 		}
 		
 		/**Clear the native text */
-		public function unLoad(e:Event=null)
+		public function unLoad(e:Event=null):void
 		{
 			if(!betterPerformanc)
 			{
@@ -547,7 +547,7 @@ package
 		}
 		
 		/**start typing*/
-		private function hideTextField(e:FocusEvent=null)
+		private function hideTextField(e:FocusEvent=null):void
 		{
 			myStageText.text = correctNativeNewLines(oldTextField.text);
 			if(!onlyNativeText)
@@ -596,7 +596,7 @@ package
 		}
 		
 		/**finish typing*/
-		private function saveChanges(e:*)
+		private function saveChanges(e:*):void
 		{
 			//trace('why save the text?'+e+' \n\t: '+oldTextField.textColor.toString(16));
 			//trace(e.currentTarget+' > '+(e.currentTarget == myStageText)+' vs '+(e.target == myStageText));
@@ -627,7 +627,7 @@ package
 									   
 		
 		/***/
-		private function manageInputPose(e:Event=null)
+		private function manageInputPose(e:Event=null):void
 		{
 			var root:DisplayObject = oldTextField.root ;
 			if(myStageText.visible || onlyNativeText)
@@ -648,6 +648,11 @@ package
 				
 				
 				rect = oldTextField.getBounds(oldTextField.stage);
+				if(rect==null)
+				{
+					saveChanges(null);
+					return;
+				}
 				myStageText.viewPort = rect;
 			}
 		}
