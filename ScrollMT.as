@@ -419,6 +419,7 @@ package
 				targ.parent.addChild(scrollerMask);
 				scrollerMask.graphics.beginFill(0x00ff00,1.0) ;
 				scrollerMask.graphics.drawRect(edgeX,edgeY,maskRect.width-edgeX*2,maskRect.height-edgeY*2) ;
+				scrollerMask.mouseEnabled=scrollerMask.mouseChildren = false;
 				
 				var matrix:Matrix;
 				var boxWidth:Number;
