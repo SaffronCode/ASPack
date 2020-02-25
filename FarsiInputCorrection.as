@@ -304,7 +304,8 @@ package
 			if(!onlyNativeText)
 			{
 				newTextField.addEventListener(MouseEvent.MOUSE_DOWN,letFocuseOnStageText);
-				myStage.addEventListener(MouseEvent.MOUSE_UP,dontletFocuseOnStageText);
+				if(myStage)
+					myStage.addEventListener(MouseEvent.MOUSE_UP,dontletFocuseOnStageText);
 				newTextField.addEventListener(MouseEvent.CLICK,focuseOnStageText);
 			}
 			else
