@@ -337,6 +337,8 @@
 		/**function(files:Vector.<File>):void */
 		private static var onSearchDone:Function ; 
 
+		private static var searchSubFolders:Boolean = true ;
+
 		private static var 	searchQue:Vector.<File>;
 		public static  var foundedQue:Vector.<File> ;
 
@@ -344,7 +346,7 @@
 
 		private static var searchFunctionTimerId:Number ; 
 
-		public static function searchFor(target:File,pattern:String,searchDone:Function,onFoundedItem:Function=null):void
+		public static function searchFor(target:File,pattern:String,searchDone:Function,onFoundedItem:Function=null,searchOnSubFoldersTo:Boolean=true):void
 		{
 			cancelSearch();
 
@@ -352,6 +354,7 @@
 			searchPattern = '^'+pattern.replace('.','\\.').replace('*','[^\\^]*')+'$' ;
 			callForEachFileFounded = onFoundedItem ;
 			onSearchDone = searchDone;
+			searchSubFolders = searchOnSubFoldersTo;
 			searchQue = new Vector.<File>();
 			foundedQue = new Vector.<File>();
 
@@ -411,13 +414,13 @@
 				}
 				if(callForEachFileFounded!=null && foundedFiles.length>0)
 					callForEachFileFounded(foundedFiles);
-				if(searchQue!=null && searchQue.length>0)
+				if(searchQue!=null && searchQue.length>0 && searchSubFolders)
 				{
 					lastFileToSearch = searchQue.shift() ;
 					lastFileToSearch.addEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
 					lastFileToSearch.getDirectoryListingAsync();
 				}
-				else if(searchQue!=null)
+				else if(searchQue!=null || searchSubFolders==false)
 				{
 					trace("Seach done for "+(e.currentTarget as File).nativePath+" vs "+lastFileToSearch.nativePath);
 					if(lastFileToSearch!=null && currentFileSearch == lastFileToSearch)
