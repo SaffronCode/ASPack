@@ -28,6 +28,8 @@ package
 	import flash.utils.getQualifiedClassName;
 	import flash.text.TextFormat;
 	import appManager.mains.App;
+	import flash.utils.setTimeout;
+	import flash.utils.clearTimeout;
 
 	/**detect objects on display object with names*/
 	public class Obj
@@ -79,6 +81,76 @@ package
 			if(target!= null && target.parent!=null)
 			{
 				DisplayObjectContainer(target.parent).removeChild(target);
+			}
+		}
+
+		public static function onLongTouch(target:*,onLongTouch:Function):void
+		{
+			if(target!=null && target is EventDispatcher)
+			{
+				if(target.stage==null)
+				{
+					target.addEventListener(Event.ADDED_TO_STAGE,setUpOnce);
+				}
+				else
+				{
+					setUpOnce();
+				}
+
+				function setUpOnce(e:*=null):void
+				{
+					var timeOutId:uint ;
+					var preventClick:Boolean = false ;
+					var activateLongTouch:Boolean = false ;
+
+					target.addEventListener(MouseEvent.MOUSE_DOWN ,onTouched);
+					target.addEventListener(MouseEvent.CLICK,onClicked,false,100000000);
+					target.stage.addEventListener(MouseEvent.MOUSE_UP,clickIsOkNow);
+
+					function clickIsOkNow(e:MouseEvent):void
+					{
+						clearTimeout(timeOutId);
+						setTimeout(letUserClick,0);
+						//trace("preventClick : "+preventClick);
+					}
+
+					function letUserClick():void
+					{
+						preventClick = false ;
+					}
+
+					function onTouched(e:MouseEvent):void
+					{
+						clearTimeout(timeOutId);
+						timeOutId = setTimeout(nowTouchCall,700);
+
+						function nowTouchCall():void
+						{
+							if(target.stage!=null && isAccesibleByMouse(target as DisplayObject))
+							{
+								preventClick = true ;
+								//trace("preventClick : "+preventClick);
+								if(onLongTouch.length>0)
+								{
+									onLongTouch(e);
+								}
+								else
+								{
+									onLongTouch();
+								}
+							}
+						}
+					}
+
+					
+
+					function onClicked(e:MouseEvent):void
+					{
+						//trace("Prevent click "+preventClick);
+						if(preventClick)
+							e.stopImmediatePropagation();
+					}
+				}
 			}
 		}
 		
