@@ -263,7 +263,7 @@
 		
 		private static function iGotGeo(e:GeolocationEvent):void
 		{
-			trace("*******Geo updated********");
+			//trace("*******Geo updated********");
 			GPSLatitude = e.latitude;
 			GPSLongitude = e.longitude;
 		}
