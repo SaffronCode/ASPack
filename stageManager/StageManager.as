@@ -110,6 +110,8 @@ package stageManager
 
 		private static var targetColor:uint,currentColor:int=-1,lastChangedColor:uint;
 
+		public static var defaultTopColorArea:Number=5;
+
 				
 							
 		 public static function isIphoneX():Boolean
@@ -434,7 +436,7 @@ package stageManager
 			var h:Number ;
 			//controlStageProperties();
 			var cColor:uint ;
-			cColor = TopColor() ;
+			cColor = TopColor(defaultTopColorArea) ;
 			if(lastTopColor!=cColor)
 			{
 				updateTopColor(cColor);
