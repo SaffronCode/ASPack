@@ -46,7 +46,6 @@ package
 	import flash.utils.setTimeout;
 	import flash.desktop.Clipboard;
 	import flash.display.DisplayObject;
-	import flash.display.Stage;
 
 	public class FarsiInputCorrection
 	{
@@ -75,12 +74,8 @@ package
 		
 		private var itsArabic:Boolean,
 					keyFormat:String,
-
-					myStage:Stage,
 					
 					returnLable:String;
-
-		private var _letFocus:Boolean = false ;
 					
 		/**Is text editing?*/
 		public var editing:Boolean = false;
@@ -191,7 +186,6 @@ package
 			}
 			else
 			{
-				myStage = oldTextField.stage ;
 				manageText();
 			}
 		}
@@ -303,9 +297,6 @@ package
 			//switched with below line to prevent myStage to stay at top↓
 			if(!onlyNativeText)
 			{
-				newTextField.addEventListener(MouseEvent.MOUSE_DOWN,letFocuseOnStageText);
-				if(myStage)
-					myStage.addEventListener(MouseEvent.MOUSE_UP,dontletFocuseOnStageText);
 				newTextField.addEventListener(MouseEvent.CLICK,focuseOnStageText);
 			}
 			else
@@ -460,22 +451,11 @@ package
 			return str.split(' ').join('[SPACE]').split('\t').join('[TAB]').split('\r').join('[NEWLINE R]').split('\n').join('[NEWLINE N]');
 		}
 		
-		public function letFocuseOnStageText(e:*=null):void
-		{
-			_letFocus = true ;
-		}
-		
-		public function dontletFocuseOnStageText(e:*=null):void
-		{
-			setTimeout(function():*{_letFocus = false ;},0)
-		}
-
 		public function focuseOnStageText(e:*=null):void
 		{
 			//timerFocus.reset();
 			//timerFocus.start();
-			if(_letFocus)
-				switchFocuse()
+			switchFocuse()
 		}
 		
 		private function switchFocuse(e:TimerEvent=null):void
@@ -554,11 +534,6 @@ package
 			oldTextField.removeEventListener(REMOVE_OLD_TEXT,unLoad);
 			oldTextField.removeEventListener(Event.CHANGE,changeTheDisplayedText);
 			oldTextField.removeEventListener(FOCUS_IN,focuseOnStageText);
-			
-			newTextField.removeEventListener(MouseEvent.MOUSE_DOWN,letFocuseOnStageText);
-			if(myStage)
-				myStage.removeEventListener(MouseEvent.MOUSE_UP,dontletFocuseOnStageText);
-			newTextField.removeEventListener(MouseEvent.CLICK,focuseOnStageText);
 			
 			oldTextField.alpha = 1 ;
 			//oldTextField.text = "I'm removed";
