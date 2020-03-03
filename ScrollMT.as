@@ -98,6 +98,7 @@ package
 		/**this number is the minimom scrolling speed that start to protect mouse events to the scrollable object*/
 		private var minAvailableScroll:Number = 20;
 		public static var minScrollToLock:Number=20;
+		private var minSpeedToUnlock:uint ;
 		private var mouseWheelSpeed:Number = 8;
 		
 		/**speed of floating back for the scrollers*/
@@ -534,6 +535,7 @@ package
 				mu2 = Math.pow(mu2,frameRatePrecent);//Math.pow(mu2,1/frameRatePrecent);//0.4
 				minAvailableScroll = minAvailableScroll/frameRatePrecent;///Math.pow(frameRatePrecent,2) ;//20
 				minScrollToLock = 20/frameRatePrecent;//20
+				minSpeedToUnlock = 10/frameRatePrecent;//20
 				mouseWheelSpeed = 8/frameRatePrecent;//8
 				
 				floatBackSpeed_on_touch= 20*frameRatePrecent;//20
@@ -812,6 +814,7 @@ package
 				targStage.addEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
 				targ.addEventListener(ScrollMTEvent.TRY_TO_SCROLL,stopScroll);
 				targ.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TOUCHED_TO_SCROLL,true));
+				MouseUnLock();
 			}
 		}
 		
@@ -878,7 +881,7 @@ package
 					}
 				}
 				isScrolling = false;
-				MouseUnLock();
+				//MouseUnLock();
 				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
 				//scrolling is stoped
 			}
@@ -914,7 +917,7 @@ package
 		}*/
 		
 		/**disable mouseEvent*/
-		private function MouseUnLock()
+		private function MouseUnLock():void
 		{
 			mouseLocker.visible = false ;
 		}
@@ -1138,6 +1141,11 @@ package
 				}
 				
 				slowDownFloat(floatBackSpeed_free,mu2);
+
+				if(mouseLocker.visible && (Math.abs(Vy)+Math.abs(Vx))<minSpeedToUnlock)
+				{
+					MouseUnLock();
+				}
 			}
 			//manage cursel s place to
 			
