@@ -46,6 +46,10 @@ package
 	import flash.utils.setTimeout;
 	import flash.desktop.Clipboard;
 	import flash.display.DisplayObject;
+	import flash.display.BitmapData;
+	import flash.display.Bitmap;
+	import stageManager.StageManager;
+	import flash.display.StageScaleMode;
 
 	public class FarsiInputCorrection
 	{
@@ -342,7 +346,7 @@ package
 			
 			if(!betterPerformanc)
 			{
-				oldTextField.addEventListener(Event.ENTER_FRAME,manageInputPose);
+				oldTextField.addEventListener(Event.ENTER_FRAME,manageInputPose,false,-10000);
 			}
 			
 			oldTextField.addEventListener(Event.REMOVED_FROM_STAGE,unLoad);
@@ -624,7 +628,8 @@ package
 				oldTextField.dispatchEvent(new FarsiInputCorrectionEvent(FarsiInputCorrectionEvent.TEXT_FIELD_CLOSED,oldTextField));
 			}
 		}
-									   
+
+		private var nativeTextCachedBitmap:Bitmap ;					   
 		
 		/***/
 		private function manageInputPose(e:Event=null):void
@@ -632,6 +637,11 @@ package
 			var root:DisplayObject = oldTextField.root ;
 			if(myStageText.visible || onlyNativeText)
 			{
+				var rect:Rectangle = oldTextField.getBounds(oldTextField.stage);
+				rect.width = Math.round(rect.width);
+				rect.height = Math.round(rect.height);
+				myStageText.viewPort = rect;
+
 				if(!onlyNativeText)
 				{
 					newTextField.x = oldTextField.x;
@@ -641,19 +651,51 @@ package
 				{
 					//f sdf fsd 
 					//trace("Obj.isAccesibleByMouse(oldTextField) : "+Obj.isAccesibleByMouse(oldTextField));
-					myStageText.visible = Obj.getVisible(oldTextField) && Obj.isAccesibleByMouse(oldTextField) ;
+					if(nativeTextCachedBitmap)
+						nativeTextCachedBitmap.visible = false ;
+					if(Obj.getVisible(oldTextField) && Obj.isAccesibleByMouse(oldTextField))
+					{
+						myStageText.visible = true ;
+					}
+					else if(myStageText.visible)
+					{
+						var scaleFactor:Number ;
+						if(DevicePrefrence.isPC())
+							scaleFactor = StageManager.stageScaleFactor() ;
+						else
+							scaleFactor = 1 ;
+
+						var scaledRect:Rectangle = new Rectangle(rect.x,rect.y,Math.round(rect.width*scaleFactor),Math.round(rect.height*scaleFactor));
+						var bitd:BitmapData = new BitmapData(scaledRect.width,scaledRect.height,true,0x00000000);
+						myStageText.viewPort = scaledRect;
+						myStageText.drawViewPortToBitmapData(bitd);
+						myStageText.viewPort = rect;
+						if(nativeTextCachedBitmap==null)
+						{
+							nativeTextCachedBitmap = new Bitmap(bitd);
+							oldTextField.parent.addChild(nativeTextCachedBitmap);
+						}
+						else
+						{
+							nativeTextCachedBitmap.visible = true ;
+							nativeTextCachedBitmap.bitmapData = bitd ;
+						}
+						nativeTextCachedBitmap.scaleX = nativeTextCachedBitmap.scaleY = 1/scaleFactor;
+						myStageText.visible = false ;
+					}
+					else if(nativeTextCachedBitmap)
+					{
+						nativeTextCachedBitmap.visible = true ;
+					}
 				}
 
-				var rect:Rectangle = oldTextField.getBounds(root);
 				
 				
-				rect = oldTextField.getBounds(oldTextField.stage);
 				if(rect==null)
 				{
 					saveChanges(null);
 					return;
 				}
-				myStageText.viewPort = rect;
 			}
 		}
 		

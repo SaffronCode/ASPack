@@ -71,7 +71,9 @@ package {
 
         private static var myStage:Stage, myNativewindow:NativeWindow;
         private static var  _isIOS:* = null,
-                            _isAndroid:* = null ;
+                            _isAndroid:* = null,
+                            _isWidnow:* = null,
+                            _isMac:* = null ;
 
         /**retuens true if this is big screened tablet*/
         public static function get isTablet():Boolean {
@@ -443,18 +445,26 @@ package {
         }
 
         public static function isWindows():Boolean {
+            if(_isWidnow!=null)
+            {
+                return _isWidnow ;
+            }
             if ((Capabilities.os.indexOf("Windows") >= 0)) {
-                return true;
+                return _isWidnow = true;
             } else {
-                return false;
+                return _isWidnow = false;
             }
         }
 
         public static function isMac():Boolean {
+            if(_isMac!=null)
+            {
+                return _isMac ;
+            }
             if ((Capabilities.os.indexOf("Mac") >= 0)) {
-                return true;
+                return _isMac = true;
             } else {
-                return false;
+                return _isMac = false;
             }
         }
 
