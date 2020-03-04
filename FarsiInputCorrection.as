@@ -533,6 +533,11 @@ package
 			{
 				oldTextField.removeEventListener(Event.ENTER_FRAME,manageInputPose);
 			}
+
+			if(nativeTextCachedBitmap)
+			{
+				Obj.remove(nativeTextCachedBitmap);
+			}
 			
 			oldTextField.removeEventListener(Event.REMOVED_FROM_STAGE,unLoad);
 			oldTextField.removeEventListener(REMOVE_OLD_TEXT,unLoad);
