@@ -82,7 +82,7 @@ package stageManager
 							
 		private static var controlleLocked:Boolean = false ;
 		
-		private static var scl:Number=0;
+		private static var scl:Number=1;
 		/**The iPhoneXJingleBarSize should be bigger tah iPhoneXJingleBarSizeDown!!*/
 		private static const 	iPhoneXJingleBarSize:Number = 65,
 								iPhoneXJingleBarSizeDown:Number = (iPhoneXJingleBarSize*2)/3,
@@ -600,7 +600,15 @@ package stageManager
 			matrix.scale(captureScaleW,captureScaleH);
 			matrix.tx = (-x)*captureScaleW;
 			matrix.ty = (-y)*captureScaleH;
-			caputerdBitmap.draw(myStage,matrix,null,null,new Rectangle(0,0,w,h));
+			try
+			{
+				caputerdBitmap.draw(myStage,matrix,null,null,new Rectangle(0,0,w,h));
+			}
+			catch(e:Error)
+			{
+				trace(e.message+'\n'+e.getStackTrace());
+				return 0;
+			}
 			
 			var myColor:uint = caputerdBitmap.getPixel(0,0) ;
 			
