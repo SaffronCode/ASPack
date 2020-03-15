@@ -671,21 +671,28 @@ package
 							scaleFactor = 1 ;
 
 						var scaledRect:Rectangle = new Rectangle(rect.x,rect.y,Math.round(rect.width*scaleFactor),Math.round(rect.height*scaleFactor));
-						var bitd:BitmapData = new BitmapData(scaledRect.width,scaledRect.height,true,0x00000000);
-						myStageText.viewPort = scaledRect;
-						myStageText.drawViewPortToBitmapData(bitd);
-						myStageText.viewPort = rect;
-						if(nativeTextCachedBitmap==null)
+						trace("scaledRect : "+scaledRect);
+						var bitd:BitmapData ;
+						if(scaledRect.width!=0 && scaledRect.height!=0)
 						{
-							nativeTextCachedBitmap = new Bitmap(bitd);
-							oldTextField.parent.addChild(nativeTextCachedBitmap);
+						 	bitd = new BitmapData(scaledRect.width,scaledRect.height,true,0x00000000);
+							myStageText.viewPort = scaledRect;
+							myStageText.drawViewPortToBitmapData(bitd);
+							myStageText.viewPort = rect;
+							if(nativeTextCachedBitmap==null)
+							{
+								nativeTextCachedBitmap = new Bitmap(bitd);
+								oldTextField.parent.addChild(nativeTextCachedBitmap);
+							}
+							else
+							{
+								nativeTextCachedBitmap.visible = true ;
+								nativeTextCachedBitmap.bitmapData = bitd ;
+							}
+							nativeTextCachedBitmap.x = oldTextField.x ;
+							nativeTextCachedBitmap.y = oldTextField.y ;
+							nativeTextCachedBitmap.scaleX = nativeTextCachedBitmap.scaleY = 1/scaleFactor;
 						}
-						else
-						{
-							nativeTextCachedBitmap.visible = true ;
-							nativeTextCachedBitmap.bitmapData = bitd ;
-						}
-						nativeTextCachedBitmap.scaleX = nativeTextCachedBitmap.scaleY = 1/scaleFactor;
 						myStageText.visible = false ;
 					}
 					else if(nativeTextCachedBitmap)
