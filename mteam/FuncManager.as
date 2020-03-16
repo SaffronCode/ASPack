@@ -3,6 +3,7 @@
 	import flash.utils.setTimeout;
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.utils.Dictionary;
 
 	public class FuncManager
 	{
@@ -10,7 +11,7 @@
 							asyncDelay:uint = 30 ;
 
 		/**function caller*/
-		public static function callFunction(myFunc:Function)
+		public static function callFunction(myFunc:Function):void
 		{
 			var cash:Function = myFunc
 		}
@@ -66,6 +67,42 @@
 		{
 			setUpAsyncFunctions();
 			funcQue = funcQue.concat(functionSlist);
+		}
+
+
+
+	//////////////////////////////////
+
+		private static var functList:Dictionary ;
+
+		public static function addFuncToList(func:Function,functionId:uint):void
+		{
+			if(functList==null)
+			{
+				functList = new Dictionary() ;
+			}
+			if(functList[functionId]==undefined)
+			{
+				functList[functionId] = [] ;
+			}
+			if(functList[functionId].indexOf(func)==-1)
+			{
+				functList[functionId].push(func);
+			}
+		}
+
+		public static function callFuncList(functionId:uint):void
+		{
+			if(functList!=null && functList[functionId]!=undefined && functList[functionId] is Array)
+			{
+				var cashedFunctList:Array = functList[functionId].concat();
+				functList[functionId] = [] ;
+
+				for(var i:int = 0 ; i<cashedFunctList.length ; i++)
+				{
+					cashedFunctList[i]();
+				}
+			}
 		}
 		
 	}
