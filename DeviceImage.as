@@ -34,6 +34,7 @@
 	
 	import videoShow.VideoClass;
 	import videoShow.VideoEvents;
+	import nativeClasses.distriqtCameraRoll.DistriqtCameraRoll;
 	
 
 	public class DeviceImage
@@ -435,7 +436,11 @@
 			
 			onDone = onImageLoaded ;
 			
-			if(VideoManaerAsist.isSupports())
+			if(DistriqtCameraRoll.isSupport())
+			{
+				DistriqtCameraRoll.loadVideoFromGallery();
+			}
+			else if(VideoManaerAsist.isSupports())
 			{
 				VideoManaerAsist.loadVideoFromGallery(onVideoLoaderFromGalleryByVideoManager);
 			}
@@ -445,6 +450,11 @@
 				onDone();
 			}
 		}
+
+			private static function onVideoLoadedFromDistriqtCameraRoll():void
+			{
+				//TODO
+			}
 		
 			/**Video loaded from VideoManagerAsist*/
 			private static function onVideoLoaderFromGalleryByVideoManager():void
@@ -750,9 +760,9 @@
 	/////////////////////////////////////////////////
 		
 		/**You can activate the distriqt cameraUI by calling this function*/
-		public static function setUp(DISTRIQT_APPLICATION_KEY:String):void
+		public static function setUp(DISTRIQT_APPLICATION_KEY:String=null):void
 		{
-			DistriqtCameraUI.setUp(DISTRIQT_APPLICATION_KEY);
+			DistriqtCameraUI.setUp();
 		}
 	}
 }
