@@ -466,6 +466,10 @@ package com.mteamapp
 			{
 				if(email==''|| email==null) return true
 			}
+			if(isArabic(email))
+			{
+				return false ;
+			}
 			var reg:RegExp = /^[\w.-]+@\w[\w.-]+\.[\w.-]*[a-z][a-z]$/i;
 			return reg.test(email);
 		}
