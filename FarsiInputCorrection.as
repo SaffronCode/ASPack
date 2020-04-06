@@ -677,7 +677,11 @@ package
 						{
 						 	bitd = new BitmapData(scaledRect.width,scaledRect.height,true,0x00000000);
 							myStageText.viewPort = scaledRect;
-							myStageText.drawViewPortToBitmapData(bitd);
+							try
+							{
+								myStageText.drawViewPortToBitmapData(bitd);
+							}
+							catch(e){};
 							myStageText.viewPort = rect;
 							if(nativeTextCachedBitmap==null)
 							{
