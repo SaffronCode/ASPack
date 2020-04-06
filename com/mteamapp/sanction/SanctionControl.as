@@ -1,4 +1,4 @@
-package com.mteamapp.sanction
+﻿package com.mteamapp.sanction
 {
 	import contents.alert.Alert;
 
@@ -11,7 +11,34 @@ package com.mteamapp.sanction
 		public static function isForeign():Boolean
 		{
 			//Alert.show("Time zone is : "+new Date().timezoneOffset);
-			if(((_activateForAllOS || DevicePrefrence.isIOS()) && (new Date().timezoneOffset != -270 && new Date().timezoneOffset != -210)) || forceToBeForeingDebug)
+			var currentDate:Date = new Date();
+			var isSummerTime:Boolean = ( currentDate.month==2 && currentDate.date>20 ) || ( currentDate.month>2 && currentDate.month<8 ) || ( currentDate.month==8 && currentDate.date<21 ) ;
+			trace("isSummerTime : "+isSummerTime+" - "+currentDate.timezoneOffset+" >> "+((currentDate.timezoneOffset != -210 && isSummerTime)));
+			if(
+				(
+					(
+						_activateForAllOS 
+						|| 
+						DevicePrefrence.isIOS()
+					) 
+					&& 
+					(
+						(
+							isSummerTime
+							&&
+							currentDate.timezoneOffset != -270 
+						)
+						||
+						(
+							!isSummerTime
+							&&
+							currentDate.timezoneOffset != -210 
+						)
+					)
+				) 
+				|| 
+				forceToBeForeingDebug
+			)
 			{
 				return true ;
 			}
