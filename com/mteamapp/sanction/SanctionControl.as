@@ -1,12 +1,50 @@
 ﻿package com.mteamapp.sanction
+//com.mteamapp.sanction.SanctionControl
 {
-	import contents.alert.Alert;
+	import flash.events.EventDispatcher;
+	import flash.events.Event;
+	import flash.display.MovieClip;
 
-	public class SanctionControl
+	public class SanctionControl extends MovieClip
 	{
 		public static var forceToBeForeingDebug:Boolean = false ;
 		
 		private static var _activateForAllOS:Boolean = false ;
+
+		private static var dispatcher:EventDispatcher = new EventDispatcher();
+
+		public function SanctionControl()
+		{
+			super();
+			stop();
+			updateVisibilatyStatus(null);
+			dispatcher.addEventListener(Event.CHANGE,updateVisibilatyStatus)
+		}
+
+		private function updateVisibilatyStatus(e:Event):void
+		{
+			if(this.totalFrames==2)
+			{
+				if(isForeign())
+				{
+					this.gotoAndStop(2);
+				}
+				else
+				{
+					this.gotoAndStop(1);
+				}
+			}
+			else
+			{
+				this.visible = !isForeign();
+			}
+		}
+
+
+
+
+
+
 		
 		public static function isForeign():Boolean
 		{
@@ -51,6 +89,7 @@
 		public static function activateSanctionForAllOSs(status:Boolean=true):void
 		{
 			_activateForAllOS = status ;
+			dispatcher.dispatchEvent(new Event(Event.CHANGE));
 		}
 	}
 }
