@@ -519,6 +519,7 @@ package {
         private static var cashedApplicationDescriptor:XML;
 
         private static var cahsedAppName:String;
+        private static var cahsedCopyRight:String;
 
         /**Returns application's descriptor xml file*/
         public static function get appDescriptor():XML {
@@ -576,6 +577,14 @@ package {
                 cahsedAppName = appDescriptor.name;
             }
             return cahsedAppName;
+        }
+
+        /**Returns the app name*/
+        public static function get copyright():String {
+            if (cahsedCopyRight == null) {
+                cahsedCopyRight = appDescriptor.copyright;
+            }
+            return cahsedCopyRight;
         }
 
         /**Returns the application's version string.*/

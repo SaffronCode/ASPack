@@ -11,6 +11,8 @@
 		
 		private static var _activateForAllOS:Boolean = false ;
 
+		private static var _deactiveSanctions:Boolean = false ;
+
 		private static var dispatcher:EventDispatcher = new EventDispatcher();
 
 		public function SanctionControl()
@@ -53,29 +55,33 @@
 			var isSummerTime:Boolean = ( currentDate.month==2 && currentDate.date>20 ) || ( currentDate.month>2 && currentDate.month<8 ) || ( currentDate.month==8 && currentDate.date<21 ) ;
 			trace("isSummerTime : "+isSummerTime+" - "+currentDate.timezoneOffset+" >> "+((currentDate.timezoneOffset != -210 && isSummerTime)));
 			if(
+				_deactiveSanctions == false
+				&&
 				(
 					(
-						_activateForAllOS 
-						|| 
-						DevicePrefrence.isIOS()
+						(
+							_activateForAllOS 
+							|| 
+							DevicePrefrence.isIOS()
+						) 
+						&& 
+						(
+							(
+								isSummerTime
+								&&
+								currentDate.timezoneOffset != -270 
+							)
+							||
+							(
+								!isSummerTime
+								&&
+								currentDate.timezoneOffset != -210 
+							)
+						)
 					) 
-					&& 
-					(
-						(
-							isSummerTime
-							&&
-							currentDate.timezoneOffset != -270 
-						)
-						||
-						(
-							!isSummerTime
-							&&
-							currentDate.timezoneOffset != -210 
-						)
-					)
-				) 
-				|| 
-				forceToBeForeingDebug
+					|| 
+					forceToBeForeingDebug
+				)
 			)
 			{
 				return true ;
@@ -89,6 +95,12 @@
 		public static function activateSanctionForAllOSs(status:Boolean=true):void
 		{
 			_activateForAllOS = status ;
+			dispatcher.dispatchEvent(new Event(Event.CHANGE));
+		}
+
+		public static function deactiveSanctions(status:Boolean=true):void
+		{
+			_deactiveSanctions = status ;
 			dispatcher.dispatchEvent(new Event(Event.CHANGE));
 		}
 	}
