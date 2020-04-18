@@ -9,6 +9,7 @@
 package com.mteamapp
 {
 	import flash.geom.Point;
+	import contents.alert.Alert;
 
 	public class StringFunctions
 	{
@@ -466,7 +467,7 @@ package com.mteamapp
 			{
 				if(email==''|| email==null) return true
 			}
-			if(isArabic(email))
+			if(isPersian(email))
 			{
 				return false ;
 			}
