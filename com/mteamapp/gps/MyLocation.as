@@ -8,6 +8,7 @@
 	import flash.utils.clearInterval;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setInterval;
+	import contents.alert.Alert;
 	
 	public class MyLocation
 	{
@@ -31,13 +32,17 @@
 		
 		/**com.distriqt.extension.location.Location*/
 		private static var distriqtLocationClass:Class;
+
+		private static var pointLoadedFnctions:Array = [] ;
 		
-		public static function start(distriqtCode:String = null, DebugGPS:Boolean = false):void
+		public static function start(distriqtCode:String = null, DebugGPS:Boolean = false,onFirstPointLoaded:Function=null):void
 		{
+			pointLoadedFnctions.push(onFirstPointLoaded);
 			if (DebugGPS && DevicePrefrence.isItPC)
 			{
 				GPSLatitude = 35.7137559;
 				GPSLongitude = 51.4149215;
+				callAllWaitingFunctions();
 			}
 			if (geo == null)
 			{
@@ -74,6 +79,29 @@
 					trace("Default GPS started");
 					getGPSPermission(getLoacationCreated);
 				}
+			}
+			else if(GPSLatitude!=0 && GPSLongitude!=0)
+			{
+				callAllWaitingFunctions();
+			}
+		}
+
+		public function stopListenForFirst(onFirstPointLoaded:Function):void
+		{
+			var foundedFunctionIndex:int = pointLoadedFnctions.indexOf(onFirstPointLoaded);
+			if(foundedFunctionIndex!=-1)
+			{
+				pointLoadedFnctions.removeAt(foundedFunctionIndex);
+			}
+		}
+
+		private static function callAllWaitingFunctions():void
+		{
+			var cashedFuncs:Array = pointLoadedFnctions.concat();
+			pointLoadedFnctions = [] ;
+			for(var i:int = 0 ; i<cashedFuncs.length ; i++)
+			{
+				cashedFuncs[i]();
 			}
 		}
 		
@@ -266,6 +294,8 @@
 			//trace("*******Geo updated********");
 			GPSLatitude = e.latitude;
 			GPSLongitude = e.longitude;
+
+			callAllWaitingFunctions();
 		}
 		
 		public static function calculateDistance(Latitude:String, Longitude:String):Number
