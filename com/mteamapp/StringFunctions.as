@@ -656,8 +656,10 @@ package com.mteamapp
 			}
 		}
 		
-		public static function isNullOrEmpty(str:String):Boolean
+		public static function isNullOrEmpty(str:String,ignoreSpaces:Boolean=false):Boolean
 		{
+			if(ignoreSpaces)
+				str.split(' ').join('');
 			return str==null || str=='';
 		}
 		
