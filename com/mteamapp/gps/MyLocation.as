@@ -37,7 +37,8 @@
 		
 		public static function start(distriqtCode:String = null, DebugGPS:Boolean = false,onFirstPointLoaded:Function=null):void
 		{
-			pointLoadedFnctions.push(onFirstPointLoaded);
+			if(onFirstPointLoaded!=null)
+				pointLoadedFnctions.push(onFirstPointLoaded);
 			if (DebugGPS && DevicePrefrence.isItPC)
 			{
 				GPSLatitude = 35.7137559;
