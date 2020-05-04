@@ -605,6 +605,44 @@ package com.mteamapp
 			
 			return red*0x010000+gre*0x000100+blu ;
 		}
+
+		public static function stringToColor2(name:String,dynamicColor:uint=0x10):uint
+		{
+			var color0:uint = 0xf0f0f0;
+
+			var randColor:uint = Math.floor(makeRandomNum(name,1)*dynamicColor)
+			+Math.floor(makeRandomNum(name,2)*dynamicColor)*0x0100
+			+Math.floor(makeRandomNum(name,3)*dynamicColor)*0x010000;
+			//Alert.show(">>"+(makeRandomNum(name,1)*dynamicColor));
+			return color0+randColor;
+		}
+
+			private static function makeRandomNum(str:String,seed:uint):Number
+			{
+				var randomSeed:Number = 0 ;
+				for(var i:int=0; i<str.length ; i++)
+				{
+					randomSeed += str.charCodeAt(i) ;
+				}
+				var max:uint ;
+				switch(seed)
+				{
+					case 1:
+						max = 135;
+						break;
+					case 2:
+						max = 456;
+						break;
+					case 3:
+						max = 984;
+						break;
+					default:
+						max = 844
+						break;
+				}
+					randomSeed = (randomSeed%max)/max;
+				return randomSeed;
+			}
 		
 		
 		
