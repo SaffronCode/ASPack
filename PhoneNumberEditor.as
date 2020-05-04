@@ -16,8 +16,16 @@
  */
 package
 {
+	import flash.net.navigateToURL;
+	import flash.net.URLRequest;
+
 	public class PhoneNumberEditor
 	{
+		public static function call(phoneNumber:String):void
+		{
+			navigateToURL(new URLRequest('tel:'+phoneNumber));
+		}
+
 		/**this class will modify all numbers to standard style*/
 		public static function clearPhoneNumber(num:String):String
 		{
