@@ -9,6 +9,7 @@
 package com.mteamapp
 {
 	import flash.geom.Point;
+	import contents.alert.Alert;
 
 	public class StringFunctions
 	{
@@ -466,6 +467,10 @@ package com.mteamapp
 			{
 				if(email==''|| email==null) return true
 			}
+			if(isPersian(email))
+			{
+				return false ;
+			}
 			var reg:RegExp = /^[\w.-]+@\w[\w.-]+\.[\w.-]*[a-z][a-z]$/i;
 			return reg.test(email);
 		}
@@ -689,8 +694,10 @@ package com.mteamapp
 			}
 		}
 		
-		public static function isNullOrEmpty(str:String):Boolean
+		public static function isNullOrEmpty(str:String,ignoreSpaces:Boolean=false):Boolean
 		{
+			if(ignoreSpaces)
+				str.split(' ').join('');
 			return str==null || str=='';
 		}
 		

@@ -30,6 +30,7 @@ package
 	import appManager.mains.App;
 	import flash.utils.setTimeout;
 	import flash.utils.clearTimeout;
+	import contents.alert.Alert;
 
 	/**detect objects on display object with names*/
 	public class Obj
@@ -169,12 +170,15 @@ package
 
 				function onClick2(e:MouseEvent):void
 				{
-					if(onClick.length>0)
-						onClick(e);
-					else
-						onClick();
-
 					App.showShineEffect(target as Sprite);
+					Alert.vibratePuls();
+
+					//setTimeout(function():void{
+						if(onClick.length>0)
+							onClick(e);
+						else
+							onClick();
+					//},0);
 				}
 			}
 		}

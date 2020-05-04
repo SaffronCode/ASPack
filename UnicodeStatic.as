@@ -342,6 +342,11 @@ package
 		{
 			return str.split('ی').join('ي').split('ک').join('ك').split('ى').join('ي');
 		}
+		/**this function will remove all persian ک and ی and will repace them with ي and ك*/
+		public static function KaafYeReveted(str:String):String
+		{
+			return str.split('ي').join('ی').split('ك').join('ک').split('ي').join('ى');
+		}
 		
 		
 		/**this funciton will reset all farsi numbers to english numbers*/
