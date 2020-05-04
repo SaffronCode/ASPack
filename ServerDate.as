@@ -34,6 +34,12 @@
 			
 			return createdDate ;
 		}
+
+		/**2020_01_02 */
+		public static function dateToServerDate3(date:Date):String
+		{
+			return date.fullYear+"_"+StringFunctions.numToString(date.month+1)+"_"+StringFunctions.numToString(date.date);
+		}
 		
 		
 		/**2015-10-27T10:46:56.9335483+03:30*///2017-05-25T17:27:38.503Z
