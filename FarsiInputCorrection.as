@@ -612,16 +612,19 @@ package
 			if(editing || onlyNativeText)
 			{
 				editing = false;
-				if(correctNums)
+				if(myStageText!=null)
 				{
-					oldTextField.text = RemoveEnters(UnicodeStatic.numberCorrection(myStageText.text));
-				}
-				else
-				{
-					oldTextField.text = RemoveEnters(myStageText.text);
+					if(correctNums)
+					{
+						oldTextField.text = RemoveEnters(UnicodeStatic.numberCorrection(myStageText.text));
+					}
+					else
+					{
+						oldTextField.text = RemoveEnters(myStageText.text);
+					}
 				}
 				oldTextField.text = UnicodeStatic.KaafYe(oldTextField.text);
-				if(!onlyNativeText)
+				if(!onlyNativeText && myStageText!=null)
 				{
 					myStageText.visible = false;
 					myStageText.text = '' ;
