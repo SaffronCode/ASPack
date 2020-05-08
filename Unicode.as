@@ -596,6 +596,11 @@ package
 		{
 			return str.split('آ').join('آ').split('ی').join('ي');//.split('‌').join(' ').split('‏').join(' ');
 		}
+
+		public function KaafYeReveted(str:String):String
+		{
+			return str.split('ي').join('ی').split('ك').join('ک').split('ي').join('ى');
+		}
 		
 		
 		
@@ -731,7 +736,7 @@ package
 			if(STR!=null){
 				if(newFontMode && at==0)
 				{
-					return character;
+					return KaafYeReveted(character);
 				}
 
 				//trace("Str is not null and at is : "+at);
