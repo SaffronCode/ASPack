@@ -11,9 +11,16 @@
 							asyncDelay:uint = 30 ;
 
 		/**function caller*/
-		public static function callFunction(myFunc:Function):void
+		public static function callFunction(myFunc:Function,...params):void
 		{
-			var cash:Function = myFunc
+			var cash:Function = myFunc;
+			if(cash!=null)
+			{
+				if(cash.length>0)
+					cash.apply(params);
+				else
+					cash();
+			}
 		}
 		
 		/**create funtion and auto insert these args into it*/
