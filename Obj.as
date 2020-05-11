@@ -156,7 +156,7 @@ package
 		}
 		
 		/**generate a button from a movieClip*/
-		public static function setButton(target:*,onClick:Function)
+		public static function setButton(target:*,onClick:Function,...params):void
 		{
 			if(target!=null && target is EventDispatcher)
 			{
@@ -175,7 +175,16 @@ package
 
 					//setTimeout(function():void{
 						if(onClick.length>0)
-							onClick(e);
+						{
+							if(params.length>0)
+							{
+								onClick.apply(null,params);
+							}
+							else
+							{
+								onClick(e);
+							}
+						}
 						else
 							onClick();
 					//},0);
