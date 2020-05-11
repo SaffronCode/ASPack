@@ -239,7 +239,7 @@
 		{
 			if(v is String)
 			{
-				if(String(v).indexOf("\/Date(")!=-1)
+				if(String(v).indexOf("\/Date(")==0)
 				{
 					var V:String = String(v) ;
 				//	trace("Get date :"+V);
