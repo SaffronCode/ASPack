@@ -109,6 +109,8 @@ package
 		/**This text will show on output whenever the input field was empty*/
 		private var inputLableText:String = '' ;
 
+		private var onChange:Function ;
+
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
@@ -132,6 +134,12 @@ package
 		public static function clear(textField:TextField):void
 		{
 			textField.dispatchEvent(new Event(Event.REMOVED_FROM_STAGE));
+		}
+
+		public function onChanged(onChangedFunction:Function):FarsiInputCorrection
+		{
+			onChange = onChangedFunction ;
+			return this ;
 		}
 
 
@@ -454,6 +462,11 @@ package
 		{
 			return str.split(' ').join('[SPACE]').split('\t').join('[TAB]').split('\r').join('[NEWLINE R]').split('\n').join('[NEWLINE N]');
 		}
+
+		public function activateKeyboard():void
+		{
+			switchFocuse();
+		}
 		
 		public function focuseOnStageText(e:*=null):void
 		{
@@ -594,6 +607,7 @@ package
 			oldTextField.removeEventListener(Event.CHANGE,changeTheStageText);
 			
 			oldTextField.dispatchEvent(new Event(Event.CHANGE));
+			callOnChange();
 			if(!onlyNativeText)
 			{
 				oldTextField.addEventListener(Event.CHANGE,changeTheDisplayedText);	
@@ -601,6 +615,21 @@ package
 			else
 			{
 				oldTextField.addEventListener(Event.CHANGE,changeTheStageText);
+			}
+		}
+
+		private function callOnChange():void
+		{
+			if(onChange!=null)
+			{
+				if(onChange.length>0)
+				{
+					onChange(oldTextField.text);
+				}
+				else
+				{
+					onChange();
+				}
 			}
 		}
 		
@@ -632,6 +661,7 @@ package
 				//trace('invisible the text '+oldTextField.textColor.toString(16));
 				
 				oldTextField.dispatchEvent(new Event(Event.CHANGE));
+				callOnChange();
 				oldTextField.dispatchEvent(new Event(Event.CLOSE));
 				oldTextField.dispatchEvent(new FarsiInputCorrectionEvent(FarsiInputCorrectionEvent.TEXT_FIELD_CLOSED,oldTextField));
 			}
