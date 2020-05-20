@@ -140,7 +140,7 @@
 			return myDate ;
 		}
 		
-		/**11/6/2014 1:10:14 AM*/
+		/**31/01/2018 15:50:08*/
 		public static function serverDateToDate(date:String):Date
 		{
 			if(date == '' || date==null)
@@ -163,7 +163,7 @@
 				timeSplitter[0] = '0' ;
 			}
 			
-			createdDate = new Date(Number(dateSplitter[2]),Number(dateSplitter[0])-1,Number(dateSplitter[1]),Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
+			createdDate = new Date(Number(dateSplitter[2]),Number(dateSplitter[1])-1,Number(dateSplitter[0]),Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
 			if(splitter[2] == "PM" && Number(timeSplitter[0])<12)
 			{
 				createdDate.hours+=12 ;
