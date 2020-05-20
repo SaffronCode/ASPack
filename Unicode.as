@@ -440,6 +440,7 @@ package
 			{
 				return '' ;
 			}
+			ch = ch.split('\t').join('   ');
 			lastRtlStatus = true ;
 			ch = farsiCorrection(ch);
 			var matn:String = "";
