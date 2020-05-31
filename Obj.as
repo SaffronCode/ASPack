@@ -42,7 +42,7 @@ package
 		
 		
 		
-		public static function get(name:String,on:DisplayObjectContainer,clas:Class=null)
+		public static function get(name:String,on:DisplayObjectContainer,clas:Class=null):*
 		{
 			if(on==null)
 			{
@@ -280,41 +280,41 @@ package
 			{
 				throw "whattt???"
 			}
-			trace("onThe.name : "+onThe.name+' : '+onThe);
-			if( onThe.name  == name)
-			{
-				if(returnOnlyFirstFounded)
-				{
-					return [onThe] ;
-				}
-				else
-				{
-					founded.push(onThe);
-				}
-			}
+			
 			trace("Search for childs : "+onThe.numChildren);
+			var myChildToSearch:Vector.<DisplayObjectContainer> = new Vector.<DisplayObjectContainer>();
+			var targ:DisplayObject ;
 			if(onThe is DisplayObjectContainer)
 			{
 				for( i = 0 ; i < onThe.numChildren ; i++)
 				{
-					if(onThe.getChildAt(i) is DisplayObjectContainer)
-					{
-						trace("Search on "+onThe.getChildAt(i));
-						founded = getAllChilds(name,(onThe.getChildAt(i) as DisplayObjectContainer),returnOnlyFirstFounded).concat(founded);
-					}
-					else if(onThe.getChildAt(i).name == name)
+					targ = onThe.getChildAt(i);
+					//trace('onThe.getChildAt(i).name : '+targ.name+' vs '+(name));
+					if(targ.name == name)
 					{
 						if(returnOnlyFirstFounded)
 						{
-							return [onThe.getChildAt(i)] ;
+							return [targ] ;
 						}
 						else
 						{
-							founded.push(onThe.getChildAt(i));
+							founded.push(targ);
 						}
 					}
+					if(targ is DisplayObjectContainer)
+					{
+						myChildToSearch.push(targ);
+					}
 				}
-			
+				for(i = 0 ; i<myChildToSearch.length ; i++)
+				{
+					founded = getAllChilds(name,myChildToSearch[i],returnOnlyFirstFounded).concat(founded);
+						
+					if(returnOnlyFirstFounded && founded.length>0)
+					{
+						return founded;
+					}
+				}
 			}
 			
 			//Below lines will contorll the founded items to have at least one element on the returned value.
@@ -322,7 +322,7 @@ package
 			{
 				if(founded[i] == null)
 				{
-					founded.splice(i,1);
+					founded.removeAt(i);
 					i--;
 				}
 			}
