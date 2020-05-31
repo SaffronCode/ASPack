@@ -64,6 +64,51 @@ package
 			}
 			return targ
 		}
+
+		/**
+		 * This function will addEventListner to your eventDispatcher. but this time, 
+		 * 1- you don't need to defind input as Event.
+		 * 2- The listner will remove if the DisplayObject removed from the state
+		 * @param target 
+		 * @param eventType 
+		 * @param onHappened with optional Event input
+		 * @param stopImmediatePropagation 
+		 * @param preventDefault 
+		 * @return The lisnterRemover function will return. call it to kill eventListner
+		 */
+		public static function addEventListener(target:EventDispatcher,eventType:String,onHappened:Function,stopImmediatePropagation:Boolean=false,preventDefault:Boolean=false,removeOnThisObjectRemovedFromState:DisplayObject=null):Function
+		{
+			target.addEventListener(eventType,onDone);
+			if(removeOnThisObjectRemovedFromState!=null)
+			{
+				removeOnThisObjectRemovedFromState.addEventListener(Event.REMOVED_FROM_STAGE,removeThisListner);
+			}
+			else if(target is DisplayObject)
+			{
+				target.addEventListener(Event.REMOVED_FROM_STAGE,removeThisListner);
+			}
+			target.addEventListener(eventType,onDone);
+
+			function onDone(e:Event):void
+			{
+				if(stopImmediatePropagation)
+					e.stopImmediatePropagation();
+				if(preventDefault)
+					e.preventDefault();
+
+				if(onHappened.length>0)
+					onHappened(e);
+				else
+					onHappened();
+			}
+
+			function removeThisListner(e:*=null):void
+			{
+				target.removeEventListener(eventType,onDone);
+			}
+
+			return removeThisListner ;
+		}
 		
 		/**remove this object from its parents*/
 		public static function remove(target:DisplayObject)
