@@ -236,6 +236,42 @@ package
 				}
 			}
 		}
+
+		/**generate a button from a movieClip*/
+		public static function setButtonNoShineEffect(target:*,onClick:Function,...params):void
+		{
+			if(target!=null && target is EventDispatcher)
+			{
+				if(target is MovieClip)
+				{
+					target.mouseChildren = false ;
+					target.buttonMode = true ;
+				}
+				target.removeEventListener(MouseEvent.CLICK,onClick2);
+				target.addEventListener(MouseEvent.CLICK,onClick2);
+
+				function onClick2(e:MouseEvent):void
+				{
+					Alert.vibratePuls();
+
+					//setTimeout(function():void{
+						if(onClick.length>0)
+						{
+							if(params.length>0)
+							{
+								onClick.apply(null,params);
+							}
+							else
+							{
+								onClick(e);
+							}
+						}
+						else
+							onClick();
+					//},0);
+				}
+			}
+		}
 		
 		
 		/**return true if the Target is still in the stage*/
