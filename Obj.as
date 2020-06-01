@@ -391,7 +391,7 @@ package
 				{
 					founded = getAllChilds(name,myChildToSearch[i],returnOnlyFirstFounded).concat(founded);
 						
-					if(returnOnlyFirstFounded && founded.length>0)
+					if(returnOnlyFirstFounded && founded.length>0 && founded[0]!=null)
 					{
 						return founded;
 					}
