@@ -362,49 +362,28 @@ package
 				throw "whattt???"
 			}
 			
-			trace("Search for childs : "+onThe.numChildren);
-			var myChildToSearch:Vector.<DisplayObjectContainer> = new Vector.<DisplayObjectContainer>();
+			//trace("Search for childs : "+onThe.numChildren);
+			var myChildToSearch:Vector.<DisplayObject> = new Vector.<DisplayObject>();
+			myChildToSearch.push(onThe);
 			var targ:DisplayObject ;
-			if(onThe is DisplayObjectContainer)
+			for(i=0;i<myChildToSearch.length ; i++)
 			{
-				for( i = 0 ; i < onThe.numChildren ; i++)
+				targ = myChildToSearch[i] ;
+				if(i>0 && targ.name == name)
 				{
-					targ = onThe.getChildAt(i);
-					//trace('onThe.getChildAt(i).name : '+targ.name+' vs '+(name));
-					if(targ.name == name)
+					founded.push(targ);
+					if(returnOnlyFirstFounded)
 					{
-						if(returnOnlyFirstFounded)
-						{
-							return [targ] ;
-						}
-						else
-						{
-							founded.push(targ);
-						}
-					}
-					if(targ is DisplayObjectContainer)
-					{
-						myChildToSearch.push(targ);
+						return founded ;
 					}
 				}
-				for(i = 0 ; i<myChildToSearch.length ; i++)
+				if(targ is DisplayObjectContainer)
 				{
-					founded = getAllChilds(name,myChildToSearch[i],returnOnlyFirstFounded).concat(founded);
-						
-					if(returnOnlyFirstFounded && founded.length>0 && founded[0]!=null)
+					var l:uint = (targ as DisplayObjectContainer).numChildren ;
+					for( var j = 0 ; j < l ; j++)
 					{
-						return founded;
+						myChildToSearch.push((targ as DisplayObjectContainer).getChildAt(j));
 					}
-				}
-			}
-			
-			//Below lines will contorll the founded items to have at least one element on the returned value.
-			for(i = 0 ; i<founded.length ; i++)
-			{
-				if(founded[i] == null)
-				{
-					founded.removeAt(i);
-					i--;
 				}
 			}
 			
