@@ -31,6 +31,8 @@ package
 	import flash.utils.setTimeout;
 	import flash.utils.clearTimeout;
 	import contents.alert.Alert;
+	import flash.utils.setInterval;
+	import flash.utils.clearInterval;
 
 	/**detect objects on display object with names*/
 	public class Obj
@@ -104,6 +106,7 @@ package
 
 			function removeThisListner(e:*=null):void
 			{
+				target.removeEventListener(Event.REMOVED_FROM_STAGE,removeThisListner);
 				target.removeEventListener(eventType,onDone);
 			}
 
@@ -198,6 +201,15 @@ package
 					}
 				}
 			}
+		}
+
+		public static function setIntervalOnDisplayObject(displayObjctOnStage:DisplayObject,closur:Function,delay:Number,...param):uint
+		{
+			var intervalID:uint = setInterval.apply(displayObjctOnStage,[closur,delay].concat(param));
+			addEventListener(displayObjctOnStage,Event.REMOVED_FROM_STAGE,function(){
+				clearInterval(intervalID);
+			});
+			return intervalID ;
 		}
 		
 		/**generate a button from a movieClip*/
