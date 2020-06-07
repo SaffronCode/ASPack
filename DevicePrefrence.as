@@ -861,9 +861,10 @@ package {
          */
         public static function isApplicationOnline(yes:Function,no:Function):void
         {
-            var urlLoader:URLLoader = new URLLoader(new URLRequest("https://www.google.com/"));
+            var urlLoader:URLLoader = new URLLoader();
             urlLoader.addEventListener(ProgressEvent.PROGRESS,function(e){urlLoader.close();yes()});
-            urlLoader.addEventListener(IOErrorEvent.IO_ERROR,function(e){no()})
+            urlLoader.addEventListener(IOErrorEvent.IO_ERROR,function(e){no()});
+            urlLoader.load(new URLRequest("https://www.google.com/"));
         }
     }
 }
