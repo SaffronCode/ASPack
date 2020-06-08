@@ -203,12 +203,30 @@ package
 			}
 		}
 
+		/**
+		 * This function will kill interval when the displayedObject removd from the state. and it will not call closur function when the appliation is not active
+		 * @param displayObjctOnStage 
+		 * @param closur 
+		 * @param delay 
+		 * @param ...param 
+		 * @return 
+		 */
 		public static function setIntervalOnDisplayObject(displayObjctOnStage:DisplayObject,closur:Function,delay:Number,...param):uint
 		{
-			var intervalID:uint = setInterval.apply(displayObjctOnStage,[closur,delay].concat(param));
-			addEventListener(displayObjctOnStage,Event.REMOVED_FROM_STAGE,function(){
+			var intervalID:uint = setInterval(onClosur,delay);
+			addEventListener(displayObjctOnStage,Event.REMOVED_FROM_STAGE,function():void{
+				trace("Obj. clear interval");
 				clearInterval(intervalID);
 			});
+			function onClosur():void
+			{
+				trace("Obj. closurHappend");
+				if(DevicePrefrence.isApplicationActive)
+				{
+					trace("Obj. app is active to call closur");
+					closur.apply(displayObjctOnStage,param);
+				}
+			}
 			return intervalID ;
 		}
 		
