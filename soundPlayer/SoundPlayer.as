@@ -80,7 +80,7 @@ package soundPlayer
 			{
 				return ;
 			}
-			trace('setUp !')
+			SaffronLogger.log('setUp !')
 			myStage = MyStage ;
 			
 			diactiveAllOnBack = dicativeAllOnBackGround ;
@@ -371,7 +371,7 @@ package soundPlayer
 		{
 			if(myStage==null)
 			{
-				trace("soundPlayer Class , addSound : "+new Error('SetUp this Class First'));
+				SaffronLogger.log("soundPlayer Class , addSound : "+new Error('SetUp this Class First'));
 				return;
 			}
 			
@@ -422,7 +422,7 @@ package soundPlayer
 		/**sound target is not refer correctly*/
 		private static function soundNOtFounded(e)
 		{
-			trace('Sound error : '+e);
+			SaffronLogger.log('Sound error : '+e);
 		}
 		
 		
@@ -514,7 +514,7 @@ package soundPlayer
 		{
 			if(myStop[I])
 			{
-				//trace('sounde played');
+				//SaffronLogger.log('sounde played');
 				myPaused[I] = false ;
 				myStop[I] = false ;
 				myTrans[I].volume = Math.min(myMaxVolume[I],beginVolume);
@@ -613,8 +613,8 @@ package soundPlayer
 			var totalLength:uint = getMusicTime(soundId);
 			var currentPrecent:Number = getPlayedPrecent(soundId) ;
 			var currentTime:uint = uint(totalLength*currentPrecent);
-			trace("currentTime : "+currentTime)
-			trace("totalLength : "+totalLength);
+			SaffronLogger.log("currentTime : "+currentTime)
+			SaffronLogger.log("totalLength : "+totalLength);
 			var newTime:uint = Math.min(totalLength,currentTime+howMuchMiliseconds);
 			SoundPlayer.pause(soundId,true);
 			play(soundId,true,true,newTime/totalLength);
@@ -626,8 +626,8 @@ package soundPlayer
 			var totalLength:uint = getMusicTime(soundId);
 			var currentPrecent:Number = getPlayedPrecent(soundId) ;
 			var currentTime:uint = uint(totalLength*currentPrecent);
-			trace("currentTime : "+currentTime)
-			trace("totalLength : "+totalLength);
+			SaffronLogger.log("currentTime : "+currentTime)
+			SaffronLogger.log("totalLength : "+totalLength);
 			var newTime:uint = Math.max(0,currentTime-howMuchMiliseconds);
 			SoundPlayer.pause(soundId,true);
 			play(soundId,true,true,newTime/totalLength);

@@ -251,18 +251,18 @@ package
 			{
 				textField.text = '-';
 				var firstLineHieght:Number = textField.textHeight ;
-				//trace(" ♠ : textField.textHeight1 : "+firstLineHieght);
+				//SaffronLogger.log(" ♠ : textField.textHeight1 : "+firstLineHieght);
 				//textField.text = '-\n-';
 				
 				metric = textField.getLineMetrics(0);
 				
-			//	trace(" ♠ : textField.textHeight2 : "+textField.textHeight);
+			//	SaffronLogger.log(" ♠ : textField.textHeight2 : "+textField.textHeight);
 				//lineHeight = textField.textHeight - firstLineHieght ;
 				
-				//trace("metric : "+JSON.stringify(metric,null,' '));
+				//SaffronLogger.log("metric : "+JSON.stringify(metric,null,' '));
 				
-				//trace(" ♦ : lineHeight : "+lineHeight);
-				//trace("VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
+				//SaffronLogger.log(" ♦ : lineHeight : "+lineHeight);
+				//SaffronLogger.log("VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
 				lineHeight = metric.height ;
 				//descent = metric.descent ;
 			}
@@ -284,7 +284,7 @@ package
 			if(generateLinksForURLs)
 			{
 				text = StringFunctions.generateLinks(text,linksColor);//Unicode.htmlCorrect(text,linksColor,!replaceWithBitmap,fontSize);
-				//trace("Text changed to : "+text)
+				//SaffronLogger.log("Text changed to : "+text)
 			}
 			
 			
@@ -304,7 +304,7 @@ package
 			
 			if(arabic)
 			{
-				//trace("text is arabic : "+text);
+				//SaffronLogger.log("text is arabic : "+text);
 				var cashedColor:uint = textField.textColor ;
 				UnicodeStatic.htmlText(textField,text,useCash,true,align,splitIfToLong);
 				
@@ -319,12 +319,12 @@ package
 			}
 			else
 			{
-				//trace("text is English : "+text);
+				//SaffronLogger.log("text is English : "+text);
 				textField.text = text ;
 			}
 			
-			//trace("textField : "+textField.text);
-			//trace("textField.numLines : "+textField.numLines);
+			//SaffronLogger.log("textField : "+textField.text);
+			//SaffronLogger.log("textField.numLines : "+textField.numLines);
 			metric = textField.getLineMetrics(0);
 			lineHeight = metric.height ;
 			//descent = metric.descent ;
@@ -338,7 +338,7 @@ package
 			}
 			
 			lastInfo_realTextHeight = lineHeight*numLines;
-			//trace("♠ calculated height is : "+lastInfo_realTextHeight+" vs real text height : "+textField.textHeight);
+			//SaffronLogger.log("♠ calculated height is : "+lastInfo_realTextHeight+" vs real text height : "+textField.textHeight);
 			//lastInfo_realTextHeight = textField.textHeight ;
 			
 			lastInfo_numLines = textField.numLines ;
@@ -383,16 +383,16 @@ package
 				}
 				if(VerticalAlign_verticalHeight!=0 && VerticalAlign_verticalHeight>lastInfo_realTextHeight)
 				{
-					/*trace("♦ : lastInfo_textHeidth : "+lastInfo_textHeidth);
-					trace("♦ : VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
-					trace("♦ : (VerticalAlign_verticalHeight-lastInfo_textHeidth)/2 : "+(VerticalAlign_verticalHeight-lastInfo_textHeidth)/2);
-					trace(" ♥ : capturedObject.y : "+capturedObject.y);
-					trace(" ♦ : text : "+text);
-					trace(" ♦ what is capturedObject ? :"+capturedObject);
-					trace(" ♦ : lastInfo_realTextHeight : "+lastInfo_realTextHeight);
-					trace(" ♦ : lineHeight : "+lineHeight);*/
-					trace("• lastInfo_realTextHeight : "+lastInfo_realTextHeight);
-					trace("• VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
+					/*SaffronLogger.log("♦ : lastInfo_textHeidth : "+lastInfo_textHeidth);
+					SaffronLogger.log("♦ : VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
+					SaffronLogger.log("♦ : (VerticalAlign_verticalHeight-lastInfo_textHeidth)/2 : "+(VerticalAlign_verticalHeight-lastInfo_textHeidth)/2);
+					SaffronLogger.log(" ♥ : capturedObject.y : "+capturedObject.y);
+					SaffronLogger.log(" ♦ : text : "+text);
+					SaffronLogger.log(" ♦ what is capturedObject ? :"+capturedObject);
+					SaffronLogger.log(" ♦ : lastInfo_realTextHeight : "+lastInfo_realTextHeight);
+					SaffronLogger.log(" ♦ : lineHeight : "+lineHeight);*/
+					SaffronLogger.log("• lastInfo_realTextHeight : "+lastInfo_realTextHeight);
+					SaffronLogger.log("• VerticalAlign_verticalHeight : "+VerticalAlign_verticalHeight);
 					capturedObject.y = ((VerticalAlign_verticalHeight-lastInfo_realTextHeight)/2)-metric.descent/2;
 				}
 			}

@@ -16,7 +16,24 @@
 		
 		public static var GPSLatitude:Number = 0, GPSLongitude:Number = 0
 		
-		public static var geo:Geolocation;
+		private static var _geo:Geolocation;
+
+		public static function get geo():Geolocation
+		{
+			return _geo ;
+		}
+
+		public static function set geo(value:Geolocation):void
+		{
+			try
+			{
+				throw new Error("Geolocation for MyLocation has been set from ");
+			}catch(e:Error)
+			{
+				SaffronLogger.log(e.message+"\n > \n"+e.getStackTrace());
+			}
+			_geo = value;
+		}
 		
 		/**This will returns the round number for gps Longitude*/
 		public static function get GPSLongitudeRound():Number
@@ -47,7 +64,7 @@
 			}
 			if (geo == null)
 			{
-				trace("*************** Geo created**********");
+				SaffronLogger.log("*************** Geo created**********");
 				
 				try
 				{
@@ -61,8 +78,8 @@
 				
 				if (distriqtCode != null)
 				{
-					trace("Distriqt GPS started");
-					trace("\n\n*****************************\n\n\nIf you whant to use distriqt location abilities, you should add below ane files to your project:" + "\t<extensionID>com.distriqt.Core</extensionID>" + "\t<extensionID>com.distriqt.androidsupport.V4</extensionID>" + 
+					SaffronLogger.log("Distriqt GPS started");
+					SaffronLogger.log("\n\n*****************************\n\n\nIf you whant to use distriqt location abilities, you should add below ane files to your project:" + "\t<extensionID>com.distriqt.Core</extensionID>" + "\t<extensionID>com.distriqt.androidsupport.V4</extensionID>" + 
 					//"\t<extensionID>com.distriqt.androidsupport.AppCompatV7</extensionID>"+
 					//"\t<extensionID>com.distriqt.androidsupport.CustomTabs</extensionID>"+
 					"\t<extensionID>com.distriqt.playservices.Base</extensionID>" + "\t<extensionID>com.distriqt.playservices.Location</extensionID>" + "\t<extensionID>com.distriqt.Location</extensionID>\n\n\n*****************************\n\n\n");
@@ -77,7 +94,7 @@
 					controllDefaultPermission();
 					distriqtLocationClass = null;
 					//recreateGeo();
-					trace("Default GPS started");
+					SaffronLogger.log("Default GPS started");
 					getGPSPermission(getLoacationCreated);
 				}
 			}
@@ -108,7 +125,7 @@
 		
 		private static function getLoacationCreated():void
 		{
-			trace("**** Start gps ****");
+			SaffronLogger.log("**** Start gps ****");
 			geo = new Geolocation();
 			geo.addEventListener(GeolocationEvent.UPDATE, iGotGeo);
 		}
@@ -227,11 +244,11 @@
 				
 				if (myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest2)) == -1 || myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest3)) == -1)
 				{
-					trace( "You have to add below permisions on the Android manifest:\n\n\t" + manifest2 + '\n\t' + manifest3 + '\n\n');
+					SaffronLogger.log( "You have to add below permisions on the Android manifest:\n\n\t" + manifest2 + '\n\t' + manifest3 + '\n\n');
 				}
 				if (myManifest.indexOf(StringFunctions.clearSpacesAndTabs(iosManifest)) == -1)
 				{
-					trace( "Add below permition to <InfoAdditions> tag for iOS versions\n\n\n" + iosManifest + '\n\n\n');
+					SaffronLogger.log( "Add below permition to <InfoAdditions> tag for iOS versions\n\n\n" + iosManifest + '\n\n\n');
 				}
 			}
 		}
@@ -250,14 +267,14 @@
 			var AndroidLocationManifestWithoutSpace:String = StringFunctions.clearSpacesAndTabs(AndroidlocationManifest);
 			
 			var erros:String = '';
-			trace('myManifest :', XML(myManifest))
+			SaffronLogger.log('myManifest :', XML(myManifest))
 			if (myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest1)) == -1 || myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest2)) == -1 || myManifest.indexOf(StringFunctions.clearSpacesAndTabs(manifest3)) == -1)
 			{
-				trace( "You have to add below permisions on the Android manifest:\n\n\t" + manifest1 + '\n\t' + manifest2 + '\n\t' + manifest3 + '\n\n');
+				SaffronLogger.log( "You have to add below permisions on the Android manifest:\n\n\t" + manifest1 + '\n\t' + manifest2 + '\n\t' + manifest3 + '\n\n');
 			}
 			else if (myManifest.indexOf(AndroidLocationManifestWithoutSpace) == -1)
 			{
-				trace( "You have to add below permision on the Android manifest on tag <application>:\n\n" + AndroidlocationManifest);
+				SaffronLogger.log( "You have to add below permision on the Android manifest on tag <application>:\n\n" + AndroidlocationManifest);
 			}
 			
 			var iosManifest:String = '	<key>UIRequiredDeviceCapabilities</key>' + '<array>' + '	<string>location-services</string>' + '</array>';
@@ -265,7 +282,7 @@
 			var iosClearManifest:String = StringFunctions.clearSpacesAndTabs(iosManifest);
 			if (myManifest.indexOf(iosClearManifest) == -1)
 			{
-				trace( "You have to add below manifest for iOS to make it able to use distriqt functions:\n\n" + iosManifest);
+				SaffronLogger.log( "You have to add below manifest for iOS to make it able to use distriqt functions:\n\n" + iosManifest);
 			}
 		}
 		
@@ -292,7 +309,7 @@
 		
 		private static function iGotGeo(e:GeolocationEvent):void
 		{
-			//trace("*******Geo updated********");
+			//SaffronLogger.log("*******Geo updated********");
 			GPSLatitude = e.latitude;
 			GPSLongitude = e.longitude;
 

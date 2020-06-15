@@ -222,7 +222,7 @@ package
 			//remember target
 			targ = target ;
 			
-			trace("This is the new scroller. activeEffect : "+activeEffect);
+			SaffronLogger.log("This is the new scroller. activeEffect : "+activeEffect);
 			
 			acceptSetEfectOnMe = activeEffect ;
 			
@@ -254,10 +254,12 @@ package
 			{
 				unLockTopDown = false ;
 			}
+
 			
-			//trace("maskRect : "+maskRect+' vs targetArea:'+targetArea);
 			
-			//trace("unLockTopDown : "+unLockTopDown);
+			//SaffronLogger.log("maskRect : "+maskRect+' vs targetArea:'+targetArea);
+			
+			//SaffronLogger.log("unLockTopDown : "+unLockTopDown);
 			
 			
 			if(!freeScrollOnTarget_LR && (maskRect.width>=targetRect.width || userDidntEnterRect))
@@ -265,7 +267,7 @@ package
 				unLockLeftRight = false ;
 			}
 			
-			//trace("unLockTopDown : "+unLockLeftRight);
+			//SaffronLogger.log("unLockTopDown : "+unLockLeftRight);
 			
 			scrollerMask = new Sprite() ;
 			
@@ -277,7 +279,7 @@ package
 			//comment this line for debuging the museLocker displayObject ↓
 			mouseLocker.alpha = 0;
 			
-			//trace('mous lock checker');
+			//SaffronLogger.log('mous lock checker');
 			
 			mouseLocker.x = scrollerMask.x = maskRect.x;
 			mouseLocker.y = scrollerMask.y = maskRect.y;
@@ -309,7 +311,7 @@ package
 			}
 			curselTopDown.y = maskRect.y+currselMargin+currselW ;
 			
-			//trace("Cursel generated");
+			//SaffronLogger.log("Cursel generated");
 			
 			
 			
@@ -320,7 +322,7 @@ package
 		protected function scrollMeByMyChild(event:ScrollMTEvent):void
 		{
 			event.stopImmediatePropagation();
-			trace("Scroll request from childs");
+			SaffronLogger.log("Scroll request from childs");
 			setPose(targetRect.x+event.dx,targetRect.y+event.dy);
 			//x = targ.x+event.dx ;
 			//y = targ.y+event.dy ;
@@ -508,7 +510,7 @@ package
 			//myTimeOutId = setTimeout(setMask,0);
 			setMask();
 			
-			//trace("♠ now im added");
+			//SaffronLogger.log("♠ now im added");
 			
 			reset() ;
 			
@@ -564,11 +566,11 @@ package
 			if(unLockTopDown)
 			{
 				targ.parent.addChild(curselTopDown);
-				//trace("Cursel added to : "+targ.parent);
+				//SaffronLogger.log("Cursel added to : "+targ.parent);
 			}
 			/*else
 			{
-				trace("Top down scroll is lock");
+				SaffronLogger.log("Top down scroll is lock");
 			}*/
 			
 			targParent.addEventListener(MouseEvent.MOUSE_DOWN,startScroll);
@@ -681,7 +683,7 @@ package
 		/**lock the scroller and stop floating*/
 		public function lock(unlockOnFirstClick:Boolean=false):void
 		{
-			//trace("**locked");
+			//SaffronLogger.log("**locked");
 			UnlockOnFirstClick = unlockOnFirstClick ;
 			MouseUnLock();
 			scrollLock = true ;
@@ -700,7 +702,7 @@ package
 		/**unlock the scroller*/
 		public function unLock(e:*=null)
 		{
-			trace("**unlocked");
+			SaffronLogger.log("**unlocked");
 			if(targStage)
 			{
 				targStage.removeEventListener(MouseEvent.MOUSE_MOVE,updateAnimation);
@@ -713,7 +715,7 @@ package
 		/**reset the floating and position*/
 		public function reset()
 		{
-			//trace('reset the scroller position');
+			//SaffronLogger.log('reset the scroller position');
 			
 			stopFloat();
 			if(revertX)
@@ -756,7 +758,7 @@ package
 		private function canScroll():Boolean
 		{
 			//Debug line ↓
-				//trace("Scroll controll : "+targStage.mouseX,targStage.mouseY+' vs '+scrollerMask.getBounds(targStage)+" > "+(scrollerMask.hitTestPoint(targStage.mouseX,targStage.mouseY))+' and '+(scrollerMask.getBounds(targStage).contains(targStage.mouseX,targStage.mouseY)));
+				//SaffronLogger.log("Scroll controll : "+targStage.mouseX,targStage.mouseY+' vs '+scrollerMask.getBounds(targStage)+" > "+(scrollerMask.hitTestPoint(targStage.mouseX,targStage.mouseY))+' and '+(scrollerMask.getBounds(targStage).contains(targStage.mouseX,targStage.mouseY)));
 				return (
 							!scrollLock 
 							&& 
@@ -890,7 +892,7 @@ package
 		/**prevent scroller to catch mosueEvents*/
 		private function MouseLock()
 		{
-			//trace('mouse s are locked');
+			//SaffronLogger.log('mouse s are locked');
 			if(!mouseLocker.visible)
 			{
 				//dispatchChildScrollLockerOn(targ as Sprite);
@@ -905,7 +907,7 @@ package
 		/**This will dispatches YOU_ARE_SCROLLING_FROM_YOUR_PARENT event to all children
 		private function dispatchChildScrollLockerOn(target:Sprite):void
 		{
-			//trace("Dispatch events on : "+target)
+			//SaffronLogger.log("Dispatch events on : "+target)
 			for(var i = 0 ; i<target.numChildren ; i++)
 			{
 				if(target.getChildAt(i) is Sprite)
@@ -935,7 +937,7 @@ package
 		{
 			/*if(e==null)
 			{
-				trace("Scroller debugger : "+targetRect);
+				SaffronLogger.log("Scroller debugger : "+targetRect);
 				targ.x = targetRect.x ;
 				targ.y = targetRect.y ;
 			}*/
@@ -947,7 +949,7 @@ package
 			
 			if(scrollLock)
 			{
-				//trace('scroll is lock')
+				//SaffronLogger.log('scroll is lock')
 				return ;
 			}
 			var temp:Number ;
@@ -966,7 +968,7 @@ package
 				{
 					if(targetRect.height!=lastH)
 					{
-						trace("These lines was increase performance");
+						SaffronLogger.log("These lines was increase performance");
 						curselTopDown.graphics.clear();
 						curselTopDown.graphics.beginFill(cursolCollor,cursolAlpha);
 						temp = (maskRect.height/targetRect.height)*maskRect.height ;
@@ -1001,7 +1003,7 @@ package
 				{
 					if(targetRect.width!=lastW)
 					{
-						trace("These lines was increase performance");
+						SaffronLogger.log("These lines was increase performance");
 						curselLeftRight.graphics.clear();
 						curselLeftRight.graphics.beginFill(cursolCollor,cursolAlpha);
 						temp = (maskRect.width/targetRect.width)*maskRect.width ;
@@ -1037,7 +1039,7 @@ package
 					unLock();
 					return;
 				}
-				//trace('absScale : '+absScale);
+				//SaffronLogger.log('absScale : '+absScale);
 				if(unLockLeftRight)
 				{
 					if(MouseLockAvailable() && Math.abs(mousePose0.x-mousePose.x)>minScrollToLock)
@@ -1049,7 +1051,7 @@ package
 					else if(mousePose0!=null)
 					{
 						vxHist = Vx = 0 ;
-						//trace("Canceling");
+						//SaffronLogger.log("Canceling");
 						targParent.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TRY_TO_SCROLL,true,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR));
 					}
 					else
@@ -1068,13 +1070,13 @@ package
 					{
 						//this function was replaced with MouseUnLock() by mistake
 						vyHist=(targStage.mouseY-mousePose0.y)/absScale;
-						//trace("Extra vy : "+Vy);
+						//SaffronLogger.log("Extra vy : "+Vy);
 						mousePose0 = null ;
 						MouseLock();
 					}
 					else if(mousePose0!=null)
 					{
-						//trace("Canceling");
+						//SaffronLogger.log("Canceling");
 						vyHist = Vy = 0 ;
 						targParent.dispatchEvent(new ScrollMTEvent(ScrollMTEvent.TRY_TO_SCROLL,true,false,freeScrollOnTarget_TD,freeScrollOnTarget_LR));
 					}
@@ -1087,7 +1089,7 @@ package
 						vyHist = Vy=(targStage.mouseY-mousePose.y)/absScale;
 					}
 					//lock the mosue↓
-					//trace('check to lock the container : '+MouseLockAvailable()+' && '+Math.abs(Vy)+' > '+minAvailableScroll+' = '+(Math.abs(Vy)>minAvailableScroll));
+					//SaffronLogger.log('check to lock the container : '+MouseLockAvailable()+' && '+Math.abs(Vy)+' > '+minAvailableScroll+' = '+(Math.abs(Vy)>minAvailableScroll));
 				}
 				
 				if(!calledByMouseDrag)
@@ -1158,7 +1160,7 @@ package
 		{
 			if(unLockLeftRight)
 			{
-				//trace('move left to right');
+				//SaffronLogger.log('move left to right');
 				targetRect.x+=Vx;
 				targ.x = targetRect.x+imageFirstPose.x;
 				var precentX:Number;
@@ -1168,7 +1170,7 @@ package
 				if(revertX)
 				{
 					precentXRaw = 1+((maskRect.x-(targetRect.x-maskRect.width))/(targetRect.width-maskRect.width));
-					//trace("precentYRaw : "+precentYRaw);
+					//SaffronLogger.log("precentYRaw : "+precentYRaw);
 				}
 				else
 				{
@@ -1181,7 +1183,7 @@ package
 			
 			if(unLockTopDown)
 			{
-				//trace('move top down '+Vy);
+				//SaffronLogger.log('move top down '+Vy);
 				targetRect.y+=Vy;
 				targ.y = targetRect.y+imageFirstPose.y;
 				var precentY:Number;
@@ -1189,7 +1191,7 @@ package
 				if(revertY)
 				{
 					precentYRaw = 1+((maskRect.y-(targetRect.y-maskRect.height))/(targetRect.height-maskRect.height));
-					//trace("precentYRaw : "+precentYRaw);
+					//SaffronLogger.log("precentYRaw : "+precentYRaw);
 				}
 				else
 				{
@@ -1234,10 +1236,10 @@ package
 				)
 			)
 			{
-				//trace("It is in range");
+				//SaffronLogger.log("It is in range");
 				return true ;
 			}
-			//trace("It is not in the range");
+			//SaffronLogger.log("It is not in the range");
 			return false ;
 		}
 		
@@ -1341,9 +1343,9 @@ package
 					if(!isScrolling && (stepBack || Math.abs(Vx)<stepMinSpeed))
 					{
 						stepBack = true ;
-						//trace(" targetRect.x : "+targetRect.x);
-						//trace(" stepSizes : "+stepSizes);
-						//trace(" Math.round(targetRect.x/stepSizes) : "+Math.round(targetRect.x/stepSizes));
+						//SaffronLogger.log(" targetRect.x : "+targetRect.x);
+						//SaffronLogger.log(" stepSizes : "+stepSizes);
+						//SaffronLogger.log(" Math.round(targetRect.x/stepSizes) : "+Math.round(targetRect.x/stepSizes));
 						var bestPlace:Number ;
 						if(revertX)
 						{
@@ -1353,13 +1355,13 @@ package
 						{
 							bestPlace = Math.min(0,Math.round(Math.max(maskRect.width-targetRect.width,targetRect.x)/stepSizes)*stepSizes);
 						}
-						//trace("NOW : "+bestPlace);
+						//SaffronLogger.log("NOW : "+bestPlace);
 						stepV += (bestPlace-targetRect.x)/stepVF; 
 						stepV*=stepVMu ;
 						
 						Vx+=stepV/stepVF2;
 						Vx*=stepVMu2;
-						//trace("Vx : "+Vx);
+						//SaffronLogger.log("Vx : "+Vx);
 					}
 				}
 			}

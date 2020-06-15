@@ -33,17 +33,19 @@
 		/**This will load local file instantly*/
 		public static function loadFile(fileTarget:File,openAsync:Boolean=false,onLoaded:Function=null):ByteArray
 		{
-			if(!fileTarget.exists)
+			if(fileTarget==null || !fileTarget.exists)
 			{
-				trace("File not found");
+				SaffronLogger.log("File not found");
 				return null ;
 			}
 			var fileBytes:ByteArray = new ByteArray();
 			var fileStream:FileStream = new FileStream();
 			
+			SaffronLogger.log('load file : '+fileTarget.nativePath);
 			
-			controlFilePermission(function(){
+			controlFilePermission(function():void{
 				
+				SaffronLogger.log('File permission granted');
 				if(!openAsync)
 				{
 					fileStream.open(fileTarget,FileMode.READ);
@@ -139,6 +141,7 @@
 		public static function controlFilePermission(onPermissionGranted:Function,askUserTogrant:Boolean=true):void
 		{
 			var _file:File = new File() ;
+			SaffronLogger.log("File.permissionStatus : "+File.permissionStatus);
 			if (File.permissionStatus != PermissionStatus.GRANTED)
 			{
 				_file.addEventListener(PermissionEvent.PERMISSION_STATUS,
@@ -149,22 +152,24 @@
 						}
 						else
 						{
-							// permission denied
+							SaffronLogger.log("permission denied");
 						}
 					});
 				
 				if(askUserTogrant)
 				{
+					SaffronLogger.log("Ask user for permission");
 					try {
 						_file.requestPermission();
 					} catch(e:Error)
 					{
-						// another request is in progress
+						SaffronLogger.log("another request is in progress");
 					}
 				}
 			}
 			else
 			{
+				SaffronLogger.log("File permission granted");
 				onPermissionGranted();
 			}
 		}
@@ -199,7 +204,7 @@
 					{
 						fileTarget.deleteFile();
 					}
-					trace("File length : "+bytes.length+' save to :'+fileTarget.name);
+					SaffronLogger.log("File length : "+bytes.length+' save to :'+fileTarget.name);
 					var fileStream:FileStream = new FileStream();
 					
 					if(openAsync)
@@ -216,7 +221,7 @@
 					fileStream.writeBytes(bytes,0,bytes.bytesAvailable);
 					fileStream.close();
 					//fileStream.position = 0 ;
-					//trace("fileStream : "+fileStream.bytesAvailable);
+					//SaffronLogger.log("fileStream : "+fileStream.bytesAvailable);
 				}
 				catch(e:Error)
 				{
@@ -232,13 +237,13 @@
 		
 		protected static function savingDone(event:Event):void
 		{
-			trace("File Saved async");
+			SaffronLogger.log("File Saved async");
 			onDone();
 		}
 		
 		private static function cannotSaveThisFile(e:IOErrorEvent):void
 		{
-			trace("Cant save the file : "+e);
+			SaffronLogger.log("Cant save the file : "+e);
 		}
 		
 		/**Delete all files in this folder*/
@@ -247,7 +252,7 @@
 			
 			if(!folder.exists)
 			{
-				trace("The folder : "+folder.url+" dosn't exist");
+				SaffronLogger.log("The folder : "+folder.url+" dosn't exist");
 				return ;
 			}
 			var files:Array = folder.getDirectoryListing();
@@ -302,7 +307,7 @@
 					{
 						destinationFolder = destinationFolder.resolvePath(folderFile.name) ;
 						destinationFolder.createDirectory();
-						trace("Folder created : "+destinationFolder.nativePath);
+						SaffronLogger.log("Folder created : "+destinationFolder.nativePath);
 					}
 					var childFolders:Array = folderFile.getDirectoryListing() ;
 					for(var i:int = 0 ; i<childFolders.length ; i++)
@@ -316,11 +321,11 @@
 					if(extentionExption.indexOf(fileTarget.extension)==-1)
 					{
 						folderFile.copyTo(fileTarget,true);
-						trace("File copied : "+fileTarget.nativePath);
+						SaffronLogger.log("File copied : "+fileTarget.nativePath);
 					}
 					else
 					{
-						trace("!!File didn't copied because of exeption: "+fileTarget.nativePath);
+						SaffronLogger.log("!!File didn't copied because of exeption: "+fileTarget.nativePath);
 					}
 				}
 			}
@@ -360,7 +365,7 @@
 
 			if(!target.isDirectory)
 			{
-				trace("Target wasnt directory : "+target.nativePath);
+				SaffronLogger.log("Target wasnt directory : "+target.nativePath);
 				onSearchDone(foundedQue);
 				return ;
 			}
@@ -374,7 +379,7 @@
 			searchQue = null;
 			if(lastFileToSearch!=null)
 			{
-				trace("Cancel search");
+				SaffronLogger.log("Cancel search");
 				lastFileToSearch.removeEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
 				lastFileToSearch.cancel();
 				lastFileToSearch = null ;
@@ -384,22 +389,22 @@
 			private static function startSearch():void
 			{
 				lastFileToSearch.addEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
-				trace("lastFileToSearch > "+lastFileToSearch.nativePath);
+				SaffronLogger.log("lastFileToSearch > "+lastFileToSearch.nativePath);
 				lastFileToSearch.getDirectoryListingAsync();
 			}
 
 			private static function directoriesLoadedForSearch(e:FileListEvent):void
 			{
-				trace("!!!!!");
+				SaffronLogger.log("!!!!!");
 				var currentFileSearch:File = lastFileToSearch ;
 				lastFileToSearch.removeEventListener(FileListEvent.DIRECTORY_LISTING,directoriesLoadedForSearch);
-				trace("Search on "+lastFileToSearch.nativePath);
+				SaffronLogger.log("Search on "+lastFileToSearch.nativePath);
 				var list:Array = e.files ;
 				var foundedFiles:Vector.<File> = new Vector.<File>();
 				for(var i:int = 0 ; i<list.length ; i++)
 				{
 					var aFile:File = list[i] as File ;
-					trace("aFile.name ? "+aFile.name+" << "+searchPattern);
+					SaffronLogger.log("aFile.name ? "+aFile.name+" << "+searchPattern);
 					if(aFile.isDirectory)
 					{
 						if(aFile.name!='.git')
@@ -407,7 +412,7 @@
 					}
 					else if(aFile.name.match(searchPattern)!=null)
 					{
-						trace(searchPattern+" founded on "+aFile.name);
+						SaffronLogger.log(searchPattern+" founded on "+aFile.name);
 						foundedQue.push(aFile);
 						foundedFiles.push(aFile);
 					}
@@ -422,7 +427,7 @@
 				}
 				else if(searchQue!=null || searchSubFolders==false)
 				{
-					trace("Seach done for "+(e.currentTarget as File).nativePath+" vs "+lastFileToSearch.nativePath);
+					SaffronLogger.log("Seach done for "+(e.currentTarget as File).nativePath+" vs "+lastFileToSearch.nativePath);
 					if(lastFileToSearch!=null && currentFileSearch == lastFileToSearch)
 						onSearchDone(foundedQue);
 				}
@@ -473,7 +478,7 @@
 			fil.browseForOpen(title,fileFilters);
 			function folderSelected(e:Event):void
 			{
-				trace("A file selected : "+fil.nativePath);
+				SaffronLogger.log("A file selected : "+fil.nativePath);
 				if(fil.exists)
 				{
 					getSelectedFilePath(fil);
@@ -565,7 +570,7 @@
 				}
 				else{
 					var bytes:ByteArray = zipR.unzip(entry);
-					//trace("Save to : "+toWhere.nativePath);
+					//SaffronLogger.log("Save to : "+toWhere.nativePath);
 					FileManager.saveFile(toWhere,bytes);
 				}
 			}

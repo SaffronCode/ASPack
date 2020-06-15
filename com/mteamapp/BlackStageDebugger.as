@@ -38,7 +38,7 @@ package com.mteamapp
 		
 		public static function setUp(myStage:Stage,myRoot:DisplayObject):void
 		{
-			trace("Black screen problem didn't see on Android 5+. The device OS is : "+Capabilities.os );
+			SaffronLogger.log("Black screen problem didn't see on Android 5+. The device OS is : "+Capabilities.os );
 			if(DevicePrefrence.isAndroid())
 			{
 				if(DistriqtApplication.isSupported())
@@ -103,7 +103,7 @@ package com.mteamapp
 				}
 				return ;
 				PermissionControl.controlVideoProblem();
-				trace("BlackScreen debugger on android...");
+				SaffronLogger.log("BlackScreen debugger on android...");
 				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,restoreBlackScreen);
 				NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE,resetScreend);
 			}
@@ -123,7 +123,7 @@ package com.mteamapp
 		
 		protected static function restoreBlackScreen(event:Event):void
 		{
-			trace("App is activated");
+			SaffronLogger.log("App is activated");
 			clearTimeout(timeOutId0);
 			clearTimeout(timeOutId1);
 			clearTimeout(timeOutId2);
@@ -137,10 +137,10 @@ package com.mteamapp
 			
 			
 			
-			trace("deraultOriented : "+defaultOriented+' vs deviceOrientation : '+stage.deviceOrientation+' and orientation : '+stage.orientation);
+			SaffronLogger.log("deraultOriented : "+defaultOriented+' vs deviceOrientation : '+stage.deviceOrientation+' and orientation : '+stage.orientation);
 			switch(stage.orientation) {
                 case(StageOrientation.UNKNOWN):
-                    //trace("Oriented to : "+StageOrientation.ROTATED_RIGHT);
+                    //SaffronLogger.log("Oriented to : "+StageOrientation.ROTATED_RIGHT);
                     if (DevicePrefrence.isPortrait()) {
                     	toOrientation = (StageOrientation.ROTATED_RIGHT);
 					}
@@ -150,36 +150,36 @@ package com.mteamapp
 					}
 					break;
 				case(StageOrientation.UPSIDE_DOWN):
-					//trace("Oriented to : "+StageOrientation.ROTATED_LEFT);
+					//SaffronLogger.log("Oriented to : "+StageOrientation.ROTATED_LEFT);
 					toOrientation = (StageOrientation.ROTATED_LEFT);
 					break;
 				case(StageOrientation.ROTATED_LEFT):
-					//trace("Oriented to : "+StageOrientation.UPSIDE_DOWN)
+					//SaffronLogger.log("Oriented to : "+StageOrientation.UPSIDE_DOWN)
 					toOrientation = StageOrientation.UPSIDE_DOWN;
 					break;
 				case(StageOrientation.ROTATED_RIGHT):
-					//trace("Oriented to : "+StageOrientation.UPSIDE_DOWN);
+					//SaffronLogger.log("Oriented to : "+StageOrientation.UPSIDE_DOWN);
 					toOrientation = (StageOrientation.UPSIDE_DOWN);
 					break;
 				case(StageOrientation.DEFAULT):
-					trace("Oriented was "+StageOrientation.DEFAULT+" change it to ... ");
+					SaffronLogger.log("Oriented was "+StageOrientation.DEFAULT+" change it to ... ");
                     if (DevicePrefrence.isPortrait()) {
-						trace("... "+StageOrientation.ROTATED_LEFT);
+						SaffronLogger.log("... "+StageOrientation.ROTATED_LEFT);
                         toOrientation = (StageOrientation.ROTATED_LEFT);
                     }
                     else
                     {
-                        trace("... "+StageOrientation.UPSIDE_DOWN);
+                        SaffronLogger.log("... "+StageOrientation.UPSIDE_DOWN);
                         toOrientation = (StageOrientation.UPSIDE_DOWN);
                     }
 					break;
 				default:
-					//trace("Oriented to ... "+StageOrientation.ROTATED_LEFT);
+					//SaffronLogger.log("Oriented to ... "+StageOrientation.ROTATED_LEFT);
                     toOrientation = (StageOrientation.ROTATED_LEFT);
 					break;
 			}
 			
-			trace("to oriention is : "+toOrientation);
+			SaffronLogger.log("to oriention is : "+toOrientation);
 			
 			root.visible = false ;
 			stage.color = 0x000000 ;
@@ -188,22 +188,22 @@ package com.mteamapp
 		
 			private static function startOriention():void
 			{
-				trace('stage : '+stage+' oriented to '+toOrientation);
+				SaffronLogger.log('stage : '+stage+' oriented to '+toOrientation);
 				stage.setOrientation(toOrientation);
 				timeOutId1 = setTimeout(backOriention,orientedRestored);
 			}
 			
 			private static function backOriention():void
 			{
-				trace("now make it back to : "+defaultOriented);
+				SaffronLogger.log("now make it back to : "+defaultOriented);
 				if(defaultOriented == StageOrientation.DEFAULT && DevicePrefrence.isLandScape())
 				{
-					trace("This app was landscape so change the oriention to "+StageOrientation.ROTATED_RIGHT)
+					SaffronLogger.log("This app was landscape so change the oriention to "+StageOrientation.ROTATED_RIGHT)
                     stage.setOrientation(StageOrientation.ROTATED_RIGHT);
 				}
 				else
 				{
-					trace("This was a portrait application")
+					SaffronLogger.log("This was a portrait application")
                     stage.setOrientation(defaultOriented);
 				}
 				timeOutId2 = setTimeout(visibleScreen,visibleActivated);
@@ -214,7 +214,7 @@ package com.mteamapp
 				root.visible = true ;
 				stage.color = stageColor ;
 				onTheRotationing = false ;
-				trace("Its ok to show now");
+				SaffronLogger.log("Its ok to show now");
 			}
 	}
 }

@@ -205,7 +205,7 @@ package
 		/**manage text after its added to stage*/
 		private function manageText(e:*=null):void
 		{
-			//trace('item is added to stage');
+			//SaffronLogger.log('item is added to stage');
 
 			oldTextField.dispatchEvent(new Event(REMOVE_OLD_TEXT));
 			oldTextField.addEventListener(FOCUS_IN,focuseOnStageText);
@@ -288,8 +288,8 @@ package
 				myStageText.fontFamily = textFormat.font.split(" Bold").join("").split(" Regular").join("");
 			}
 			myStageText.fontSize = Math.round(Number(textFormat.size)*DevicePrefrence.StageScaleFactor());
-			//trace("myStageText.fontSize : "+myStageText.fontSize);
-			//trace('the key oard is : '+keyFormat);
+			//SaffronLogger.log("myStageText.fontSize : "+myStageText.fontSize);
+			//SaffronLogger.log('the key oard is : '+keyFormat);
 			if(editableNativeText)
 			{
 				myStageText.softKeyboardType = keyFormat;
@@ -374,10 +374,10 @@ package
 		private function traceTheKeyCode(e:KeyboardEvent):void
 		{
 			//Only next and Default button type can dispatch this event
-			trace("e.keyCode : "+e.keyCode);
+			SaffronLogger.log("e.keyCode : "+e.keyCode);
 			if(e.keyCode == 16777230 || (!oldTextField.multiline && e.keyCode==13))
 			{
-				trace("On closed event");
+				SaffronLogger.log("On closed event");
 				closeSoftKeyBoard();
 			}
 		}
@@ -449,7 +449,7 @@ package
 		private function correctNativeNewLines(str:String):String
 		{
 			//var changedString:String = str.split('\n').join('\r').split('\r').join('\n\r');
-			//trace('****************************\n'+visualString(str)+'\n'+visualString(changedString));
+			//SaffronLogger.log('****************************\n'+visualString(str)+'\n'+visualString(changedString));
 			return RemoveEnters(str).split('\n').join('\r');//.split('\r').join('\n\r');
 		}
 		
@@ -484,7 +484,7 @@ package
 				myStageText.visible = true ;
 				//Make it faster
 				myStageText.stage = oldTextField.stage ;
-				//trace("visible the textfield");
+				//SaffronLogger.log("visible the textfield");
 				hideTextField();
 				manageInputPose();
 				myStageText.assignFocus();
@@ -501,7 +501,7 @@ package
 		{
 			if(onlyNativeText)
 			{
-				trace("This text is only on stageText");
+				SaffronLogger.log("This text is only on stageText");
 				return ;
 			}
 			var updatedText:String ;
@@ -588,7 +588,7 @@ package
 			{
 				return;
 			}
-			trace("Text changed");
+			SaffronLogger.log("Text changed");
 			if(correctNums)
 			{
 				oldTextField.text = RemoveEnters(UnicodeStatic.numberCorrection(myStageText.text));
@@ -636,8 +636,8 @@ package
 		/**finish typing*/
 		private function saveChanges(e:*):void
 		{
-			//trace('why save the text?'+e+' \n\t: '+oldTextField.textColor.toString(16));
-			//trace(e.currentTarget+' > '+(e.currentTarget == myStageText)+' vs '+(e.target == myStageText));
+			//SaffronLogger.log('why save the text?'+e+' \n\t: '+oldTextField.textColor.toString(16));
+			//SaffronLogger.log(e.currentTarget+' > '+(e.currentTarget == myStageText)+' vs '+(e.target == myStageText));
 			if(editing || onlyNativeText)
 			{
 				editing = false;
@@ -658,7 +658,7 @@ package
 					myStageText.visible = false;
 					myStageText.text = '' ;
 				}
-				//trace('invisible the text '+oldTextField.textColor.toString(16));
+				//SaffronLogger.log('invisible the text '+oldTextField.textColor.toString(16));
 				
 				oldTextField.dispatchEvent(new Event(Event.CHANGE));
 				callOnChange();
@@ -688,7 +688,7 @@ package
 				else
 				{
 					//f sdf fsd 
-					//trace("Obj.isAccesibleByMouse(oldTextField) : "+Obj.isAccesibleByMouse(oldTextField));
+					//SaffronLogger.log("Obj.isAccesibleByMouse(oldTextField) : "+Obj.isAccesibleByMouse(oldTextField));
 					if(nativeTextCachedBitmap)
 						nativeTextCachedBitmap.visible = false ;
 					if(Obj.getVisible(oldTextField) && Obj.isAccesibleByMouse(oldTextField))
@@ -704,7 +704,7 @@ package
 							scaleFactor = 1 ;
 
 						var scaledRect:Rectangle = new Rectangle(rect.x,rect.y,Math.round(rect.width*scaleFactor),Math.round(rect.height*scaleFactor));
-						trace("scaledRect : "+scaledRect);
+						SaffronLogger.log("scaledRect : "+scaledRect);
 						var bitd:BitmapData ;
 						if(scaledRect.width!=0 && scaledRect.height!=0)
 						{

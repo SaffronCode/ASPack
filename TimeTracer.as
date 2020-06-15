@@ -16,7 +16,7 @@ package
 			}
 			else
 			{
-				trace(str);
+				SaffronLogger.log(str);
 			}
 			lastTime = getTimer();
 		}

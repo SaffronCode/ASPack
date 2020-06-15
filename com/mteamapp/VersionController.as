@@ -38,7 +38,7 @@ package com.mteamapp
 			versionControll.addEventListener(Event.COMPLETE,onVersinoStringReceved);
 			versionControll.addEventListener(IOErrorEvent.IO_ERROR,noConnection);
 			versionControll.load(versionURL);
-			trace("Load this : "+versionURL.url);
+			SaffronLogger.log("Load this : "+versionURL.url);
 			
 			if(controllEveryApplicationOpenning)
 			{
@@ -59,7 +59,7 @@ package com.mteamapp
 			function onVersinoStringReceved(event:Event):void
 			{
 				
-				trace("XML is receved");
+				SaffronLogger.log("XML is receved");
 				var xmlController:XML = new XML();
 				try
 				{
@@ -68,7 +68,7 @@ package com.mteamapp
 				catch(e)
 				{
 					onDone();
-					trace("xml version controller is crash");
+					SaffronLogger.log("xml version controller is crash");
 					return ;
 				}
 				lastData.data["version"+versionURL] = versionControll.data ;
@@ -112,7 +112,7 @@ package com.mteamapp
 					currentVersion2 = appVerArr[0]+'.'+TimeToString.numToString(appVerArr[1],5); 
 				}
 				
-				trace("Controll version : "+serverVersion+" vs "+currentVersion2);
+				SaffronLogger.log("Controll version : "+serverVersion+" vs "+currentVersion2);
 				
 				var myNumbericVersion:Number = Number(currentVersion2);
 				var serverNumericVersion:Number = Number(serverVersion);
@@ -151,7 +151,7 @@ package com.mteamapp
 			
 			function noConnection(event:IOErrorEvent):void
 			{
-				trace("No connection stablished");
+				SaffronLogger.log("No connection stablished");
 				
 				controllCashedDatas();
 			}

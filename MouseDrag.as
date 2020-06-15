@@ -48,7 +48,7 @@ package
 		
 		public static function reset()
 		{
-			//trace("▬ Mouse Drag resets");
+			//SaffronLogger.log("▬ Mouse Drag resets");
 			nextFunc = new Vector.<Function>();
 			prevFunc = new Vector.<Function>();
 			myRect = new Vector.<Rectangle>();
@@ -58,7 +58,7 @@ package
 		/**This function will return the nextPrevFunction id to make you able to remove it*/
 		public static function addFunctions(next_f:Function,preve_f:Function,rect:Rectangle):uint
 		{
-			//trace("▬ Listen to mouse drag");
+			//SaffronLogger.log("▬ Listen to mouse drag");
 			var prevIndex:int = prevFunc.indexOf(preve_f);
 			var nextIndex:int = nextFunc.indexOf(next_f);
 			
@@ -74,7 +74,7 @@ package
 			funcId.push(currentFuncId);
 			currentFuncId++;
 			
-			trace("Add mouse drag : "+(currentFuncId-1));
+			SaffronLogger.log("Add mouse drag : "+(currentFuncId-1));
 			
 			return currentFuncId-1 ;
 		}
@@ -89,11 +89,11 @@ package
 				nextFunc.splice(funcIndex,1);
 				myRect.splice(funcIndex,1);
 				funcId.splice(funcIndex,1);
-				trace("**** mouse drag removed *** : "+funcIndex);
+				SaffronLogger.log("**** mouse drag removed *** : "+funcIndex);
 			}
 			else
 			{
-				trace("Muse cannot remove : "+addFunctionId);
+				SaffronLogger.log("Muse cannot remove : "+addFunctionId);
 			}
 		}
 		
@@ -105,7 +105,7 @@ package
 			mouseFirstX = myStage.mouseX;
 			mouseFirstY = myStage.mouseY;
 			dragTime = getTimer();
-			//trace("▬ Listen to mouse Dragg");
+			//SaffronLogger.log("▬ Listen to mouse Dragg");
 		}
 		
 		
@@ -117,23 +117,23 @@ package
 			dragTime = getTimer()-dragTime;
 			if(Math.abs(dx/dragTime)<mouseDragDelta || Math.abs(dy)>Math.abs(dx))
 			{
-				//trace("▬ Mouse is not dragging")
+				//SaffronLogger.log("▬ Mouse is not dragging")
 				return 
 			}
 			for(var i= 0 ; i<myRect.length ; i++)
 			{
-				//trace("▬ Checking Rectangles");
+				//SaffronLogger.log("▬ Checking Rectangles");
 				if(myRect[i]==null || myRect[i].contains(myStage.mouseX,myStage.mouseY))
 				{
-					//trace("▬ This is it");
+					//SaffronLogger.log("▬ This is it");
 					if((dx/dragTime)>mouseDragDelta)
 					{
-						//trace("▬ preve");
+						//SaffronLogger.log("▬ preve");
 						prevFunc[i]();
 					}
 					else if((dx/dragTime)<mouseDragDelta*-1)
 					{
-						//trace("▬ next");
+						//SaffronLogger.log("▬ next");
 						nextFunc[i]();
 					}
 				}

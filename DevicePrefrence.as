@@ -214,26 +214,26 @@ package {
             if (true || idCode.data.id == undefined) {
                 loadToCashAppStoreid();
             } else {
-                trace("The apple id is ready: " + ("http://itunes.apple.com/app/id" + idCode.data.id));
+                SaffronLogger.log("The apple id is ready: " + ("http://itunes.apple.com/app/id" + idCode.data.id));
             }
-            trace("The Android url is : " + "market://details?id=air." + appID);
+            SaffronLogger.log("The Android url is : " + "market://details?id=air." + appID);
             //Cafe bazar
             if (true || idCode.data[cafeBazarSharedObjectId] == undefined) {
                 loadCafeBazarLink();
             } else {
-                trace("The cafe bazar id is ready: " + downloadLink_cafeBazar);
+                SaffronLogger.log("The cafe bazar id is ready: " + downloadLink_cafeBazar);
             }
             //myket
             if (true || idCode.data[myketSharedObjectId] == undefined) {
                 loadmyketLink();
             } else {
-                trace("The myket id is ready: " + downloadLink_myketStore);
+                SaffronLogger.log("The myket id is ready: " + downloadLink_myketStore);
             }
             //Playstore
             if (true || idCode.data[playStoreId] == undefined) {
                 loadPlayStoreLink();
             } else {
-                trace("The playStore id is ready: " + downloadLink_playStore);
+                SaffronLogger.log("The playStore id is ready: " + downloadLink_playStore);
             }
         }
 
@@ -250,13 +250,13 @@ package {
             myketLoader.addEventListener(Event.COMPLETE, myketContentLoaded);
             myketLoader.addEventListener(IOErrorEvent.IO_ERROR, connectionErrorOnLoadingmyket);
             myketLoader.load(new URLRequest(_downloadLink_myketStore()));
-            trace("Control myket for this application .... " + _downloadLink_myketStore());
+            SaffronLogger.log("Control myket for this application .... " + _downloadLink_myketStore());
         }
 
         private static function myketContentLoaded(e:Event):void {
             if (String(myketLoader.data).split(appID).length > 2) {
                 idCode.data[myketSharedObjectId] = true;
-                trace("+++++This app is released on myket");
+                SaffronLogger.log("+++++This app is released on myket");
             } else {
                 idCode.data[myketSharedObjectId] = undefined;
                 connectionErrorOnLoadingmyket(null);
@@ -264,7 +264,7 @@ package {
         }
 
         private static function connectionErrorOnLoadingmyket(e:*):void {
-            trace("+++++This app is not released on myket");
+            SaffronLogger.log("+++++This app is not released on myket");
         }
 
         //Play store
@@ -280,11 +280,11 @@ package {
             playStoreLoader.addEventListener(Event.COMPLETE, playStoreContentLoaded);
             playStoreLoader.addEventListener(IOErrorEvent.IO_ERROR, connectionErrorOnLoadingPlayStore);
             playStoreLoader.load(new URLRequest(_downloadLink_playStore()));
-            trace("Control playStore for this application .... " + _downloadLink_playStore());
+            SaffronLogger.log("Control playStore for this application .... " + _downloadLink_playStore());
         }
 
         private static function playStoreContentLoaded(e:Event):void {
-            trace(">>>>>This app is released on playstore");
+            SaffronLogger.log(">>>>>This app is released on playstore");
             idCode.data[playStoreId] = secondCheck_play;
         }
 
@@ -292,9 +292,9 @@ package {
             if (appCorrectedID != '' && secondCheck_play == false) {
                 secondCheck_play = true;
                 playStoreLoader.load(new URLRequest(_downloadLink_playStore(true)));
-                trace("Control playStore for this application .... " + _downloadLink_playStore(true));
+                SaffronLogger.log("Control playStore for this application .... " + _downloadLink_playStore(true));
             }
-            trace(">>>>>This app is not released on PlayStore");
+            SaffronLogger.log(">>>>>This app is not released on PlayStore");
         }
 
         //cafe
@@ -310,31 +310,31 @@ package {
             cafeBazarLoader.addEventListener(Event.COMPLETE, cafeBazarContentLoaded);
             cafeBazarLoader.addEventListener(IOErrorEvent.IO_ERROR, connectionErrorOnLoadingCafeBazar);
             cafeBazarLoader.load(new URLRequest(_downloadLink_cafeBazar()));
-            trace("Control cafe bazar for this application .... " + _downloadLink_cafeBazar());
+            SaffronLogger.log("Control cafe bazar for this application .... " + _downloadLink_cafeBazar());
         }
 
         private static function cafeBazarContentLoaded(e:Event):void {
-            trace("Cafe bazar loaded");
+            SaffronLogger.log("Cafe bazar loaded");
             /*if(String(cafeBazarLoader.data).split(appID).length>2)
                {*/
             var loadedPage:String = String(cafeBazarLoader.data);
             if ((appCorrectedID != '' && loadedPage.indexOf(appCorrectedID + '0.jpg') != -1) || (appID != '' && loadedPage.indexOf(appID + '0.jpg') != -1)) {
-                trace("<<<<Yesss, this app is released on caffe bazar");
+                SaffronLogger.log("<<<<Yesss, this app is released on caffe bazar");
                 idCode.data[cafeBazarSharedObjectId] = true;
             } else {
-                trace("<<<<NO CAE BAZAR");
+                SaffronLogger.log("<<<<NO CAE BAZAR");
                 idCode.data[cafeBazarSharedObjectId] = undefined;
             }
             idCode.flush();
         /*}
            else
            {
-           trace("<<<<This app is not released on caffe bazar");
+           SaffronLogger.log("<<<<This app is not released on caffe bazar");
            }*/
         }
 
         protected static function connectionErrorOnLoadingCafeBazar(event:IOErrorEvent):void {
-            trace("<<<<<<<This app has not published on Caffe Bazar");
+            SaffronLogger.log("<<<<<<<This app has not published on Caffe Bazar");
         }
 
         private static function loadToCashAppStoreid():void {
@@ -349,7 +349,7 @@ package {
             urlLoader2.addEventListener(Event.COMPLETE, idLoaded);
             urlLoader2.addEventListener(IOErrorEvent.IO_ERROR, loadURLAgain);
             urlLoader2.load(new URLRequest("https://itunes.apple.com/lookup?bundleId=" + appID));
-            trace("Load apple id : " + urlLoader2);
+            SaffronLogger.log("Load apple id : " + urlLoader2);
         }
 
 
@@ -357,14 +357,14 @@ package {
         ////////////////////////////////////
         protected static function idLoaded(event:Event):void {
             var info:Object = JSON.parse(urlLoader2.data);
-            trace("urlLoader2.data : " + JSON.stringify(info, null, ' '));
+            SaffronLogger.log("urlLoader2.data : " + JSON.stringify(info, null, ' '));
             if (info.resultCount == 0) {
-                trace("iOS service bug");
+                SaffronLogger.log("iOS service bug");
             } else {
                 idCode.data.id = info.results[0].trackId;
                 idCode.flush();
-                trace("iOS url is ready now");
-                trace("The apple id is ready: " + ("http://itunes.apple.com/app/id" + idCode.data.id));
+                SaffronLogger.log("iOS url is ready now");
+                SaffronLogger.log("The apple id is ready: " + ("http://itunes.apple.com/app/id" + idCode.data.id));
             }
         }
 
@@ -567,7 +567,7 @@ package {
                     androidOtherId = '';
                 }
             }
-            trace("androidOtherId : " + androidOtherId);
+            SaffronLogger.log("androidOtherId : " + androidOtherId);
             return androidOtherId;
         }
 
@@ -639,7 +639,7 @@ package {
                 }
                 navigateToURL(new URLRequest("market://details?id=air." + appID));
                 GlobalStorage.save(ranked_sharedObject_id, true);
-                trace("The rank url is : " + "market://details?id=air." + appID);
+                SaffronLogger.log("The rank url is : " + "market://details?id=air." + appID);
             }
             //https://itunes.apple.com/lookup?bundleId=com.mteamapps.NabatNorooz
         }
@@ -669,7 +669,7 @@ package {
 
         protected static function codeLoaded(event:Event):void {
 
-            trace('information loaded : ' + urlLoader.data);
+            SaffronLogger.log('information loaded : ' + urlLoader.data);
             var info:Object = JSON.parse(urlLoader.data);
             if (info.resultCount == 0) {
                 if (onFaild != null) {
@@ -732,7 +732,7 @@ package {
                     var DeviceUtils:Class = getDefinitionByName("com.digitalstrawberry.ane.deviceutils.DeviceUtils") as Class;
                     isNativeAdded = true;
                 } catch (e) {
-                    //trace("*** To get better security,You can add  com.digitalstrawberry.ane.deviceutils.DeviceUtils  native to your project");
+                    //SaffronLogger.log("*** To get better security,You can add  com.digitalstrawberry.ane.deviceutils.DeviceUtils  native to your project");
                     isNativeAdded = false;
                 }
                 if (isNativeAdded) {
@@ -788,7 +788,7 @@ package {
 
         /**Pass 478239472389 to make it work. (this password created to prevent injection)*/
         public static function DeviceEncryptedKey(passWord:String):String {
-            trace("***some one needs the DeviceEncryptedKey");
+            SaffronLogger.log("***some one needs the DeviceEncryptedKey");
             if (passWord == "478239472389") {
                 createDeviceKeyForMoreSecurity();
                 return MD5.hash(createdKeyIs + uniqueId + 'بپ');
@@ -802,7 +802,7 @@ package {
         public static function DeviceUniqueId():String {
             createDeviceKeyForMoreSecurity();
             if (uniqueId == '') {
-                trace("*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project. get the file from below link:\n\n\thttps://github.com/flashpress/FPUniqueId/\n\nthe xml description:\n\n\t<extensionID>ru.flashpress.FPUniqueId</extensionID>\n\n\n");
+                SaffronLogger.log("*** To get better security,You can add  ru.flashpress.uid.FPUniqueId  native to your project. get the file from below link:\n\n\thttps://github.com/flashpress/FPUniqueId/\n\nthe xml description:\n\n\t<extensionID>ru.flashpress.FPUniqueId</extensionID>\n\n\n");
                 return createdKeyIs;
             }
             return uniqueId;
@@ -816,7 +816,7 @@ package {
                 var ver:String = vers.split(',')[0];
                 return uint(ver);
             } catch (e:*) {
-                trace("Version parsing error : " + e)
+                SaffronLogger.log("Version parsing error : " + e)
             }
             return Infinity;
         }

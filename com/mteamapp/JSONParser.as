@@ -35,7 +35,7 @@
 		/**You can make a copy from simple objecs*/
 		public static function makeCopy(fromObject:*):*
 		{
-			trace("Clone created by JSONParser");
+			SaffronLogger.log("Clone created by JSONParser");
 			var itemType:Class = getDefinitionByName(getQualifiedClassName(fromObject)) as Class;
 			var cloneObject:Object = new itemType();
 			JSONParser.parse(JSONParser.stringify(fromObject),cloneObject) ;
@@ -96,8 +96,8 @@
 			var arr:* ; // is Array or Vector
 			var j:int,l:uint ;
 			
-			//trace("From : "+JSON.stringify(fromObject));
-			//trace("To : "+JSON.stringify(toObject));
+			//SaffronLogger.log("From : "+JSON.stringify(fromObject));
+			//SaffronLogger.log("To : "+JSON.stringify(toObject));
 			
 			for(var i in fromObject)
 			{
@@ -107,39 +107,39 @@
 					if(toObject[i] is Vector.<*>)
 					{
 						//Clear vector if it is full
-						//trace("(model as Vector.<*>).length : "+(fillThisObject as Vector.<*>).length);
+						//SaffronLogger.log("(model as Vector.<*>).length : "+(fillThisObject as Vector.<*>).length);
 						while((toObject[i] as Vector.<*>).length)
 						{
 							(toObject[i] as Vector.<*>).pop();
 						}
 						
 						
-						//trace("This is vector parameter");
+						//SaffronLogger.log("This is vector parameter");
 						if(currentParam is Array || currentParam is Vector.<*> )
 						{
 							var vecClassName:String = getQualifiedClassName(toObject[i]).split("__AS3__.vec::Vector.<").join('').split('>').join('');
-							//trace("Vector element type is : "+vecClassName);
+							//SaffronLogger.log("Vector element type is : "+vecClassName);
 							var vecItemClass:Class = (getDefinitionByName(vecClassName) as Class)
 							var vec:Vector.<*> = (toObject[i]) ;
 							arr = currentParam;
 							l = arr.length ;
-							//trace("pars "+l+" items");
+							//SaffronLogger.log("pars "+l+" items");
 							for(j = 0 ; j<l ; j++)
 							{
 								var newObject:Object = new vecItemClass();
 								vec.push(newObject);
-								//trace("element is : "+newObject+' > '+JSON.stringify(newObject));
+								//SaffronLogger.log("element is : "+newObject+' > '+JSON.stringify(newObject));
 								parsParams(arr[j],newObject);
 							}
 						}
 						else if(currentParam!=null)
 						{
-							trace("The parameter "+i+" cannot pars on Vector");
+							SaffronLogger.log("The parameter "+i+" cannot pars on Vector");
 						}
 					}
 					else if(toObject[i] is Array)
 					{
-						//trace("Tis is Array");
+						//SaffronLogger.log("Tis is Array");
 						if(currentParam is Array)
 						{
 							arr = currentParam as Array;
@@ -151,7 +151,7 @@
 						}
 						else if(currentParam!=null)
 						{
-							trace("The parameter "+i+" cannot pars on Array");
+							SaffronLogger.log("The parameter "+i+" cannot pars on Array");
 						}
 					}
 					else if(toObject[i] is Date && toObject[i]!=null)
@@ -162,30 +162,30 @@
 						}
 						catch(e)
 						{
-							trace("Date value is wrong : "+currentParam);
+							SaffronLogger.log("Date value is wrong : "+currentParam);
 						}
 					}
 					else if(toObject[i] is String )
 					{
-						//trace("Convert "+JSON.stringify(currentParam)+" to "+i);
+						//SaffronLogger.log("Convert "+JSON.stringify(currentParam)+" to "+i);
 						try
 						{
 							if(currentParam is String)
 							{
-								//trace("** Its string");
+								//SaffronLogger.log("** Its string");
 								toObject[i] = currentParam ;
 							}
 							else
 							{
-								//trace("** Its Object");
+								//SaffronLogger.log("** Its Object");
 								toObject[i] = JSON.stringify(currentParam);
-								//trace("*** i : "+i);
-								//trace("*** It saved as : "+toObject[i]);
+								//SaffronLogger.log("*** i : "+i);
+								//SaffronLogger.log("*** It saved as : "+toObject[i]);
 							}
 						}
 						catch(e)
 						{
-							trace("The parameter is readonly : "+getQualifiedClassName(toObject[i]));
+							SaffronLogger.log("The parameter is readonly : "+getQualifiedClassName(toObject[i]));
 						}
 					}
 					else if(toObject[i] is Number 
@@ -194,45 +194,45 @@
 						|| toObject[i] == null
 					)
 					{
-						//trace("Put toObject : "+currentParam);
-						//trace("Put toObject i is : "+i);
-						//trace("befor update : "+getQualifiedClassName(toObject[i]));
+						//SaffronLogger.log("Put toObject : "+currentParam);
+						//SaffronLogger.log("Put toObject i is : "+i);
+						//SaffronLogger.log("befor update : "+getQualifiedClassName(toObject[i]));
 						try
 						{
 							toObject[i] = currentParam ;
 						}
 						catch(e)
 						{
-							trace("The parameter is readonly : "+getQualifiedClassName(toObject[i]));
+							SaffronLogger.log("The parameter is readonly : "+getQualifiedClassName(toObject[i]));
 						}
-						//trace("after update : "+avmplus.getQualifiedClassName(toObject[i])+' > '+toObject[i])
+						//SaffronLogger.log("after update : "+avmplus.getQualifiedClassName(toObject[i])+' > '+toObject[i])
 					}
 					else
 					{
-						//trace("Current parameter is complex parameter");
+						//SaffronLogger.log("Current parameter is complex parameter");
 						if(currentParam!=null)
 						{
 							parsParams(currentParam,toObject[i]);
 						}
 						else
 						{
-							trace("But the value is null");
+							SaffronLogger.log("But the value is null");
 							toObject[i] = null ;
 						}
 					}
 					//__AS3__.vec::Vector.<*>
 					/*var className:String = getQualifiedClassName(toObject[i]);
 					if(className
-						trace("getQualifiedClassName : "+className);*/
+						SaffronLogger.log("getQualifiedClassName : "+className);*/
 					/*	}*/
 				}
 				
 				/*else
 				{
-					trace("There is no "+i+" defined");	
+					SaffronLogger.log("There is no "+i+" defined");	
 				}*/
 			}
-			//trace("ToOjbect isDone :"+avmplus.getQualifiedClassName(toObject));
+			//SaffronLogger.log("ToOjbect isDone :"+avmplus.getQualifiedClassName(toObject));
 		}
 		
 		private static function reciver(k,v):*
@@ -242,8 +242,8 @@
 				if(String(v).indexOf("\/Date(")==0)
 				{
 					var V:String = String(v) ;
-				//	trace("Get date :"+V);
-					//trace("It is : "+ new Date(Number(V.substring(6,V.length-2))));
+				//	SaffronLogger.log("Get date :"+V);
+					//SaffronLogger.log("It is : "+ new Date(Number(V.substring(6,V.length-2))));
 					var dateNumberPart:String = V.substring(6, V.length - 2) ;
 					var splitedDate:Array = dateNumberPart.split('+') ;
 					var dateNumber:Number = Number(splitedDate[0]);
