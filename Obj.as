@@ -112,6 +112,22 @@ package
 
 			return removeThisListner ;
 		}
+
+		public static function removeAllChildBut(target:DisplayObjectContainer,elements:Array):void
+		{
+			var masAcceptableItemsOnTarget:uint = 0 ;
+			while(target.numChildren>masAcceptableItemsOnTarget)
+			{
+				if(elements.indexOf(target.getChildAt(masAcceptableItemsOnTarget))==-1)
+				{
+					target.removeChildAt(masAcceptableItemsOnTarget);
+				}
+				else
+				{
+					masAcceptableItemsOnTarget++;
+				}
+			}
+		}
 		
 		/**remove this object from its parents*/
 		public static function remove(target:DisplayObject)
