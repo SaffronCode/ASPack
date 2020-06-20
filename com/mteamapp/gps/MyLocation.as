@@ -89,14 +89,14 @@
 						(distriqtLocationClass as Object).init(distriqtCode)
 					}
 				}
-				else
-				{
-					controllDefaultPermission();
-					distriqtLocationClass = null;
-					//recreateGeo();
-					SaffronLogger.log("Default GPS started");
-					getGPSPermission(getLoacationCreated);
-				}
+				
+				
+				controllDefaultPermission();
+				distriqtLocationClass = null;
+				//recreateGeo();
+				SaffronLogger.log("Default GPS started");
+				getGPSPermission(getLoacationCreated);
+				
 			}
 			else if(GPSLatitude!=0 && GPSLongitude!=0)
 			{
