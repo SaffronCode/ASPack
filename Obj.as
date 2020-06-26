@@ -256,6 +256,21 @@ package
 			return intervalID ;
 		}
 		
+		public static function setTimeoutOnDisplayObject(displayObjctOnStage:DisplayObject,closur:Function,delay:Number,...param):uint
+		{
+			var timeoutId:uint = setTimeout(onClosur,delay);
+			addEventListener(displayObjctOnStage,Event.REMOVED_FROM_STAGE,function():void{
+				trace("Obj. clear interval");
+				clearTimeout(timeoutId);
+			});
+			function onClosur():void
+			{
+				trace("Obj. closurHappend");
+				closur.apply(displayObjctOnStage,param);
+			}
+			return timeoutId ;
+		}
+		
 		/**generate a button from a movieClip*/
 		public static function setButton(target:*,onClick:Function,...params):void
 		{
