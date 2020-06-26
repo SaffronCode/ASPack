@@ -42,7 +42,17 @@ package
 		
 		
 		
+		public static function button_disable(item:Sprite):void
+		{
+			item.mouseChildren = item.mouseEnabled = false ;
+			item.alpha = 0.7 ;
+		}
 		
+		public static function button_enable(item:Sprite):void
+		{
+			item.mouseChildren = item.mouseEnabled = true ;
+			item.alpha = 1.0 ;
+		}
 		
 		public static function get(name:String,on:DisplayObjectContainer,clas:Class=null):*
 		{
