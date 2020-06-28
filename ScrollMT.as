@@ -155,6 +155,12 @@ package
 							
 		private var currselXArea:Number,
 					currselYArea:Number;
+
+		private var precentY:Number=0;
+		private var precentX:Number=0;
+
+		public function get floatPrecentY():Number{return precentY};
+		public function get floatPrecentX():Number{return precentX};
 		
 	
 		
@@ -316,6 +322,20 @@ package
 			
 			
 			onAdded();
+		}
+
+		public function freeToScrollTD():Boolean
+		{
+			if(maskRect==null || targetRect==null)
+				return false ;
+			return maskRect.height<targetRect.height;
+		}
+
+		public function freeToScrollLR():Boolean
+		{
+			if(maskRect==null || targetRect==null)
+				return false ;
+			return maskRect.width<targetRect.width;
 		}
 		
 		/**Scroll me*/
@@ -1163,7 +1183,6 @@ package
 				//SaffronLogger.log('move left to right');
 				targetRect.x+=Vx;
 				targ.x = targetRect.x+imageFirstPose.x;
-				var precentX:Number;
 				var precentXRaw:Number;
 				
 				
@@ -1186,7 +1205,6 @@ package
 				//SaffronLogger.log('move top down '+Vy);
 				targetRect.y+=Vy;
 				targ.y = targetRect.y+imageFirstPose.y;
-				var precentY:Number;
 				var precentYRaw:Number ;
 				if(revertY)
 				{
@@ -1209,7 +1227,7 @@ package
 				}*/
 				curselTopDown.y = currselYArea*precentY+maskRect.y+currselMargin+currselW ;
 			}
-		}		
+		}
 		
 		/**This will returns true if the scroller is in the correct ragne and there is no need to wait till scroller back to the page*/
 		public function isInRange():Boolean
