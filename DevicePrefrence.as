@@ -830,7 +830,12 @@ package {
         }
 
         public static function isRoot():Boolean {
-            if (isAndroid()) {
+            var rootCheckerClass:Class = Obj.generateClass('com.distriqt.extension.rootchecker.RootChecker')
+            if(rootCheckerClass!=null && (rootCheckerClass as Object).isSupported)
+            {
+                return (rootCheckerClass as Object).instance.isRooted ;
+            }
+            else if (isAndroid()) {
                 var rootApp:Array = ["/system/app/Superuser.apk", "/sbin/su", "/system/bin/su", "/system/xbin/su", "/data/local/xbin/su", "/data/local/bin/su", "/system/sd/xbin/su",
                     "/system/bin/failsafe/su", "/data/local/su", "/su/bin/su", "/system/su", "/system/bin/.ext/.su", "/system/usr/we-need-root/su-backup", "/system/xbin/mu"];
                 for (var i:int = 0; i < rootApp.length; i++) {
