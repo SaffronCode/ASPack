@@ -99,7 +99,6 @@ package
 			{
 				target.addEventListener(Event.REMOVED_FROM_STAGE,removeThisListner);
 			}
-			target.addEventListener(eventType,onDone);
 
 			function onDone(e:Event):void
 			{
