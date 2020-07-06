@@ -367,7 +367,7 @@ package soundPlayer
 		/**add a sound to sound list , but you have too call Play after thiss<br>
 		 * you can set an callerID to listen to your oun class sounds<br>
 		 * you can tell the class that this sound should be silent on app diactivated or not*/
-		public static function addSound(TargetURL:String,ID:uint,Loop:Boolean,maxVolume:Number,callerID:Number=Infinity,silentONBackGorund:Boolean=true):void
+		public static function addSound(TargetURL:String,ID:uint,Loop:Boolean,maxVolume:Number,callerID:Number=Infinity,silentONBackGorund:Boolean=true,initSoundPosition:Number=0):void
 		{
 			if(myStage==null)
 			{
@@ -389,7 +389,7 @@ package soundPlayer
 			myPaused[I] = true ;
 			silentOnBack[I] = silentONBackGorund ;
 			myStop[I] = true ;
-			myPosition[I] = 0 ;
+			myPosition[I] = initSoundPosition ;
 			endPosition[I] = 0 ;
 			myLength[I] = 0 ;
 			myCallerID[I] = callerID ;
@@ -470,7 +470,7 @@ package soundPlayer
 		
 		
 		
-		private static function deactiveSound(I:uint,isDeactivatedBecauseAppDeactived:Boolean,stopPlayingSound:Boolean=true)
+		private static function deactiveSound(I:uint,isDeactivatedBecauseAppDeactived:Boolean,stopPlayingSound:Boolean=true):void
 		{
 			if(!myStop[I])
 			{
@@ -596,6 +596,14 @@ package soundPlayer
 			var callerID:Number = gI(ID);
 			myStage.dispatchEvent(new SoundPlayerEvent(soundEvent,ID,myCallerID[callerID]));
 			eventsDispatch.dispatchEvent(new SoundPlayerEvent(soundEvent,ID,myCallerID[callerID]));
+		}
+
+		public static function lastCallerIdForThisSoundId(soundId:uint):Number
+		{
+			var callerID:Number = gI(soundId);
+			if(callerID<myCallerID.length && callerID>=0)
+				return myCallerID[callerID];
+			return -1 ;
 		}
 		
 		/**Extract the sound to byte array*/
