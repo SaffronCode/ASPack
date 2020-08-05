@@ -1,4 +1,4 @@
-﻿/**bug reported : 
+/**bug reported : 
  * 		when a field is selected in ios , you can not select other field, i did not understand why but
  * 		it will close the field just after the field is visibled
  * 	>	SoftKeyboard Event Listener is not added To the myStageText if de os is IOS
@@ -21,10 +21,6 @@
 package
 {
 	import com.mteamapp.StringFunctions;
-	
-	import contents.alert.Alert;
-	
-	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.FocusEvent;
@@ -49,7 +45,6 @@ package
 	import flash.display.BitmapData;
 	import flash.display.Bitmap;
 	import stageManager.StageManager;
-	import flash.display.StageScaleMode;
 
 	public class FarsiInputCorrection
 	{
@@ -97,6 +92,7 @@ package
 		
 		/**Works only for native texts and make it editable or not*/
 		private var editableNativeText:Boolean;
+        private var selectAll:Boolean = false;
 		
 		private var onDone:Function ;
 		
@@ -117,7 +113,7 @@ package
 		 * CLOSE event dispatches when the keyboard leaved the text area<br>
 		 * OnDoneFunction can get the selectedTextField
 		 */
-		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null,restrictCharacterRange:String=null):FarsiInputCorrection
+		public static function setUp(textField:TextField,softKeyFormat:String = SoftKeyboardType.DEFAULT,convertArabic:Boolean=true,correctingArabicNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean=false,editableNative:Boolean=true,controllStageChangesTo:Boolean=true,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null,restrictCharacterRange:String=null,selectAllCharchter:Boolean=false):FarsiInputCorrection
 		{
 			if(softKeyFormat == null)
 			{
@@ -127,7 +123,7 @@ package
 			{
 				ReturnLable=ReturnKeyLabel.DEFAULT ;
 			}
-			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo,ReturnLable,onDoneFunction,restrictCharacterRange);
+			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo,ReturnLable,onDoneFunction,restrictCharacterRange,selectAllCharchter);
 		}
 		
 		/**reset all added effects on this text field*/
@@ -150,7 +146,7 @@ package
 		}
 
 		
-		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true,controllStageTextsToo:Boolean=false,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null,restrictCharacterRange:String=null)
+		public function FarsiInputCorrection(textField:TextField,softKeyFormat:String,convertArabic:Boolean=true,correctNumbers:Boolean = true,clearAfterClicked:Boolean = false,justShowNativeText:Boolean = false,editableNative:Boolean=true,controllStageTextsToo:Boolean=false,ReturnLable:String=ReturnKeyLabel.DEFAULT,onDoneFunction:Function=null,restrictCharacterRange:String=null,selectAllCharchter:Boolean=false)
 		{
 			listenToChangesAllTheTime = controllStageTextsToo ;
 			clearInputText = clearAfterClicked ;
@@ -161,6 +157,7 @@ package
 			onlyNativeText = justShowNativeText ;
 			editableNativeText = editableNative ;
 			onDone = onDoneFunction ;
+            selectAll= selectAllCharchter;
 
 			if(restrictCharacterRange==null && softKeyFormat!=null)
 			{
@@ -488,7 +485,10 @@ package
 				hideTextField();
 				manageInputPose();
 				myStageText.assignFocus();
-				myStageText.selectRange(myStageText.text.length,myStageText.text.length);
+                if(selectAll)
+                    myStageText.selectRange(0,myStageText.text.length);
+                else
+				    myStageText.selectRange(myStageText.text.length,myStageText.text.length);
 				
 				oldTextField.dispatchEvent(new FarsiInputCorrectionEvent(FarsiInputCorrectionEvent.TEXT_FIELD_SELECTED,oldTextField));
 				
