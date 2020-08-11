@@ -335,6 +335,7 @@ package
 			
 			
 			myStageText.addEventListener(KeyboardEvent.KEY_UP,traceTheKeyCode,false,1000);
+			myStageText.addEventListener(KeyboardEvent.KEY_DOWN,traceTheKeyDownCode,false,1000);
 				
 				
 			if(!onlyNativeText)
@@ -371,6 +372,10 @@ package
 		}
 		
 		
+		private function traceTheKeyDownCode(e:KeyboardEvent):void
+		{
+			oldTextField.dispatchEvent(e.clone());
+		}
 		private function traceTheKeyCode(e:KeyboardEvent):void
 		{
 			//Only next and Default button type can dispatch this event
@@ -380,22 +385,25 @@ package
 				SaffronLogger.log("On closed event");
 				closeSoftKeyBoard();
 			}
+			oldTextField.dispatchEvent(e.clone());
 		}
 		
 		/**Close the keyboard*/
-		public function closeKeyBoard():void
+		public function closeKeyBoard(dispatchChangeEvent:Boolean=true):void
 		{
-			closeSoftKeyBoard();
-			changeTheDisplayedText();
+			closeSoftKeyBoard(dispatchChangeEvent);
+			if(dispatchChangeEvent)
+				changeTheDisplayedText();
 		}
 		
-		private function closeSoftKeyBoard():void
+		private function closeSoftKeyBoard(callDoneFunction:Boolean=true):void
 		{
 			if(oldTextField.stage!=null)
 			{
 				oldTextField.stage.focus = null ;
 			}
-			dispatchOnDone();
+			if(callDoneFunction)
+				dispatchOnDone();
 		}
 		
 			/**This will dispatches on done with delay*/
@@ -409,15 +417,18 @@ package
 			}
 				
 				/**Call the onDone function in bet way*/
-				protected function callDone():void
+				public function callDone():void
 				{
-					if(onDone.length==1)
+					if(onDone!=null)
 					{
-						onDone.apply(this,[oldTextField]);
-					}
-					else
-					{
-						onDone();
+						if(onDone.length==1)
+						{
+							onDone.apply(this,[oldTextField]);
+						}
+						else
+						{
+							onDone();
+						}
 					}
 				}		
 		
