@@ -568,6 +568,20 @@ package com.mteamapp
 			return inputcurencynumber+s2+floatPart
 		
 		}
+
+		public static function removeCurrancyPrint(inputcurencynumber:*):String
+		{
+			var lengthCharchters:int = String(inputcurencynumber).length;
+			inputcurencynumber=String(inputcurencynumber);
+			for(var i:int = 0;i<lengthCharchters;i++)
+			{
+				if(String(inputcurencynumber).charAt(i)==',')
+				{
+					inputcurencynumber = String(inputcurencynumber).replace(",","");
+				}
+			}
+			return inputcurencynumber;
+		}
 		
 		
 		
