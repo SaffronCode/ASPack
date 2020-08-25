@@ -88,7 +88,7 @@
 
 		
 		/**This function can only use by RestGullJSON parser.<br>
-		 * Warning!! Vector.<int> will not catch by this class. you should change it with Array object.
+		 * Warning!! Vector.[int] will not catch by this class. you should change it with Array object.
 		 * <br><br>
 		 * Warning2 : set a default variable for date instanses to make them works correctly. (dat:Date = <strong>new Date()</strong>)*/
 		public static function parsParams(fromObject:Object,toObject:*):void

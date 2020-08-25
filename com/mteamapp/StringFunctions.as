@@ -355,7 +355,7 @@ package com.mteamapp
 		}
 		
 		
-		/**Returns -1 if string1 < str2, 1 if str1>str2*/
+		/**Returns -1 if string1 less than str2, 1 if str1 greater than str2*/
 		public static function compairFarsiString(str1:String,str2:String):int
 		{
 			str1 = str1.toLowerCase();
