@@ -58,10 +58,10 @@ package
 		
 		
 		/**convert numbers to arabic*/
-		public static function arabicNumber(myText:String):String
+		public static function arabicNumber(myText:*):String
 		{
 			firstSetUp();
-			return uni.NumberChange(myText);
+			return uni.NumberChange(String(myText));
 		}
 		
 		/**remove all cashd strings based on this cash id*/
