@@ -549,6 +549,28 @@ package
 			}
 			return founded ;
 		}
+
+
+		/**Find all MovieClips on child and grand childs with name contanes this*/
+		public static function getSameTo(sameNameTo:String,container:DisplayObjectContainer):*
+		{
+			for(var i:int = 0 ; i<container.numChildren ; i++)
+			{
+				var targ:* = container.getChildAt(i) ;
+				if(String(targ.name).indexOf(sameNameTo)!=-1)
+				{
+					return targ;
+				}
+				if(targ is DisplayObjectContainer)
+				{
+					var targ2:DisplayObjectContainer = targ as DisplayObjectContainer ;
+					var findedOne:* = getSameTo(sameNameTo,targ2);
+					if(findedOne!=null)
+						return findedOne ;
+				}
+			}
+			return null ;
+		}
 		
 		
 		/**Find requested class in this container.*/
