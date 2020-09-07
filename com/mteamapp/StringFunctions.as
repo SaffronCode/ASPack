@@ -673,8 +673,8 @@ package com.mteamapp
 			{
 				return null ;
 			}
-			str = str.replace(/[\s]+$/g,'');
-			str = str.replace(/^[\s]+/g,'');
+			str = str.replace(/[\s\t\n\r]+$/g,'');
+			str = str.replace(/^[\s\t\n\r]+/g,'');
 			return str ;
 		}
 		
