@@ -285,19 +285,39 @@
 		}
 		
 	/////////////////////////////////////////////////////////////Shamsi↓
-		/**Sample is : 1395/09/06*/
+		/**Sample is : 1395/09/06 or "1399/06/13 13:13"*/
 		public static function stringToMyShamsi(stringedDate:String):MyShamsi
 		{
 			if(stringedDate == null)
 			{
 				return null ;
 			}
+			var splitedTime:Array = stringedDate.split(' ');
+			var timePart:String = '' ;
+			if(splitedTime.length>1)
+			{
+				timePart = splitedTime[1];
+				stringedDate = splitedTime[0];
+			}
 			var splited:Array = stringedDate.split('/');
 			if(splited.length!=3)
 			{
 				return null ;
 			}
-			var createdShamsi:MyShamsi = new MyShamsi(uint(splited[0]),uint(splited[1])-1,uint(splited[2]),0,0,0,0);
+			var houre:uint = 0 ;
+			var minutes:uint = 0 ;
+			var seconds:uint = 0 ;
+			var miliseconds:uint = 0 ;
+			if(timePart!='')
+			{
+				//12:15
+				var splitedClock:Array = timePart.split(':');
+				houre = uint(splitedClock[0]);
+				minutes = uint(splitedClock[1]);
+				seconds = uint(splitedClock[2]);
+				miliseconds = uint(splitedClock[3]);
+			}
+			var createdShamsi:MyShamsi = new MyShamsi(uint(splited[0]),uint(splited[1])-1,uint(splited[2]),houre,minutes,seconds,miliseconds);
 			return createdShamsi ;
 		}
 	}
