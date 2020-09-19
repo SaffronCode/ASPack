@@ -12,6 +12,7 @@ package com.mteamapp.camera
 	import flash.utils.clearTimeout;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.setTimeout;
+	import flash.display.Bitmap;
 
 	public class MTeamCamera
 	{
@@ -52,6 +53,10 @@ package com.mteamapp.camera
 		private static var PermissionEventClass:Class;
 		/**flash.permissions.PermissionStatus*/
 		private static var PermissionStatusClass:Class;
+
+		private var fakeCamera:Boolean,
+					fakeCameraBitmap:Bitmap,
+					fakeCamData:BitmapData ;
 		
 		private static function setUpShared():void
 		{
@@ -109,14 +114,14 @@ package com.mteamapp.camera
 			shared.data['r'+currentCamera] = newVal ;
 		}
 		
-		public function MTeamCamera(target:MovieClip,selctedCameraID:String='')
+		public function MTeamCamera(target:MovieClip,selctedCameraID:String='',fakeCameraWhenNoCameraAccesible:Boolean=false)
 		{
-			DevicePrefrence.isItPC
 			if(selctedCameraID!='')
 			{
 				currentCamera = selctedCameraID ;
 			}
 			
+			fakeCamera = fakeCameraWhenNoCameraAccesible ;
 			
 			targ = target ;
 			targWidth = targ.width ;
@@ -189,7 +194,7 @@ package com.mteamapp.camera
 		
 		protected function unLoad(event:Event):void
 		{
-			
+			targ.removeEventListener(Event.ENTER_FRAME,fakeCameraEffect);
 			deactivateCamera();
 		}
 		
@@ -242,7 +247,7 @@ package com.mteamapp.camera
 		}
 		
 		/**set up camera*/
-		private function setCurrentCam()
+		private function setCurrentCam():void
 		{
 			if(!landScape)
 			{
@@ -289,6 +294,9 @@ package com.mteamapp.camera
 		
 		private function connectCamera():void
 		{
+			Obj.remove(fakeCameraBitmap);
+			targ.removeEventListener(Event.ENTER_FRAME,fakeCameraEffect);
+
 			if(camera!=null){
 				camera.setQuality(0,100);
 				var camScale:Number = Math.max((camWidth/camera.width),(camHeight/camera.height));
@@ -333,8 +341,25 @@ package com.mteamapp.camera
 			else
 			{
 				trace("camera 1 is not ready");
+				if(fakeCamera)
+				{
+					if(fakeCameraBitmap==null)
+					{
+						fakeCamData = new BitmapData(targWidth,targHeight,false,0x000000);
+						fakeCameraBitmap = new Bitmap(fakeCamData);
+					}
+					targ.addChild(fakeCameraBitmap);
+
+					fakeCameraEffect(null);
+					targ.addEventListener(Event.ENTER_FRAME,fakeCameraEffect);
+				}
 			}
 			updateCustomRotationInterface();
+		}
+
+		private function fakeCameraEffect(e:Event):void
+		{
+			fakeCamData.noise(Math.floor(Math.random()*20),0,255,7,true);
 		}
 		
 		/***Rotate the camera in the custom user rotation*/
@@ -369,7 +394,7 @@ package com.mteamapp.camera
 	////////////////////////////////////public functions ↓
 		
 		/**switch cameras*/
-		public function switchCameras(e:MouseEvent=null)
+		public function switchCameras(e:MouseEvent=null):void
 		{
 			trace("switch cameras")
 			if(currentCamera == firstCamID)
