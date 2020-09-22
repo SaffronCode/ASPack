@@ -155,6 +155,38 @@
 				_microphone.addEventListener(StatusEvent.STATUS, onStatus);
 			}
 		}
+
+		public static function getMicrophonePermission(onPermissionGranted:Function=null,noPermission:Function=null):Boolean
+		{
+			var _mic:Microphone = new Microphone()
+			if (Microphone.permissionStatus != PermissionStatus.GRANTED)
+			{
+				_mic.addEventListener(PermissionEvent.PERMISSION_STATUS,
+					function(e:PermissionEvent):void {
+						if (e.status == PermissionStatus.GRANTED)
+						{
+							if(onPermissionGranted!=null)onPermissionGranted();
+						}
+						else
+						{
+							if(noPermission!=null)noPermission();
+						}
+					});
+				
+				try {
+					_mic.requestPermission();
+				} catch(e:Error)
+				{
+					// another request is in progress
+				}
+			}
+			else
+			{
+				noPermission();
+				return true;
+			}
+			return false; 
+		}
 		
 		private function onStatus(event:StatusEvent):void
 		{
