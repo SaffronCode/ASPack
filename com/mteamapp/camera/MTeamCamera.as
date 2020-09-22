@@ -221,7 +221,7 @@ package com.mteamapp.camera
 		
 		public function createCamera():void
 		{
-			
+			Obj.setButton(targ,switchCameras);
 			
 			//remove every thing↓
 			targ.removeChildren();
@@ -243,7 +243,6 @@ package com.mteamapp.camera
 			
 			setCurrentCam();
 			
-			Obj.setButton(targ,switchCameras);
 		}
 		
 		/**set up camera*/
@@ -298,10 +297,10 @@ package com.mteamapp.camera
 			targ.removeEventListener(Event.ENTER_FRAME,fakeCameraEffect);
 
 			if(camera!=null){
-				camera.setQuality(0,100);
+				camera.setQuality(0,70);
 				var camScale:Number = Math.max((camWidth/camera.width),(camHeight/camera.height));
 				
-				camera.setMode(Math.floor(camera.width*camScale),Math.floor(camera.height*camScale),24,true);
+				camera.setMode(640,480,60,true);
 				vid.attachCamera(camera);
 				
 				if(landScape)
