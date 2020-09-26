@@ -113,21 +113,9 @@ package com.mteamapp.camera
 			//trace("newVal 3 : "+newVal);
 			shared.data['r'+currentCamera] = newVal ;
 		}
-		
-		public function MTeamCamera(target:MovieClip,selctedCameraID:String='',fakeCameraWhenNoCameraAccesible:Boolean=false)
+
+		private function detectLandscape():void
 		{
-			if(selctedCameraID!='')
-			{
-				currentCamera = selctedCameraID ;
-			}
-			
-			fakeCamera = fakeCameraWhenNoCameraAccesible ;
-			
-			targ = target ;
-			targWidth = targ.width ;
-			targHeight = targ.height;
-			targ.scaleX = targ.scaleY = 1 ;
-			
 			if(dont_controll_portrate_screen || targ.stage.stageWidth > targ.stage.stageHeight || DevicePrefrence.isItPC)
 			{
 				landScape = true ;
@@ -145,6 +133,23 @@ package com.mteamapp.camera
 				}
 				landScape = false ;
 			}
+		}
+		
+		public function MTeamCamera(target:MovieClip,selctedCameraID:String='',fakeCameraWhenNoCameraAccesible:Boolean=false)
+		{
+			if(selctedCameraID!='')
+			{
+				currentCamera = selctedCameraID ;
+			}
+			
+			fakeCamera = fakeCameraWhenNoCameraAccesible ;
+			
+			targ = target ;
+			targWidth = targ.width ;
+			targHeight = targ.height;
+			targ.scaleX = targ.scaleY = 1 ;
+			
+			detectLandscape();
 			
 			if(landScape)
 			{
@@ -259,7 +264,7 @@ package com.mteamapp.camera
 					vid.rotation = -90 ;
 				}
 			}
-			rotation0 = vid.rotation ;
+			rotation0 = isNaN(rotation0)?vid.rotation:rotation0 ;
 			
 			camera = Camera.getCamera(currentCamera);
 			setUpPermissionClasses();
@@ -301,41 +306,10 @@ package com.mteamapp.camera
 				var camScale:Number = Math.max((camWidth/camera.width),(camHeight/camera.height));
 				
 				camera.setMode(640,480,60,true);
+				camera.setQuality(1,1);
 				vid.attachCamera(camera);
 				
-				if(landScape)
-				{
-					vid.width = targWidth ;
-					vid.height = targHeight ;
-				}
-				else
-				{
-					vid.height = targWidth ;
-					vid.width = targHeight ;
-				}
 				
-				//debug line
-				//vid.height = 1000;
-				
-				vid.scaleX = vid.scaleY = Math.max(vid.scaleX,vid.scaleY);
-				if(landScape)
-				{
-					vid.x = (targWidth-vid.width)/2;
-					vid.y = (targHeight-vid.height)/2;
-				}
-				else
-				{
-					if(rotateToRight)
-					{
-						vid.x = targWidth-(targWidth-vid.width)/2;
-						vid.y = (targHeight-vid.height)/2;
-					}
-					else
-					{
-						vid.x = (targWidth-vid.width)/2;
-						vid.y = targHeight-(targHeight-vid.height)/2;
-					}
-				}
 			}
 			else
 			{
@@ -364,7 +338,34 @@ package com.mteamapp.camera
 		/***Rotate the camera in the custom user rotation*/
 		private function updateCustomRotationInterface():void
 		{
+				vid.height = vid.width = Math.max(targWidth,targHeight) ;
 			
+			//debug line
+			//vid.height = 1000;
+
+			trace("landScape:"+landScape);
+			trace("targWidth:"+targWidth+' , targHeight:'+targHeight);
+			trace("vid.width:"+vid.width+' , vid.height:'+vid.height);
+			
+			vid.scaleX = vid.scaleY = Math.max(vid.scaleX,vid.scaleY);
+			if(landScape)
+			{
+				vid.x = (targWidth-vid.width)/2;
+				vid.y = (targHeight-vid.height)/2;
+			}
+			else
+			{
+				if(rotateToRight)
+				{
+					vid.x = targWidth-(targWidth-vid.width)/2;
+					vid.y = (targHeight-vid.height)/2;
+				}
+				else
+				{
+					vid.x = (targWidth-vid.width)/2;
+					vid.y = targHeight-(targHeight-vid.height)/2;
+				}
+			}
 			//trace("customRotation is : "+customRotation);
 			vid.rotation = rotation0 + customRotation ;
 			switch(vid.rotation)
