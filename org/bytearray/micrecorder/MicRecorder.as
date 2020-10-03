@@ -12,6 +12,7 @@
 	
 	import org.bytearray.micrecorder.encoder.WaveEncoder;
 	import org.bytearray.micrecorder.events.RecordingEvent;
+	import contents.alert.Alert;
 	
 	/**
 	 * Dispatched during the recording of the audio stream coming from the microphone.
@@ -158,7 +159,8 @@
 
 		public static function getMicrophonePermission(onPermissionGranted:Function=null,noPermission:Function=null):Boolean
 		{
-			var _mic:Microphone = new Microphone()
+			var _mic:Microphone = new Microphone();
+			trace("Microphone.permissionStatus : "+Microphone.permissionStatus);
 			if (Microphone.permissionStatus != PermissionStatus.GRANTED)
 			{
 				_mic.addEventListener(PermissionEvent.PERMISSION_STATUS,
@@ -182,7 +184,7 @@
 			}
 			else
 			{
-				noPermission();
+				onPermissionGranted();
 				return true;
 			}
 			return false; 
