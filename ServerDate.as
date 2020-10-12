@@ -5,6 +5,7 @@
 	import diagrams.calender.MyShamsi;
 	
 	import flash.utils.getTimer;
+	import contents.alert.Alert;
 	
 	public class ServerDate
 	{
@@ -147,6 +148,7 @@
 			{
 				return new Date();
 			}
+			//Alert.show("date: "+date);
 			
 			var splitter:Array;
 			var dateSplitter:Array ;
@@ -162,8 +164,14 @@
 			{
 				timeSplitter[0] = '0' ;
 			}
-			
-			createdDate = new Date(Number(dateSplitter[2]),Number(dateSplitter[1])-1,Number(dateSplitter[0]),Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
+			var month:Number = Number(dateSplitter[0]) ;
+			var day:Number = Number(dateSplitter[1]) ;
+			if(month>12)
+			{
+				month = day ;
+				day = Number(dateSplitter[0]) ;
+			}
+			createdDate = new Date(Number(dateSplitter[2]),month-1,day,Number(timeSplitter[0]),Number(timeSplitter[1]),Number(timeSplitter[2]));
 			if(splitter[2] == "PM" && Number(timeSplitter[0])<12)
 			{
 				createdDate.hours+=12 ;
