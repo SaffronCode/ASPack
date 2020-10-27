@@ -35,6 +35,8 @@
 	import videoShow.VideoClass;
 	import videoShow.VideoEvents;
 	import nativeClasses.distriqtCameraRoll.DistriqtCameraRoll;
+	import flash.permissions.PermissionStatus;
+	import flash.events.PermissionEvent;
 	
 
 	public class DeviceImage
@@ -491,14 +493,19 @@
 			}
 			cameraRoll.addEventListener(MediaEvent.SELECT,addThisImageTo);
 			cameraRoll.addEventListener(Event.CANCEL,mediaLoadingCanseled);
-			setUpPermissionClasses();
-			if (PermissionStatusClass!=null && (CameraRoll as Object).permissionStatus != (PermissionStatusClass as Object).GRANTED)
+			getCameraRollPermission(launchCameraRoll);
+		}
+
+		public static function getCameraRollPermission(onPermited:Function):void
+		{
+			var cameraRollPermission:CameraRoll = new CameraRoll();
+			if (CameraRoll.permissionStatus != PermissionStatus.GRANTED)
 			{
-				cameraRoll.addEventListener((PermissionEventClass as Object).PERMISSION_STATUS,
+				cameraRollPermission.addEventListener(PermissionEvent.PERMISSION_STATUS,
 					function(e:*):void {
-						if (e.status == (PermissionStatusClass as Object).GRANTED)
+						if (e.status == PermissionStatus.GRANTED)
 						{
-							launchCameraRoll();
+							onPermited();
 						}
 						else
 						{
@@ -507,7 +514,7 @@
 						}
 					});
 				try {
-					(cameraRoll as Object).requestPermission();
+					cameraRollPermission.requestPermission();
 				} catch(e:Error)
 				{
 					trace("another request is in progress");
@@ -516,7 +523,7 @@
 			}
 			else
 			{
-				launchCameraRoll()
+				onPermited()
 			}
 		}
 		
@@ -702,13 +709,22 @@
 
 		private static var browsOptions:CameraRollBrowseOptions;
 		
-		public static function saveImageToGallery(file:ByteArray, onImageSaved:Function):void
+		/**file can be BitmapData, ByteArray or URL in string */
+		public static function saveImageToGallery(file:*, onImageSaved:Function):void
 		{
 			onLoadingVideo = false ;
 			
 			cashedOnDone = onDone = onImageSaved ;
 			
-			createBitmapFromByteOrURL(file,saveToGall);
+			if(file is BitmapData)
+			{
+				lastBitmap = new Bitmap(file) ;
+				getCameraRollPermission(saveToGall);
+			}
+			else
+			{
+				createBitmapFromByteOrURL(file,function():void{getCameraRollPermission(saveToGall)});
+			}
 		}
 		
 		private static function saveToGall():void
