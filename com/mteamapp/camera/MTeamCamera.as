@@ -57,6 +57,8 @@ package com.mteamapp.camera
 		private var fakeCamera:Boolean,
 					fakeCameraBitmap:Bitmap,
 					fakeCamData:BitmapData ;
+
+		private var framerate:uint ;
 		
 		private static function setUpShared():void
 		{
@@ -135,7 +137,7 @@ package com.mteamapp.camera
 			}
 		}
 		
-		public function MTeamCamera(target:MovieClip,selctedCameraID:String='',fakeCameraWhenNoCameraAccesible:Boolean=false)
+		public function MTeamCamera(target:MovieClip,selctedCameraID:String='',fakeCameraWhenNoCameraAccesible:Boolean=false,framerate:uint=60)
 		{
 			if(selctedCameraID!='')
 			{
@@ -143,6 +145,7 @@ package com.mteamapp.camera
 			}
 			
 			fakeCamera = fakeCameraWhenNoCameraAccesible ;
+			this.framerate = framerate ;
 			
 			targ = target ;
 			targWidth = targ.width ;
@@ -305,7 +308,7 @@ package com.mteamapp.camera
 				camera.setQuality(0,70);
 				var camScale:Number = Math.max((camWidth/camera.width),(camHeight/camera.height));
 				
-				camera.setMode(640,480,60,true);
+				camera.setMode(640,480,framerate,true);
 				camera.setQuality(1,1);
 				vid.attachCamera(camera);
 				
