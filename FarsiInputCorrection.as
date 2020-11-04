@@ -107,6 +107,8 @@ package
 
 		private var onChange:Function ;
 
+		private var _currencyPrint:Boolean = false ;
+
 					
 		/**this function will make your input text edittable with stageText that will show farsi texts correctly on it<br>
 		 * remember to ember fonts that used on the textField<br>
@@ -124,6 +126,12 @@ package
 				ReturnLable=ReturnKeyLabel.DEFAULT ;
 			}
 			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo,ReturnLable,onDoneFunction,restrictCharacterRange,selectAllCharchter);
+		}
+
+		public function isCurrency():void
+		{
+			_currencyPrint = true ;
+			if(newTextField!=null && oldTextField!=null)newTextField.text = StringFunctions.currancyPrint(oldTextField.text);
 		}
 		
 		/**reset all added effects on this text field*/
@@ -529,7 +537,11 @@ package
 				targetColor = grayScale(oldTextField.textColor);
 				newTextField.displayAsPassword = false ;
 			}
-			if(itsArabic ||  ( detectArabic && StringFunctions.isPersian(updatedText)))
+			if(_currencyPrint)
+			{
+				newTextField.text = StringFunctions.currancyPrint(oldTextField.text);
+			}
+			else if(itsArabic ||  ( detectArabic && StringFunctions.isPersian(updatedText)))
 			{
 				UnicodeStatic.fastUnicodeOnLines(newTextField,updatedText,false);
 			}
