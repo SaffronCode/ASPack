@@ -241,10 +241,13 @@ package
 		public static function setIntervalOnDisplayObject(displayObjctOnStage:DisplayObject,closur:Function,delay:Number,...param):uint
 		{
 			var intervalID:uint = setInterval(onClosur,delay);
-			addEventListener(displayObjctOnStage,Event.REMOVED_FROM_STAGE,function():void{
-				trace("Obj. clear interval");
-				clearInterval(intervalID);
-			});
+			if(displayObjctOnStage!=null)
+			{
+				addEventListener(displayObjctOnStage,Event.REMOVED_FROM_STAGE,function():void{
+					trace("Obj. clear interval");
+					clearInterval(intervalID);
+				});
+			}
 			function onClosur():void
 			{
 				trace("Obj. closurHappend");
