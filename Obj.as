@@ -33,6 +33,8 @@ package
 	import contents.alert.Alert;
 	import flash.utils.setInterval;
 	import flash.utils.clearInterval;
+	import contents.LinkData;
+	import appManager.event.AppEventContent;
 
 	/**detect objects on display object with names*/
 	public class Obj
@@ -268,6 +270,17 @@ package
 				closur.apply(displayObjctOnStage,param);
 			}
 			return timeoutId ;
+		}
+
+		/**Set a link oppener button */
+		public static function setLinkButton(target:MovieClip,linkdata:LinkData):void
+		{
+			function openLink():void
+			{
+				target.dispatchEvent(new AppEventContent(linkdata));
+			}
+
+			setButton(target,openLink);
 		}
 		
 		/**generate a button from a movieClip*/
