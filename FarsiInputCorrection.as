@@ -128,10 +128,11 @@ package
 			return new FarsiInputCorrection(textField,softKeyFormat,convertArabic,correctingArabicNumbers,clearAfterClicked,justShowNativeText,editableNative,controllStageChangesTo,ReturnLable,onDoneFunction,restrictCharacterRange,selectAllCharchter);
 		}
 
-		public function isCurrency():void
+		public function isCurrency():FarsiInputCorrection
 		{
 			_currencyPrint = true ;
 			if(newTextField!=null && oldTextField!=null)newTextField.text = StringFunctions.currancyPrint(oldTextField.text);
+			return this ;
 		}
 		
 		/**reset all added effects on this text field*/
@@ -600,6 +601,11 @@ package
 				newTextField.text = '';
 			}
 			editing = true ;
+		}
+
+		public function isActive():Boolean
+		{
+			return editing ;
 		}
 		
 		/***/
