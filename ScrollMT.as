@@ -608,8 +608,10 @@ package
 			{
 				if((ScrollEffect && acceptSetEfectOnMe || forseScrollEffect))
 				{
-					Vx += scrollEffectDelta ;
-					Vy += scrollEffectDelta ;
+					if(freeScrollOnTarget_LR)
+						Vx += scrollEffectDelta ;
+					if(freeScrollOnTarget_TD)
+						Vy += scrollEffectDelta ;
 				}
 				if(fadeTheCursel)
 				{
@@ -1452,7 +1454,6 @@ package
 		/**This function will cause to scroll the page befor its starts to work*/
 		public static function showScrollEfect(value:Boolean=true):void
 		{
-			
 			ScrollEffect = value ;
 		}
 		
