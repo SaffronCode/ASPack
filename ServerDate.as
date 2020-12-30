@@ -118,6 +118,7 @@
 				myDate.fullYearUTC = uint(splitedDatePart[0]);
 				myDate.monthUTC = uint(splitedDatePart[1])-1;
 				myDate.dateUTC = uint(splitedDatePart[2]);
+				myDate.milliseconds = 0 ;
 				if(noZoneAvailable)
 				{
 					myDate.hours = uint(splitedTimePart[0]);
