@@ -22,5 +22,29 @@ package
 				navigateToURL(new URLRequest("geo://"+locationString+"?z=1&q="+locationString+" ("+locationTitle+")"));
 			}
 		}
+
+
+		/**returns in kilometers */
+		public  static function CalculationByDistance(startLat:Number,startLon:Number,endLat:Number,endLon:Number):Number
+		{
+			var Radius:int = 6371;// radius of earth in Km
+			var dLat:Number = toRadians(endLat - startLat);
+			var dLon:Number = toRadians(endLon - startLon);
+			var a:Number = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+				+ Math.cos(toRadians(startLat))
+				* Math.cos(toRadians(endLat)) * Math.sin(dLon / 2)
+				* Math.sin(dLon / 2);
+			var c:Number = 2 * Math.asin(Math.sqrt(a));
+			return Radius * c;
+		}
+		private static function toDegrees(radians:Number):Number
+		{
+			return radians * 180/Math.PI;
+		}
+		
+		private static function toRadians(degrees:Number):Number
+		{
+			return degrees * Math.PI / 180;
+		}
 	}
 }
