@@ -26,7 +26,7 @@ package
 		/**Update the last date*/
 		public static function update(newDate:Date):void
 		{
-			if(lastDate==null || date().time>newDate.time )
+			if(lastDate==null || newDate!=null )
 			{
 				lastDate = new Date(newDate.time);
 				zeroTime = getTimer();
