@@ -35,6 +35,8 @@ package
 	import flash.utils.clearInterval;
 	import contents.LinkData;
 	import appManager.event.AppEventContent;
+	import flash.net.navigateToURL;
+	import flash.net.URLRequest;
 
 	/**detect objects on display object with names*/
 	public class Obj
@@ -281,6 +283,17 @@ package
 			function openLink():void
 			{
 				target.dispatchEvent(new AppEventContent(linkdata));
+			}
+
+			setButton(target,openLink);
+		}
+
+		/**Set a url oppener button */
+		public static function setURLButton(target:MovieClip,_url:String):void
+		{
+			function openLink():void
+			{
+				navigateToURL(new URLRequest(_url));
 			}
 
 			setButton(target,openLink);

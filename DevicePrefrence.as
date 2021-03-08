@@ -830,7 +830,7 @@ package {
         }
 
         public static function isRoot():Boolean {
-            var rootCheckerClass:Class = Obj.generateClass('com.distriqt.extension.rootchecker.RootChecker')
+            var rootCheckerClass:Class = Obj.generateClass('com.distriqt.extension.rootchecker.RootChecker');
             if(rootCheckerClass!=null && (rootCheckerClass as Object).isSupported)
             {
                 return (rootCheckerClass as Object).instance.isRooted ;
