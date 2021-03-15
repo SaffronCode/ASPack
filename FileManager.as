@@ -138,7 +138,7 @@
 		}
 		
 		/**Control the file permission*/
-		public static function controlFilePermission(onPermissionGranted:Function,askUserTogrant:Boolean=true):void
+		public static function controlFilePermission(onPermissionGranted:Function,askUserTogrant:Boolean=true,permissionDenied:Function=null):void
 		{
 			var _file:File = new File() ;
 			SaffronLogger.log("File.permissionStatus : "+File.permissionStatus);
@@ -153,6 +153,7 @@
 						else
 						{
 							SaffronLogger.log("permission denied");
+							if(permissionDenied!=null)permissionDenied();
 						}
 					});
 				
