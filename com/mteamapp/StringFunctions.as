@@ -160,7 +160,8 @@ package com.mteamapp
 			}
 			var regURLDetect:RegExp = /([^"]|^)(www|http[s]?:\/\/)([^\s^\n^\r^<^\]^\[^>^"^']*)/gi ;
 			str = str.replace(/(http[s]?:\/\/)www\./gi,'$1');//Remove extra www
-			str = str.replace(regURLDetect,'<a href="$2$3">$2$3</a>');
+			str = str.replace(regURLDetect,'<a href="http:\/\/$2$3">$2$3</a>');
+			//str = str.replace(/(href=")(?!http)([^"]+")/gi,'href="http://$2$3"');
 			//var regURLDetect2:RegExp = /http\S*\s/gi;
 			//str = str.replace(regURLDetect2,'<font color="'+linkColors+'"><a href="$&">$&</a></font>');
 			var regDetectEmail:RegExp = /[a-z\.\-1234567890_]*\@[a-z\.\-_]*/gi ;
