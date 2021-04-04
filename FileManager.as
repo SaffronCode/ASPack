@@ -31,7 +31,7 @@
 
 		private static var onDone:Function;
 		/**This will load local file instantly*/
-		public static function loadFile(fileTarget:File,openAsync:Boolean=false,onLoaded:Function=null):ByteArray
+		public static function loadFile(fileTarget:File,openAsync:Boolean=false,onLoaded:Function=null,forceToGrantPermission:Boolean=false):ByteArray
 		{
 			if(fileTarget==null || !fileTarget.exists)
 			{
@@ -60,7 +60,7 @@
 					fileStream.addEventListener(Event.COMPLETE,fileLoaded);
 					fileStream.openAsync(fileTarget,FileMode.READ);
 				}
-			});
+			},forceToGrantPermission);
 			
 			return fileBytes;
 		}
