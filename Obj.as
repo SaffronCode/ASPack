@@ -81,6 +81,19 @@ package
 			return targ
 		}
 
+		public static function stackTrace():String
+		{
+			try
+			{
+				throw "StackTrace";
+			}
+			catch(e:Error)
+			{
+				return e.getStackTrace();
+			}
+			return '';
+		}
+
 		/**
 		 * This function will addEventListner to your eventDispatcher. but this time, 
 		 * 1- you don't need to defind input as Event.
