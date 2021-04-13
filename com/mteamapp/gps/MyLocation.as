@@ -25,13 +25,6 @@
 
 		public static function set geo(value:Geolocation):void
 		{
-			try
-			{
-				throw new Error("Geolocation for MyLocation has been set from ");
-			}catch(e:Error)
-			{
-				SaffronLogger.log(e.message+"\n > \n"+e.getStackTrace());
-			}
 			_geo = value;
 		}
 		
