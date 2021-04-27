@@ -149,7 +149,6 @@ package com.mteamapp
 				colorTagStart = '<font color="#'+linkColors.toString(16)+'">';
 				colorTagEnd = '</font>';
 			}
-			var str:String = str;
 			//debug telephone
 			if(true || !DevicePrefrence.isItPC)
 			{
@@ -168,6 +167,8 @@ package com.mteamapp
 			str = str.replace(regDetectEmail,colorTagStart+'<a href="mailto:$&">$&</a>'+colorTagEnd);
 			
 			var doubleHTTP:RegExp = /http:\/\/[ ]*http:\/\//gi;
+			str = str.replace(doubleHTTP,'http://');
+			doubleHTTP = /http:\/\/[ ]*https:\/\//gi;
 			str = str.replace(doubleHTTP,'http://');
 			
 			return str ;
