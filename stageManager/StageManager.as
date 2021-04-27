@@ -56,6 +56,8 @@ package stageManager
 		private static var lastStageFW:Number,lastStageFH:Number;
 		
 		private static var lastStageWidth:Number,lastStageHeight:Number ;
+
+		private static var _lastKeyboardStatus:Number ;
 		
 		/**Activate resolution controll*/
 		private static var resolutionControll:Boolean,
@@ -220,10 +222,7 @@ package stageManager
 			controllStageSizes(null,true);
 			
 			myStage.addEventListener(Event.ADDED,controllFromMe,false,1);
-			//myStage.nativeWindow.addEventListener(NativeWindowBoundsEvent.RESIZE,controllStageSizesOnFullScreen);
-			//NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,controllStageSizesOnFullScreen);
 			setTimeout(controlStageIntervalOnFrames,0);
-			//setInterval(controllStageSizesOnFullScreen,stageUpdateInterval);
 			enterFramer.addEventListener(Event.ENTER_FRAME,controlStageIntervalOnFrames);
 		}
 
@@ -350,7 +349,11 @@ package stageManager
 				var stageWidth:Number;
 				var stageHeight:Number;
 
-				var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC ;
+
+				var currentKeyboardStatus:Number = myStage.softKeyboardRect.height ;
+				var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC || currentKeyboardStatus!=_lastKeyboardStatus ;
+				_lastKeyboardStatus = myStage.softKeyboardRect.height ;
+
 				
 				if(changeTheStageSizeToReCheck&&(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize))
 				{
