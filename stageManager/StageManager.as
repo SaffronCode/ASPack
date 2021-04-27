@@ -352,7 +352,7 @@ package stageManager
 
 				var currentKeyboardStatus:Number = myStage.softKeyboardRect.height ;
 				var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC || currentKeyboardStatus!=_lastKeyboardStatus ;
-				_lastKeyboardStatus = myStage.softKeyboardRect.height ;
+				_lastKeyboardStatus = currentKeyboardStatus ;
 
 				
 				if(changeTheStageSizeToReCheck&&(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize))
