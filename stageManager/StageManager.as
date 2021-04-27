@@ -339,23 +339,23 @@ package stageManager
 		}
 		
 		/**Controll the stage each frame*/
-		public static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false):void
+		public static function controllStageSizes(event:Event=null,testTheStageSizeTo:Boolean=false,forceToCheckSize:Boolean=false):void
 		{
 			if(!DevicePrefrence.isApplicationActive)
 				return ;
 			//trace("testTheStageSizeTo : "+testTheStageSizeTo);
-			if((lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) || testTheStageSizeTo)
+			if(forceToCheckSize || (lastStageFW!=myStage.fullScreenWidth || lastStageFH != myStage.fullScreenHeight) || testTheStageSizeTo)
 			{
 				var stageWidth:Number;
 				var stageHeight:Number;
 
 
 				var currentKeyboardStatus:Number = myStage.softKeyboardRect.height ;
-				var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC || currentKeyboardStatus!=_lastKeyboardStatus ;
+				var changeTheStageSizeToReCheck:Boolean = (false || (deltaStageHeight==0 && deltaStageWidth==0) || getTimer()<5000) || DevicePrefrence.isItPC || (currentKeyboardStatus!=_lastKeyboardStatus);
 				_lastKeyboardStatus = currentKeyboardStatus ;
 
 				
-				if(changeTheStageSizeToReCheck&&(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize))
+				if(forceToCheckSize || (changeTheStageSizeToReCheck&&(!DevicePrefrence.isFullScreen() || testTheStageSizeTo || haveToCheckStageSize)))
 				{
 					eventDispatcher.dispatchEvent(new StageManagerEvent(StageManagerEvent.STAGE_RESIZING,new Rectangle(deltaStageWidth/-2,deltaStageHeight/-2,stageWidth,stageHeight)));
 					lastStageFW = myStage.fullScreenWidth ;
