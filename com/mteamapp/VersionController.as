@@ -27,7 +27,7 @@ package com.mteamapp
 		public static var force:Boolean = true ;
 		
 		/**You can receive the hint text as the first parameter for thisIsOldVersion function and application download URL based on your OD on the second input parameter.*/
-		public static function controllVersion(currectVersion:Function,thisIsOldVersion:Function,versionURL:URLRequest,appVersion:String=null,controllEveryApplicationOpenning:Boolean=false)
+		public static function controllVersion(currectVersion:Function,thisIsOldVersion:Function,versionURL:URLRequest,appVersion:String=null,controllEveryApplicationOpenning:Boolean=false,useOfflineVersion:Boolean=false):void
 		{
 			var onDone:Function = currectVersion ;
 			var onFaild:Function = thisIsOldVersion ;
@@ -40,10 +40,18 @@ package com.mteamapp
 			var versionControll:URLLoader = new URLLoader();
 			versionControll.addEventListener(Event.COMPLETE,onVersinoStringReceved);
 			versionControll.addEventListener(IOErrorEvent.IO_ERROR,noConnection);
-			versionControll.load(versionURL);
+			if(useOfflineVersion)
+			{
+				controllCashedDatas();
+			}
+			else
+			{
+				versionControll.load(versionURL);
+			}
+
 			SaffronLogger.log("Load this : "+versionURL.url);
 			
-			if(controllEveryApplicationOpenning)
+			if(useOfflineVersion == false && controllEveryApplicationOpenning)
 			{
 				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e)
 					{
