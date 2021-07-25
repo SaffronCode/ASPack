@@ -6,6 +6,7 @@ package com.mteamapp
 	import flash.net.SharedObject;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import contents.alert.Alert;
 
 	public class VersionController
 	{
@@ -22,6 +23,8 @@ package com.mteamapp
 		public static var hintText:String ;
 		/**App store url*/
 		public static var appStoreURL:String ;
+
+		public static var force:Boolean = true ;
 		
 		/**You can receive the hint text as the first parameter for thisIsOldVersion function and application download URL based on your OD on the second input parameter.*/
 		public static function controllVersion(currectVersion:Function,thisIsOldVersion:Function,versionURL:URLRequest,appVersion:String=null,controllEveryApplicationOpenning:Boolean=false)
@@ -55,6 +58,7 @@ package com.mteamapp
 			 <text>نسخه ی 2 همکنون آماده ی دانلود می باشد</text>
 			 <url_ios>http://www.apple.com</url_ios>
 			 <url_android>http://www.google.com</url_android>
+			 <force>true</force>
 			 </version>*/
 			function onVersinoStringReceved(event:Event):void
 			{
@@ -99,6 +103,7 @@ package com.mteamapp
 				}
 				var serverVersion:String = xmlController.id ;
 				var currentVersion2:String = currentVersion ;
+				var forceToUpdate:Boolean = (xmlController.force==undefined)?true:xmlController.force=='true' ;
 				
 				var serVerArr:Array = serverVersion.split('.');
 				var appVerArr:Array = currentVersion.split('.');
@@ -140,7 +145,10 @@ package com.mteamapp
 					}
 					else if(hintText.length>1)
 					{
-						onFaild(hintText,appStoreURL);
+						if(onFaild.length==3)
+							onFaild(hintText,appStoreURL,forceToUpdate);
+						else
+							onFaild(hintText,appStoreURL);
 					}
 					else
 					{
