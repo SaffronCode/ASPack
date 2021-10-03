@@ -20,7 +20,7 @@ package multiMediaManager
 		/**app stage*/
 		private static var myStage:Stage;
 		
-		public static function setUpFullSvreenApp(yourStage:Stage)
+		public static function setUpFullSvreenApp(yourStage:Stage):void
 		{
 			myStage = yourStage ;
 			
@@ -33,14 +33,14 @@ package multiMediaManager
 		}
 		
 		/**now listen to maximizeing apps*/
-		private static function getReady(e)
+		private static function getReady(e:*):void
 		{
 			myStage.nativeWindow.removeEventListener(Event.ACTIVATE,maxit);
 			myStage.nativeWindow.addEventListener(Event.ACTIVATE,maxit);
 		}
 		
 		/**prevent scape to act and minimize the app*/
-		private static function preventScape(e)
+		private static function preventScape(e:*):void
 		{
 			switch(e.charCode)
 			{
@@ -53,7 +53,7 @@ package multiMediaManager
 		}
 		
 		/**maximize the window*/
-		private static function maxit(e=null)
+		private static function maxit(e:*=null):void
 		{
 			if(DevicePrefrence.isItPC)
 			{
@@ -67,7 +67,7 @@ package multiMediaManager
 		
 		
 		/**close app*/
-		public static function closeApp(e=null)
+		public static function closeApp(e:*=null):void
 		{
 			NativeApplication.nativeApplication.exit();
 		}
@@ -75,7 +75,7 @@ package multiMediaManager
 		
 		
 		/**minimize app*/
-		public static function minimizeApp(e=null){
+		public static function minimizeApp(e:*=null):void{
 			if(myStage!=null)
 			{
 				myStage.nativeWindow.minimize();
