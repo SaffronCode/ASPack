@@ -53,7 +53,7 @@ package com.mteamapp
 			
 			if(useOfflineVersion == false && controllEveryApplicationOpenning)
 			{
-				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e)
+				NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE,function(e:*):void
 					{
 						versionControll.load(versionURL);
 					}

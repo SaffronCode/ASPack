@@ -74,7 +74,7 @@ package myMultiTouch
 		private static var touchPoints:Vector.<TouchData>;
 		
 		/**reset the position and scale of this object*/
-		public static function resetZoom(target:Sprite)
+		public static function resetZoom(target:Sprite):void
 		{
 			if(zoomAbles==null)
 			{
@@ -111,14 +111,14 @@ package myMultiTouch
 		}
 		
 		/**remove all touch points on app is deactivated*/
-		private static function removeAllTouches(e)
+		private static function removeAllTouches(e:*):void
 		{
 			touchPoints = new Vector.<TouchData>();
 		}
 		
 		
 		/**add zoom effect to thid object*/
-		public static function zoomAct(target:Sprite,monitorRectangle:Rectangle,onZoomed:Function=null,onZoomEnds:Function=null,moveOnlyWithTwoFinger:Boolean=false,MaxZoom:Number=NaN)
+		public static function zoomAct(target:Sprite,monitorRectangle:Rectangle,onZoomed:Function=null,onZoomEnds:Function=null,moveOnlyWithTwoFinger:Boolean=false,MaxZoom:Number=NaN):void
 		{
 			
 			if(onZoomed == null)
@@ -215,7 +215,7 @@ package myMultiTouch
 		
 		
 		/**managing the app*/
-		public static function anim(e:Event)
+		public static function anim(e:Event):void
 		{
 			/**delta x y width*/
 			var dx:Number=0,dy:Number=0,ds:Number=1;
@@ -420,7 +420,7 @@ package myMultiTouch
 		
 		
 		/**touch begined*/
-		private static function begined(e:TouchEvent)
+		private static function begined(e:TouchEvent):void
 		{
 			/*debug purpose
 			var targ:points = new points();
@@ -441,7 +441,7 @@ package myMultiTouch
 		}
 		
 		/**touch ended*/
-		private static function ended(e:TouchEvent)
+		private static function ended(e:TouchEvent):void
 		{
 			//these lines will reset my all settings↓↓
 				//deactiveXMoving(true);
@@ -464,7 +464,7 @@ package myMultiTouch
 		}
 		
 		/**touchePointMoved*/
-		private static function moved(e:TouchEvent)
+		private static function moved(e:TouchEvent):void
 		{
 			var index:int = findeTouch(e.touchPointID);
 			if(index!=-1)
@@ -483,7 +483,7 @@ package myMultiTouch
 		}
 		
 		/**target unloaded*/
-		public static function unLoaded(e:*)
+		public static function unLoaded(e:*):void
 		{
 			var index:int ;
 			if(e is Event)
@@ -544,7 +544,7 @@ package myMultiTouch
 		}
 		
 		/**lock the zoom action of the specified target*/
-		private static function lockTargetChange(target:Sprite,isLock:Boolean )
+		private static function lockTargetChange(target:Sprite,isLock:Boolean ):void
 		{
 			var ind:int = finedIndex(target);
 			if(ind!=-1)
@@ -555,13 +555,13 @@ package myMultiTouch
 		
 		/**lock the zoomer activiti on specified target<br>
 		 * unLock it with unLockTarget() function*/
-		public static function LockTarget(target:Sprite)
+		public static function LockTarget(target:Sprite):void
 		{
 			lockTargetChange(target,true);
 		}
 		
 		/**ulock the zoom action of the specified target that had locked with lockTarget() befor*/
-		public static function unLockTarget(target:Sprite)
+		public static function unLockTarget(target:Sprite):void
 		{
 			lockTargetChange(target,false);
 		}
@@ -569,7 +569,7 @@ package myMultiTouch
 		
 		private static function findeTouch(touchID:int):int
 		{
-			for(var i=0 ; i<touchPoints.length;i++)
+			for(var i:int=0 ; i<touchPoints.length;i++)
 			{
 				if(touchPoints[i].ID == touchID)
 				{
@@ -582,7 +582,7 @@ package myMultiTouch
 		/**deactive horizontale moveings<br>
 		 * false for deactivation<br>
 		 * true for activation*/
-		public static function deactiveXMoving(activation:Boolean= false,alowScale:Boolean = false)
+		public static function deactiveXMoving(activation:Boolean= false,alowScale:Boolean = false):void
 		{
 			scaleActivate = alowScale ;
 			XmoveActive = activation ;
@@ -590,7 +590,7 @@ package myMultiTouch
 		}
 		
 		/**deactive vertival moveings*/
-		public static function deactiveYMoving(activation:Boolean= false,alowScale:Boolean = false)
+		public static function deactiveYMoving(activation:Boolean= false,alowScale:Boolean = false):void
 		{
 			scaleActivate = alowScale ;
 			YmoveActive = activation ;
@@ -598,16 +598,16 @@ package myMultiTouch
 		
 		
 		/**zoomStarted*/
-		private static function zoomEvent(target:Stage)
+		private static function zoomEvent(target:Stage):void
 		{
 			target.dispatchEvent(new Event(EVENT_ZOOM_STARTS,true));
 		}
 		
 		/**zoom ended*/
-		private static function zoomEndedEvent(target:Stage)
+		private static function zoomEndedEvent(target:Stage):void
 		{
 			target.dispatchEvent(new Event(EVENT_ZOOM_STOPED,true));
-			for(var i = 0 ; i<onZoomEndedFuncs.length ; i++)
+			for(var i:int = 0 ; i<onZoomEndedFuncs.length ; i++)
 			{
 				onZoomEndedFuncs[i]();
 			}

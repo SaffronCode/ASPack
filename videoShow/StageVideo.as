@@ -64,7 +64,7 @@
 		
 		
 		/**stop the video and unload every thing*/
-		public function unLoad(e:*=null)
+		public function unLoad(e:*=null):void
 		{
 			this.removeEventListener(Event.ENTER_FRAME,controllStageVideoPose);
 			if(stageVideo)
@@ -81,7 +81,7 @@
 		
 		
 		/**load this video file*/
-		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN,videoExtention:String=null)
+		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN,videoExtention:String=null):void
 		{
 			var useOnHMLTag:Boolean=true;
 			trace("loadThiwVideo : "+videoURL);

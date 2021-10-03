@@ -32,7 +32,7 @@ package
 							
 		private static var currentFuncId:uint = 1 ;
 		
-		public static function setUp(getStage:Stage,sens:Number=0.7)
+		public static function setUp(getStage:Stage,sens:Number=0.7):void
 		{
 			if(myStage == null)
 			{
@@ -46,7 +46,7 @@ package
 			mouseDragDelta = sens ;
 		}
 		
-		public static function reset()
+		public static function reset():void
 		{
 			//SaffronLogger.log("▬ Mouse Drag resets");
 			nextFunc = new Vector.<Function>();
@@ -100,7 +100,7 @@ package
 		
 		
 		
-		private static function mouseDragStarted(e:MouseEvent)
+		private static function mouseDragStarted(e:MouseEvent):void
 		{
 			mouseFirstX = myStage.mouseX;
 			mouseFirstY = myStage.mouseY;
@@ -110,17 +110,17 @@ package
 		
 		
 		/**mouse dtagged on image , for touch devices*/
-		private static function mouseDragStopd(e:MouseEvent)
+		private static function mouseDragStopd(e:MouseEvent):void
 		{
-			var dx = myStage.mouseX - mouseFirstX ;
-			var dy = myStage.mouseY - mouseFirstY ;
+			var dx:Number = myStage.mouseX - mouseFirstX ;
+			var dy:Number = myStage.mouseY - mouseFirstY ;
 			dragTime = getTimer()-dragTime;
 			if(Math.abs(dx/dragTime)<mouseDragDelta || Math.abs(dy)>Math.abs(dx))
 			{
 				//SaffronLogger.log("▬ Mouse is not dragging")
 				return 
 			}
-			for(var i= 0 ; i<myRect.length ; i++)
+			for(var i:int= 0 ; i<myRect.length ; i++)
 			{
 				//SaffronLogger.log("▬ Checking Rectangles");
 				if(myRect[i]==null || myRect[i].contains(myStage.mouseX,myStage.mouseY))

@@ -198,7 +198,7 @@ package
 		
 		//92-8-30
 		/**if html boolean set to true , it will act on input tex as a HTML text*/
-		public function fastUnicodeOnLines(yourTextField:TextField,tex:String,detectLanguage:Boolean = true)
+		public function fastUnicodeOnLines(yourTextField:TextField,tex:String,detectLanguage:Boolean = true):void
 		{
 			HTMLfastUnicodeOnLines(yourTextField,tex,false);
 		}
@@ -206,12 +206,12 @@ package
 		
 		
 		///92-9-3  fast html unicode
-		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true,maxLines:uint = uint.MAX_VALUE)
+		public function HTMLfastUnicodeOnLines(yourTextField:TextField,tex:String,justify:Boolean = true,maxLines:uint = uint.MAX_VALUE):void
 		{
 			//trace("tex : "+tex);
-			var myTextcash = entersCorrection(tex).split(String.fromCharCode(10));
+			var myTextcash:Array = entersCorrection(tex).split(String.fromCharCode(10));
 			var parag:Array = [];
-			var i ;
+			var i:* ;
 			var corrected:String ; 
 			
 			var lastWorldWrapMode:Boolean = yourTextField.wordWrap ;
@@ -255,7 +255,7 @@ package
 			}
 			var linesTest:Array = new Array();
 			var defaultFontSize:uint = yourTextField.defaultTextFormat.size as uint ;
-			for(var j =0 ;j<parag.length;j++){
+			for(var j:int =0 ;j<parag.length;j++){
 				/// tamam e data haa bayad rooye textfield ha beran bad 
 				yourTextField.htmlText = StringFunctions.makeHTMLWithSize(parag[j] as String,defaultFontSize) ;
 				cashedText = yourTextField.text ;
@@ -278,7 +278,7 @@ package
 				var charLeft:Number;
 				var spaceLeft:Number;
 				
-				const maxWordLength = 15 ;
+				const maxWordLength:int = 15 ;
 				
 				for( i=l-1 ; i>=0 ; i-=step )
 				{
@@ -411,7 +411,7 @@ package
 			//trace("Insert "+numSpaces+" spaces")
 			if(splitedWorld.length>1)
 			{
-				for(var i = 0 ; i<numSpaces ; i++)
+				for(var i:int = 0 ; i<numSpaces ; i++)
 				{
 					var selectedWorld:uint = randGen(i,splitedWorld.length-1);
 					splitedWorld[selectedWorld] = splitedWorld[selectedWorld]+' ';
@@ -435,7 +435,7 @@ package
 		
 		
 		/**style 0 mamooli , 1 aval chasban , 2 dovom chasban , 3 do var chasban*/
-		public function toUnicode(ch:String,style=0):String{
+		public function toUnicode(ch:String,style:int=0):String{
 			if(ch=='')
 			{
 				return '' ;
@@ -593,7 +593,7 @@ package
 			
 		}
 		
-		public function farsiCorrection(str:String)
+		public function farsiCorrection(str:String):String
 		{
 			return str.split('آ').join('آ').split('ی').join('ي');//.split('‌').join(' ').split('‏').join(' ');
 		}
@@ -608,7 +608,7 @@ package
 		
 		
 		
-		private function MESisEnglish(megh:String,copleteString:String=null,charIndex:uint=0,stringLength:uint=0,lookingForard:Boolean=false){
+		private function MESisEnglish(megh:String,copleteString:String=null,charIndex:uint=0,stringLength:uint=0,lookingForard:Boolean=false):Boolean{
 			var test:*;
 			//trace("lookingForard : "+lookingForard);
 			if(smartTextAlign && copleteString!=null)
@@ -617,7 +617,7 @@ package
 				if(floatingChars.indexOf(megh)!=-1 || (lookingForard && megh==' '))
 				{
 					//trace("Megh is floating char, so the next char for : "+megh)
-					for(var i = charIndex+1 ; i<stringLength ; i++)
+					for(var i:int = charIndex+1 ; i<stringLength ; i++)
 					{
 						test = MESisEnglish(copleteString.charAt(i),copleteString,i,stringLength,true);
 						//trace(".... is English??? "+test);
@@ -672,7 +672,7 @@ package
 		private function MESfindeType(ch:*):int
 		{
 			
-			var cash = typeHirostic[ch];
+			var cash:* = typeHirostic[ch];
 			if(cash!=undefined)
 			{
 				return cash ;
@@ -703,7 +703,7 @@ package
 		}
 		
 		
-		private function MESbekesh(character,no:int = -1){
+		private function MESbekesh(character:String,no:int = -1):String{
 			//character=character.split('ي').join('ی').split('آ').join('آ');
 			//trace("Bekesh : "+character+' no : '+no);
 			var STR:String = MESlistChr[character] as String ;
@@ -715,7 +715,7 @@ package
 					return character;
 				}
 			}
-			var at=-1;
+			var at:int=-1;
 			switch(no){
 				case(1/*"01"*/):{
 					at=2
@@ -743,7 +743,7 @@ package
 				//trace("Str is not null and at is : "+at);
 				//Below line had to stay here, because of the 2 char Seda characters.
 					at = Math.min(String(STR).length-1,at);
-				var cash = STR.charAt(at) ;
+				var cash:* = STR.charAt(at) ;
 				if(cash == undefined)
 				{
 					cash = STR.charAt(STR.length-1) ;
@@ -755,7 +755,7 @@ package
 		}
 		
 		
-		public function getPorp(htm:String,color:Boolean=false,size:Boolean=false,align:Boolean=false,lending:Boolean=false){
+		public function getPorp(htm:String,color:Boolean=false,size:Boolean=false,align:Boolean=false,lending:Boolean=false):*{
 			var cash:String = ''
 			if(color){
 				cash = "COLOR=\"";
@@ -769,17 +769,17 @@ package
 				return
 			}
 			htm = htm.toUpperCase()
-			var I=htm.indexOf(cash)+cash.length;
-			var htm2 = htm.substring(I)
-			var num = (htm2.substring(0,htm2.indexOf('\"')))
+			var I:int=htm.indexOf(cash)+cash.length;
+			var htm2:* = htm.substring(I)
+			var num:* = (htm2.substring(0,htm2.indexOf('\"')))
 			return num
 		}
 		
 		
 		
-		public function setPorp(htm,variable,color=false,size=false,align=false,lending=false){
+		public function setPorp(htm:String,variable:*,color:Boolean=false,size:Boolean=false,align:Boolean=false,lending:Boolean=false):*{
 			var cash:String = ''
-			var htm2=''
+			var htm2:String=''
 			if(color){
 				cash = "COLOR=\"";
 			}else if(size){
@@ -890,7 +890,7 @@ package
 		}
 		
 		
-		public function HTMLUnicode(tex:String){
+		public function HTMLUnicode(tex:String):String{
 			
 			tex = htmlCorrect(tex);
 			
@@ -1006,21 +1006,21 @@ package
 			return fullTag ;
 		}
 		
-		public function justHTML(field_txt,tex:String,autoSize_F:Boolean=true){
+		public function justHTML(field_txt:TextField,tex:String,autoSize_F:Boolean=true):void{
 			field_txt.text = 's'
-			var cashAlign = getPorp(field_txt.htmlText,false,false,true)
+			var cashAlign:* = getPorp(field_txt.htmlText,false,false,true)
 			if(autoSize_F){
 				field_txt.autoSize = TextFieldAutoSize.CENTER;
 			}
 			field_txt.htmlText = tex;
 		}
 		
-		private function getLastSplit(tex){
-			var mem = 0;
-			var cash=0;
-			var batel=false
-			for(var i=0;i<splitters.length;i++){
-				for(var j=0;j<tex.length-2;j++){
+		private function getLastSplit(tex:String):*{
+			var mem:* = 0;
+			var cash:*=0;
+			var batel:Boolean=false
+			for(var i:int=0;i<splitters.length;i++){
+				for(var j:int=0;j<tex.length-2;j++){
 					cash = tex.charAt(j)
 					if(cash=='<'){
 						batel=true
@@ -1039,13 +1039,13 @@ package
 		}
 		
 		
-		private function justifyUnicode(field_txt,matn){
+		private function justifyUnicode(field_txt:TextField,matn:String):*{
 			field_txt.text = '.';
-			var lastH = field_txt.textHeight;
-			var lastMatn = matn;
-			var lastMatn2 = matn;
-			var lastI = new Array(matn,0)
-			var contor=1
+			var lastH:Number = field_txt.textHeight;
+			var lastMatn:String = matn;
+			var lastMatn2:String = matn;
+			var lastI:Array = new Array(matn,0)
+			var contor:int=1
 			while(field_txt.textHeight<=lastH){
 				contor++
 					lastMatn2 = lastMatn
@@ -1063,13 +1063,13 @@ package
 		}
 		
 		
-		private function putJUnicode(matn,I){
-			var batel=false
-			var newMatn=matn
-			var cash;
-			var myI
+		private function putJUnicode(matn:String,I:*):Array{
+			var batel:Boolean=false
+			var newMatn:String=matn
+			var cash:*;
+			var myI:*
 			var shans:Array = new Array()
-			for(var i=0;i<matn.length;i++){
+			for(var i:int=0;i<matn.length;i++){
 				myI = (i+I)%matn.length
 				cash = matn.charAt(myI)
 				if(cash=='<'){
@@ -1088,7 +1088,7 @@ package
 			if(shans.length==0){
 				return new Array(false,false)
 			}else{
-				var rand = Math.floor(Math.random()*shans.length)
+				var rand:Number = Math.floor(Math.random()*shans.length)
 				newMatn = matn.substring(0,shans[rand])+'ـ'+matn.substring(shans[rand])
 				return new Array(newMatn,0)
 			}
@@ -1097,9 +1097,9 @@ package
 		
 		
 		
-		private function htmlSplit(tex,I){
-			var matn1='';
-			var matn2='';
+		private function htmlSplit(tex:String,I:*):Array{
+			var matn1:String='';
+			var matn2:String='';
 			
 			matn1 = tex.substring(0,I);
 			matn2 = tex.substring(I);
@@ -1135,14 +1135,14 @@ package
 		
 		
 		/////////////////////////////////////////////////////////////////////removed
-		public function UnicodeSet(field_txt,tex:String,justifyFlag:Boolean=false,autoSize_F:Boolean=true,shoHTML_f:Boolean=false,myID:String='',ezafe:String='',ezafe2:String=''){
-			var ZAKHIRE = tex
+		public function UnicodeSet(field_txt:TextField,tex:String,justifyFlag:Boolean=false,autoSize_F:Boolean=true,shoHTML_f:Boolean=false,myID:String='',ezafe:String='',ezafe2:String=''):void{
+			var ZAKHIRE:String = tex
 			if(tex==''){
 				field_txt.text = ''
 				return
 			}
 			field_txt.text = 's'
-			var cashAlign = getPorp(field_txt.htmlText,false,false,true)
+			var cashAlign:* = getPorp(field_txt.htmlText,false,false,true)
 			if(autoSize_F){
 				field_txt.autoSize = TextFieldAutoSize.CENTER;
 			}
@@ -1150,11 +1150,11 @@ package
 			field_txt.multiline = true
 			var lines:String = '';
 			var cash:Array;
-			var lineI = 0;
+			var lineI:* = 0;
 			field_txt.text = tex.charAt(0)
-			var lastH = field_txt.textHeight;
-			var I=0
-			var split=0
+			var lastH:Number = field_txt.textHeight;
+			var I:*=0
+			var split:*=0
 			for(I=0;I<=tex.length;I++){
 				cash = htmlSplit(tex,I)
 				field_txt.htmlText = HTMLUnicode(cash[0]);

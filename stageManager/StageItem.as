@@ -26,7 +26,7 @@ package stageManager
 		}
 		
 		/**Call this function to make isNew function works with again*/
-		public static function remove(item:StageItem)
+		public static function remove(item:StageItem):void
 		{
 			var I:int = itemsObject.indexOf(item.object);
 			if(I!=-1)

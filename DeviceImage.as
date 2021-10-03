@@ -150,7 +150,7 @@
 			if(DistriqtCameraUI.isSupport())
 			{
 				trace("Distriqt Camera is Supporting");
-				DistriqtCameraUI.captureVideo(function(){
+				DistriqtCameraUI.captureVideo(function():void{
 					trace("** Camera file loaded on DeviceImage **");
 					videoBytes = DistriqtCameraUI.fileByte ;
 					trace("*** The video size is : "+videoBytes.length);
@@ -286,7 +286,7 @@
 			}
 		}
 		
-		private static function readMediaData(e=null):void 
+		private static function readMediaData(e:*=null):void 
 		{
 			imageBytes = new ByteArray();
 			dataSource.readBytes(imageBytes);
@@ -302,7 +302,7 @@
 			}
 		}
 		
-		public static function loadFile(onImageReady:Function,file:File,imageW:Number=NaN,imageH:Number=NaN)
+		public static function loadFile(onImageReady:Function,file:File,imageW:Number=NaN,imageH:Number=NaN):void
 		{
 			onLoadingVideo = false ;
 			tempW = imageW;

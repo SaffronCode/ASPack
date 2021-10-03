@@ -46,8 +46,8 @@ package soundPlayer
 		public static var eventsDispatch:SoundEventDispatcher = new SoundEventDispatcher();
 		
 		
-		public static var volSpeed=0.1;
-		private static const timSpeed=100;
+		public static var volSpeed:Number=0.1;
+		private static const timSpeed:Number=100;
 		/**ایا نرم افزار فعال است یا خیر*/
 		private static var isActive:Boolean
 		private static var 	mySound:Vector.<Sound>,
@@ -74,7 +74,7 @@ package soundPlayer
 							
 		private static var _preventExitHandler:Boolean = false ;
 							
-		public static function setUp(MyStage:Stage,dicativeAllOnBackGround:Boolean = false,handleBackBTNOnAndroid:Boolean=true)
+		public static function setUp(MyStage:Stage,dicativeAllOnBackGround:Boolean = false,handleBackBTNOnAndroid:Boolean=true):void
 		{
 			if(myStage!=null)
 			{
@@ -135,9 +135,9 @@ package soundPlayer
 		}
 		
 		
-		private static function timing(e:TimerEvent)
+		private static function timing(e:TimerEvent):void
 		{
-			for(var i=0;i<mySound.length;i++)
+			for(var i:int=0;i<mySound.length;i++)
 			{
 				var vol:Number = myTrans[i].volume;
 				if(myPaused[i] || (!isActive && silentOnBack[i]))
@@ -192,7 +192,7 @@ package soundPlayer
 			}
 		}
 		
-		private static function activate(e)
+		private static function activate(e:*):void
 		{
 			isActive = true ;
 			if(diactiveAllOnBack && !deactivated)
@@ -201,7 +201,7 @@ package soundPlayer
 			}
 		}
 		
-		private static function deActivate(e)
+		private static function deActivate(e:*):void
 		{
 			if(diactiveAllOnBack)
 			{
@@ -211,20 +211,20 @@ package soundPlayer
 		}
 		
 		/**deactive all sounds. you can activate theme again with activateAll() function*/
-		public static function deactiveAll()
+		public static function deactiveAll():void
 		{
 			deactivated = true ;
 			SoundMixer.soundTransform = new SoundTransform(0);
 		}
 		
 		/**activate all sounds that diactivate by deactiveAll function*/
-		public static function activateAll()
+		public static function activateAll():void
 		{
 			deactivated = false ;
 			SoundMixer.soundTransform = new SoundTransform(1);
 		}
 		
-		private static function checkExit(e)
+		private static function checkExit(e:*):void
 		{
 			if(e.keyCode == Keyboard.BACK)
 				NativeApplication.nativeApplication.exit();
@@ -233,7 +233,7 @@ package soundPlayer
 		/**return true if this sound is paused*/
 		public static function getStatuse_pause(ID:uint):Boolean
 		{
-			var I = gI(ID);
+			var I:* = gI(ID);
 			if(I!=-1)
 			{
 				return myPaused[I];
@@ -246,9 +246,9 @@ package soundPlayer
 		/**play immediately and play if from begin option<br>
 		 * you can set the starting volume<br>
 		 * if you whant to reset Position , you can enter the newPosition in Presetn (0 - 1.0)*/
-		public static function play(soundID:uint,withOutFadeIn:Boolean=false,resetPosition:Boolean=false,newPosition:Number=0,doNotStopLastPlayedSound:Boolean = false,endAtPosition:Number=0)
+		public static function play(soundID:uint,withOutFadeIn:Boolean=false,resetPosition:Boolean=false,newPosition:Number=0,doNotStopLastPlayedSound:Boolean = false,endAtPosition:Number=0):void
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				if(resetPosition)
@@ -270,7 +270,7 @@ package soundPlayer
 		/**returns the currentMusic totalTime in mili seconds*/
 		public static function getMusicTime(soundID:uint):Number
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				return myLength[I];
@@ -282,7 +282,7 @@ package soundPlayer
 		 * returnd Number is between 0 and 1.0*/
 		public static function getPlayedPrecent(soundID:uint):Number
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				if(myLength[I]==0)
@@ -311,7 +311,7 @@ package soundPlayer
 		/**it will returns the current sound channle for using pans , and etc..*/
 		public static function getSoundChannle(soundID:uint):SoundChannel
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				return myChan[I];
@@ -323,9 +323,9 @@ package soundPlayer
 		}
 		
 		/**you can stp the sound with the fadeOut or withOutFade*/
-		public static function pause(soundID:uint,withOutFadeOut:Boolean=false)
+		public static function pause(soundID:uint,withOutFadeOut:Boolean=false):void
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				myPaused[I] = true ;
@@ -338,9 +338,9 @@ package soundPlayer
 		}
 		
 		/**remove sound with special ID*/
-		public static function removeSound(soundID:uint)
+		public static function removeSound(soundID:uint):void
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			var index:int = gI(soundID);
 			if(index != -1)
 			{
@@ -377,7 +377,7 @@ package soundPlayer
 			
 			removeSound(ID);
 			
-			var I = mySound.length;
+			var I:* = mySound.length;
 			mySound[I] = new Sound(new URLRequest(URLCorrector.correct(TargetURL)));
 			mySound[I].addEventListener(Event.COMPLETE,SoundLoadCompleted);
 			mySound[I].addEventListener(IOErrorEvent.IO_ERROR,soundNOtFounded);
@@ -399,7 +399,7 @@ package soundPlayer
 		 * returnd number is between 0 and 1.0*/
 		public static function getLoadedSoundPrecent(soundID:uint):Number
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				if(mySound[I].bytesTotal>0)
@@ -420,7 +420,7 @@ package soundPlayer
 		
 		
 		/**sound target is not refer correctly*/
-		private static function soundNOtFounded(e)
+		private static function soundNOtFounded(e:*):void
 		{
 			SaffronLogger.log('Sound error : '+e);
 		}
@@ -429,10 +429,10 @@ package soundPlayer
 		
 		/**clntroll the volume<br>
 		 * volumes have to be a number between 0 and 1*/
-		public static function volumeContril(soundID:uint,newVolume:Number)
+		public static function volumeContril(soundID:uint,newVolume:Number):void
 		{
 			newVolume = Math.max(0,Math.min(newVolume,1));
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				myMaxVolume[I] = newVolume ;
@@ -442,7 +442,7 @@ package soundPlayer
 		/**get current sound volume*/
 		public static function getVolume(soundID:uint):Number
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				return myMaxVolume[I];
@@ -457,7 +457,7 @@ package soundPlayer
 		/**returns my music target*/
 		public static function getMusicTarget(soundID:uint):String
 		{
-			var I = gI(soundID);
+			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				return mySound[I].url;
@@ -493,9 +493,9 @@ package soundPlayer
 		
 		
 		/**صدا لود شد*/
-		private static function SoundLoadCompleted(e:Event)
+		private static function SoundLoadCompleted(e:Event):void
 		{
-			var I = gI(e.currentTarget);
+			var I:* = gI(e.currentTarget);
 			
 			myLength[I] = mySound[I].length ;
 			
@@ -510,7 +510,7 @@ package soundPlayer
 		
 		/**start playing sound<br>
 		 * set sound chanel*/
-		private static function playSound(I:uint,beginVolume:Number=0)
+		private static function playSound(I:uint,beginVolume:Number=0):void
 		{
 			if(myStop[I])
 			{
@@ -528,9 +528,9 @@ package soundPlayer
 			}
 		}
 		
-		private static function mySoundIsCompleted(e:Event)
+		private static function mySoundIsCompleted(e:Event):void
 		{
-			var I = gI(e.currentTarget);
+			var I:* = gI(e.currentTarget);
 			if(I==-1)
 			{
 				return ;
@@ -554,13 +554,13 @@ package soundPlayer
 		}
 		
 		
-		private static function deletThisSound(I)
+		private static function deletThisSound(I:*):void
 		{
 			myChan[I].stop();
 			myChan[I].removeEventListener(Event.SOUND_COMPLETE,mySoundIsCompleted);
 			mySound[I].removeEventListener(Event.COMPLETE,SoundLoadCompleted);
 			
-			for(var i=0;i<myAll.length;i++)
+			for(var i:int=0;i<myAll.length;i++)
 			{
 				myAll[i].splice(I,1);
 			}
@@ -591,7 +591,7 @@ package soundPlayer
 			return -1 ;
 		}
 		
-		private static function dispathcEvent(soundEvent:String,ID:uint)
+		private static function dispathcEvent(soundEvent:String,ID:uint):void
 		{
 			var callerID:Number = gI(ID);
 			myStage.dispatchEvent(new SoundPlayerEvent(soundEvent,ID,myCallerID[callerID]));

@@ -64,7 +64,7 @@ package
 		}
 		
 		/**ظاهر کردن موی کلیپ با انیمیشن*/
-		public static function fadeIn(Target:Sprite,afterFunc:Function=null,fadeTime:Number=0)
+		public static function fadeIn(Target:Sprite,afterFunc:Function=null,fadeTime:Number=0):void
 		{
 			if(fadeTime == 0)
 			{
@@ -75,7 +75,7 @@ package
 		}
 		
 		/**مجو کردن موی کلیپ*/
-		public static function fadeOut(Target:Sprite,afterFunc:Function=null,fadeTime:Number=0)
+		public static function fadeOut(Target:Sprite,afterFunc:Function=null,fadeTime:Number=0):void
 		{
 			if(fadeTime == 0)
 			{
@@ -86,7 +86,7 @@ package
 		}
 		
 		
-		private static function act(Target:Sprite,afterFunc:Function,fadeTime:Number)
+		private static function act(Target:Sprite,afterFunc:Function,fadeTime:Number):void
 		{
 			initialize();
 			deleteDataAbout(Target);
@@ -119,7 +119,7 @@ package
 		}
 		
 		/**finish it*/
-		private static function done(targ:Sprite,func:Function,alpha:Number)
+		private static function done(targ:Sprite,func:Function,alpha:Number):void
 		{
 			targ.alpha = alpha ;
 			deleteDataAbout(targ);
@@ -169,7 +169,7 @@ package
 /////////////////////////////////////////////////////////////////
 		
 		/**rewind the target till it get to its first position*/
-		public static function rewind(target:MovieClip)
+		public static function rewind(target:MovieClip):void
 		{
 			target.removeEventListener(Event.ENTER_FRAME,forwFunc);
 			target.removeEventListener(Event.ENTER_FRAME,rewFunc);
@@ -177,7 +177,7 @@ package
 		}
 		
 			/**rewind the curren item til it gets to its first frame */
-			private static function rewFunc(e:Event)
+			private static function rewFunc(e:Event):void
 			{
 				var targ:MovieClip = MovieClip(e.currentTarget);
 				targ.prevFrame();
@@ -188,7 +188,7 @@ package
 			}
 		
 		/**forwarding the target til it gets to its last frame*/
-		public static function forward(target:MovieClip)
+		public static function forward(target:MovieClip):void
 		{
 			target.removeEventListener(Event.ENTER_FRAME,rewFunc);
 			target.removeEventListener(Event.ENTER_FRAME,forwFunc);
@@ -196,7 +196,7 @@ package
 		}
 		
 			/**forwarding the target*/
-			private static function forwFunc(e:Event)
+			private static function forwFunc(e:Event):void
 			{
 				var targ:MovieClip = MovieClip(e.currentTarget);
 				targ.nextFrame();

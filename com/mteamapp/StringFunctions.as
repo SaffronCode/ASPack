@@ -24,7 +24,7 @@ package com.mteamapp
 		
 		/**returns true if there was to many arabic signes there<br>
 		 * if the number of arabic sign was less than 1/4 , this function detect that the str is not arabic*/
-		public static function isArabic(str:String)
+		public static function isArabic(str:String):Boolean
 		{
 			var reg:RegExp = new RegExp('['+arabicChars+']','g');
 			var founced:uint = 0 ;
@@ -62,7 +62,7 @@ package com.mteamapp
 			{
 				max = Math.min(str.length , stringLength) ;
 			}
-			for(var i = 0 ; i<max ; i++)
+			for(var i:int = 0 ; i<max ; i++)
 			{
 				if(str.charCodeAt(i)>1000 && EnglishEstesna.indexOf(str.charAt(i))==-1)
 				{
@@ -91,10 +91,10 @@ package com.mteamapp
 				{
 					arabChars+= arabicWord ;
 				}
-				for(var i = 0 ; i<L ; i++)
+				for(var i:int = 0 ; i<L ; i++)
 				{
 					var char:String = searchedWord.charAt(i); 
-					for(var j = 0 ; j<arabicSames.length ; j++)
+					for(var j:int = 0 ; j<arabicSames.length ; j++)
 					{
 						if(arabicSames[j].indexOf(char)!=-1)
 						{
@@ -220,7 +220,7 @@ package com.mteamapp
 			var searchResult:Object = reg.exec(utfString);
 			var correctedString:String = '' ;
 			var index:uint = 0 ;
-			var lastIndex:uint = Infinity ;
+			var lastIndex:Number = Infinity ;
 			var currentIndex:uint ;
 			while(searchResult!=null)
 			{
@@ -331,7 +331,7 @@ package com.mteamapp
 		}
 		
 		/**1 > 001*/
-		public static function numToString(num:*,numberLenght:uint=2)
+		public static function numToString(num:*,numberLenght:uint=2):String
 		{
 			num = String(num);
 			while(num.length<numberLenght)
@@ -433,7 +433,7 @@ package com.mteamapp
 			}
 			return str		
 		}
-		public static function jsonCorrector(oldJson:String)
+		public static function jsonCorrector(oldJson:String):String
 		{
 			return oldJson.split('\n').join(' \\n').split('\r').join(' \\r').split('"').join('\"').split('\t').join('\\t')
 		}
@@ -447,7 +447,7 @@ package com.mteamapp
 			var firstDashIndex:int = str.indexOf('-');
 			if(firstDashIndex!=-1)
 			{
-				for(var i = 0 ; i<firstDashIndex ; i++)
+				for(var i:int = 0 ; i<firstDashIndex ; i++)
 				{
 					if(isNaN(Number(str.charAt(i))))
 					{
@@ -741,20 +741,20 @@ package com.mteamapp
 			var allDigitEqual:Array = new Array("0000000000","1111111111","2222222222","3333333333","4444444444","5555555555","6666666666","7777777777","8888888888","9999999999");
 			if (allDigitEqual.indexOf(nationalCode)!=-1) return false;
 			
-			var chArray = nationalCode.split('');
-			var num0 = int(chArray[0].toString())*10;
-			var num2 = int(chArray[1].toString())*9;
-			var num3 = int(chArray[2].toString())*8;
-			var num4 = int(chArray[3].toString())*7;
-			var num5 = int(chArray[4].toString())*6;
-			var num6 = int(chArray[5].toString())*5;
-			var num7 = int(chArray[6].toString())*4;
-			var num8 = int(chArray[7].toString())*3;
-			var num9 = int(chArray[8].toString())*2;
-			var a = int(chArray[9].toString());
+			var chArray:Array = nationalCode.split('');
+			var num0:int = int(chArray[0].toString())*10;
+			var num2:int = int(chArray[1].toString())*9;
+			var num3:int = int(chArray[2].toString())*8;
+			var num4:int = int(chArray[3].toString())*7;
+			var num5:int = int(chArray[4].toString())*6;
+			var num6:int = int(chArray[5].toString())*5;
+			var num7:int = int(chArray[6].toString())*4;
+			var num8:int = int(chArray[7].toString())*3;
+			var num9:int = int(chArray[8].toString())*2;
+			var a:int = int(chArray[9].toString());
 			
-			var b = (((((((num0 + num2) + num3) + num4) + num5) + num6) + num7) + num8) + num9;
-			var c = b%11;
+			var b:int = (((((((num0 + num2) + num3) + num4) + num5) + num6) + num7) + num8) + num9;
+			var c:int = b%11;
 			
 			return (((c < 2) && (a == c)) || ((c >= 2) && ((11 - c) == a)));
 		}

@@ -56,7 +56,7 @@ package
 		}
 		
 		/***/
-		public static function capture3(target:DisplayObject,resolution:Number = 1,moreWidth:Number = 0 )
+		public static function capture3(target:DisplayObject,resolution:Number = 1,moreWidth:Number = 0 ):Bitmap
 		{
 			var rot0:Number = target.rotation ;
 			target.rotation = 0 ;
@@ -134,12 +134,12 @@ package
 		}
 		
 		/**remove all old captured images and restor text fild visible to true*/
-		public static function deleteCapturedBigText(displayedObject:DisplayObject)
+		public static function deleteCapturedBigText(displayedObject:DisplayObject):void
 		{
 			var textFieldContainer:DisplayObjectContainer = displayedObject.parent;
 			
 			//remove old images
-			for(var i = textFieldContainer.numChildren-1 ; i>=0 ; i--)
+			for(var i:int = textFieldContainer.numChildren-1 ; i>=0 ; i--)
 			{
 				var currentTarg:DisplayObject = textFieldContainer.getChildAt(i);
 				if(currentTarg is Bitmap && currentTarg.name.indexOf(addedImageName+displayedObject.name)!=-1)

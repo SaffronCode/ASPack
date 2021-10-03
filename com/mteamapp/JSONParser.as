@@ -42,7 +42,7 @@
 			return cloneObject ;
 		}
 		
-		private static function dateController(k,v):*
+		private static function dateController(k:*,v:*):*
 		{
 			/**Sat Jun 13 16:45:04 GMT+0430 2015*/
 			if(v is String && v!= null)
@@ -99,7 +99,7 @@
 			//SaffronLogger.log("From : "+JSON.stringify(fromObject));
 			//SaffronLogger.log("To : "+JSON.stringify(toObject));
 			
-			for(var i in fromObject)
+			for(var i:* in fromObject)
 			{
 				var currentParam:Object = fromObject[i] ;
 				if(toObject.hasOwnProperty(i) && !(toObject[i] is Function))
@@ -235,7 +235,7 @@
 			//SaffronLogger.log("ToOjbect isDone :"+avmplus.getQualifiedClassName(toObject));
 		}
 		
-		private static function reciver(k,v):*
+		private static function reciver(k:*,v:*):*
 		{
 			if(v is String)
 			{

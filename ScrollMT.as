@@ -384,7 +384,7 @@ package
 		
 		
 		/**lock the scroller till the next mouse up event from the stage*/
-		private function lockTheScrollThillMouseUp(e:Event)
+		private function lockTheScrollThillMouseUp(e:Event):void
 		{
 			if(!scrollLock)
 			{
@@ -394,7 +394,7 @@ package
 		}
 		
 		/**lock the scroller till the next mouse up event from the stage or UN_LOCK_SCROLL dispatches*/
-		private function lockTheScrollThempurarily(e:Event)
+		private function lockTheScrollThempurarily(e:Event):void
 		{
 			targStage.addEventListener(MouseEvent.MOUSE_UP,unLock);
 			targStage.addEventListener(UN_LOCK_SCROLL,unLock);
@@ -404,7 +404,7 @@ package
 		
 		
 		
-		private function onAdded(e:Event=null)
+		private function onAdded(e:Event=null):void
 		{
 			targ.removeEventListener(Event.ADDED_TO_STAGE,onAdded);
 			if(targ.stage!=null)
@@ -521,7 +521,7 @@ package
 		}
 		
 		/**set up the scroller variables and event listeners from now*/
-		private function setUpTheScroller()
+		private function setUpTheScroller():void
 		{
 			absScale = absoluteScale();
 			//1.3.1 to ask to delete old scrolleers
@@ -626,7 +626,7 @@ package
 		}
 		
 		/**unload the scroller functions*/
-		public function unLoad(e:Event=null)
+		public function unLoad(e:Event=null):void
 		{
 			if(targ)
 			{
@@ -679,7 +679,7 @@ package
 		}
 		
 		/**mouse will event*/
-		private function manageMouseWheel(e:MouseEvent)
+		private function manageMouseWheel(e:MouseEvent):void
 		{
 			if( canScroll())
 			{
@@ -722,7 +722,7 @@ package
 		}
 		
 		/**unlock the scroller*/
-		public function unLock(e:*=null)
+		public function unLock(e:*=null):void
 		{
 			SaffronLogger.log("**unlocked");
 			if(targStage)
@@ -735,7 +735,7 @@ package
 		}
 		
 		/**reset the floating and position*/
-		public function reset()
+		public function reset():void
 		{
 			//SaffronLogger.log('reset the scroller position');
 			
@@ -761,7 +761,7 @@ package
 		}
 		
 		/**stop floating the targ*/
-		public function stopFloat()
+		public function stopFloat():void
 		{
 			Vx = 0 ;
 			Vy = 0 ;
@@ -812,7 +812,7 @@ package
 		}
 		
 		
-		private function startScroll(e:MouseEvent)
+		private function startScroll(e:MouseEvent):void
 		{
 			if(UnlockOnFirstClick)
 			{
@@ -851,7 +851,7 @@ package
 				e.updateAfterEvent();
 		}
 		
-		private function stopScroll(e:*=null)
+		private function stopScroll(e:*=null):void
 		{
 			if(e is ScrollMTEvent && ((e as ScrollMTEvent).freeScrollOnTarget_LR != freeScrollOnTarget_LR && (e as ScrollMTEvent).freeScrollOnTarget_TD != freeScrollOnTarget_TD))
 			{
@@ -865,7 +865,7 @@ package
 				var deltaFrame:uint = Math.min(maxDelayToSave,(getTimer()-mouseDownTime))/(1000/targStage.frameRate);
 				var lastAcceptableTime:uint = getTimer()-maxDelayToSave ;
 				VxRound = VyRound = 0 ;
-				for(var i = VDates.length-1 ; i>=0 ; i--)
+				for(var i:int = VDates.length-1 ; i>=0 ; i--)
 				{
 					if(VDates[i]>lastAcceptableTime)
 					{
@@ -912,7 +912,7 @@ package
 		}
 		
 		/**prevent scroller to catch mosueEvents*/
-		private function MouseLock()
+		private function MouseLock():void
 		{
 			//SaffronLogger.log('mouse s are locked');
 			if(!mouseLocker.visible)
@@ -955,7 +955,7 @@ package
 		
 	//////////////////////////////////////scroll animation↓
 		
-		private function scrollAnim(e:Event,imCalledFromStopScrollFunction:Boolean=false)
+		private function scrollAnim(e:Event,imCalledFromStopScrollFunction:Boolean=false):void
 		{
 			/*if(e==null)
 			{
@@ -1265,7 +1265,7 @@ package
 		
 		
 		/**this function will slow down the floating speeds if targRectangle was got out from the mask rectangle*/
-		private function slowDownFloat(slowDownSpeed:Number,slowDownMu:Number)
+		private function slowDownFloat(slowDownSpeed:Number,slowDownMu:Number):void
 		{
 			if(Math.abs(Vx)<minV)
 			{

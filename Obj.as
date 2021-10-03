@@ -156,7 +156,7 @@ package
 		}
 		
 		/**remove this object from its parents*/
-		public static function remove(target:DisplayObject)
+		public static function remove(target:DisplayObject):void
 		{
 			if(target==null)
 			{
@@ -403,7 +403,7 @@ package
 		}
 		
 		/**move this object to top of all other objects*/
-		public static function moveToFront(target:MovieClip)
+		public static function moveToFront(target:MovieClip):void
 		{
 			var par:MovieClip = (target.parent as MovieClip);
 			par.swapChildrenAt(par.getChildIndex(target),par.numChildren-1);
@@ -417,7 +417,7 @@ package
 		
 		
 		/**call back the onsomthingAdded function if something is added to this target*/
-		public static function onAddSomething(target:MovieClip,onSomthingAdded:Function)
+		public static function onAddSomething(target:MovieClip,onSomthingAdded:Function):void
 		{
 			onAddedHelper[target] = onSomthingAdded ;
 			target.addEventListener(Event.ADDED,someThingAdded);
@@ -426,7 +426,7 @@ package
 		
 		
 		/**some thing is added*/
-		private static function someThingAdded(e:Event)
+		private static function someThingAdded(e:Event):void
 		{
 			var target:MovieClip = MovieClip(e.currentTarget);
 			if(onAddedHelper[target] is Function)
@@ -436,10 +436,10 @@ package
 		}
 		
 		/**this object is added to stage*/
-		private static function thisIsAdded(target:MovieClip,onAddFunc:Function)
+		private static function thisIsAdded(target:MovieClip,onAddFunc:Function):void
 		{
 			onAddFunc(target);
-			for(var i = 0 ; i<target.numChildren ; i++)
+			for(var i:int = 0 ; i<target.numChildren ; i++)
 			{
 				var targ:* = target.getChildAt(i);
 				if(targ is MovieClip)
@@ -450,7 +450,7 @@ package
 		}
 		
 		/**unload the */
-		private static function unLoaded(e:Event)
+		private static function unLoaded(e:Event):void
 		{
 			var target:MovieClip = MovieClip(e.currentTarget) ;
 			
@@ -492,7 +492,7 @@ package
 				if(targ is DisplayObjectContainer)
 				{
 					var l:uint = (targ as DisplayObjectContainer).numChildren ;
-					for( var j = 0 ; j < l ; j++)
+					for( var j:int = 0 ; j < l ; j++)
 					{
 						myChildToSearch.push((targ as DisplayObjectContainer).getChildAt(j));
 					}
@@ -510,7 +510,7 @@ package
 		
 	/////////////////////////////////////////////////////////////////
 		/**set the target position to this point*/
-		public static function setPosition(target:DisplayObject,newPose:Point)
+		public static function setPosition(target:DisplayObject,newPose:Point):void
 		{
 			target.x = newPose.x;
 			target.y = newPose.y;
@@ -556,7 +556,7 @@ package
 		public static function getChildIn(myName:String,container:DisplayObjectContainer):Array
 		{
 			var founded:Array = [] ;
-			for(var i = 0 ; i<container.numChildren ; i++)
+			for(var i:int = 0 ; i<container.numChildren ; i++)
 			{
 				var targ:* = container.getChildAt(i) ;
 				if(targ is MovieClip)
@@ -576,7 +576,7 @@ package
 		public static function findAllClass(requestedClass:Class,container:DisplayObjectContainer):Array
 		{
 			var founded:Array = [] ;
-			for(var i = 0 ; i<container.numChildren ; i++)
+			for(var i:int = 0 ; i<container.numChildren ; i++)
 			{
 				var targ:* = container.getChildAt(i) ;
 				if(targ is requestedClass)
@@ -618,7 +618,7 @@ package
 		/**Find requested class in this container.*/
 		public static function findThisClass(requestedClass:Class,container:DisplayObjectContainer,searchOnGrandChilds:Boolean=false):*
 		{
-			for(var i = 0 ; i<container.numChildren ; i++)
+			for(var i:int = 0 ; i<container.numChildren ; i++)
 			{
 				var targ:* = container.getChildAt(i);
 				//trace("targ is : "+targ,container);
@@ -686,7 +686,7 @@ package
 		public static function playAll(target:MovieClip):void
 		{
 			target.play();
-			for(var i = 0 ; i<target.numChildren ; i++)
+			for(var i:int = 0 ; i<target.numChildren ; i++)
 			{
 				if(target.getChildAt(i) is MovieClip)
 				{
@@ -893,7 +893,7 @@ package
 		/**This will dispatches event to all children*/
 		public static function dispatchReverse(target:Sprite,event:Event):void
 		{
-			for(var i = 0 ; i<target.numChildren ; i++)
+			for(var i:int = 0 ; i<target.numChildren ; i++)
 			{
 				if(target.getChildAt(i) is Sprite)
 				{
@@ -907,7 +907,7 @@ package
 		{
 			if(!DevicePrefrence.isDebuggingMode())
 				return;
-			stage.addEventListener(MouseEvent.MOUSE_DOWN,function(e:MouseEvent){
+			stage.addEventListener(MouseEvent.MOUSE_DOWN,function(e:MouseEvent):void{
 				trace(Obj.displayObjectInfo(e.target as DisplayObject));
 			});
 		}

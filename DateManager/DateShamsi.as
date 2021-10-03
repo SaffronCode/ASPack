@@ -83,7 +83,7 @@ package DateManager
 		}
 		
 		
-		public function toString(e=null):String
+		public function toString(e:*=null):String
 		{
 			return '['+fullYear+','+month+','+date+'   '+hours+':'+minutes+':'+seconds+']';
 		}

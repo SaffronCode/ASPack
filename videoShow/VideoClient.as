@@ -16,7 +16,7 @@ package videoShow
 			super();
 		}
 		
-		public function onCuePoint(e=null)
+		public function onCuePoint(e:*=null):void
 		{
 			trace("onCuePoint : " +e);
 			if(OnCuePoint!=null)
@@ -24,7 +24,7 @@ package videoShow
 				OnCuePoint(e);
 			}
 		}
-		public function onImageData(e=null)
+		public function onImageData(e:*=null):void
 		{
 			trace("onImageData : " +e);
 			if(OnImageData!=null)
@@ -32,7 +32,7 @@ package videoShow
 				OnImageData(e);
 			}
 		}
-		public function onMetaData(e=null)
+		public function onMetaData(e:*=null):void
 		{
 			trace("onMetaData : " +e);
 			if(OnMetaData!=null)
@@ -40,7 +40,7 @@ package videoShow
 				OnMetaData(e);
 			}
 		}
-		public function onPlayStatus(e=null)
+		public function onPlayStatus(e:*=null):void
 		{
 			trace("onPlayStatus : " +e);
 			if(OnPlayStatus!=null)
@@ -48,7 +48,7 @@ package videoShow
 				OnPlayStatus(e);
 			}
 		}
-		public function onSeekPoint(e=null)
+		public function onSeekPoint(e:*=null):void
 		{
 			trace("onSeekPoint : " +e);
 			if(OnSeekPoint!=null)
@@ -56,7 +56,7 @@ package videoShow
 				OnSeekPoint(e);
 			}
 		}
-		public function onTextData(e=null)
+		public function onTextData(e:*=null):void
 		{
 			trace("onTextData : " +e);
 			if(OnTextData!=null)
@@ -64,7 +64,7 @@ package videoShow
 				OnTextData(e);
 			}
 		}
-		public function onXMPData(e=null)
+		public function onXMPData(e:*=null):void
 		{
 			trace("onXMPData : " +e);
 			if(OnXMPData!=null)

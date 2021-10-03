@@ -105,7 +105,7 @@ package
 			textField.x = textField.y = 0 ;
 			textField.visible = true ;
 			
-			var removeThis = textField.parent.getChildByName(mustRemove);
+			var removeThis:* = textField.parent.getChildByName(mustRemove);
 			if(removeThis!=null)
 			{
 				textField.parent.removeChild(removeThis);
@@ -186,7 +186,7 @@ package
 		}
 		
 		/**put texts on the big textField areas*/
-		public static function OnBigField(textField:TextField,text:String,arabic:Boolean=false,captureBitmap:Boolean = false,captureResolution:Number=0)
+		public static function OnBigField(textField:TextField,text:String,arabic:Boolean=false,captureBitmap:Boolean = false,captureResolution:Number=0):void
 		{
 			if(captureResolution<=0)
 			{
@@ -199,7 +199,7 @@ package
 			textField.wordWrap = true ;
 			textField.visible = true ;
 			
-			var removeThis = textField.parent.getChildByName(mustRemove);
+			var removeThis:* = textField.parent.getChildByName(mustRemove);
 			
 			if(arabic)
 			{
@@ -401,7 +401,7 @@ package
 		}
 		
 		
-		public static function onStaticArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,justify:Boolean=true)
+		public static function onStaticArea(textField:TextField,text:String,arabic:Boolean=false,replaceWithBitmap:Boolean=false,useCash:Boolean = false,captureResolution:Number=0,justify:Boolean=true):void
 		{
 			var firstHeight:Number = textField.height ;
 			
@@ -412,7 +412,7 @@ package
 			//textField.multiline = true;
 			//textField.wordWrap = true;
 			
-			var removeThis = textField.parent.getChildByName(mustRemove);
+			var removeThis:* = textField.parent.getChildByName(mustRemove);
 			if(removeThis!=null)
 			{
 				textField.parent.removeChild(removeThis);

@@ -108,7 +108,7 @@ package videoShow
 		}
 		
 		/**stop the video and unload every thing*/
-		public function unLoad(e:*=null)
+		public function unLoad(e:*=null):void
 		{
 			netConnetction.close();
 			netStream.close();
@@ -121,13 +121,13 @@ package videoShow
 		}
 		
 		/**net status changed*/
-		private function listenToNetStatus(e:NetStatusEvent)
+		private function listenToNetStatus(e:NetStatusEvent):void
 		{
 			//trace(e);
 		}
 		
 		
-		private function getPlayStatus(e)
+		private function getPlayStatus(e:*):void
 		{
 			trace("Play statis updated : "+JSON.stringify(e,null,' '));
 			if(e.code == "NetStream.Play.Complete")
@@ -142,7 +142,7 @@ package videoShow
 		
 		
 		/**load this video file*/
-		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN,videoExtention:String=null,useOnHMLTag:Boolean=true)
+		public function loadThiwVideo(videoURL:String,autoPlay:Boolean=true,Width:Number=NaN,Height:Number=NaN,videoExtention:String=null,useOnHMLTag:Boolean=true):void
 		{
 			//Alert.show("loadThiwVideo : "+videoURL);
 			if(!isNaN(Width))
@@ -247,7 +247,7 @@ package videoShow
 		}
 		
 		/**pause the video*/
-		public function pause()
+		public function pause():void
 		{
 			if(videoDuration!=0)
 			{
@@ -258,13 +258,13 @@ package videoShow
 		}
 		
 		/**seek this video from selected position*/
-		public function set seek(position:Number)
+		public function set seek(position:Number):void
 		{
 			setseek(position);
 		}
 		
 		/**seek this video from selected position*/
-		private function setseek(position:Number)
+		private function setseek(position:Number):void
 		{
 			if(videoDuration!=0)
 			{
@@ -282,7 +282,7 @@ package videoShow
 		}
 		
 		/**play the video*/
-		public function play()
+		public function play():void
 		{
 			if(videoDuration!=0)
 			{
@@ -314,7 +314,7 @@ package videoShow
 		
 		
 		/**video is loaded*/
-		private function videoLoaded(metaData)
+		private function videoLoaded(metaData:*):void
 		{
 			trace("VIDOIEFIOJIEOFJOE JIFOJIO "+JSON.stringify(metaData,null,' '));
 			videoDuration = metaData.duration ;

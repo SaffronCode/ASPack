@@ -91,7 +91,7 @@ package videoPlayer
 			hideBTNs();
 		}
 		
-		private function controllStage(e:Event=null)
+		private function controllStage(e:Event=null):void
 		{
 			if(this.stage!=null)
 			{
@@ -105,7 +105,7 @@ package videoPlayer
 		}
 		
 		/**unload class*/
-		private function unLoad(e:*=null)
+		private function unLoad(e:*=null):void
 		{
 			if(ns!=null)
 			{
@@ -120,7 +120,7 @@ package videoPlayer
 			
 		}
 		
-		public static function close()
+		public static function close():void
 		{
 			ns.close();
 			//play music again if it was playing befor
@@ -132,21 +132,21 @@ package videoPlayer
 		
 		
 		/**stop seeking*/
-		private function seekEnded(e)
+		private function seekEnded(e:*):void
 		{
 			seeking = false;	
 		}
 		
 		
 		/**stop seeking*/
-		private function startSeek(e)
+		private function startSeek(e:*):void
 		{
 			seeking = true;	
 		}
 		
 		
 		/**playe the selected video*/
-		public static function playeMyVideo(target:String)
+		public static function playeMyVideo(target:String):void
 		{
 			/*musicPlaying = !SoundPlayer.getStatuse_pause(Bahaiat.musicID);
 			SoundPlayer.pause(Bahaiat.musicID);*/
@@ -165,7 +165,7 @@ package videoPlayer
 			}
 		}
 		
-		public function setup()
+		public function setup():void
 		{
 			stageVideoIsReady();
 		}
@@ -188,7 +188,7 @@ package videoPlayer
 /////////////////////////////////////////////////////////
 		
 		/**check if video started or stage video started*/
-		private function stageVideoIsReady(e=null)
+		private function stageVideoIsReady(e:*=null):void
 		{
 			if(ns!=null)
 			{
@@ -219,12 +219,12 @@ package videoPlayer
 		}
 		
 		
-		public function onXMPData(w=null)
+		public function onXMPData(w:*=null):void
 		{
 			
 		}
 		
-		private function checkForReadyVideo()
+		private function checkForReadyVideo():void
 		{
 			if(vid_target!=null && vid_target!='')
 			{
@@ -235,7 +235,7 @@ package videoPlayer
 		
 		
 ////////////////////////////////////////////////////////playe back functions
-		public function onMetaData(e)
+		public function onMetaData(e:*):void
 		{
 			//trace('meta')
 			var testScale:Number = Math.min(backGround.width/e.width,
@@ -267,13 +267,13 @@ package videoPlayer
 		}
 		
 		
-		public function onPlayStatus(e)
+		public function onPlayStatus(e:*):void
 		{
 			togglePause(null,0);
 		}
 		
 		/**managing the seek and other btns */
-		private function enterFrame(e=null)
+		private function enterFrame(e:*=null):void
 		{
 			var persent:Number;
 			if(seeking)
@@ -307,7 +307,7 @@ package videoPlayer
 		}
 		
 		/**seek line clicked by client*/
-		private function seekLinePressd(e)
+		private function seekLinePressd(e:*):void
 		{
 			/*var persent = ((mouseX-seekLine.x)/seekLine.width);
 			if(persent>1)
@@ -326,7 +326,7 @@ package videoPlayer
 		/**toggle pause and play<br>
 		 * you can force it to play or allways stop with<br>
 		 * set playIt to 0 to stop and set playIt to 1 to allways play*/
-		private function togglePause(e,playIt=-1)
+		private function togglePause(e:*,playIt:int=-1):void
 		{
 			if(playBTN.currentFrame==1 || playIt==1)
 			{
@@ -349,7 +349,7 @@ package videoPlayer
 		/**toggle video volume<br>
 		 * you can manage what to doo with setting mute to 0 to allwoys 
 		 * volume up or 1 to allways mute the sound */
-		private function toggleSound(e,mute=-1)
+		private function toggleSound(e:*,mute:int=-1):void
 		{
 			if(soundBTN.currentFrame==1 || mute==1)
 			{

@@ -198,7 +198,7 @@
 				onDone = new Function();
 			}
 			
-			controlFilePermission(function(){
+			controlFilePermission(function():*{
 				try
 				{
 					if(fileTarget.exists)
@@ -263,7 +263,7 @@
 			
 			function startDeleting():void
 			{
-				for(var i = 0 ; i<files.length ; i++)
+				for(var i:int = 0 ; i<files.length ; i++)
 				{
 					_file = files[i] as File;
 					if(_file.isDirectory)

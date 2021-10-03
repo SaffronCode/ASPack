@@ -309,11 +309,11 @@ package com.flashandmath.bitmaps {
 	
 	var n:int;
 	
-	var distArray=[];
+	var distArray:Array=[];
 	
-	var dispArray=[];
+	var dispArray:Array=[];
 	
-	var tilesNewArray=[];
+	var tilesNewArray:Array=[];
 	
 	var midPoint:Array=[];
 

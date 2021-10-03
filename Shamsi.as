@@ -13,7 +13,7 @@
 	        var Month_Temp_Miladi:int = int(MM_Miladi-1);
 	        var Day_Temp_Miladi:int = int(DD_Miladi-1);
 	        var DD_Miladi_no:int = int(int(365)*YYYY_Temp_Miladi+Divides(YYYY_Temp_Miladi+3, 4)-Divides((YYYY_Temp_Miladi+99), 100)+Divides((YYYY_Temp_Miladi+399), 400));
-	        for (var i = 0; i<Month_Temp_Miladi; ++i) {
+	        for (var i:int = 0; i<Month_Temp_Miladi; ++i) {
 	            DD_Miladi_no += Month_Miladi[i];
 	        }
 	        if (Month_Temp_Miladi>1 && ((YYYY_Temp_Miladi%4 == 0 && YYYY_Temp_Miladi%100 != 0) || (YYYY_Temp_Miladi%400 == 0))) {
@@ -44,7 +44,7 @@
 	        var Month_Result_Milady:Number = j_m-1;
 	        var day_Result_Milady:Number = j_d-1;
 	        var Day_Result_Milady:Number = 365*Year_Result_Milady+Divides(Year_Result_Milady, 33)*8+Divides(Year_Result_Milady%33+3, 4);
-	        for (var i = 0; i<int(Month_Result_Milady); ++i) {
+	        for (var i:int = 0; i<int(Month_Result_Milady); ++i) {
 	            Day_Result_Milady += Day_Miladi[i];
 	        }
 	        Day_Result_Milady += day_Result_Milady;

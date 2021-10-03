@@ -40,7 +40,7 @@ package
 		}
 		
 		/**1 > 001*/
-		public static function numToString(num:*,numberLenght:uint=2)
+		public static function numToString(num:*,numberLenght:uint=2):String
 		{
 			num = String(num);
 			while(num.length<numberLenght)
@@ -55,7 +55,7 @@ package
 		{
 			var parts:Array = str.split(':');
 			var num:uint = 0 ;
-			for(var i = 0 ; i<parts.length ; i++)
+			for(var i:int = 0 ; i<parts.length ; i++)
 			{
 				num *= 60 ;
 				num += uint(parts[i]) ;

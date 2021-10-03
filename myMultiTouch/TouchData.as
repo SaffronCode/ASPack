@@ -16,7 +16,7 @@ package myMultiTouch
 		public var ID:int;
 		
 		/**touch positions */
-		public var x,y;
+		public var x:Number,y:Number;
 		
 		/**can you update it?*/
 		public var updatePermition:Boolean;

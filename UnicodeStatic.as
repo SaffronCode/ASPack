@@ -48,7 +48,7 @@ package
 		
 							
 		/**change the id of cashes*/
-		public static function setID(newID:String)
+		public static function setID(newID:String):void
 		{
 			tempID = newID ;
 			//new line↓ 92-12-27
@@ -65,7 +65,7 @@ package
 		}
 		
 		/**remove all cashd strings based on this cash id*/
-		public static function clearMyTemp(cashID:String=null)
+		public static function clearMyTemp(cashID:String=null):void
 		{
 			if(cashID == null)
 			{
@@ -76,7 +76,7 @@ package
 			tempStrings = null ;
 		}
 		/**it can cash your text to load it later*/			
-		public static function convert(str:String,useCash:Boolean=false,arabicNumber:Boolean=false)
+		public static function convert(str:String,useCash:Boolean=false,arabicNumber:Boolean=false):*
 		{
 			//trace('♣');
 			
@@ -92,10 +92,10 @@ package
 				return '' ;
 			}
 			
-			var noData = useCash ;
+			var noData:Boolean = useCash ;
 			if(useCash)
 			{
-				var ID = textID(null,str);
+				var ID:String = textID(null,str);
 				var cashed:String = loadStringFromData(ID);
 				//trace('cashed : '+cashed);
 				if (cashed == null || cashed == 'undefined' || cashed == '')
@@ -194,7 +194,7 @@ package
 			//trace('add this : '+tx.substr(0,20));
 			if((useCash) && !deactiveConvertor && detectedArabicScript)
 			{
-				var ID = textID(target,tx,maxLines);
+				var ID:String = textID(target,tx,maxLines);
 				var cashed:String = loadStringFromData(ID);
 				if (cashed == null || cashed == 'undefined' || cashed == '')
 				{
@@ -264,7 +264,7 @@ package
 		}
 		
 		/**insialize the app*/
-		private static function firstSetUp(forceToSetUp:Boolean=false)
+		private static function firstSetUp(forceToSetUp:Boolean=false):void
 		{
 			if(uni==null || forceToSetUp==true)
 			{
@@ -278,7 +278,7 @@ package
 		}
 		
 		/**reset the unicod temp for this app*/
-		public static function resetTemp()
+		public static function resetTemp():void
 		{
 			firstSetUp();
 			tempStrings.data['unicodetemp'] = new Object();
@@ -308,7 +308,7 @@ package
 		{
 			var tim:Number = getTimer();
 			var myNum:uint = 0 ;var l:uint = tex.length ;
-			for(var i=0;i<l;i++)
+			for(var i:int=0;i<l;i++)
 			{
 				myNum += tex.charCodeAt(i);
 			}
@@ -320,14 +320,14 @@ package
 		
 		/**if The Language Is ENglish ( or any Other LR languages that can handel by Flash it self) dont search for
 		 * cashed Strings*/
-		private static function loadStringFromData(ID:String){
+		private static function loadStringFromData(ID:String):*{
 			return tempStrings.data['unicodetemp'][ID];
 		}
 		
 		
 		
 		/** if Language is LR , it will not Cash Any thins*/
-		private static function saveStringOnID(ID:String,Text:String){
+		private static function saveStringOnID(ID:String,Text:String):void{
 			//trace('♠saved on cash');
 			tempStrings.data['unicodetemp'][ID] = Text;
 				//↓ this line will make app crash if device had not enaugh storage
@@ -366,7 +366,7 @@ package
 		/**detect arabic texts*/
 		public static function isArabic(str:String):Boolean
 		{
-			for(var i = 0 ; i<str.length ; i++)
+			for(var i:int = 0 ; i<str.length ; i++)
 			{
 				if(str.charCodeAt(i)>1000)
 				{

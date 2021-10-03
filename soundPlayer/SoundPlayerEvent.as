@@ -26,7 +26,7 @@ package soundPlayer
 		/**class ID that is caused of this event*/
 		public var 	CallerID:Number;
 		
-		public function SoundPlayerEvent(type:String,ID,callerID)
+		public function SoundPlayerEvent(type:String,ID:uint,callerID:Number)
 		{
 			CallerID = callerID ;
 			SoundID = ID ;

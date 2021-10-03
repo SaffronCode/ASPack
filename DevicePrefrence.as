@@ -107,10 +107,10 @@ package {
             if (lastStatus == -1) {
                 lastStatus = int(GlobalStorage.load(id_firstApp + appVersion));
                 GlobalStorage.save(id_firstApp + appVersion, 1);
-                NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, function(e):* {
+                NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, function(e:*):* {
                     _isApplicationActive = true;
                 });
-                NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, function(e):* {
+                NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, function(e:*):* {
                     _isApplicationActive = false;
                 });
             }
@@ -430,7 +430,7 @@ package {
         }
 
         /**This will returns the playStore link in any case*/
-        private static function _downloadLink_myketStore(secondId = false):String {
+        private static function _downloadLink_myketStore(secondId:Boolean = false):String {
             if (secondId) {
                 return 'https://myket.ir/app/air.' + appCorrectedID;
             } else {
@@ -867,8 +867,8 @@ package {
         public static function isApplicationOnline(yes:Function,no:Function):void
         {
             var urlLoader:URLLoader = new URLLoader();
-            urlLoader.addEventListener(ProgressEvent.PROGRESS,function(e){urlLoader.close();yes()});
-            urlLoader.addEventListener(IOErrorEvent.IO_ERROR,function(e){no()});
+            urlLoader.addEventListener(ProgressEvent.PROGRESS,function(e:*):void{urlLoader.close();yes()});
+            urlLoader.addEventListener(IOErrorEvent.IO_ERROR,function(e:*):void{no()});
             urlLoader.load(new URLRequest("https://www.google.com/"));
         }
     }
