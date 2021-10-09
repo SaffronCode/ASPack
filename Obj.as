@@ -175,6 +175,19 @@ package
 			}
 		}
 
+		public static function onRemoved(target:DisplayObject,trigger:Function):void
+		{	
+			target.addEventListener(Event.REMOVED_FROM_STAGE,unLoadTrigger);
+			function unLoadTrigger(e:Event):void
+			{
+				if(trigger.length==0)
+					trigger();
+				else
+					trigger(e);
+				target.removeEventListener(Event.REMOVED_FROM_STAGE,unLoadTrigger);
+			}
+		}
+
 		public static function onLongTouch(target:*,onLongTouch:Function):void
 		{
 			if(target!=null && target is EventDispatcher)
