@@ -31,6 +31,7 @@ package myMultiTouch
 		private static var 	zoomAbles:Vector.<Sprite>,
 							onZoomedFuncs:Vector.<Function>,
 							onZoomEndedFuncs:Vector.<Function>,
+							zoomableOptionalRect:Vector.<Rectangle>,
 		
 							currentScale:Vector.<Number>,
 							targetedScale:Vector.<Number>,
@@ -118,7 +119,8 @@ package myMultiTouch
 		
 		
 		/**add zoom effect to thid object*/
-		public static function zoomAct(target:Sprite,monitorRectangle:Rectangle,onZoomed:Function=null,onZoomEnds:Function=null,moveOnlyWithTwoFinger:Boolean=false,MaxZoom:Number=NaN):void
+		public static function zoomAct(target:Sprite,monitorRectangle:Rectangle,onZoomed:Function=null,
+			onZoomEnds:Function=null,moveOnlyWithTwoFinger:Boolean=false,MaxZoom:Number=NaN, targetOptionalRectangle:Rectangle=null):void
 		{
 			
 			if(onZoomed == null)
@@ -149,6 +151,7 @@ package myMultiTouch
 				stageRectangle = new Vector.<Rectangle>();
 				MoveOnlyWithTwoFinger = new Vector.<Boolean>();
 				myMaxZoom = new Vector.<Number>();
+				zoomableOptionalRect = new Vector.<Rectangle>();
 				
 				currentX = new Vector.<Number>();
 				currentY = new Vector.<Number>();
@@ -183,6 +186,7 @@ package myMultiTouch
 			}
 			zoomAbles[index] = target ;
 			onZoomedFuncs[index] = onZoomed ;
+			zoomableOptionalRect[index] = targetOptionalRectangle ;
 			onZoomEndedFuncs[index] = onZoomEnds ;
 			currentScale[index] = target.scaleX;
 			targetedScale[index] = target.scaleX;
@@ -328,8 +332,8 @@ package myMultiTouch
 					
 					var pos:Point = DisplayObject(zoomAbles[i].parent).localToGlobal(new Point(targetX[i]+firstPoint[i].x,targetY[i]+firstPoint[i].y)) ;
 					
-					var DX:Number = (changedDs)*zoomAbles[i].width;
-					var DY:Number = (changedDs)*zoomAbles[i].height;
+					var DX:Number = (changedDs)*(zoomableOptionalRect[i]==null?zoomAbles[i].width:zoomableOptionalRect[i].width*zoomAbles[i].scaleX);
+					var DY:Number = (changedDs)*(zoomableOptionalRect[i]==null?zoomAbles[i].height:zoomableOptionalRect[i].height*zoomAbles[i].scaleX);
 					
 					
 					
@@ -513,6 +517,7 @@ package myMultiTouch
 			zoomAbles.splice(index,1);
 			onZoomedFuncs.splice(index,1);
 			onZoomEndedFuncs.splice(index,1);
+			zoomableOptionalRect.splice(index,1);
 			
 			lock.splice(index,1);
 			
