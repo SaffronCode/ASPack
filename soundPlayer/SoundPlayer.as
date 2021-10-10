@@ -30,6 +30,7 @@ package soundPlayer
 	import flash.ui.Keyboard;
 	import flash.utils.ByteArray;
 	import flash.utils.Timer;
+	import flash.utils.setTimeout;
 
 	/**SetUp() activate class<br>
 	 * playSound(ID,boolean,number) playe the sound , whit ID , Loopable or not (Loop Abale Sounds will not remove Automaticliy from que)<br>
@@ -44,6 +45,8 @@ package soundPlayer
 	public class SoundPlayer
 	{
 		public static var eventsDispatch:SoundEventDispatcher = new SoundEventDispatcher();
+
+		private static var cacheBeforSwtUp:Array = [] ;
 		
 		
 		public static var volSpeed:Number=0.1;
@@ -126,7 +129,18 @@ package soundPlayer
 			tim = new Timer(timSpeed);
 			tim.addEventListener(TimerEvent.TIMER,timing);
 			tim.start();
+
+			setTimeout(addCachedSounds,0);
 		}
+
+			private static function addCachedSounds():void
+			{
+				for(var i:int = 0 ; i<cacheBeforSwtUp.length ; i++)
+				{
+					addSound.apply(null,cacheBeforSwtUp[i]);
+				}
+				cacheBeforSwtUp = [] ;
+			}
 		
 		public static function preventExitHandler():void
 		{
@@ -246,14 +260,14 @@ package soundPlayer
 		/**play immediately and play if from begin option<br>
 		 * you can set the starting volume<br>
 		 * if you whant to reset Position , you can enter the newPosition in Presetn (0 - 1.0)*/
-		public static function play(soundID:uint,withOutFadeIn:Boolean=false,resetPosition:Boolean=false,newPosition:Number=0,doNotStopLastPlayedSound:Boolean = false,endAtPosition:Number=0):void
+		public static function play(soundID:uint,withOutFadeIn:Boolean=false,resetPosition:Boolean=false,newPosition:Number=0,stopLastPlayedSound:Boolean = false,endAtPosition:Number=0):void
 		{
 			var I:* = gI(soundID);
 			if(I!=-1)
 			{
 				if(resetPosition)
 				{
-					deactiveSound(I,false,doNotStopLastPlayedSound);
+					deactiveSound(I,false,stopLastPlayedSound);
 					var myPose:Number = Math.min(myLength[I],Math.max(0,newPosition*myLength[I]));
 					myPosition[I] = myPose ;
 				}
@@ -372,6 +386,7 @@ package soundPlayer
 			if(myStage==null)
 			{
 				SaffronLogger.log("soundPlayer Class , addSound : "+new Error('SetUp this Class First'));
+				cacheBeforSwtUp.push([TargetURL,ID,Loop,maxVolume,callerID,silentONBackGorund,initSoundPosition])
 				return;
 			}
 			
