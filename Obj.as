@@ -51,6 +51,31 @@ package
 			item.mouseChildren = item.mouseEnabled = false ;
 			item.alpha = 0.7 ;
 		}
+
+		public static function controlZIndex(items:Vector.<MovieClip>):void
+		{
+			var eventListner:DisplayObjectContainer = (items!=null && items.length>0)?items[0]:null;
+			if(eventListner==null)return;//Do nothing
+
+			Obj.addEventListener(eventListner,Event.ENTER_FRAME,switchDepths);
+			function switchDepths():void
+			{
+				items.sort(sortMovieClipsIndex);
+				for(var i:int = 0 ; i<items.length ; i++)
+				{
+					items[i].parent.addChild(items[i]);
+				}
+			}
+		}
+
+		private static function sortMovieClipsIndex(item1:MovieClip,item2:MovieClip):int
+		{
+			if(item1.y>item2.y)
+				return 1;
+			if(item1.y<item2.y)
+				return -1;
+			return 0 ;
+		}
 		
 		public static function button_enable(item:Sprite):void
 		{
