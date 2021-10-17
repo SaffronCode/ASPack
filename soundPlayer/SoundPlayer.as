@@ -271,6 +271,10 @@ package soundPlayer
 					var myPose:Number = Math.min(myLength[I],Math.max(0,newPosition*myLength[I]));
 					myPosition[I] = myPose ;
 				}
+				else
+				{
+					myPosition[I] = myPosition[I]%myLength[I];
+				}
 				myPaused[I] = false ;
 				endPosition[I] = endAtPosition ;
 				if(withOutFadeIn)
