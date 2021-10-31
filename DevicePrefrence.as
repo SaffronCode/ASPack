@@ -210,6 +210,8 @@ package {
 
         /**This function calls apple webservice to generate application id to make a download link for*/
         public static function createDownloadLink():void {
+            //Calling all stores canceled
+            return;
             //Controll the sites any way
             if (true || idCode.data.id == undefined) {
                 loadToCashAppStoreid();
