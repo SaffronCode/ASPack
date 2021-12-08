@@ -97,6 +97,30 @@ package {
             return Boolean(bigScreen);
         }
 
+        public static function deviceIp():String
+        {
+            var networkInfo:NetworkInfo = NetworkInfo.networkInfo;
+            var interfaces:Vector.<NetworkInterface> = networkInfo.findInterfaces();
+            var interfaceObj:NetworkInterface;
+            var address:InterfaceAddress;
+
+            //Get available interfaces
+            for (var i:int = 0; i < interfaces.length; i++)
+            {
+                interfaceObj = interfaces[i];
+
+                for (var j:int = 0; j < interfaceObj.addresses.length; j++)
+                {
+                    address = interfaceObj.addresses[j];
+                    if(address.prefixLength==24 || address.prefixLength==22)
+                    {
+                        return  address.address ;
+                    }
+                }
+            }
+            return null
+        }
+
         /**Prevent screen from going to sleep*/
         public static function systemIdleMode(KeepAwake:Boolean):void {
             if (KeepAwake == true) {
