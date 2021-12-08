@@ -42,6 +42,9 @@ package {
     import flash.utils.setInterval;
     import starlingPack.core.ScreenManager;
     import stageManager.StageManager;
+    import flash.net.NetworkInfo;
+    import flash.net.NetworkInterface;
+    import flash.net.InterfaceAddress;
 
     public class DevicePrefrence {
 		private static var storage:SharedObject ; 
@@ -101,6 +104,16 @@ package {
             } else {
                 NativeApplication.nativeApplication.systemIdleMode = SystemIdleMode.NORMAL;
             }
+        }
+
+        public static function preventSleep():void
+        {
+            systemIdleMode(true);
+        }
+
+        public static function letSleep():void
+        {
+            systemIdleMode(false);
         }
 
         public static function setUp():void {
